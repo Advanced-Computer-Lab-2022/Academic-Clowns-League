@@ -3,6 +3,7 @@ require('dotenv').config()
 const express = require('express')  //requiring the express package after installing it
 
 const courseRoutes = require('./routes/courseRoutes')
+const cTraineeRoutes = require('./routes/cTraineeRoutes')
 const mongoose = require('mongoose')
 const app = express() //this fn creates an express app for us
 
@@ -47,7 +48,5 @@ app.get('/',(req,res)=>{
 
 //routes
 app.use('/api/courses',courseRoutes)
+app.use('/api/ctrainee', cTraineeRoutes)
 //means that when we fire a request to this URL, use these routes (courseRoutes)
-
-
-
