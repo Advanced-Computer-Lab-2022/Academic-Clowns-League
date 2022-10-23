@@ -1,4 +1,4 @@
-const Instructor = require("../models/InstructorModel");
+const Instructor = require("../models/instructorModel");
 
 // create new Instructor
 
