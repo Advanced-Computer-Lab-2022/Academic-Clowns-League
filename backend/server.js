@@ -5,8 +5,8 @@ const express = require("express"); //requiring the express package after instal
 const courseRoutes = require("./routes/courseRoutes");
 const cTraineeRoutes = require("./routes/cTraineeRoutes");
 const iTraineeRoutes = require("./routes/iTraineeRoutes");
-const InstructorRoutes = require("./routes/InstructorRoutes");
-const AdminRoutes = require("./routes/AdminRoutes");
+const instructorRoutes = require("./routes/instructorRoutes");
+const adminRoutes = require("./routes/adminRoutes");
 const mongoose = require("mongoose");
 const app = express(); //this fn creates an express app for us
 
@@ -44,8 +44,11 @@ app.get('/',(req,res)=>{
 app.use("/api/courses", courseRoutes);
 app.use("/api/ctrainee", cTraineeRoutes);
 app.use("/api/iTrainee", iTraineeRoutes);
-app.use("/api/Instructor", InstructorRoutes);
-app.use("/api/Admin", AdminRoutes);
+app.use("/api/instructor", instructorRoutes);
+app.use("/api/admin", adminRoutes);
 //means that when we fire a request to this URL, use these routes (courseRoutes)
 
+
 //GANNA'S TEST COMMENT
+
+//THIS IS MARIAM TEST
