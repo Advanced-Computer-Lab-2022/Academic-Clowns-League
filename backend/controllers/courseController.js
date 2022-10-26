@@ -8,6 +8,12 @@ const getAllCourses = async (req,res)=>{
     res.status(200).json(courses);
 }
 
+//get instructor courses
+const getInstCourses = async (req,res)=>{
+    const courses = await Course.find({instructor: 'Mariam Hossam'});
+    res.status(200).json(courses);
+}
+
 
 //get a single course
 const getCourse = (req,res)=>{
@@ -44,23 +50,43 @@ const filterPrice = async (req, res) =>{
     res.status(200).json(courses);
 }
 
+//filter based on subjetc and/or rating
 const filterSubRat = async (req, res) =>{
-    console.log(req.query)
-    if(req.query.subject && !req.query.rating1){
+    if(req.query.subject && req.query.rating1 == ''){
+        console.log(req.query)
         const courses = await Course.find({subject: req.query.subject})
         res.status(200).json(courses);
     }
-    else if (!req.query.subject && req.query.rating1){
-        const courses = await Course.find({rating: {$gte: req.query.rating1, $lte: req.query.rating2}})
+    else if (req.query.subject == '' && req.query.rating1){
+        console.log(req.query)
+        const courses = await Course.find({overallRating: {$gte: req.query.rating1, $lte: req.query.rating2}})
         res.status(200).json(courses);
     }
     else{
-        const courses = await Course.find({rating: {$gte: req.query.rating1, $lte: req.query.rating2}, subject: req.query.subject})
+        console.log(req.query)
+        const courses = await Course.find({overallRating: {$gte: req.query.rating1, $lte: req.query.rating2}, subject: req.query.subject})
         res.status(200).json(courses);
     }
-    /*const price1 = req.query.price1
+}
+
+//filter based on subject for INSTRUCTOR
+const filterSub = async (req, res) =>{
+    //console.log(price1);
+    const courses = await Course.find({subject: req.query.subject, instructor: 'Mariam Hossam'});
+    //console.log(JSON.stringify(courses))
+    res.status(200).json(courses);
+}
+
+//filter based on price for INSTRUCTOR
+const filterInstPrice = async (req, res) =>{
+    //console.log(req.body)
+    console.log(req.query)
+    const price1 = req.query.price1
     const price2 = req.query.price2
-    const courses = await Course.find({price: {$gte: price1, $lte: price2}});*/
+    //console.log(price1);
+    const courses = await Course.find({price: {$gte: price1, $lte: price2}, instructor: 'Mariam Hossam'});
+    //console.log(JSON.stringify(courses))
+    res.status(200).json(courses);
 }
 
 //IGNORE THE NEXT COMMENT FOR NOW, we just want a message like the ones displayed above
@@ -93,5 +119,8 @@ module.exports = {
     updateCourse,
     createCourse,
     filterPrice,
-    filterSubRat
+    filterSubRat,
+    getInstCourses,
+    filterSub,
+    filterInstPrice
 }

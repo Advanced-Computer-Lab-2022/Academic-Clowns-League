@@ -6,7 +6,10 @@ const{
     updateCourse,
     createCourse,
     filterPrice,
-    filterSubRat
+    filterSubRat,
+    getInstCourses,
+    filterSub,
+    filterInstPrice
 } = require('../controllers/courseController')
 
 const router = express.Router()
@@ -33,6 +36,14 @@ router.get('/filterprice', filterPrice);
 
 //filter courses by subject and/or rating
 router.get('/filtersubrat', filterSubRat);
+
+//get instructor courses
+router.get('/instcourses', getInstCourses)
+
+//filter courses by subject
+router.get('/filtersub', filterSub)
+
+router.get('/filterinstprice', filterInstPrice)
 
 //after creating all our routes , export the router with the routes attached to it
 module.exports = router
