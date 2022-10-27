@@ -48,6 +48,21 @@ const createCourse = async (req,res)=>{
     
 }
 
+const searchAllCourses = async (req, res) =>{
+
+    const THEsearchterm = req.query.searchTerm
+    var re = new RegExp(THEsearchterm, "i");
+    //console.log(THEsearchterm)
+    //const courses = await Course.find({instructor:{"$regex": re  }})
+    const courses = await Course.find(
+        {$or:[{instructor:{"$regex": re  }},
+        {title:{"$regex": re  }},
+        {subject:{"$regex": re  }}]}
+   
+    )
+    res.status(200).json(courses);  
+}
+
 
 
 module.exports = {
@@ -55,5 +70,6 @@ module.exports = {
     getCourse,
     deleteCourse,
     updateCourse,
-    createCourse
+    createCourse,
+    searchAllCourses
 }

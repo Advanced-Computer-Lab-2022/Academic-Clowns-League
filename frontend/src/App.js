@@ -11,6 +11,7 @@ import {BrowserRouter , Routes, Route} from 'react-router-dom'
 
 //pages & components
 import Home from './pages/home'
+import SearchAllCourses from './pages/searchAllCourses'
 import Navbar from './components/navbar';
 //we wanna put the Navbar outside (above) all pages but still inside the router, to be able to use the link component
 
@@ -29,6 +30,11 @@ function App() {
               <Route 
                 path="/"
                 element={ <Home /> } //the component we want to render for this route
+
+              />
+              <Route 
+                path="/searchAllCourses"
+                element={ <SearchAllCourses /> } //the component we want to render for this route
 
               />
 

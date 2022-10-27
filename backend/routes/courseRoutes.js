@@ -4,11 +4,14 @@ const{
     getCourse,
     deleteCourse,
     updateCourse,
-    createCourse
+    createCourse,
+    searchAllCourses
 } = require('../controllers/courseController')
 
 const router = express.Router()
 
+//search all courses
+router.get('/searchAllCourses', searchAllCourses);
 
 
 //GET all courses
