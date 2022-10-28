@@ -24,17 +24,14 @@ const Instructor = require("../models/instructorModel");
 };*/
 
 const createInstructor = async (req, res) => {
-  const { username, password, country, ratings, reviews, email, minibio } =
-    req.body;
+  const { username, password, country, email, miniBio } = req.body;
   try {
     const instructor = await Instructor.create({
       username,
       password,
       country,
-      ratings,
-      reviews,
       email,
-      minibio,
+      miniBio,
     });
     //Instructor.create() is async that's why we put async around the handler fn, so u can use await right here
     //now we're storing the response of Instructor.create() (which is the doc created along with its is) in Instructor
