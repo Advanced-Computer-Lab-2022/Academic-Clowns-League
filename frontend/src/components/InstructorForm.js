@@ -5,8 +5,6 @@ const InstructorForm = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [country, setCountry] = useState("");
-  const [ratings, setRatings] = useState("");
-  const [reviews, setReviews] = useState("");
   const [email, setEmail] = useState("");
   const [miniBio, setMiniBio] = useState("");
   const [error, setError] = useState(null);
@@ -18,8 +16,6 @@ const InstructorForm = () => {
       username,
       password,
       country,
-      ratings,
-      reviews,
       email,
       miniBio,
     };
@@ -40,8 +36,6 @@ const InstructorForm = () => {
       setUsername("");
       setPassword("");
       setCountry("");
-      setRatings("");
-      setReviews("");
       setEmail("");
       setMiniBio("");
       setError(null);
@@ -52,54 +46,50 @@ const InstructorForm = () => {
     <form className="create" onSubmit={handleSubmit}>
       <h3>Add Instructor</h3>
 
-      <label>Username:</label>
-      <input
-        type="text"
-        onChange={(e) => setUsername(e.target.value)}
-        value={username}
-      />
+      <li>
+        <label>Username:</label>
+        <input
+          type="text"
+          onChange={(e) => setUsername(e.target.value)}
+          value={username}
+        />
+      </li>
 
-      <label>Password:</label>
-      <input
-        type="text"
-        onChange={(e) => setPassword(e.target.value)}
-        value={password}
-      />
+      <li>
+        <label>Password:</label>
+        <input
+          type="text"
+          onChange={(e) => setPassword(e.target.value)}
+          value={password}
+        />
+      </li>
 
-      <label>Country:</label>
-      <input
-        type="text"
-        onChange={(e) => setCountry(e.target.value)}
-        value={country}
-      />
+      <li>
+        <label>Country:</label>
+        <input
+          type="text"
+          onChange={(e) => setCountry(e.target.value)}
+          value={country}
+        />
+      </li>
 
-      <label>Ratings:</label>
-      <input
-        type="[Number]"
-        onChange={(e) => setRatings(e.target.value)}
-        value={ratings}
-      />
+      <li>
+        <label>Email:</label>
+        <input
+          type="text"
+          onChange={(e) => setEmail(e.target.value)}
+          value={email}
+        />
+      </li>
 
-      <label>Reviews:</label>
-      <input
-        type="[Number]"
-        onChange={(e) => setReviews(e.target.value)}
-        value={reviews}
-      />
-
-      <label>Email:</label>
-      <input
-        type="text"
-        onChange={(e) => setEmail(e.target.value)}
-        value={email}
-      />
-
-      <label>MiniBio:</label>
-      <input
-        type="text"
-        onChange={(e) => setMiniBio(e.target.value)}
-        value={miniBio}
-      />
+      <li>
+        <label>MiniBio:</label>
+        <input
+          type="text"
+          onChange={(e) => setMiniBio(e.target.value)}
+          value={miniBio}
+        />
+      </li>
       <button>Add instructor</button>
       {error && <div className="error">{error}</div>}
     </form>

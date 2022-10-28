@@ -2,6 +2,14 @@ import { useState } from "react";
 import { json } from "react-router-dom";
 
 const AdminForm = () => {
+  const [popup, setPop] = useState(false);
+  const handleClickOpen = () => {
+    setPop(!popup);
+  };
+
+  const closePopup = () => {
+    setPop(false);
+  };
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState(null);
@@ -52,7 +60,24 @@ const AdminForm = () => {
           value={password}
         />{" "}
       </li>
-      <button>Add new Admin</button>
+      <button onClick={handleClickOpen}>Add new Admin</button>
+      <div>
+        {popup ? (
+          <div className="main">
+            <div className="popup">
+              <div className="popup-header">
+                <h1></h1>
+                <h1 onClick={closePopup}>X</h1>
+              </div>
+              <div>
+                <p className="message">A new Admin is added</p>
+              </div>
+            </div>
+          </div>
+        ) : (
+          ""
+        )}
+      </div>
       {error && <div className="error">{error}</div>}
     </form>
   );
