@@ -54,9 +54,9 @@ const createCourse = async (req,res)=>{
             instructor,
             summary,
             previewURL,
-            reveiws,
-            overallRating,
-            ratings,outline,
+            
+            
+            outline,
             subtitles})
         //Course.create() is async that's why we put async around the handler fn, so u can use await right here
         //now we're storing the response of Course.create() (which is the doc created along with its is) in course
