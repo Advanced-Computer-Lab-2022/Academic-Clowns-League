@@ -6,6 +6,7 @@ import InstructorCourses from './pages/InstructorCourses'
 import Guest from './pages/Guest'
 import IndividualTrainee from './pages/IndividualTrainee'
 import CorporateTrainee from './pages/CorporateTrainee'
+import CorpCourses from './pages/CorpCourses'
 
 //BrowserRouter wraps all things involved with routes
 //Routes wraps the routes
@@ -41,6 +42,10 @@ function App() {
             <Route
               path = '/ctrainee'
               element = {<CorporateTrainee/>}
+            />
+            <Route
+              path = '/ctraineecourses'
+              element = {<CorpCourses/>}
             />
           </Routes>
         </div>

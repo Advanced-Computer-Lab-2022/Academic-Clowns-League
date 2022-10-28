@@ -3,41 +3,44 @@ import CourseDetails from '../components/CourseDetails'
 
 const Courses = () => {
     const [courses, setCourses] = useState(null)
-    const [price, setPrice] = useState('')
-    const [subject, setSubject] = useState('')
-    const [rating, setRating] = useState('')
-    //const [isChecked, setIsChecked] = useState(false)
+    const [subjects, setSubject] = useState({
+        computer: false,
+        digital: false,
+        lab: false
+    })
+    const [ratings, setRating] = useState({
+        zero: false,
+        four: false,
+        eight: false
+    })
+    const [prices, setPrice] = useState({
+        free: false,
+        sixth: false,
+        seventh: false,
+        eighth: false,
+        ninth: false,
+        tenth: false
+    })
 
-    const handleSubmit = async(e) => {
-        //console.log(e.target.value)
-        e.preventDefault()
-        //prevents default action of form button which is submit
-        const priceArray = price.split(',')
-        //console.log(priceArray)
-        const priceValue = {price1: priceArray[0], price2: priceArray[1]};
-        //object of price is made and passed to URL
-        const response = await fetch(`/api/courses/filterprice?${new URLSearchParams(priceValue).toString()}`)
-        const json = await response.json()
-        console.log(json)
-        if(response.ok){
-            setCourses(json);
-        }
+    const onChangeSub = (e) => {
+        setSubject({...subjects, [e.target.value]: e.target.checked})
     }
 
-    const handleFilter = async(e) => {
-        //console.log(e.target.value)
+    const onChangeRate = (e) => {
+        setRating({...ratings, [e.target.value]: e.target.checked})
+    }
+
+    const onChangePrice = (e) => {
+        setPrice({...prices, [e.target.value]: e.target.checked})
+    }
+
+    const handleSubmit = async(e) => {
         e.preventDefault()
-        //prevents default action of form button which is submit
-        //const subjectValue = subject
-        const ratingArray = rating.split(',')
-        const subRate = {subject: subject, rating1: ratingArray[0], rating2: ratingArray[1]}
-        console.log(subRate)
-        //object of price is made and passed to URL
-        const response = await fetch(`/api/courses/filtersubrat?${new URLSearchParams(subRate).toString()}`)
+        const result = Object.assign(subjects, ratings, prices)
+        const response = await fetch(`/api/courses/filtersubrat?${new URLSearchParams(result).toString()}`)
         const json = await response.json()
-        //console.log(json)
         if(response.ok){
-            setCourses(json);
+            setCourses(json)
         }
     }
 
@@ -69,93 +72,102 @@ const Courses = () => {
                 <form className="filter" onSubmit={handleSubmit}>
                     <h3>Filter by: </h3>
                     <h4>Price</h4>
-                    <input type="radio" 
+                    <input type="checkbox" 
                             id="price"
                             name="price"
-                            onChange= {(e) => setPrice(e.target.value)}
-                            value='0,0'
+                            checked={prices.free}
+                            onChange= {onChangePrice}
+                            value='free'
                     />
                     <label>Free</label>
-                    <input type="radio" 
+                    <input type="checkbox" 
                             id="price"
                             name="price"
-                            onChange= {(e) => setPrice(e.target.value)}
-                            value='6000,7000'
+                            checked={prices.sixth}
+                            onChange= {onChangePrice}
+                            value='sixth'
                     />
                     <label>6000 - 7000</label>
-                    <input type="radio" 
+                    <input type="checkbox" 
                             id="price"
                             name="price"
-                            onChange= {(e) => setPrice(e.target.value)}
-                            value='7000,8000'
+                            checked={prices.seventh}
+                            onChange= {onChangePrice}
+                            value='seventh'
                     />
                     <label>7000 - 8000</label>
-                    <input type="radio" 
+                    <input type="checkbox" 
                             id="price"
                             name="price"
-                            onChange= {(e) => setPrice(e.target.value)}
-                            value='8000,9000'
+                            checked={prices.eighth}
+                            onChange= {onChangePrice}
+                            value='eighth'
                     />
                     <label>8000 - 9000</label>
-                    <input type="radio" 
+                    <input type="checkbox" 
                             id="price"
                             name="price"
-                            onChange= {(e) => setPrice(e.target.value)}
-                            value='9000,10000'
+                            checked={prices.ninth}
+                            onChange= {onChangePrice}
+                            value='ninth'
                     />
                     <label>9000 - 10000</label>
-                    <input type="radio" 
+                    <input type="checkbox" 
                             id="price"
                             name="price"
-                            onChange= {(e) => setPrice(e.target.value)}
-                            value='10000,0'
+                            checked={prices.tenth}
+                            onChange= {onChangePrice}
+                            value='tenth'
                     />
                     <label>10000+</label>
-                    <button>Apply</button>
-                </form>
-                <form className='filter' onSubmit={handleFilter}>
                     <h4>Subject</h4>
                     <input type="checkbox" 
                             id="subject"
                             name="subject"
-                            onChange= {(e) => setSubject(e.target.value)}
-                            value='Computer Science'
+                            checked={subjects.computer}
+                            onChange= {onChangeSub}
+                            value='computer'
                     />
                     <label>Computer Science</label>
                     <input type="checkbox" 
                             id="subject"
                             name="subject"
-                            onChange= {(e) => setSubject(e.target.value)}
-                            value='Digital Media'
+                            checked={subjects.digital}
+                            onChange= {onChangeSub}
+                            value='digital'
                     />
                     <label>Digital Media</label>
                     <input type="checkbox" 
                             id="subject"
                             name="subject"
-                            onChange= {(e) => setSubject(e.target.value)}
-                            value='Lab Programming'
+                            checked={subjects.lab}
+                            onChange= {onChangeSub}
+                            value='lab'
                     />
                     <label>Lab Programming</label>
                     <h4>Rating</h4>
                     <input type="checkbox" 
                             id="rating"
                             name="rating"
-                            onChange= {(e) => setRating(e.target.value)}
-                            value='0,3'
+                            checked={ratings.zero}
+                            onChange= {onChangeRate}
+                            value='zero'
                     />
                     <label>0-3</label>
                     <input type="checkbox" 
                             id="rating"
                             name="rating"
-                            onChange= {(e) => setRating(e.target.value)}
-                            value='4,7'
+                            checked={ratings.four}
+                            onChange= {onChangeRate}
+                            value='four'
                     />
                     <label>4-7</label>
                     <input type="checkbox" 
                             id="rating"
                             name="rating"
-                            onChange= {(e) => setRating(e.target.value)}
-                            value='8,10'
+                            checked={ratings.eight}
+                            onChange= {onChangeRate}
+                            value='eight'
                     />
                     <label>8-10</label>
                     <button>Apply</button>

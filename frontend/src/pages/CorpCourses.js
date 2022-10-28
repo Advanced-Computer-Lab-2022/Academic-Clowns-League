@@ -3,21 +3,38 @@ import CourseDetails from '../components/CourseDetails'
 
 const Courses = () => {
     const [courses, setCourses] = useState(null)
-    const [subject, setSubject] = useState('')
-    const [rating, setRating] = useState('')
+    const [subjects, setSubject] = useState({
+        computer: false,
+        digital: false,
+        lab: false
+    })
+    const [ratings, setRating] = useState({
+        zero: false,
+        four: false,
+        eight: false
+    })
+    const [prices] = useState({
+        free: false,
+        sixth: false,
+        seventh: false,
+        eighth: false,
+        ninth: false,
+        tenth: false
+    })
 
-    const handleFilter = async(e) => {
-        //console.log(e.target.value)
+    const onChangeSub = (e) => {
+        setSubject({...subjects, [e.target.value]: e.target.checked})
+    }
+
+    const onChangeRate = (e) => {
+        setRating({...ratings, [e.target.value]: e.target.checked})
+    }
+
+    const handleSubmit = async(e) => {
         e.preventDefault()
-        //prevents default action of form button which is submit
-        //const subjectValue = subject
-        const ratingArray = rating.split(',')
-        const subRate = {subject: subject, rating1: ratingArray[0], rating2: ratingArray[1]}
-        console.log(subRate)
-        //object of price is made and passed to URL
-        const response = await fetch(`/api/courses/filtersubrat?${new URLSearchParams(subRate).toString()}`)
+        const result = Object.assign(subjects, ratings, prices)
+        const response = await fetch(`/api/courses/filtersubrat?${new URLSearchParams(result).toString()}`)
         const json = await response.json()
-        //console.log(json)
         if(response.ok){
             setCourses(json);
         }
@@ -47,51 +64,57 @@ const Courses = () => {
                     <CourseDetails key={course._id} course={course}/>
                 ))}
             </div>
-            <form className='filter' onSubmit={handleFilter}>
-                <h4>Subject</h4>
-                <input type="checkbox" 
-                        id="subject"
-                        name="subject"
-                        onChange= {(e) => setSubject(e.target.value)}
-                        value='Computer Science'
-                />
-                <label>Computer Science</label>
-                <input type="checkbox" 
-                        id="subject"
-                        name="subject"
-                        onChange= {(e) => setSubject(e.target.value)}
-                        value='Digital Media'
-                />
-                <label>Digital Media</label>
-                <input type="checkbox" 
-                        id="subject"
-                        name="subject"
-                        onChange= {(e) => setSubject(e.target.value)}
-                        value='Lab Programming'
-                />
-                <label>Lab Programming</label>
-                <h4>Rating</h4>
-                <input type="checkbox" 
-                        id="rating"
-                        name="rating"
-                        onChange= {(e) => setRating(e.target.value)}
-                        value='0,3'
-                />
-                <label>0-3</label>
-                <input type="checkbox" 
-                        id="rating"
-                        name="rating"
-                        onChange= {(e) => setRating(e.target.value)}
-                        value='4,7'
-                />
-                <label>4-7</label>
-                <input type="checkbox" 
-                        id="rating"
-                        name="rating"
-                        onChange= {(e) => setRating(e.target.value)}
-                        value='8,10'
-                />
-                <label>8-10</label>
+            <form className='filter' onSubmit={handleSubmit}>
+            <h4>Subject</h4>
+                    <input type="checkbox" 
+                            id="subject"
+                            name="subject"
+                            checked={subjects.computer}
+                            onChange= {onChangeSub}
+                            value='computer'
+                    />
+                    <label>Computer Science</label>
+                    <input type="checkbox" 
+                            id="subject"
+                            name="subject"
+                            checked={subjects.digital}
+                            onChange= {onChangeSub}
+                            value='digital'
+                    />
+                    <label>Digital Media</label>
+                    <input type="checkbox" 
+                            id="subject"
+                            name="subject"
+                            checked={subjects.lab}
+                            onChange= {onChangeSub}
+                            value='lab'
+                    />
+                    <label>Lab Programming</label>
+                    <h4>Rating</h4>
+                    <input type="checkbox" 
+                            id="rating"
+                            name="rating"
+                            checked={ratings.zero}
+                            onChange= {onChangeRate}
+                            value='zero'
+                    />
+                    <label>0-3</label>
+                    <input type="checkbox" 
+                            id="rating"
+                            name="rating"
+                            checked={ratings.four}
+                            onChange= {onChangeRate}
+                            value='four'
+                    />
+                    <label>4-7</label>
+                    <input type="checkbox" 
+                            id="rating"
+                            name="rating"
+                            checked={ratings.eight}
+                            onChange= {onChangeRate}
+                            value='eight'
+                    />
+                    <label>8-10</label>
                 <button>Apply</button>
             </form>
             <button onClick={handleClick}>Clear Filter</button>
@@ -99,3 +122,5 @@ const Courses = () => {
         
     )
 }
+
+export default Courses
