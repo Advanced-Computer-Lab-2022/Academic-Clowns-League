@@ -3,11 +3,12 @@ import { useEffect, useState } from "react";
 //components
 
 import AdminForm from "../components/AdminForm";
+import InstructorForm from "../components/InstructorForm";
 const Home = () => {
   return (
     <div className="home">
-      <h2>Home</h2>
       <AdminForm />
+      <InstructorForm />
     </div>
   );
 };

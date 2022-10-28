@@ -34,20 +34,24 @@ const AdminForm = () => {
   return (
     <form className="create" onSubmit={handleSubmit}>
       <h3>Add a new Admin</h3>
+      <li>
+        <label>Admin Username:</label>
+        <input
+          type="text"
+          onChange={(e) => setUsername(e.target.value)}
+          value={username}
+        />{" "}
+      </li>
 
-      <label>Admin Useername:</label>
-      <input
-        type="text"
-        onChange={(e) => setUsername(e.target.value)}
-        value={username}
-      />
-
-      <label>Password:</label>
-      <input
-        type="text"
-        onChange={(e) => setPassword(e.target.value)}
-        value={password}
-      />
+      <li>
+        {" "}
+        <label>Password:</label>
+        <input
+          type="text"
+          onChange={(e) => setPassword(e.target.value)}
+          value={password}
+        />{" "}
+      </li>
       <button>Add new Admin</button>
       {error && <div className="error">{error}</div>}
     </form>

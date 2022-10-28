@@ -3,6 +3,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom"; //BrowserRouter
 
 import Home from "./pages/Home";
 import Navbar from "./components/Navbar";
+/*import Home2 from "./pages/Home2";*/
 
 function App() {
   return (
@@ -12,6 +13,7 @@ function App() {
         <div className="pages">
           <Routes>
             <Route path="/" element={<Home />} />
+            /*route path of home2*/
           </Routes>
         </div>
       </BrowserRouter>
