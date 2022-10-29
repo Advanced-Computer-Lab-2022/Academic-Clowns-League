@@ -150,20 +150,11 @@ const filterSubRatePrice = async (req, res) => {
     prices[5] = [];
   }
   if (subCount > 0 && priceCount > 0 && rateCount > 0) {
+    const result = []
+    console.log(ratings)
     const courses = await Course.find({
       subject: { $in: [subjects[0], subjects[1], subjects[2]] },
-      $or: [
-        {
-          overallRating: { $gte: ratings[0][0], $lte: ratings[0][1] },
-        },
-        {
-          overallRating: { $gte: ratings[1][0], $lte: ratings[1][1] },
-        },
-        {
-          overallRating: { $gte: ratings[2][0], $lte: ratings[2][1] },
-        },
-      ],
-      $or: [
+        $or:[
         {
           price: { $gte: prices[0][0], $lte: prices[0][1] },
         },
@@ -182,9 +173,17 @@ const filterSubRatePrice = async (req, res) => {
         {
           price: { $gte: prices[5][0], $lt: prices[5][1] },
         },
-      ],
-    });
-    res.status(200).json(courses);
+      ]});
+    for(i = 0; i<courses.length; i++){
+      let j = 0
+      if((courses[i].overallRating >= ratings[0][0] && courses[i].overallRating <= ratings[0][1]) ||
+      (courses[i].overallRating >= ratings[1][0] && courses[i].overallRating <= ratings[1][1]) ||
+      (courses[i].overallRating >= ratings[2][0] && courses[i].overallRating <= ratings[2][1])){
+        result[j] = courses[i]
+        j++
+      }
+    }
+    res.status(200).json(result);
   } else if (subCount == 0 && priceCount > 0 && rateCount > 0) {
     const courses = await Course.find({
       $or: [
@@ -305,7 +304,7 @@ const filterSubRatePrice = async (req, res) => {
       ],
     });
     res.status(200).json(courses);
-  } else {
+  } else if(subCount == 0 && priceCount == 0 && rateCount == 0){
     const courses = await Course.find({});
     res.status(200).json(courses);
   }
@@ -344,19 +343,12 @@ const searchInstrCourses = async (req, res) => {
   res.status(200).json(courses);
 };
 
-
-
-
-
-
 //filter based on price for INSTRUCTOR
 const filterInstPriceSub = async (req, res) => {
   const subjects = [];
-  const ratings = [];
   const prices = [];
   let subCount = 0;
   let priceCount = 0;
-  let rateCount = 0;
   if (req.query.computer == "true") {
     subjects[0] = "Computer Science";
     subCount++;
@@ -374,24 +366,6 @@ const filterInstPriceSub = async (req, res) => {
     subCount++;
   } else {
     subjects[2] = "";
-  }
-  if (req.query.zero == "true") {
-    ratings[0] = [0, 3];
-    rateCount++;
-  } else {
-    ratings[0] = [];
-  }
-  if (req.query.four == "true") {
-    ratings[1] = [4, 7];
-    rateCount++;
-  } else {
-    ratings[1] = [];
-  }
-  if (req.query.eight == "true") {
-    ratings[2] = [8, 10];
-    rateCount++;
-  } else {
-    ratings[2] = [];
   }
   if (req.query.free == "true") {
     prices[0] = [0, 0];
@@ -429,80 +403,7 @@ const filterInstPriceSub = async (req, res) => {
   } else {
     prices[5] = [];
   }
-  if (subCount > 0 && priceCount > 0 && rateCount > 0) {
-    const courses = await Course.find({
-      subject: { $in: [subjects[0], subjects[1], subjects[2]] },
-      $or: [
-        {
-          overallRating: { $gte: ratings[0][0], $lte: ratings[0][1] },
-        },
-        {
-          overallRating: { $gte: ratings[1][0], $lte: ratings[1][1] },
-        },
-        {
-          overallRating: { $gte: ratings[2][0], $lte: ratings[2][1] },
-        },
-      ],
-      $or: [
-        {
-          price: { $gte: prices[0][0], $lte: prices[0][1] },
-        },
-        {
-          price: { $gte: prices[1][0], $lt: prices[1][1] },
-        },
-        {
-          price: { $gte: prices[2][0], $lt: prices[2][1] },
-        },
-        {
-          price: { $gte: prices[3][0], $lt: prices[3][1] },
-        },
-        {
-          price: { $gte: prices[4][0], $lt: prices[4][1] },
-        },
-        {
-          price: { $gte: prices[5][0], $lt: prices[5][1] },
-        },
-      ],
-      instructor: "Mariam Hossam",
-    });
-    res.status(200).json(courses);
-  } else if (subCount == 0 && priceCount > 0 && rateCount > 0) {
-    const courses = await Course.find({
-      $or: [
-        {
-          overallRating: { $gte: ratings[0][0], $lte: ratings[0][1] },
-        },
-        {
-          overallRating: { $gte: ratings[1][0], $lte: ratings[1][1] },
-        },
-        {
-          overallRating: { $gte: ratings[2][0], $lte: ratings[2][1] },
-        },
-      ],
-      $or: [
-        {
-          price: { $gte: prices[0][0], $lte: prices[0][1] },
-        },
-        {
-          price: { $gte: prices[1][0], $lt: prices[1][1] },
-        },
-        {
-          price: { $gte: prices[2][0], $lt: prices[2][1] },
-        },
-        {
-          price: { $gte: prices[3][0], $lt: prices[3][1] },
-        },
-        {
-          price: { $gte: prices[4][0], $lt: prices[4][1] },
-        },
-        {
-          price: { $gte: prices[5][0], $lt: prices[5][1] },
-        },
-      ],
-      instructor: "Mariam Hossam",
-    });
-    res.status(200).json(courses);
-  } else if (subCount > 0 && priceCount > 0 && rateCount == 0) {
+  if (subCount > 0 && priceCount > 0) {
     const courses = await Course.find({
       subject: { $in: [subjects[0], subjects[1], subjects[2]] },
       $or: [
@@ -527,31 +428,8 @@ const filterInstPriceSub = async (req, res) => {
       ],
       instructor: "Mariam Hossam",
     });
-    res.status(200).json(courses);
-  } else if (subCount > 0 && priceCount == 0 && rateCount > 0) {
-    const courses = await Course.find({
-      subject: { $in: [subjects[0], subjects[1], subjects[2]] },
-      $or: [
-        {
-          overallRating: { $gte: ratings[0][0], $lte: ratings[0][1] },
-        },
-        {
-          overallRating: { $gte: ratings[1][0], $lte: ratings[1][1] },
-        },
-        {
-          overallRating: { $gte: ratings[2][0], $lte: ratings[2][1] },
-        },
-      ],
-      instructor: "Mariam Hossam",
-    });
-    res.status(200).json(courses);
-  } else if (subCount > 0 && priceCount == 0 && rateCount == 0) {
-    const courses = await Course.find({
-      subject: { $in: [subjects[0], subjects[1], subjects[2]] },
-      instructor: "Mariam Hossam",
-    });
-    res.status(200).json(courses);
-  } else if (subCount == 0 && priceCount > 0 && rateCount == 0) {
+    res.status(200).json(courses)
+  } else if (subCount == 0 && priceCount > 0) {
     const courses = await Course.find({
       $or: [
         {
@@ -576,19 +454,10 @@ const filterInstPriceSub = async (req, res) => {
       instructor: "Mariam Hossam",
     });
     res.status(200).json(courses);
-  } else if (subCount == 0 && priceCount == 0 && rateCount > 0) {
+  } 
+    else if (subCount > 0 && priceCount == 0) {
     const courses = await Course.find({
-      $or: [
-        {
-          overallRating: { $gte: ratings[0][0], $lte: ratings[0][1] },
-        },
-        {
-          overallRating: { $gte: ratings[1][0], $lte: ratings[1][1] },
-        },
-        {
-          overallRating: { $gte: ratings[2][0], $lte: ratings[2][1] },
-        },
-      ],
+      subject: { $in: [subjects[0], subjects[1], subjects[2]] },
       instructor: "Mariam Hossam",
     });
     res.status(200).json(courses);

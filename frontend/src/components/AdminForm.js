@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { json } from "react-router-dom";
 
 const AdminForm = () => {
   const [popup, setPop] = useState(false);
@@ -66,7 +65,6 @@ const AdminForm = () => {
           <div className="main">
             <div className="popup">
               <div className="popup-header">
-                <h1></h1>
                 <h1 onClick={closePopup}>X</h1>
               </div>
               <div>
