@@ -50,7 +50,6 @@ app.use("/api/instructor", instructorRoutes);
 app.use("/api/admin", adminRoutes);
 //means that when we fire a request to this URL, use these routes (courseRoutes)
 
-
 //GANNA'S TEST COMMENT
 
 //THIS IS MARIAM TEST

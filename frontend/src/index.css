@@ -32,6 +32,33 @@ header a {
   margin: 0 auto;
 }
 
+.popup {
+  height: 200px;
+  width: 50%;
+  background-color: white;
+  position: absolute;
+  top: 25%;
+  right: 25%;
+}
+
+.popup-header {
+  display: flex;
+  justify-content: space-between;
+  padding: 0 30px 0 15px;
+  border-bottom: 2px solid black;
+}
+
+.main {
+  background-color: rgba(195, 162, 162, 0.408);
+  height: 100%;
+  width: 100%;
+  position: absolute;
+  top: 0;
+}
+
+.message {
+  text-align: center;
+}
 /* homepage */
 .home {
   display: grid;

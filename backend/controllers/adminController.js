@@ -2,8 +2,15 @@ const Admin = require("../models/adminModel");
 
 // create new Admin
 
-const createAdmin = (req, res) => {
-  res.json({ mssg: "POST a new individual Admin" });
+const createAdmin = async (req, res) => {
+  const { username, password } = req.body;
+
+  try {
+    const admin = await Admin.create({ username, password });
+    res.status(200).json(admin);
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
 };
 
 //UPDATE an individual Admin
