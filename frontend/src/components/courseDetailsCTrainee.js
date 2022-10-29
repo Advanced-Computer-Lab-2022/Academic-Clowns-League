@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-const CourseDetails = ({ course }) => {
+const CourseDetailsCTrainee = ({ course }) => {
   const [isActive, setIsActive] = useState(false);
   const handleClick = () => {
     // 👇️ toggle
@@ -28,10 +28,6 @@ const CourseDetails = ({ course }) => {
         }}
       >
         <p>
-          <strong>Price: </strong>
-          {course.price}
-        </p>
-        <p>
           <strong>Subject: </strong>
           {course.subject}
         </p>
@@ -53,4 +49,4 @@ const CourseDetails = ({ course }) => {
   );
 };
 
-export default CourseDetails;
+export default CourseDetailsCTrainee;

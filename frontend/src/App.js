@@ -1,4 +1,5 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+
 //BrowserRouter surrounds everything that ever needs to use the routing system
 //Routes wraps all of our individual routes
 //Route -> to create a single route
@@ -7,18 +8,20 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 //adding an individual route, needs 2 props: path and element
 
 //pages & components
-import Home from "./pages/home";
-import SearchAllCourses from "./pages/searchAllCourses";
+import InstructorHome from "./pages/instructorHome";
+import AdminHome from "./pages/adminHome";
+import GuestHome from "./pages/guestHome";
+import IndividualTraineeHome from "./pages/individualTraineeHome";
 //we wanna put the Navbar outside (above) all pages but still inside the router, to be able to use the link component
 
-import Courses from "./pages/courses";
-import Instructor from "./pages/instructor";
+import FilterAllCourses from "./pages/filterAllCourses";
+import FilterMyCourses from "./pages/filterInstCourses";
+
 import Navbar from "./components/navbar";
-import InstructorCourses from "./pages/instructorCourses";
-import Guest from "./pages/guest";
-import IndividualTrainee from "./pages/individualTrainee";
-import CorporateTrainee from "./pages/corporateTrainee";
-import CorpCourses from "./pages/corpCourses";
+import InstructorCourses from "./pages/filterInstCourses";
+import CorporateTraineeHome from "./pages/corporateTraineeHome";
+import FilterCorpCourses from "./pages/filterCorpCourses";
+import SearchMyCourses from "./pages/searchInstCourses";
 
 //BrowserRouter wraps all things involved with routes
 //Routes wraps the routes
@@ -32,20 +35,26 @@ function App() {
         <div className="pages">
           <Routes>
             <Route
-              path="/"
-              element={<Home />} //the component we want to render for this route
+              path="/instructorHome"
+              element={<InstructorHome />} //the component we want to render for this route
             />
+            <Route path="/filterAllCourses" element={<FilterAllCourses />} />
+            <Route path="/searchInstCourses" element={<SearchMyCourses />} />
+            <Route path="/filterInstCourses" element={<FilterMyCourses />} />
+
+            <Route path="/adminHome" element={<AdminHome />} />
+            <Route path="/guestHome" element={<GuestHome />} />
             <Route
-              path="/searchAllCourses"
-              element={<SearchAllCourses />} //the component we want to render for this route
+              path="/individualTraineeHome"
+              element={<IndividualTraineeHome />}
             />
-            <Route path="/courses" element={<Courses />} />
-            <Route path="/instructor" element={<Instructor />} />
+
             <Route path="/mycourses" element={<InstructorCourses />} />
-            <Route path="/guest" element={<Guest />} />
-            <Route path="/itrainee" element={<IndividualTrainee />} />
-            <Route path="/ctrainee" element={<CorporateTrainee />} />
-            <Route path="/ctraineecourses" element={<CorpCourses />} />
+            <Route
+              path="/corporateTraineeHome"
+              element={<CorporateTraineeHome />}
+            />
+            <Route path="/filterCorpCourses" element={<FilterCorpCourses />} />
           </Routes>
         </div>
       </BrowserRouter>
