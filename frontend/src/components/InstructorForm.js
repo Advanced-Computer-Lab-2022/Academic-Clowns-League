@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { json } from "react-router-dom";
 
 const InstructorForm = () => {
   const [username, setUsername] = useState("");

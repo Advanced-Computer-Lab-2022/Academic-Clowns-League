@@ -41,6 +41,7 @@ const Courses = () => {
       `/api/courses/filtersubrat?${new URLSearchParams(result).toString()}`
     );
     const json = await response.json();
+    console.log(json)
     if (response.ok) {
       setCourses(json);
     }

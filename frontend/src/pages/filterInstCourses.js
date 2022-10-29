@@ -8,11 +8,6 @@ const Courses = () => {
     digital: false,
     lab: false,
   });
-  const [ratings] = useState({
-    zero: false,
-    four: false,
-    eight: false,
-  });
   const [prices, setPrice] = useState({
     free: false,
     sixth: false,
@@ -32,7 +27,7 @@ const Courses = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const result = Object.assign(subjects, ratings, prices);
+    const result = Object.assign(subjects, prices);
     const response = await fetch(
       `/api/courses/filterinstprice?${new URLSearchParams(result).toString()}`
     );
