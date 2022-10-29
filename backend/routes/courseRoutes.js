@@ -9,12 +9,16 @@ const {
   filterSubRatePrice,
   getInstCourses,
   filterInstPriceSub,
+  searchInstrCourses
 } = require("../controllers/courseController");
 
 const router = express.Router();
 
 //search all courses
 router.get("/searchAllCourses", searchAllCourses);
+
+//search in one instructor's courses
+router.get("/searchInstrCourses", searchInstrCourses);
 
 //GET all courses
 router.get("/", getAllCourses);

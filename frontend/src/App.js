@@ -17,11 +17,12 @@ import IndividualTraineeHome from "./pages/individualTraineeHome";
 import FilterAllCourses from "./pages/filterAllCourses";
 import FilterMyCourses from "./pages/filterInstCourses";
 
+
 import Navbar from "./components/navbar";
 import InstructorCourses from "./pages/filterInstCourses";
 import CorporateTraineeHome from "./pages/corporateTraineeHome";
 import FilterCorpCourses from "./pages/filterCorpCourses";
-import SearchMyCourses from "./pages/searchInstCourses";
+import SearchInstrCourses from "./pages/searchInstrCourses";
 
 //BrowserRouter wraps all things involved with routes
 //Routes wraps the routes
@@ -39,7 +40,7 @@ function App() {
               element={<InstructorHome />} //the component we want to render for this route
             />
             <Route path="/filterAllCourses" element={<FilterAllCourses />} />
-            <Route path="/searchInstCourses" element={<SearchMyCourses />} />
+            <Route path="/searchInstrCourses" element={<SearchInstrCourses />} />
             <Route path="/filterInstCourses" element={<FilterMyCourses />} />
 
             <Route path="/adminHome" element={<AdminHome />} />
