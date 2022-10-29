@@ -5,19 +5,19 @@ const Schema = mongoose.Schema //fn to create a new schema
 const courseSchema = new Schema({
     title:{
         type: String,
-        required: true
+        required: "true"
     },
     hours:{ //should it be written manually or automatically the total duration of the videos?
         type: Number,
-        required: true
+        required: "true"
     },
     subject:{
         type: String,
-       required: true
+       required: "true"
     },
     price:{
         type: Number,
-        required: true
+        required: "true"
     },
     discount:{
         type: Number,
@@ -31,7 +31,7 @@ const courseSchema = new Schema({
 
     instructor:{
         type: String, //String for now, may later be updated to be of type 'Instructor'
-        required: true
+        required: "true"
     },
     summary:{
         type: String

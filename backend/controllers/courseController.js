@@ -30,7 +30,19 @@ const updateCourse = (req, res) => {
 
 //create new course
 const createCourse = async (req, res) => {
-  const { title, hours } = req.body;
+  const {
+    title,
+    hours,
+    subject,
+    price,
+    discount,
+    discountValidUntil,
+    instructor,
+    summary,
+    previewURL,
+    outline,
+    subtitles,
+  } = req.body;
   try {
     const course = await Course.create({
       title,
@@ -42,9 +54,6 @@ const createCourse = async (req, res) => {
       instructor,
       summary,
       previewURL,
-      reveiws,
-      overallRating,
-      ratings,
       outline,
       subtitles,
     });

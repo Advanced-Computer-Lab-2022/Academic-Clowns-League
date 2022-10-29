@@ -2,6 +2,7 @@ import { useEffect, useState } from "react"
 
 // components
 import CourseDetails from "../components/courseDetails"
+import CourseForm from "../components/CourseForm"
 
 
 const Home = () => {
@@ -30,6 +31,7 @@ const Home = () => {
           <CourseDetails course={course} key={course._id} />
         ))}
       </div>
+      <CourseForm/>
     </div>
   )
 }
