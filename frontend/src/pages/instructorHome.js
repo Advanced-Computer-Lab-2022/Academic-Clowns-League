@@ -60,6 +60,9 @@ const InstructorHome = () => {
       <Link to="/filterInstCourses">
         <button>Filter my Courses</button>
       </Link>
+      <Link to="/searchInstrCourses">
+        <button>Search my Courses</button>
+      </Link>
       <form className="create" onSubmit={handleSubmit}>
         <h3>Search</h3>
 

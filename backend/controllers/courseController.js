@@ -326,6 +326,29 @@ const searchAllCourses = async (req, res) => {
   res.status(200).json(courses);
 };
 
+
+const searchInstrCourses = async (req, res) => {
+  const THEsearchterm = req.query.searchTerm;
+  var re = new RegExp(THEsearchterm, "i");
+  //console.log(THEsearchterm)
+  //const courses = await Course.find({instructor:{"$regex": re  }})
+
+  const courses = await Course.find({
+    instructor: "Mariam Hossam",
+    $or: [
+      { instructor: { $regex: re } },
+      { title: { $regex: re } },
+      { subject: { $regex: re } },
+    ],
+  });
+  res.status(200).json(courses);
+};
+
+
+
+
+
+
 //filter based on price for INSTRUCTOR
 const filterInstPriceSub = async (req, res) => {
   const subjects = [];
@@ -585,4 +608,5 @@ module.exports = {
   filterSubRatePrice,
   getInstCourses,
   filterInstPriceSub,
+  searchInstrCourses
 };
