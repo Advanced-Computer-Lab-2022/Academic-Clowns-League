@@ -26,6 +26,8 @@ mongoose
 //middleware
 app.use(express.json());
 //now any req that comes, it looks as if it has some body to the req, some data to the server, and ifit does, then it passes and attches it to the req obj so we can access it in the request handler
+//now we can say req.body
+//replaces body-parser in some videos
 
 //this fn will fire for every req that comes in, will help us see in the terminal what's happening
 app.use((req, res, next) => {
