@@ -3,8 +3,8 @@ const cTrainee = require("../models/cTraineeModel");
 //POST a corporate trainee
 const createCTrainee = async (req, res) => {
   const {
-    firstName,
-    lastName,
+    firstname,
+    lastname,
     username,
     password,
     email,
@@ -18,8 +18,8 @@ const createCTrainee = async (req, res) => {
   // add ctrainee to DB
   try {
     const ctrainee = await cTrainee.create({
-      firstName,
-      lastName,
+      firstname,
+      lastname,
       username,
       password,
       email,
