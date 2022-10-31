@@ -73,61 +73,72 @@ const CourseForm = () => {
     <input type = "text" 
     onChange = {(e) => setTitle(e.target.value)}
     value = {title}/>
+    <br/>
 
 
     <label>Course Hours</label>
     <input type = "text" 
     onChange = {(e) => setHours(e.target.value)}
     value = {hours}/>
+        <br/>
 
 
     <label>Course Subject</label>
     <input type = "text" 
     onChange = {(e) => setSubject(e.target.value)}
     value = {subject}/>
+        <br/>
 
 
     <label>Course Price</label>
     <input type = "text" 
     onChange = {(e) => setPrice(e.target.value)}
     value = {price}/>
+        <br/>
 
 
     <label>Course Discount</label>
     <input type = "text" 
     onChange = {(e) => setDiscount(e.target.value)}
     value = {discount}/>
+        <br/>
 
 
-    <label>DiscountValidUntil</label>
+    <label>Discount Valid Until</label>
     <input type = "text" 
     onChange = {(e) => setDiscountValidUntil(e.target.value)}
     value = {discountValidUntil}/>
+        <br/>
 
     <label>Course Instructor</label>
     <input type = "text" 
     onChange = {(e) => setInstructor(e.target.value)}
     value = {instructor}/>
+        <br/>
 
     <label>Course Summary</label>
     <input type = "text" 
     onChange = {(e) => setSummary(e.target.value)}
     value = {summary}/>
+        <br/>
 
     <label>Course Preview</label>
     <input type = "text" 
     onChange = {(e) => setPreviewURL(e.target.value)}
     value = {previewURL}/>
+        <br/>
 
      <label>Course Subtitles</label>
     <input type = "text" 
     onChange = {(e) => setSubtitles(e.target.value)}
     value = {subtitles}/>
+        <br/>
 
     <label>Course Outline</label>
     <input type = "text" 
     onChange = {(e) => setOutline(e.target.value)}
     value = {outline}/>
+        <br/>
 
     <button>Submit</button>
 
