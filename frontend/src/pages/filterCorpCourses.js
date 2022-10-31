@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import CourseDetails from "../components/courseDetails";
+import CourseDetailsCTrainee from "../components/courseDetailsCTrainee";
 
 const Courses = () => {
   const [courses, setCourses] = useState(null);
@@ -64,7 +64,7 @@ const Courses = () => {
       <div className="all-courses">
         {courses &&
           courses.map((course) => (
-            <CourseDetails key={course._id} course={course} />
+            <CourseDetailsCTrainee key={course._id} course={course} />
           ))}
       </div>
       <form className="filter" onSubmit={handleSubmit}>

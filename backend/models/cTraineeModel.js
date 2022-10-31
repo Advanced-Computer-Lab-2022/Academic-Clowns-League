@@ -4,11 +4,11 @@ const Schema = mongoose.Schema;
 
 const cTraineeSchema = new Schema(
   {
-    firstName: {
+    firstname: {
       type: String,
       required: true,
     },
-    lastName: {
+    lastname: {
       type: String,
       required: true,
     },

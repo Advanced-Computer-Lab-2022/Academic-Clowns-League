@@ -1,5 +1,6 @@
 const { useState } = require("react")
 
+
 const CourseForm = () => {
     const [title,setTitle] = useState('')
     const [hours,setHours] = useState('')
@@ -12,6 +13,7 @@ const CourseForm = () => {
     const [previewURL,setPreviewURL] = useState('')
     const [subtitles,setSubtitles] = useState('')
     const [outline,setOutline] = useState('')
+    const [error, setError] = useState(null);
 
     const handleSubmit = async (e) => {
         e.preventDefault()
@@ -35,11 +37,12 @@ const CourseForm = () => {
                     'Content-Type':'application/json'
                 }
             })
+
             const json = await response.json()
 
-            if (!response.ok)
-            console.log("error404")
-
+            if (!response.ok) {
+                setError(json.error);
+              }
             if (response.ok){
                 setTitle('')
                 setHours('')
@@ -52,7 +55,8 @@ const CourseForm = () => {
                 setPreviewURL('')
                 setSubtitles('')
                 setOutline('')
-                console.log("Done baby",json)
+                setError(null);
+      console.log("new course added", json);
 
             }
 
@@ -127,6 +131,7 @@ const CourseForm = () => {
 
     <button>Submit</button>
 
+    {error && <div className="error">{error}</div>}
     </form>
 
     
