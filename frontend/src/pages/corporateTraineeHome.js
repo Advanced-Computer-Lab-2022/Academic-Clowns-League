@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 // components
 import CourseDetailsCTrainee from "../components/courseDetailsCTrainee";
 
+
 const CorporateTraineeHome = () => {
   const [courses, setCourses] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");

@@ -4,13 +4,14 @@ const Schema = mongoose.Schema;
 
 const cTraineeSchema = new Schema(
   {
+
     firstname: {
       type: String,
-      required: true,
+      //required: true,
     },
     lastname: {
       type: String,
-      required: true,
+      //required: true,
     },
     username: {
       type: String,
@@ -26,7 +27,7 @@ const cTraineeSchema = new Schema(
     },
     country: {
       type: String,
-      required: true,
+      //required: true,
     },
     credNumber: {
       type: String,
@@ -44,4 +45,5 @@ const cTraineeSchema = new Schema(
   { timestamps: true }
 );
 
-module.exports = mongoose.model("cTrainee", cTraineeSchema);
+
+module.exports =  mongoose.model("cTrainee", cTraineeSchema);
