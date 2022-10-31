@@ -70,7 +70,6 @@ const createCourse = async (req, res) => {
 
 //filter based on subject and/or rating and/or price
 const filterSubRatePrice = async (req, res) => {
-  console.log(req.query);
   const subjects = [];
   const ratings = [];
   const prices = [];
@@ -151,7 +150,6 @@ const filterSubRatePrice = async (req, res) => {
   }
   if (subCount > 0 && priceCount > 0 && rateCount > 0) {
     const result = []
-    console.log(ratings)
     const courses = await Course.find({
       subject: { $in: [subjects[0], subjects[1], subjects[2]] },
         $or:[
@@ -174,11 +172,12 @@ const filterSubRatePrice = async (req, res) => {
           price: { $gte: prices[5][0], $lt: prices[5][1] },
         },
       ]});
-    for(i = 0; i<courses.length; i++){
       let j = 0
+    for(i = 0; i<courses.length; i++){
       if((courses[i].overallRating >= ratings[0][0] && courses[i].overallRating <= ratings[0][1]) ||
       (courses[i].overallRating >= ratings[1][0] && courses[i].overallRating <= ratings[1][1]) ||
       (courses[i].overallRating >= ratings[2][0] && courses[i].overallRating <= ratings[2][1])){
+        
         result[j] = courses[i]
         j++
       }
