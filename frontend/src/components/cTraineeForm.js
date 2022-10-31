@@ -1,6 +1,16 @@
 import { useState } from "react";
+import { json } from "react-router-dom";
 
 const CTraineeForm = () => {
+  const [popup, setPop] = useState(false);
+  const handleClickOpen = () => {
+    setPop(!popup);
+  };
+
+  const closePopup = () => {
+    setPop(false);
+  };
+
   const [firstname, setFirstname] = useState("");
   const [lastname, setLastname] = useState("");
   const [username, setUsername] = useState("");
@@ -150,7 +160,24 @@ const CTraineeForm = () => {
         />
       </li>
 
-      <button>Add Corporate Trainee</button>
+      <button onClick={handleClickOpen}>Add new cTrainee</button>
+      <div>
+        {popup ? (
+          <div className="main">
+            <div className="popup">
+              <div className="popup-header">
+                <h1></h1>
+                <h1 onClick={closePopup}>X</h1>
+              </div>
+              <div>
+                <p className="message">A new Corporate Trainee is added</p>
+              </div>
+            </div>
+          </div>
+        ) : (
+          ""
+        )}
+      </div>
       {error && <div className="error">{error}</div>}
     </form>
   );
