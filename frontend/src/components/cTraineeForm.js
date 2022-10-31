@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { json } from "react-router-dom";
 
 const CTraineeForm = () => {
   const [popup, setPop] = useState(false);
@@ -11,32 +10,32 @@ const CTraineeForm = () => {
     setPop(false);
   };
 
-  const [firstname, setFirstname] = useState("");
-  const [lastname, setLastname] = useState("");
+  //const [firstname, setFirstname] = useState("");
+  //const [lastname, setLastname] = useState("");
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
-  const [country, setCountry] = useState("");
-  const [crednumber, setCrednum] = useState("");
-  const [credccv, setCredccv] = useState("");
-  const [credexpdate, setCredexpdate] = useState("");
-  const [courses, setCourses] = useState("");
+  //const [country, setCountry] = useState("");
+  //const [credNumber, setCredNum] = useState("");
+  //const [credCCV, setCredCCV] = useState("");
+  //const [credExpDate, setCredExpDate] = useState("");
+  //const [courses, setCourses] = useState("");
   const [error, setError] = useState(null);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     const cTrainee = {
-      firstname,
-      lastname,
+      //firstname,
+      //lastname,
       username,
       password,
       email,
-      country,
-      crednumber,
-      credccv,
-      credexpdate,
-      courses,
+      //country,
+      //credNumber,
+      //credCCVv,
+      //credExpDate,
+      //courses,
     };
 
     const response = await fetch("/api/ctrainee", {
@@ -52,16 +51,16 @@ const CTraineeForm = () => {
       setError(json.error);
     }
     if (response.ok) {
-      setFirstname("");
-      setLastname("");
+      //setFirstname("");
+      //setLastname("");
       setUsername("");
       setPassword("");
       setEmail("");
-      setCountry("");
-      setCrednum("");
-      setCredccv("");
-      setCredexpdate("");
-      setCourses("");
+      //setCountry("");
+      //setCrednum("");
+      //setCredccv("");
+      //setCredexpdate("");
+      //setCourses("");
       setError(null);
       console.log("new corporate trainee is added", json);
     }
@@ -69,25 +68,6 @@ const CTraineeForm = () => {
   return (
     <form className="create" onSubmit={handleSubmit}>
       <h3>Add Corporate Trainee</h3>
-
-      <li>
-        <label>Firstname:</label>
-        <input
-          type="text"
-          onChange={(e) => setFirstname(e.target.value)}
-          value={firstname}
-        />
-      </li>
-
-      <li>
-        <label>Lastname:</label>
-        <input
-          type="text"
-          onChange={(e) => setLastname(e.target.value)}
-          value={lastname}
-        />
-      </li>
-
       <li>
         <label>Username:</label>
         <input
@@ -114,59 +94,12 @@ const CTraineeForm = () => {
           value={email}
         />
       </li>
-
-      <li>
-        <label>Country:</label>
-        <input
-          type="text"
-          onChange={(e) => setCountry(e.target.value)}
-          value={country}
-        />
-      </li>
-
-      <li>
-        <label>CredNumber:</label>
-        <input
-          type="text"
-          onChange={(e) => setCrednum(e.target.value)}
-          value={crednumber}
-        />
-      </li>
-
-      <li>
-        <label>CredCCV:</label>
-        <input
-          type="text"
-          onChange={(e) => setCredccv(e.target.value)}
-          value={credccv}
-        />
-      </li>
-
-      <li>
-        <label>credexpdate:</label>
-        <input
-          type="text"
-          onChange={(e) => setCredexpdate(e.target.value)}
-          value={credexpdate}
-        />
-      </li>
-
-      <li>
-        <label>Courses:</label>
-        <input
-          type="text"
-          onChange={(e) => setCourses(e.target.value)}
-          value={courses}
-        />
-      </li>
-
       <button onClick={handleClickOpen}>Add new cTrainee</button>
       <div>
         {popup ? (
           <div className="main">
             <div className="popup">
               <div className="popup-header">
-                <h1></h1>
                 <h1 onClick={closePopup}>X</h1>
               </div>
               <div>
