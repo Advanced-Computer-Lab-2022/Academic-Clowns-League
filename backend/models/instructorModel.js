@@ -30,6 +30,13 @@ const InstructorSchema = new Schema(
     miniBio: {
       type: String,
     },
+    name: {
+      type: String,
+      required: true,
+    },
+    rating:{
+      type: Number,
+    },
   },
   { timestamps: true }
 );

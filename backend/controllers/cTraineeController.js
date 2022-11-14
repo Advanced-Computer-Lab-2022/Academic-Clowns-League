@@ -9,9 +9,6 @@ const createCTrainee = async (req, res) => {
     password,
     email,
     country,
-    credNumber,
-    credCCV,
-    credExpDate,
     courses,
   } = req.body;
 
@@ -24,9 +21,6 @@ const createCTrainee = async (req, res) => {
       password,
       email,
       country,
-      credNumber,
-      credCCV,
-      credExpDate,
       courses,
     });
     res.status(200).json(ctrainee);
