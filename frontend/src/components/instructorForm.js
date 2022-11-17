@@ -15,6 +15,7 @@ const InstructorForm = () => {
   const [country, setCountry] = useState("");
   const [email, setEmail] = useState("");
   const [miniBio, setMiniBio] = useState("");
+  const [name, setName] = useState("");
   const [error, setError] = useState(null);
 
   const handleSubmit = async (e) => {
@@ -26,6 +27,7 @@ const InstructorForm = () => {
       country,
       email,
       miniBio,
+      name,
     };
 
     const response = await fetch("/api/instructor", {
@@ -46,6 +48,7 @@ const InstructorForm = () => {
       setCountry("");
       setEmail("");
       setMiniBio("");
+      setName("");
       setError(null);
       console.log("new Instructor added", json);
     }
@@ -60,6 +63,15 @@ const InstructorForm = () => {
           type="text"
           onChange={(e) => setUsername(e.target.value)}
           value={username}
+        />
+      </li>
+
+      <li>
+        <label>Name:</label>
+        <input
+          type="text"
+          onChange={(e) => setName(e.target.value)}
+          value={name}
         />
       </li>
 

@@ -29,10 +29,18 @@ const courseSchema = new Schema({
         type: Date
     },
 
-    instructor:{
+    instructor:
+
+    {
+        type: mongoose.Types.ObjectId,
+        ref:'instructorModel'
+    }
+    
+    /*{
         type: String, //String for now, may later be updated to be of type 'Instructor'
         required: true
-    },
+    }*/
+    ,
     summary:{
         type: String
         
@@ -54,9 +62,23 @@ const courseSchema = new Schema({
     outline:{
         type: String
     },
-    subtitles:{
+    subtitles:[{
+        title: String,
+        videoLink: String,
+        shortDescription: String,
+        totalHours: Number
+    }],
+    
+    /*
+    {
         type: [String] //may be changed to Array of subtitles later
     }
+    */
+    exercises:[{
+        question: String,
+        options: [String],
+        answer: Number
+    }],
 
 }, {timestamps: true})
 

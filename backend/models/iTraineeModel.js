@@ -41,9 +41,10 @@ const iTraineeSchema = new Schema(
     credExpDate: {
       type: Date,
     },
-    courses: {
-      type: [String],
-    },
+    courses: [{
+        type: mongoose.Types.ObjectId,
+        ref:'courseModel'
+      }],
   },
   { timestamps: true }
 );

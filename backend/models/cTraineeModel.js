@@ -29,18 +29,10 @@ const cTraineeSchema = new Schema(
       type: String,
       //required: true,
     },
-    credNumber: {
-      type: String,
-    },
-    credCCV: {
-      type: String,
-    },
-    credExpDate: {
-      type: Date,
-    },
-    courses: {
-      type: [String], //may be changed later to an array of objects: progress, grade, etc.
-    },
+    courses: [{
+      type: mongoose.Types.ObjectId,
+      ref:'courseModel'
+    }],
   },
   { timestamps: true }
 );

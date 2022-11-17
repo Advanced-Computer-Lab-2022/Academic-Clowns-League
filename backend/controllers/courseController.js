@@ -9,7 +9,7 @@ const getAllCourses = async (req, res) => {
 
 //get instructor courses
 const getInstCourses = async (req, res) => {
-  const courses = await Course.find({ instructor: "Mariam Hossam" });
+  const courses = await Course.find({ instructor: "63715373d953904400b6a4d5" }); //id of Mariam Hossam
   res.status(200).json(courses);
 };
 
@@ -316,7 +316,7 @@ const searchAllCourses = async (req, res) => {
   //const courses = await Course.find({instructor:{"$regex": re  }})
   const courses = await Course.find({
     $or: [
-      { instructor: { $regex: re } },
+      //{ instructor: { $regex: re } },
       { title: { $regex: re } },
       { subject: { $regex: re } },
     ],
@@ -332,9 +332,8 @@ const searchInstrCourses = async (req, res) => {
   //const courses = await Course.find({instructor:{"$regex": re  }})
 
   const courses = await Course.find({
-    instructor: "Mariam Hossam",
+    instructor: "63715373d953904400b6a4d5", //id of Mariam Hossam
     $or: [
-      { instructor: { $regex: re } },
       { title: { $regex: re } },
       { subject: { $regex: re } },
     ],
@@ -425,7 +424,7 @@ const filterInstPriceSub = async (req, res) => {
           price: { $gte: prices[5][0], $lt: prices[5][1] },
         },
       ],
-      instructor: "Mariam Hossam",
+      instructor: "63715373d953904400b6a4d5", //id of Mariam Hossam
     });
     res.status(200).json(courses)
   } else if (subCount == 0 && priceCount > 0) {
@@ -450,18 +449,18 @@ const filterInstPriceSub = async (req, res) => {
           price: { $gte: prices[5][0], $lt: prices[5][1] },
         },
       ],
-      instructor: "Mariam Hossam",
+      instructor: "63715373d953904400b6a4d5", //id of Mariam Hossam
     });
     res.status(200).json(courses);
   } 
     else if (subCount > 0 && priceCount == 0) {
     const courses = await Course.find({
       subject: { $in: [subjects[0], subjects[1], subjects[2]] },
-      instructor: "Mariam Hossam",
+      instructor: "63715373d953904400b6a4d5", //id of Mariam Hossam
     });
     res.status(200).json(courses);
   } else {
-    const courses = await Course.find({ instructor: "Mariam Hossam" });
+    const courses = await Course.find({ instructor: "63715373d953904400b6a4d5" }); //id of Mariam Hossam
     res.status(200).json(courses);
   }
 };
