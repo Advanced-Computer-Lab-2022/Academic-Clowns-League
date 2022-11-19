@@ -8,12 +8,34 @@ const CourseForm = () => {
     const [price,setPrice] = useState('')
     const [discount,setDiscount] = useState('')
     const [discountValidUntil,setDiscountValidUntil] = useState('')
-    const [instructor,setInstructor] = useState('')
+    //const [instructor,setInstructor] = useState('63715373d953904400b6a4d5')
     const [summary,setSummary] = useState('')
     const [previewURL,setPreviewURL] = useState('')
-    const [subtitles,setSubtitles] = useState('')
+    const [subtitles,setSubtitles] = useState(null)
     const [outline,setOutline] = useState('')
     const [error, setError] = useState(null);
+    const [popup, setPop] = useState(false);
+
+    const handleClickOpen = async (e) => {
+        e.preventDefault()
+        console.log(title)
+        setPop(!popup);
+    };
+
+    const closePopup = () => {
+        setPop(false);
+        setTitle('')
+        setHours('')
+        setSubject('')
+        setPrice('')
+        setDiscount('')
+        setDiscountValidUntil('')
+        setSummary('')
+        setPreviewURL('')
+        setSubtitles(null)
+        setOutline('')
+        setError(null);
+    };
 
     const handleSubmit = async (e) => {
         e.preventDefault()
@@ -24,7 +46,7 @@ const CourseForm = () => {
             price,
             discount,
             discountValidUntil,
-            instructor,
+            //instructor,
             summary,
             previewURL,
             subtitles,
@@ -50,23 +72,22 @@ const CourseForm = () => {
                 setPrice('')
                 setDiscount('')
                 setDiscountValidUntil('')
-                setInstructor('')
                 setSummary('')
                 setPreviewURL('')
-                setSubtitles('')
+                setSubtitles(null)
                 setOutline('')
                 setError(null);
       console.log("new course added", json);
 
             }
-
+            closePopup()
     }
 
 
 
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form  onSubmit={handleClickOpen}>
     <h3>Add a new Course</h3>
 
     <label>Course Title</label>
@@ -103,17 +124,10 @@ const CourseForm = () => {
     value = {discount}/>
         <br/>
 
-
     <label>Discount Valid Until</label>
     <input type = "text" 
     onChange = {(e) => setDiscountValidUntil(e.target.value)}
     value = {discountValidUntil}/>
-        <br/>
-
-    <label>Course Instructor</label>
-    <input type = "text" 
-    onChange = {(e) => setInstructor(e.target.value)}
-    value = {instructor}/>
         <br/>
 
     <label>Course Summary</label>
@@ -140,11 +154,27 @@ const CourseForm = () => {
     value = {outline}/>
         <br/>
 
-    <button>Submit</button>
-
+    <button onClick = {handleClickOpen}>Submit</button>
+    <div>
+    {popup ? (
+      <div className="main">
+        <div className="popup">
+          <div>
+            <p className="message-header">Please read the following contract carefully:</p>
+            <p className="message">This is a contract to signify that the company now owns the rights
+            to the posted videos and materials of this registered course and will take a share of 20%
+            on each video per registered trainee.</p>
+          </div>
+          <button onClick = {closePopup}>Cancel</button>
+          <button onClick = {handleSubmit}>Agree & Add Course</button>
+        </div>
+      </div>
+    ) : (
+      ""
+    )}
+  </div>
     {error && <div className="error">{error}</div>}
     </form>
-
     
 
     
