@@ -46,9 +46,19 @@ const deleteCourse = (req, res) => {
   res.json({ mssg: "DELETE a course" });
 };
 
-//update a course
-const updateCourse = (req, res) => {
-  res.json({ mssg: "UPDATE a course" });
+//add a course subtitle
+const addCourseSub = async (req, res) => {
+  const{
+    title,
+    videoLink,
+    shortDescription,
+    totalHours,
+  } = req.body
+  const courseSubs = (await Course.findById({_id: '637a197cbc66688b3924a864'}).select('subtitles')).subtitles
+  subtitle = {"title" : title, "videoLink": videoLink, "shortDescription" : shortDescription, "totalHours" : totalHours}
+  courseSubs.push(subtitle)
+  const course = await Course.findByIdAndUpdate({_id: '637a197cbc66688b3924a864'},{subtitles: courseSubs})
+  res.status(200).json(course);
 };
 
 //create new course
@@ -64,7 +74,6 @@ const createCourse = async (req, res) => {
     summary,
     previewURL,
     outline,
-    subtitles,
   } = req.body;
   try {
     const course = await Course.create({
@@ -78,7 +87,6 @@ const createCourse = async (req, res) => {
       summary,
       previewURL,
       outline,
-      subtitles,
     });
     //Course.create() is async that's why we put async around the handler fn, so u can use await right here
     //now we're storing the response of Course.create() (which is the doc created along with its is) in course
@@ -657,15 +665,33 @@ const filterInstPriceSub = async (req, res) => {
   }
 };
 
+const getCourseItems = async (req, res) => {
+  /*const subtitles = (await Course.findById({_id : '637a197cbc66688b3924a864'}).select('subtitles')).subtitles
+  const exercises = (await Course.findById({_id : '637a197cbc66688b3924a864'}).select('exercises')).exercises
+  let courseItems = await Course.findById({_id : '637a197cbc66688b3924a864'}).select('-exercises -subtitles')
+  for(i = 0; i<subtitles.length; i++){
+    Object.assign(courseItems,{"title": subtitles[i].title})
+  }
+  for(i = 0; i<exercises.length; i++){
+    courseItems.push(exercises[i].question)
+    for(j = 0; j<exercises[i].options.length; j++){
+      courseItems.push(exercises[i].options[j])
+    }
+  }*/
+  const courseItems = await Course.findById({_id : '637a197cbc66688b3924a864'})
+  res.status(200).json(courseItems)
+};
+
 module.exports = {
   getAllCourses,
   getCourse,
   deleteCourse,
-  updateCourse,
+  addCourseSub,
   createCourse,
   searchAllCourses,
   filterSubRatePrice,
   getInstCourses,
   filterInstPriceSub,
-  searchInstrCourses
+  searchInstrCourses,
+  getCourseItems
 };

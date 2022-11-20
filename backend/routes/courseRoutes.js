@@ -3,13 +3,14 @@ const {
   getAllCourses,
   getCourse,
   deleteCourse,
-  updateCourse,
+  addCourseSub,
   createCourse,
   searchAllCourses,
   filterSubRatePrice,
   getInstCourses,
   filterInstPriceSub,
-  searchInstrCourses
+  searchInstrCourses,
+  getCourseItems
 } = require("../controllers/courseController");
 
 const router = express.Router();
@@ -29,8 +30,8 @@ router.get("/", getAllCourses);
 //DELETE a single course
 router.delete("/:id", deleteCourse);
 
-//UPDATE a single course
-router.patch("/:id", updateCourse);
+//add subtitle to course on creation
+router.patch("/addcoursesub", addCourseSub);
 
 //POST a new course
 router.post("/", createCourse);
@@ -42,6 +43,9 @@ router.get("/filtersubrat", filterSubRatePrice);
 router.get("/instcourses", getInstCourses);
 
 router.get("/filterinstprice", filterInstPriceSub);
+
+//get items of specific course
+router.get("/allcourseitems", getCourseItems);
 
 //after creating all our routes , export the router with the routes attached to it
 module.exports = router;

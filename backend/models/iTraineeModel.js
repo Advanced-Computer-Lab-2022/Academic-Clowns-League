@@ -4,11 +4,11 @@ const Schema = mongoose.Schema;
 
 const iTraineeSchema = new Schema(
   {
-    firstName: {
+    firstname: {
       type: String,
       required: true,
     },
-    lastName: {
+    lastname: {
       type: String,
       required: true,
     },
@@ -44,7 +44,14 @@ const iTraineeSchema = new Schema(
     courses: [{
         type: mongoose.Types.ObjectId,
         ref:'courseModel'
-      }],
+    }],
+    grades: [{
+      courseID: mongoose.Types.ObjectId,
+      exercises: [{
+        exerciseID: mongoose.Types.ObjectId,
+        grade: Number
+      }]
+    }]
   },
   { timestamps: true }
 );

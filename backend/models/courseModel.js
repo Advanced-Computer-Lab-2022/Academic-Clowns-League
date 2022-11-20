@@ -77,7 +77,7 @@ const courseSchema = new Schema({
     exercises:[{
         question: String,
         options: [String],
-        answer: Number
+        answer: String
     }],
 
 }, {timestamps: true})

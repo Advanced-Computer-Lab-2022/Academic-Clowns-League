@@ -158,7 +158,7 @@ const CourseForm = () => {
     <div>
     {popup ? (
       <div className="main">
-        <div className="popup">
+        <div className="popup-contract">
           <div>
             <p className="message-header">Please read the following contract carefully:</p>
             <p className="message">This is a contract to signify that the company now owns the rights
@@ -175,7 +175,6 @@ const CourseForm = () => {
   </div>
     {error && <div className="error">{error}</div>}
     </form>
-    
 
     
   )}

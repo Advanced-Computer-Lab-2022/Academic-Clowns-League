@@ -41,6 +41,16 @@ header a {
   right: 25%;
 }
 
+.popup-contract{
+  height: 200px;
+  width: 50%;
+  background-color: white;
+  position: absolute;
+  top: 50%;
+  left: 25%;
+  margin: 0 auto;
+}
+
 .popup-header {
   display: flex;
   justify-content: space-between;
@@ -64,6 +74,7 @@ header a {
   display: grid;
   grid-template-columns: 3fr 1fr;
   gap: 100px;
+
 }
 .course-details {
   background: #fff;

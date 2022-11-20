@@ -18,7 +18,6 @@ import IndividualTraineeHome from "./pages/individualTraineeHome";
 import FilterAllCourses from "./pages/filterAllCourses";
 import FilterMyCourses from "./pages/filterInstCourses";
 
-
 import Navbar from "./components/navbar";
 import InstructorCourses from "./pages/filterInstCourses";
 import CorporateTraineeHome from "./pages/corporateTraineeHome";
@@ -32,7 +31,7 @@ import SearchInstrCourses from "./pages/searchInstrCourses";
 function App() {
   return (
     <div className="App">
-      <Navbar />
+      <Navbar/>
       <BrowserRouter>
         <div className="pages">
           <Routes>
