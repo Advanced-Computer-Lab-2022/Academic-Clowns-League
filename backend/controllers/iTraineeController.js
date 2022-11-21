@@ -69,8 +69,10 @@ const getRegisteredCourses = async (req,res) => {
       for(j = 0; j < itraineeGrades[i].exercises.length; j++){
         if(itraineeGrades[i].exercises[j].exerciseID == "637a197cbc66688b3924a868"){
           grade = itraineeGrades[i].exercises[j].grade
+          break
         }
       }
+      break
     }
   }
   res.status(200).json(grade)

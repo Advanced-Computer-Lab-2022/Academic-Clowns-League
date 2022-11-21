@@ -103,15 +103,22 @@ const getRegisteredCourses = async (req,res) => {
 }
 
 const getGrade = async (req, res) => {
+  const{
+    //ctrainee, 637a8c03f7740521fbe8246e
+    course, //637a197cbc66688b3924a864
+    exercise //637a197cbc66688b3924a868
+  } = req.body
   const ctraineeGrades = (await cTrainee.findById({_id: '637a8c03f7740521fbe8246e'}).select('grades')).grades
   let grade = 0;
   for(i = 0; i < ctraineeGrades.length; i++){
-    if(ctraineeGrades[i].courseID == "637a197cbc66688b3924a864"){
+    if(ctraineeGrades[i].courseID == course){
       for(j = 0; j < ctraineeGrades[i].exercises.length; j++){
-        if(ctraineeGrades[i].exercises[j].exerciseID == "637a197cbc66688b3924a868"){
+        if(ctraineeGrades[i].exercises[j].exerciseID == exercise){
           grade = ctraineeGrades[i].exercises[j].grade
+          break
         }
       }
+      break
     }
   }
   res.status(200).json(grade)

@@ -23,6 +23,7 @@ import InstructorCourses from "./pages/filterInstCourses";
 import CorporateTraineeHome from "./pages/corporateTraineeHome";
 import FilterCorpCourses from "./pages/filterCorpCourses";
 import SearchInstrCourses from "./pages/searchInstrCourses";
+//import CourseDetails from './components/courseDetails';
 
 //BrowserRouter wraps all things involved with routes
 //Routes wraps the routes
@@ -31,8 +32,8 @@ import SearchInstrCourses from "./pages/searchInstrCourses";
 function App() {
   return (
     <div className="App">
-      <Navbar/>
       <BrowserRouter>
+        <Navbar/>
         <div className="pages">
           <Routes>
             <Route path="/instructorHome" element={<InstructorHome />}   />

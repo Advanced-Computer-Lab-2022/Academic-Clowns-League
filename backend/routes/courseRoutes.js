@@ -10,7 +10,9 @@ const {
   getInstCourses,
   filterInstPriceSub,
   searchInstrCourses,
-  getCourseItems
+  getCourseItems,
+  viewCorrectAnswer,
+  addCourseExercise
 } = require("../controllers/courseController");
 
 const router = express.Router();
@@ -33,6 +35,9 @@ router.delete("/:id", deleteCourse);
 //add subtitle to course on creation
 router.patch("/addcoursesub", addCourseSub);
 
+//add exercise to course on creation
+router.patch("/addcoursex", addCourseExercise);
+
 //POST a new course
 router.post("/", createCourse);
 
@@ -46,6 +51,9 @@ router.get("/filterinstprice", filterInstPriceSub);
 
 //get items of specific course
 router.get("/allcourseitems", getCourseItems);
+
+//view correct answer
+router.get("/viewcorrectanswer", viewCorrectAnswer);
 
 //after creating all our routes , export the router with the routes attached to it
 module.exports = router;

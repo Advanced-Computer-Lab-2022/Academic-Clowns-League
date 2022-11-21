@@ -49,15 +49,34 @@ const deleteCourse = (req, res) => {
 //add a course subtitle
 const addCourseSub = async (req, res) => {
   const{
+    courseID, //637a197cbc66688b3924a864
     title,
     videoLink,
     shortDescription,
     totalHours,
   } = req.body
-  const courseSubs = (await Course.findById({_id: '637a197cbc66688b3924a864'}).select('subtitles')).subtitles
+  const courseSubs = (await Course.findById({_id: courseID}).select('subtitles')).subtitles
   subtitle = {"title" : title, "videoLink": videoLink, "shortDescription" : shortDescription, "totalHours" : totalHours}
   courseSubs.push(subtitle)
-  const course = await Course.findByIdAndUpdate({_id: '637a197cbc66688b3924a864'},{subtitles: courseSubs})
+  const course = await Course.findByIdAndUpdate({_id: courseID},{subtitles: courseSubs})
+  res.status(200).json(course);
+};
+
+//add course exercise
+const addCourseExercise = async (req, res) => {
+  const{
+    courseID, //637a197cbc66688b3924a864
+    question,
+    option1,
+    option2,
+    option3,
+    option4,
+    answer
+  } = req.body
+  const courseEx = (await Course.findById({_id: courseID}).select('exercises')).exercises
+  exercise = {"question" : question, "options": [option1, option2, option3, option4], "answer" : answer}
+  courseEx.push(exercise)
+  const course = await Course.findByIdAndUpdate({_id: courseID},{exercises: courseEx})
   res.status(200).json(course);
 };
 
@@ -678,9 +697,36 @@ const getCourseItems = async (req, res) => {
       courseItems.push(exercises[i].options[j])
     }
   }*/
-  const courseItems = await Course.findById({_id : '637a197cbc66688b3924a864'})
+  const{
+    course //637a197cbc66688b3924a864
+  } = req.body
+  const courseItems = await Course.findById({_id : course})
   res.status(200).json(courseItems)
 };
+
+const viewCorrectAnswer = async (req, res) => {
+  const{
+    course, //637a197cbc66688b3924a864
+    exercise, //637a197cbc66688b3924a867
+    answer
+  } = req.body
+
+  const exercises = (await Course.findById({_id : course}).select('exercises')).exercises
+  let reply = ''
+
+  for(i = 0; i < exercises.length; i++){
+    if(exercises[i]._id == exercise){
+      if(exercises[i].answer == answer){
+        reply = "Your answer is correct"
+      }
+      else{
+        reply = "The correct answer is: " + exercises[i].answer
+      }
+    }
+    break
+  }
+  res.status(200).json(reply)
+}
 
 module.exports = {
   getAllCourses,
@@ -693,5 +739,7 @@ module.exports = {
   getInstCourses,
   filterInstPriceSub,
   searchInstrCourses,
-  getCourseItems
+  getCourseItems,
+  viewCorrectAnswer,
+  addCourseExercise
 };
