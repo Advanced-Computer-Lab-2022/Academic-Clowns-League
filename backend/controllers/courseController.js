@@ -657,6 +657,42 @@ const filterInstPriceSub = async (req, res) => {
   }
 };
 
+
+const addCourseSub = async (req, res) => {
+  const id = req.params.id;
+  const{
+    //courseID, //637a197cbc66688b3924a864
+    title,
+    videoLink,
+    shortDescription,
+    totalHours,
+  } = req.body
+  const courseSubs = (await Course.findById({_id: id}).select('subtitles')).subtitles
+  subtitle = {"title" : title, "videoLink": videoLink, "shortDescription" : shortDescription, "totalHours" : totalHours}
+  courseSubs.push(subtitle)
+  const course = await Course.findByIdAndUpdate({_id: id},{subtitles: courseSubs},{new:true})
+  res.status(200).json(course);
+
+};
+
+
+const addCoursePreview = async (req, res) => {
+  const id = req.params.id;
+  const{
+    videoPreviewURL
+  } = req.body
+  const course = await Course.findByIdAndUpdate({_id: id},{previewURL: videoPreviewURL},{new:true})
+  res.status(200).json(course);
+};
+
+const openMyCourse = async (req, res) => {
+  const id = req.params.id;
+  const course = await Course.findById({_id: id})
+  res.status(200).json(course)
+};
+
+
+
 module.exports = {
   getAllCourses,
   getCourse,
@@ -667,5 +703,8 @@ module.exports = {
   filterSubRatePrice,
   getInstCourses,
   filterInstPriceSub,
-  searchInstrCourses
+  searchInstrCourses,
+  addCourseSub,
+  addCoursePreview,
+  openMyCourse
 };

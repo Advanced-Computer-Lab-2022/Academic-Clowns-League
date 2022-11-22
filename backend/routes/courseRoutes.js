@@ -9,7 +9,10 @@ const {
   filterSubRatePrice,
   getInstCourses,
   filterInstPriceSub,
-  searchInstrCourses
+  searchInstrCourses,
+  addCourseSub,
+  addCoursePreview,
+  openMyCourse
 } = require("../controllers/courseController");
 
 const router = express.Router();
@@ -42,6 +45,17 @@ router.get("/filtersubrat", filterSubRatePrice);
 router.get("/instcourses", getInstCourses);
 
 router.get("/filterinstprice", filterInstPriceSub);
+
+
+//add subtitle to course
+router.patch("/addCourseSub/:id", addCourseSub);
+
+//add preview link to course
+router.patch("/addCoursePreview/:id", addCoursePreview);
+
+//open my course
+router.get("/openMyCourse/:id", openMyCourse);
+
 
 //after creating all our routes , export the router with the routes attached to it
 module.exports = router;
