@@ -1,6 +1,17 @@
 //import the model
 const Course = require("../models/courseModel");
 
+
+
+function getId(url) {
+  const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
+  const match = url.match(regExp);
+
+  return (match && match[2].length === 11)
+    ? match[2]
+    : null;
+}
+
 //get all courses
 const getAllCourses = async (req, res) => {
     const courses = await Course.aggregate([{
@@ -659,7 +670,7 @@ const filterInstPriceSub = async (req, res) => {
 
 
 const addCourseSub = async (req, res) => {
-  const id = req.params.id;
+  const id = req.query.id;
   const{
     //courseID, //637a197cbc66688b3924a864
     title,
@@ -667,8 +678,10 @@ const addCourseSub = async (req, res) => {
     shortDescription,
     totalHours,
   } = req.body
+  const videoId = getId(videoLink)
+  const embeddedLink = ("//www.youtube.com/embed/"+ videoId)
   const courseSubs = (await Course.findById({_id: id}).select('subtitles')).subtitles
-  subtitle = {"title" : title, "videoLink": videoLink, "shortDescription" : shortDescription, "totalHours" : totalHours}
+  subtitle = {"title" : title, "videoLink": embeddedLink, "shortDescription" : shortDescription, "totalHours" : totalHours}
   courseSubs.push(subtitle)
   const course = await Course.findByIdAndUpdate({_id: id},{subtitles: courseSubs},{new:true})
   res.status(200).json(course);
@@ -676,17 +689,30 @@ const addCourseSub = async (req, res) => {
 };
 
 
+
+ /* 
+const videoId = getId('http://www.youtube.com/watch?v=zbYf5_S7oJo');
+const iframeMarkup = '<iframe width="560" height="315" src="//www.youtube.com/embed/' 
+  + videoId + '" frameborder="0" allowfullscreen></iframe>';
+
+console.log('Video ID:', videoId)
+*/
+
+
+
 const addCoursePreview = async (req, res) => {
-  const id = req.params.id;
+  const id = req.query.id;
   const{
     videoPreviewURL
   } = req.body
-  const course = await Course.findByIdAndUpdate({_id: id},{previewURL: videoPreviewURL},{new:true})
+  const videoId = getId(videoPreviewURL)
+  const embeddedLink = ("//www.youtube.com/embed/"+ videoId)
+  const course = await Course.findByIdAndUpdate({_id: id},{previewURL: embeddedLink},{new:true})
   res.status(200).json(course);
 };
 
 const openMyCourse = async (req, res) => {
-  const id = req.params.id;
+  const id = req.query.id;
   const course = await Course.findById({_id: id})
   res.status(200).json(course)
 };

@@ -1,17 +1,24 @@
-import { useParams } from "react-router-dom";
+
 import { useEffect, useState } from "react";
-import CourseDetails from "../components/courseDetails";
 import Subtitle from "../components/subtitle";
 
 
 const TraineeCourse = () => {
-  const { id } = useParams();
+  //const { id } = useParams();
+
+  //to get the id from  (query, in the URL)
+  const params = new URLSearchParams(window.location.search);
+  const id = params.get('id');
+
+
   const [course, setCourse] = useState(null);
 
 
   useEffect(() => {
     const fetchCourse = async () => {
-      const response = await fetch("/api/courses/openMyCourse/" + id);
+      const response = await fetch("/api/courses/openMyCourse/?id=" + id);
+
+
       const json = await response.json();
       if (response.ok) {
         setCourse(json);

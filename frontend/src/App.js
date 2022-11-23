@@ -50,8 +50,11 @@ function App() {
             <Route path="/filterCorpCourses" element={<FilterCorpCourses />} />
 
 
+            <Route path="/traineeCourse" element={<TraineeCourse />} />
 
-            <Route path="/courses/:id" element={<TraineeCourse />} />
+
+
+           {/*<Route path="/courses/:id" element={<TraineeCourse />} /> */} 
 
           </Routes>
         </div>

@@ -32,8 +32,7 @@ router.get("/", getAllCourses);
 //DELETE a single course
 router.delete("/:id", deleteCourse);
 
-//UPDATE a single course
-router.patch("/:id", updateCourse);
+
 
 //POST a new course
 router.post("/", createCourse);
@@ -48,14 +47,18 @@ router.get("/filterinstprice", filterInstPriceSub);
 
 
 //add subtitle to course
-router.patch("/addCourseSub/:id", addCourseSub);
+router.patch("/addCourseSub", addCourseSub);
 
 //add preview link to course
-router.patch("/addCoursePreview/:id", addCoursePreview);
+router.patch("/addCoursePreview", addCoursePreview);
 
 //open my course
-router.get("/openMyCourse/:id", openMyCourse);
+router.get("/openMyCourse", openMyCourse);
 
+
+//moved this to the end so none of the requests map to it
+//UPDATE a single course
+router.patch("/:id", updateCourse);
 
 //after creating all our routes , export the router with the routes attached to it
 module.exports = router;
