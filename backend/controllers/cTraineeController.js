@@ -1,16 +1,9 @@
 const cTrainee = require("../models/cTraineeModel");
-
+const mongoose = require("mongoose");
 //POST a corporate trainee
 const createCTrainee = async (req, res) => {
-  const {
-    firstname,
-    lastname,
-    username,
-    password,
-    email,
-    country,
-    courses,
-  } = req.body;
+  const { firstname, lastname, username, password, email, country, courses } =
+    req.body;
 
   // add ctrainee to DB
   try {
@@ -67,8 +60,25 @@ const createCTrainee = async (req, res) => {
 };*/
 
 //UPDATE a corporate trainee
-const updateCTrainee = (req, res) => {
-  res.json({ mssg: "UPDATE a corporate trainee" });
+const updateCTrainee = async (req, res) => {
+  const { id } = req.params;
+
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    return res.status(404).json({ error: "No such Corporate Trainee" });
+  }
+
+  const ctrainee = await cTrainee.findOneAndUpdate(
+    { _id: id },
+    {
+      ...req.body,
+    }
+  );
+
+  if (!ctrainee) {
+    return res.status(400).json({ error: "No such Corporate Tainee" });
+  }
+
+  res.status(200).json(ctrainee);
 };
 
 //DELETE a corporate trainee

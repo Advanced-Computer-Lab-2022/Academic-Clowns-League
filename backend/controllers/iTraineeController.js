@@ -1,5 +1,5 @@
 const iTrainee = require("../models/iTraineeModel");
-
+const mongoose = require("mongoose");
 // create new iTrainee
 
 const createITrainee = (req, res) => {
@@ -7,8 +7,25 @@ const createITrainee = (req, res) => {
 };
 
 //UPDATE an individual trainee
-const updateITrainee = (req, res) => {
-  res.json({ mssg: "UPDATE an individual trainee" });
+const updateITrainee = async (req, res) => {
+  const { id } = req.params;
+
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    return res.status(404).json({ error: "No such Individual Trainee" });
+  }
+
+  const itrainee = await iTrainee.findOneAndUpdate(
+    { _id: id },
+    {
+      ...req.body,
+    }
+  );
+
+  if (!itrainee) {
+    return res.status(400).json({ error: "No such Individual Trainee" });
+  }
+
+  res.status(200).json(itrainee);
 };
 
 //DELETE an individual trainee

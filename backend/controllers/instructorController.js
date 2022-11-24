@@ -1,5 +1,5 @@
 const Instructor = require("../models/instructorModel");
-
+const mongoose = require("mongoose");
 // create new Instructor
 
 /*const createInstructor = async (req, res) => {
@@ -24,7 +24,7 @@ const Instructor = require("../models/instructorModel");
 };*/
 
 const createInstructor = async (req, res) => {
-  const { username, password, country, email, miniBio,name } = req.body;
+  const { username, password, country, email, miniBio, name } = req.body;
   try {
     const instructor = await Instructor.create({
       username,
@@ -32,7 +32,7 @@ const createInstructor = async (req, res) => {
       country,
       email,
       miniBio,
-      name
+      name,
     });
     //Instructor.create() is async that's why we put async around the handler fn, so u can use await right here
     //now we're storing the response of Instructor.create() (which is the doc created along with its is) in Instructor
@@ -46,8 +46,25 @@ const createInstructor = async (req, res) => {
 };
 
 //UPDATE an individual Instructor
-const updateInstructor = (req, res) => {
-  res.json({ mssg: "UPDATE an individual Instructor" });
+const updateInstructor = async (req, res) => {
+  const { id } = req.params;
+
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    return res.status(404).json({ error: "No such Instructor" });
+  }
+
+  const instructor = await Instructor.findOneAndUpdate(
+    { _id: id },
+    {
+      ...req.body,
+    }
+  );
+
+  if (!instructor) {
+    return res.status(400).json({ error: "No such Instructor" });
+  }
+
+  res.status(200).json(instructor);
 };
 
 //DELETE an individual Instructor
