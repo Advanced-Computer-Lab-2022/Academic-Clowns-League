@@ -1,4 +1,5 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 //BrowserRouter surrounds everything that ever needs to use the routing system
 //Routes wraps all of our individual routes
