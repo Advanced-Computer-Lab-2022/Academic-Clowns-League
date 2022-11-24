@@ -3,6 +3,8 @@ const {
   getAllCourses,
   getCourse,
   deleteCourse,
+  updateCourse,
+  rateCourse,
   createCourse,
   searchAllCourses,
   filterSubRatePrice,
@@ -33,6 +35,8 @@ router.get("/", getAllCourses);
 //DELETE a single course
 router.delete("/:id", deleteCourse);
 
+//UPDATE a single course
+router.patch("/rate", rateCourse);
 //add exercise to course on creation
 router.patch("/addcoursex", addCourseExercise);
 

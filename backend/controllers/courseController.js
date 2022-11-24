@@ -58,6 +58,51 @@ const deleteCourse = (req, res) => {
   res.json({ mssg: "DELETE a course" });
 };
 
+//Rate a course
+const rateCourse = async (req, res) => {
+  const { courseId, s1, s2, s3, s4, s5 } = req.body;
+  let sum = 0;
+  const course = await Course.findOneAndUpdate({ _id: courseId });
+  if (s1 == "true") {
+    sum++;
+  }
+  if (s2 == "true") {
+    sum++;
+  }
+  if (s3 == "true") {
+    sum++;
+  }
+  if (s4 == "true") {
+    sum++;
+  }
+  if (s5 == "true") {
+    sum++;
+  }
+  let ratingsTemp = [Number];
+  ratingsTemp = course.ratings;
+  console.log(ratingsTemp);
+  ratingsTemp.push(sum);
+  console.log(ratingsTemp);
+  let len = ratingsTemp.length;
+  console.log(len);
+  let ratingsSum = 0;
+  ratingsTemp.forEach(myFunction);
+
+  function myFunction(value) {
+    ratingsSum += value;
+  }
+  console.log(ratingsSum);
+
+  const overallR = ratingsSum / len;
+  console.log(overallR);
+
+  const updatedcourse = await Course.findOneAndUpdate(
+    { _id: courseId },
+    { ratings: ratingsTemp, overallRating: overallR },
+    { new: true }
+  );
+  res.status(200).json(updatedcourse);
+};
 //update a course
 const updateCourse = async (req, res) => {
   const { id } = req.params;
@@ -102,6 +147,29 @@ const addCourseExercise = async (req, res) => {
     { exercises: courseEx }
   );
   res.status(200).json(course);
+};
+
+//DELETE an individual Instructor
+const deleteInstructor = (req, res) => {
+  res.json({ mssg: "DELETE an individual Instructor" });
+};
+
+//GET a single individual Instructor
+const getInstructor = async (req, res) => {
+  // const { id } = req.params
+
+  // if (!mongoose.Types.ObjectId.isValid(id)) {
+  // return res.status(404).json({error: 'No such instructor'})
+  // }
+
+  // const instructor = await Instructor.findById(id)
+  const instructor = await Instructor.find({ _id: "63715373d953904400b6a4d5" });
+
+  //if (!instructor) {
+  // return res.status(404).json({error: 'No such instructor'})
+  //}
+
+  res.status(200).json(instructor);
 };
 
 //create new course
@@ -827,6 +895,7 @@ module.exports = {
   getAllCourses,
   getCourse,
   deleteCourse,
+  rateCourse,
   createCourse,
   searchAllCourses,
   filterSubRatePrice,
