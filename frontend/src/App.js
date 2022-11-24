@@ -24,6 +24,7 @@ import InstructorCourses from "./pages/filterInstCourses";
 import CorporateTraineeHome from "./pages/corporateTraineeHome";
 import FilterCorpCourses from "./pages/filterCorpCourses";
 import SearchInstrCourses from "./pages/searchInstrCourses";
+import TraineeCourse from "./pages/traineeCourse";
 
 //BrowserRouter wraps all things involved with routes
 //Routes wraps the routes
@@ -47,6 +48,13 @@ function App() {
             <Route path="/filterInstCourses" element={<FilterMyCourses />} />
             <Route path="/mycourses" element={<InstructorCourses />} />
             <Route path="/filterCorpCourses" element={<FilterCorpCourses />} />
+
+
+            <Route path="/traineeCourse" element={<TraineeCourse />} />
+
+
+
+           {/*<Route path="/courses/:id" element={<TraineeCourse />} /> */} 
 
           </Routes>
         </div>
