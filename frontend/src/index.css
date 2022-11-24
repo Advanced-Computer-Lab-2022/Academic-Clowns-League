@@ -4,7 +4,7 @@
 /* layout */
 :root {
   /*referenced during whole proj, primary is used in .course-details h4*/
-  --primary: #1aac83;
+  --primary: #b41212;
   --error: #e7195a;
 }
 body {
