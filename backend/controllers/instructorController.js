@@ -1,5 +1,5 @@
 const Instructor = require("../models/instructorModel");
-
+const mongoose = require("mongoose");
 // create new Instructor
 
 /*const createInstructor = async (req, res) => {
@@ -45,9 +45,53 @@ const createInstructor = async (req, res) => {
   }
 };
 
-//UPDATE an individual Instructor
-const updateInstructor = (req, res) => {
-  res.json({ mssg: "UPDATE an individual Instructor" });
+//RATE an individual Instructor
+const rateInstructor = async (req, res) => {
+  const {
+   instructorId,
+   s1,
+   s2,
+   s3,
+   s4,
+   s5,
+  } = req.body;
+  let sum=0;
+  const instructor = await Instructor.findOneAndUpdate({_id:instructorId});
+  if(s1=="true"){
+    sum++;
+  }
+  if(s2=="true"){
+    sum++;
+ }
+  if(s3=="true"){
+    sum++;
+  }
+  if(s4=="true"){
+    sum++;
+  }
+  if(s5=="true"){
+    sum++;
+  }
+  let ratingsTemp = [Number];
+  ratingsTemp = instructor.ratings;
+  console.log(ratingsTemp);
+  ratingsTemp.push(sum);
+  console.log(ratingsTemp);
+  let len=ratingsTemp.length;
+  console.log(len);
+ let ratingsSum = 0;
+ ratingsTemp.forEach(myFunction);
+
+function myFunction(value) {
+ratingsSum += value ;
+}
+console.log(ratingsSum); 
+
+const overallRating = (ratingsSum/len);
+console.log(overallRating);
+
+ const updatedinstructor = await Instructor.findOneAndUpdate({_id: instructorId}, {ratings:ratingsTemp, rating: overallRating},{new:true});
+ res.status(200).json(updatedinstructor)
 };
 
 //DELETE an individual Instructor
@@ -56,8 +100,21 @@ const deleteInstructor = (req, res) => {
 };
 
 //GET a single individual Instructor
-const getInstructor = (req, res) => {
-  res.json({ mssg: "GET a single individual Instructor" });
+const getInstructor = async (req, res) => {
+ // const { id } = req.params
+
+ // if (!mongoose.Types.ObjectId.isValid(id)) {
+   // return res.status(404).json({error: 'No such instructor'})
+ // }
+
+ // const instructor = await Instructor.findById(id)
+   const instructor = await Instructor.find({_id: "63715373d953904400b6a4d5"})
+
+  //if (!instructor) {
+   // return res.status(404).json({error: 'No such instructor'})
+  //}
+
+  res.status(200).json(instructor)
 };
 
 //GET all individual Instructors
@@ -70,5 +127,5 @@ module.exports = {
   getAllInstructor,
   getInstructor,
   deleteInstructor,
-  updateInstructor,
+  rateInstructor
 };

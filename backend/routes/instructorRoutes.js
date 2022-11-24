@@ -4,24 +4,24 @@ const {
     getAllInstructor,
     getInstructor,
     deleteInstructor,
-    updateInstructor
+    rateInstructor
 } = require('../controllers/InstructorController');
 
 const router = express.Router();
 
-//GET all corporate trainees
+//GET all  instructor
 router.get('/', getAllInstructor);
 
-//GET a single corporate trainee
-router.get('/:id', getInstructor);
+//GET a single  instructor
+router.get('/onlyone', getInstructor);
 
-//POST a new corporate trainee
+//POST a new  instructor
 router.post('/', createInstructor);
 
-//DELETE a corporate trainee
+//DELETE a instructor
 router.delete('/:id', deleteInstructor);
 
-//UPDATE a corporate trainee
-router.patch('/:id', updateInstructor);
+//RATE an instructor
+router.patch('/rate', rateInstructor);
 
 module.exports = router;
