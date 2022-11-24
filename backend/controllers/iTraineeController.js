@@ -1,4 +1,6 @@
 const iTrainee = require("../models/iTraineeModel");
+const mongoose = require("mongoose");
+// create new iTrainee
 const Course = require("../models/courseModel");
 
 // create new iTrainee ->  signing up of guest to become iTrainee
@@ -12,7 +14,7 @@ const createITrainee = async (req, res) => {
     country,
     email,
     gender,
-    courses
+    courses,
   } = req.body;
   try {
     const itrainee = await iTrainee.create({
@@ -32,8 +34,25 @@ const createITrainee = async (req, res) => {
 };
 
 //UPDATE an individual trainee
-const updateITrainee = (req, res) => {
-  res.json({ mssg: "UPDATE an individual trainee" });
+const updateITrainee = async (req, res) => {
+  const { id } = req.params;
+
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    return res.status(404).json({ error: "No such Individual Trainee" });
+  }
+
+  const itrainee = await iTrainee.findOneAndUpdate(
+    { _id: id },
+    {
+      ...req.body,
+    }
+  );
+
+  if (!itrainee) {
+    return res.status(400).json({ error: "No such Individual Trainee" });
+  }
+
+  res.status(200).json(itrainee);
 };
 
 //DELETE an individual trainee
@@ -51,15 +70,19 @@ const getAllITrainee = (req, res) => {
   res.json({ mssg: "GET all individual trainees" });
 };
 
-const getRegisteredCourses = async (req,res) => {
+const getRegisteredCourses = async (req, res) => {
   //get course id's from courses array of ctrainee
-  const itraineeCourses = (await iTrainee.findById({_id: '637a356c54c79d632507dc8a'}).select('courses')).courses
-  let courses = []
-  for(i = 0; i < itraineeCourses.length; i++){
-    courses.push(await Course.find({_id: itraineeCourses[i]}))
+  const itraineeCourses = (
+    await iTrainee
+      .findById({ _id: "637a356c54c79d632507dc8a" })
+      .select("courses")
+  ).courses;
+  let courses = [];
+  for (i = 0; i < itraineeCourses.length; i++) {
+    courses.push(await Course.find({ _id: itraineeCourses[i] }));
   }
   res.status(200).json(courses);
-}
+};
 
 /*const getGrade = async (req, res) => {
   const itraineeGrades = (await iTrainee.findById({_id: '637a8c03f7740521fbe8246e'}).select('grades')).grades

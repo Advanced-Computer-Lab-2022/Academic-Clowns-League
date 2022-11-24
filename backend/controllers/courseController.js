@@ -1,5 +1,6 @@
 //import the model
 const Course = require("../models/courseModel");
+const mongoose = require("mongoose");
 
 function getId(url) {
   const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
@@ -57,6 +58,25 @@ const deleteCourse = (req, res) => {
   res.json({ mssg: "DELETE a course" });
 };
 
+//update a course
+const updateCourse = async (req, res) => {
+  const { id } = req.params;
+
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    return res.status(404).json({ error: "No such Course" });
+  }
+
+  const course = await Course.findOneAndUpdate(
+    { _id: id },
+    {
+      ...req.body,
+    }
+  );
+
+  if (!course) {
+    return res.status(400).json({ error: "No such Course" });
+  }
+};
 //add course exercise
 const addCourseExercise = async (req, res) => {
   const {
@@ -814,6 +834,7 @@ module.exports = {
   filterInstPriceSub,
   searchInstrCourses,
   viewCorrectAnswer,
+  updateCourse,
   addCourseExercise,
   addCourseSub,
   addCoursePreview,
