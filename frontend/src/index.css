@@ -3,6 +3,7 @@
 
 /* layout */
 :root {
+  /*referenced during whole proj, primary is used in .course-details h4*/
   --primary: #1aac83;
   --error: #e7195a;
 }
@@ -12,9 +13,11 @@ body {
   font-family: "Poppins";
 }
 header {
+  /*for the navbar*/
   background: #fff;
 }
 header .container {
+  /*for the navbar*/
   max-width: 1400px;
   margin: 0 auto;
   padding: 10px 20px;
@@ -27,12 +30,14 @@ header a {
   text-decoration: none;
 }
 .pages {
+  /*used in App.js*/
   max-width: 1400px;
   padding: 20px;
   margin: 0 auto;
 }
 
 .popup {
+  /* for Nourhan's pop up message */
   height: 200px;
   width: 50%;
   background-color: white;
@@ -41,7 +46,18 @@ header a {
   right: 25%;
 }
 
+.popup-contract {
+  height: 200px;
+  width: 50%;
+  background-color: white;
+  position: absolute;
+  top: 50%;
+  left: 25%;
+  margin: 0 auto;
+}
+
 .popup-header {
+  /* for Nourhan's pop up message */
   display: flex;
   justify-content: space-between;
   padding: 0 30px 0 15px;
@@ -49,6 +65,7 @@ header a {
 }
 
 .main {
+  /* for Nourhan's pop up message */
   background-color: rgba(195, 162, 162, 0.408);
   height: 100%;
   width: 100%;
@@ -57,8 +74,10 @@ header a {
 }
 
 .message {
+  /* for Nourhan's pop up message */
   text-align: center;
 }
+
 /* homepage */
 .home {
   display: grid;
@@ -66,6 +85,7 @@ header a {
   gap: 100px;
 }
 .course-details {
+  /*for courseDetails.js*/
   background: #fff;
   border-radius: 4px;
   margin: 20px auto;
@@ -74,16 +94,19 @@ header a {
   box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.05);
 }
 .course-details h4 {
+  /*for courseDetails.js*/
   margin: 0 0 10px 0;
   font-size: 1.2em;
   color: var(--primary);
 }
 .course-details p {
+  /*for courseDetails.js*/
   margin: 0;
   font-size: 0.9em;
   color: #555;
 }
 .course-details span {
+  /*for courseDetails.js*/
   position: absolute;
   top: 20px;
   right: 20px;

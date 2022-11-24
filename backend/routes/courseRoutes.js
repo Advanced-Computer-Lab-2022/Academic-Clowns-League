@@ -3,13 +3,17 @@ const {
   getAllCourses,
   getCourse,
   deleteCourse,
-  updateCourse,
   createCourse,
   searchAllCourses,
   filterSubRatePrice,
   getInstCourses,
   filterInstPriceSub,
-  searchInstrCourses
+  searchInstrCourses,
+  viewCorrectAnswer,
+  addCourseExercise,
+  addCourseSub,
+  addCoursePreview,
+  openMyCourse,
 } = require("../controllers/courseController");
 
 const router = express.Router();
@@ -29,8 +33,8 @@ router.get("/", getAllCourses);
 //DELETE a single course
 router.delete("/:id", deleteCourse);
 
-//UPDATE a single course
-router.patch("/:id", updateCourse);
+//add exercise to course on creation
+router.patch("/addcoursex", addCourseExercise);
 
 //POST a new course
 router.post("/", createCourse);
@@ -42,6 +46,22 @@ router.get("/filtersubrat", filterSubRatePrice);
 router.get("/instcourses", getInstCourses);
 
 router.get("/filterinstprice", filterInstPriceSub);
+
+//view correct answer
+router.get("/viewcorrectanswer", viewCorrectAnswer);
+
+//add subtitle to course
+router.patch("/addCourseSub", addCourseSub);
+
+//add preview link to course
+router.patch("/addCoursePreview", addCoursePreview);
+
+//open my course
+router.get("/openMyCourse", openMyCourse);
+
+//moved this to the end so none of the requests map to it
+//UPDATE a single course
+router.patch("/:id", updateCourse);
 
 //after creating all our routes , export the router with the routes attached to it
 module.exports = router;

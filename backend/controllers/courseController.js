@@ -1,6 +1,14 @@
 //import the model
 const Course = require("../models/courseModel");
 const mongoose = require("mongoose");
+
+function getId(url) {
+  const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
+  const match = url.match(regExp);
+
+  return match && match[2].length === 11 ? match[2] : null;
+}
+
 //get all courses
 const getAllCourses = async (req, res) => {
   const courses = await Course.aggregate([
@@ -68,7 +76,31 @@ const updateCourse = async (req, res) => {
   if (!course) {
     return res.status(400).json({ error: "No such Course" });
   }
-
+};
+//add course exercise
+const addCourseExercise = async (req, res) => {
+  const {
+    courseID, //637a197cbc66688b3924a864
+    question,
+    option1,
+    option2,
+    option3,
+    option4,
+    answer,
+  } = req.body;
+  const courseEx = (
+    await Course.findById({ _id: courseID }).select("exercises")
+  ).exercises;
+  exercise = {
+    question: question,
+    options: [option1, option2, option3, option4],
+    answer: answer,
+  };
+  courseEx.push(exercise);
+  const course = await Course.findByIdAndUpdate(
+    { _id: courseID },
+    { exercises: courseEx }
+  );
   res.status(200).json(course);
 };
 
@@ -81,11 +113,10 @@ const createCourse = async (req, res) => {
     price,
     discount,
     discountValidUntil,
-    instructor,
+    //instructor,
     summary,
     previewURL,
     outline,
-    subtitles,
   } = req.body;
   try {
     const course = await Course.create({
@@ -95,11 +126,10 @@ const createCourse = async (req, res) => {
       price,
       discount,
       discountValidUntil,
-      instructor,
+      instructor: "63715373d953904400b6a4d5",
       summary,
       previewURL,
       outline,
-      subtitles,
     });
     //Course.create() is async that's why we put async around the handler fn, so u can use await right here
     //now we're storing the response of Course.create() (which is the doc created along with its is) in course
@@ -714,15 +744,99 @@ const filterInstPriceSub = async (req, res) => {
   }
 };
 
+const viewCorrectAnswer = async (req, res) => {
+  const {
+    course, //637a197cbc66688b3924a864
+    exercise, //637a197cbc66688b3924a867
+    answer,
+  } = req.body;
+
+  const exercises = (await Course.findById({ _id: course }).select("exercises"))
+    .exercises;
+  let reply = "";
+
+  for (i = 0; i < exercises.length; i++) {
+    if (exercises[i]._id == exercise) {
+      if (exercises[i].answer == answer) {
+        reply = "Your answer is correct";
+      } else {
+        reply = "The correct answer is: " + exercises[i].answer;
+      }
+    }
+    break;
+  }
+  res.status(200).json(reply);
+};
+
+const addCourseSub = async (req, res) => {
+  const id = req.query.id;
+  const {
+    //courseID, //637a197cbc66688b3924a864
+    title,
+    videoLink,
+    shortDescription,
+    totalHours,
+  } = req.body;
+  const videoId = getId(videoLink);
+  const embeddedLink = "//www.youtube.com/embed/" + videoId;
+  const courseSubs = (await Course.findById({ _id: id }).select("subtitles"))
+    .subtitles;
+  subtitle = {
+    title: title,
+    videoLink: embeddedLink,
+    shortDescription: shortDescription,
+    totalHours: totalHours,
+  };
+  courseSubs.push(subtitle);
+  const course = await Course.findByIdAndUpdate(
+    { _id: id },
+    { subtitles: courseSubs },
+    { new: true }
+  );
+  res.status(200).json(course);
+};
+
+/* 
+const videoId = getId('http://www.youtube.com/watch?v=zbYf5_S7oJo');
+const iframeMarkup = '<iframe width="560" height="315" src="//www.youtube.com/embed/' 
+  + videoId + '" frameborder="0" allowfullscreen></iframe>';
+
+console.log('Video ID:', videoId)
+*/
+
+const addCoursePreview = async (req, res) => {
+  const id = req.query.id;
+  const { videoPreviewURL } = req.body;
+  const videoId = getId(videoPreviewURL);
+  const embeddedLink = "//www.youtube.com/embed/" + videoId;
+  const course = await Course.findByIdAndUpdate(
+    { _id: id },
+    { previewURL: embeddedLink },
+    { new: true }
+  );
+  res.status(200).json(course);
+};
+
+const openMyCourse = async (req, res) => {
+  const id = req.query.id;
+  const course = await Course.findById({ _id: id });
+  res.status(200).json(course);
+};
+
 module.exports = {
   getAllCourses,
   getCourse,
   deleteCourse,
-  updateCourse,
   createCourse,
   searchAllCourses,
   filterSubRatePrice,
   getInstCourses,
   filterInstPriceSub,
   searchInstrCourses,
+  viewCorrectAnswer,
+  updateCourse,
+  addCourseExercise,
+  addCourseSub,
+  addCoursePreview,
+  openMyCourse,
 };

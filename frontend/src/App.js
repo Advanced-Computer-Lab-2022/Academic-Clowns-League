@@ -7,7 +7,6 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 //all our pages will go here so I can style this div later on
 //adding an individual route, needs 2 props: path and element
 
-
 //pages & components
 import InstructorHome from "./pages/instructorHome";
 import AdminHome from "./pages/adminHome";
@@ -18,12 +17,13 @@ import IndividualTraineeHome from "./pages/individualTraineeHome";
 import FilterAllCourses from "./pages/filterAllCourses";
 import FilterMyCourses from "./pages/filterInstCourses";
 
-
 import Navbar from "./components/navbar";
 import InstructorCourses from "./pages/filterInstCourses";
 import CorporateTraineeHome from "./pages/corporateTraineeHome";
 import FilterCorpCourses from "./pages/filterCorpCourses";
 import SearchInstrCourses from "./pages/searchInstrCourses";
+//import CourseDetails from './components/courseDetails';
+import TraineeCourse from "./pages/traineeCourse";
 
 //BrowserRouter wraps all things involved with routes
 //Routes wraps the routes
@@ -32,22 +32,34 @@ import SearchInstrCourses from "./pages/searchInstrCourses";
 function App() {
   return (
     <div className="App">
-      <Navbar />
       <BrowserRouter>
+        <Navbar />
         <div className="pages">
           <Routes>
-            <Route path="/instructorHome" element={<InstructorHome />}   />
+            <Route path="/instructorHome" element={<InstructorHome />} />
             <Route path="/adminHome" element={<AdminHome />} />
             <Route path="/guestHome" element={<GuestHome />} />
-            <Route path="/individualTraineeHome" element={<IndividualTraineeHome />} />
-            <Route path="/corporateTraineeHome" element={<CorporateTraineeHome />} />
+            <Route
+              path="/individualTraineeHome"
+              element={<IndividualTraineeHome />}
+            />
+            <Route
+              path="/corporateTraineeHome"
+              element={<CorporateTraineeHome />}
+            />
 
-            <Route path="/searchInstrCourses" element={<SearchInstrCourses />} />
+            <Route
+              path="/searchInstrCourses"
+              element={<SearchInstrCourses />}
+            />
             <Route path="/filterAllCourses" element={<FilterAllCourses />} />
             <Route path="/filterInstCourses" element={<FilterMyCourses />} />
             <Route path="/mycourses" element={<InstructorCourses />} />
             <Route path="/filterCorpCourses" element={<FilterCorpCourses />} />
 
+            <Route path="/traineeCourse" element={<TraineeCourse />} />
+
+            {/*<Route path="/courses/:id" element={<TraineeCourse />} /> */}
           </Routes>
         </div>
       </BrowserRouter>
