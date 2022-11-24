@@ -1,27 +1,30 @@
-const express = require('express');
+const express = require("express");
 const {
-    createInstructor,
-    getAllInstructor,
-    getInstructor,
-    deleteInstructor,
-    rateInstructor
-} = require('../controllers/InstructorController');
+  createInstructor,
+  getAllInstructor,
+  getInstructor,
+  deleteInstructor,
+  rateInstructor,
+  updateInstructor,
+} = require("../controllers/InstructorController");
 
 const router = express.Router();
 
 //GET all  instructor
-router.get('/', getAllInstructor);
+router.get("/", getAllInstructor);
 
 //GET a single  instructor
-router.get('/onlyone', getInstructor);
+router.get("/onlyone", getInstructor);
 
 //POST a new  instructor
-router.post('/', createInstructor);
+router.post("/", createInstructor);
 
 //DELETE a instructor
-router.delete('/:id', deleteInstructor);
+router.delete("/:id", deleteInstructor);
 
 //RATE an instructor
-router.patch('/rate', rateInstructor);
+router.patch("/rate", rateInstructor);
+
+router.patch("/:id", updateInstructor);
 
 module.exports = router;

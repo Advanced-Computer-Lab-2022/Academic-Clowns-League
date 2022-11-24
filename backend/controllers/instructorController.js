@@ -24,7 +24,7 @@ const mongoose = require("mongoose");
 };*/
 
 const createInstructor = async (req, res) => {
-  const { username, password, country, email, miniBio,name } = req.body;
+  const { username, password, country, email, miniBio, name } = req.body;
   try {
     const instructor = await Instructor.create({
       username,
@@ -32,7 +32,7 @@ const createInstructor = async (req, res) => {
       country,
       email,
       miniBio,
-      name
+      name,
     });
     //Instructor.create() is async that's why we put async around the handler fn, so u can use await right here
     //now we're storing the response of Instructor.create() (which is the doc created along with its is) in Instructor
@@ -47,29 +47,22 @@ const createInstructor = async (req, res) => {
 
 //RATE an individual Instructor
 const rateInstructor = async (req, res) => {
-  const {
-   instructorId,
-   s1,
-   s2,
-   s3,
-   s4,
-   s5,
-  } = req.body;
-  let sum=0;
-  const instructor = await Instructor.findOneAndUpdate({_id:instructorId});
-  if(s1=="true"){
+  const { instructorId, s1, s2, s3, s4, s5 } = req.body;
+  let sum = 0;
+  const instructor = await Instructor.findOneAndUpdate({ _id: instructorId });
+  if (s1 == "true") {
     sum++;
   }
-  if(s2=="true"){
-    sum++;
- }
-  if(s3=="true"){
+  if (s2 == "true") {
     sum++;
   }
-  if(s4=="true"){
+  if (s3 == "true") {
     sum++;
   }
-  if(s5=="true"){
+  if (s4 == "true") {
+    sum++;
+  }
+  if (s5 == "true") {
     sum++;
   }
   let ratingsTemp = [Number];
@@ -77,21 +70,46 @@ const rateInstructor = async (req, res) => {
   console.log(ratingsTemp);
   ratingsTemp.push(sum);
   console.log(ratingsTemp);
-  let len=ratingsTemp.length;
+  let len = ratingsTemp.length;
   console.log(len);
- let ratingsSum = 0;
- ratingsTemp.forEach(myFunction);
+  let ratingsSum = 0;
+  ratingsTemp.forEach(myFunction);
 
-function myFunction(value) {
-ratingsSum += value ;
-}
-console.log(ratingsSum); 
+  function myFunction(value) {
+    ratingsSum += value;
+  }
+  console.log(ratingsSum);
 
-const overallRating = (ratingsSum/len);
-console.log(overallRating);
+  const overallRating = ratingsSum / len;
+  console.log(overallRating);
 
- const updatedinstructor = await Instructor.findOneAndUpdate({_id: instructorId}, {ratings:ratingsTemp, rating: overallRating},{new:true});
- res.status(200).json(updatedinstructor)
+  const updatedinstructor = await Instructor.findOneAndUpdate(
+    { _id: instructorId },
+    { ratings: ratingsTemp, rating: overallRating },
+    { new: true }
+  );
+  res.status(200).json(updatedinstructor);
+};
+//UPDATE an individual Instructor
+const updateInstructor = async (req, res) => {
+  const { id } = req.params;
+
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    return res.status(404).json({ error: "No such Instructor" });
+  }
+
+  const instructor = await Instructor.findOneAndUpdate(
+    { _id: id },
+    {
+      ...req.body,
+    }
+  );
+
+  if (!instructor) {
+    return res.status(400).json({ error: "No such Instructor" });
+  }
+
+  res.status(200).json(instructor);
 };
 
 //DELETE an individual Instructor
@@ -101,20 +119,20 @@ const deleteInstructor = (req, res) => {
 
 //GET a single individual Instructor
 const getInstructor = async (req, res) => {
- // const { id } = req.params
+  // const { id } = req.params
 
- // if (!mongoose.Types.ObjectId.isValid(id)) {
-   // return res.status(404).json({error: 'No such instructor'})
- // }
+  // if (!mongoose.Types.ObjectId.isValid(id)) {
+  // return res.status(404).json({error: 'No such instructor'})
+  // }
 
- // const instructor = await Instructor.findById(id)
-   const instructor = await Instructor.find({_id: "63715373d953904400b6a4d5"})
+  // const instructor = await Instructor.findById(id)
+  const instructor = await Instructor.find({ _id: "63715373d953904400b6a4d5" });
 
   //if (!instructor) {
-   // return res.status(404).json({error: 'No such instructor'})
+  // return res.status(404).json({error: 'No such instructor'})
   //}
 
-  res.status(200).json(instructor)
+  res.status(200).json(instructor);
 };
 
 //GET all individual Instructors
@@ -127,5 +145,6 @@ module.exports = {
   getAllInstructor,
   getInstructor,
   deleteInstructor,
-  rateInstructor
+  rateInstructor,
+  updateInstructor,
 };

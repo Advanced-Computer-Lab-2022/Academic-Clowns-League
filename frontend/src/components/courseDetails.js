@@ -1,7 +1,19 @@
-import { useState } from "react";
+import React, { useState } from "react";
+//import {useLocation} from 'react-router-dom';
+//const cities = require('../country-json/src/country-by-currency-code.json')
 
 const CourseDetails = ({ course }) => {
   const [isActive, setIsActive] = useState(false);
+  /*const location = useLocation();
+  const  {state} = location.state
+  console.log(state)
+  let currency = ''
+  for(let i = 0; i < cities.length; i++){
+    if(cities[i].country === state){
+      currency = cities[i].currency_code
+      break
+    }
+  }*/
   const handleClick = () => {
     // 👇️ toggle
     setIsActive((current) => !current);
@@ -37,7 +49,7 @@ const CourseDetails = ({ course }) => {
         </p>
         <p>
           <strong>Instructor: </strong>
-          {course.instructor}
+          {course.instructorData.name}
         </p>
       </div>
       <button

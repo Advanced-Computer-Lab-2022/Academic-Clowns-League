@@ -45,7 +45,7 @@ app.get('/',(req,res)=>{
 //routes
 app.use("/api/courses", courseRoutes);
 app.use("/api/ctrainee", cTraineeRoutes);
-app.use("/api/iTrainee", iTraineeRoutes);
+app.use("/api/itrainee", iTraineeRoutes);
 app.use("/api/instructor", instructorRoutes);
 app.use("/api/admin", adminRoutes);
 //means that when we fire a request to this URL, use these routes (courseRoutes)

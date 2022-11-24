@@ -1,4 +1,8 @@
 const cTrainee = require("../models/cTraineeModel");
+const mongoose = require("mongoose");
+//POST a corporate trainee
+const Course = require("../models/courseModel");
+const { json } = require("body-parser");
 
 //POST a corporate trainee
 const createCTrainee = async (req, res) => {
@@ -10,6 +14,7 @@ const createCTrainee = async (req, res) => {
     email,
     country,
     courses,
+    grades,
   } = req.body;
 
   // add ctrainee to DB
@@ -22,12 +27,15 @@ const createCTrainee = async (req, res) => {
       email,
       country,
       courses,
+      grades,
     });
     res.status(200).json(ctrainee);
   } catch (error) {
     res.status(400).json({ error: error.message });
   }
 };
+
+//only need username, password and email on creation
 
 /*const createCTrainee = async (req, res) => {
   const {
@@ -67,8 +75,25 @@ const createCTrainee = async (req, res) => {
 };*/
 
 //UPDATE a corporate trainee
-const updateCTrainee = (req, res) => {
-  res.json({ mssg: "UPDATE a corporate trainee" });
+const updateCTrainee = async (req, res) => {
+  const { id } = req.params;
+
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    return res.status(404).json({ error: "No such Corporate Trainee" });
+  }
+
+  const ctrainee = await cTrainee.findOneAndUpdate(
+    { _id: id },
+    {
+      ...req.body,
+    }
+  );
+
+  if (!ctrainee) {
+    return res.status(400).json({ error: "No such Corporate Tainee" });
+  }
+
+  res.status(200).json(ctrainee);
 };
 
 //DELETE a corporate trainee
@@ -86,10 +111,52 @@ const getAllCTrainee = (req, res) => {
   res.json({ mssg: "GET all corporate trainees" });
 };
 
+const getRegisteredCourses = async (req, res) => {
+  //get course id's from courses array of ctrainee
+  const ctraineeCourses = (
+    await cTrainee
+      .findById({ _id: "637909641e794efbe229af85" })
+      .select("courses")
+  ).courses;
+  let courses = [];
+  for (i = 0; i < ctraineeCourses.length; i++) {
+    courses.push(await Course.find({ _id: ctraineeCourses[i] }));
+  }
+  res.status(200).json(courses);
+};
+
+const getGrade = async (req, res) => {
+  const {
+    //ctrainee, 637a8c03f7740521fbe8246e
+    course, //637a197cbc66688b3924a864
+    exercise, //637a197cbc66688b3924a868
+  } = req.body;
+  const ctraineeGrades = (
+    await cTrainee
+      .findById({ _id: "637a8c03f7740521fbe8246e" })
+      .select("grades")
+  ).grades;
+  let grade = 0;
+  for (i = 0; i < ctraineeGrades.length; i++) {
+    if (ctraineeGrades[i].courseID == course) {
+      for (j = 0; j < ctraineeGrades[i].exercises.length; j++) {
+        if (ctraineeGrades[i].exercises[j].exerciseID == exercise) {
+          grade = ctraineeGrades[i].exercises[j].grade;
+          break;
+        }
+      }
+      break;
+    }
+  }
+  res.status(200).json(grade);
+};
+
 module.exports = {
   createCTrainee,
   getAllCTrainee,
-  getCTrainee,
+  //getCTrainee,
   deleteCTrainee,
   updateCTrainee,
+  getRegisteredCourses,
+  getGrade,
 };

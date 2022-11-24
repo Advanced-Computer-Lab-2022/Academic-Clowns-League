@@ -33,7 +33,7 @@ const CourseDetailsCTrainee = ({ course }) => {
         </p>
         <p>
           <strong>Instructor: </strong>
-          {course.instructor}
+          {course.instructorData.name}
         </p>
       </div>
       <button

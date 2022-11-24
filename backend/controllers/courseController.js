@@ -1,15 +1,50 @@
 //import the model
 const Course = require("../models/courseModel");
+const mongoose = require("mongoose");
+
+function getId(url) {
+  const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
+  const match = url.match(regExp);
+
+  return match && match[2].length === 11 ? match[2] : null;
+}
 
 //get all courses
 const getAllCourses = async (req, res) => {
-  const courses = await Course.find({});
+  const courses = await Course.aggregate([
+    {
+      $lookup: {
+        from: "instructors",
+        localField: "instructor",
+        foreignField: "_id",
+        as: "instructorData",
+      },
+    },
+    {
+      $unwind: "$instructorData",
+    },
+  ]);
   res.status(200).json(courses);
 };
 
 //get instructor courses
 const getInstCourses = async (req, res) => {
-  const courses = await Course.find({ instructor: "63715373d953904400b6a4d5" }); //id of Mariam Hossam
+  const courses = await Course.aggregate([
+    {
+      $lookup: {
+        from: "instructors",
+        localField: "instructor",
+        foreignField: "_id",
+        as: "instructorData",
+      },
+    },
+    {
+      $unwind: "$instructorData",
+    },
+    {
+      $match: { "instructorData.name": "Mariam Hossam" },
+    },
+  ]);
   res.status(200).json(courses);
 };
 
@@ -25,29 +60,22 @@ const deleteCourse = (req, res) => {
 
 //Rate a course
 const rateCourse = async (req, res) => {
-  const {
-   courseId,
-   s1,
-   s2,
-   s3,
-   s4,
-   s5,
-  } = req.body;
-  let sum=0;
-  const course = await Course.findOneAndUpdate({_id:courseId});
-  if(s1=="true"){
+  const { courseId, s1, s2, s3, s4, s5 } = req.body;
+  let sum = 0;
+  const course = await Course.findOneAndUpdate({ _id: courseId });
+  if (s1 == "true") {
     sum++;
   }
-  if(s2=="true"){
-    sum++;
- }
-  if(s3=="true"){
+  if (s2 == "true") {
     sum++;
   }
-  if(s4=="true"){
+  if (s3 == "true") {
     sum++;
   }
-  if(s5=="true"){
+  if (s4 == "true") {
+    sum++;
+  }
+  if (s5 == "true") {
     sum++;
   }
   let ratingsTemp = [Number];
@@ -55,21 +83,70 @@ const rateCourse = async (req, res) => {
   console.log(ratingsTemp);
   ratingsTemp.push(sum);
   console.log(ratingsTemp);
-  let len=ratingsTemp.length;
+  let len = ratingsTemp.length;
   console.log(len);
- let ratingsSum = 0;
- ratingsTemp.forEach(myFunction);
+  let ratingsSum = 0;
+  ratingsTemp.forEach(myFunction);
 
-function myFunction(value) {
-ratingsSum += value ;
-}
-console.log(ratingsSum); 
+  function myFunction(value) {
+    ratingsSum += value;
+  }
+  console.log(ratingsSum);
 
-const overallR = (ratingsSum/len);
-console.log(overallR);
+  const overallR = ratingsSum / len;
+  console.log(overallR);
 
- const updatedcourse = await Course.findOneAndUpdate({_id:courseId}, {ratings:ratingsTemp,overallRating:overallR},{new:true});
- res.status(200).json(updatedcourse);
+  const updatedcourse = await Course.findOneAndUpdate(
+    { _id: courseId },
+    { ratings: ratingsTemp, overallRating: overallR },
+    { new: true }
+  );
+  res.status(200).json(updatedcourse);
+};
+//update a course
+const updateCourse = async (req, res) => {
+  const { id } = req.params;
+
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    return res.status(404).json({ error: "No such Course" });
+  }
+
+  const course = await Course.findOneAndUpdate(
+    { _id: id },
+    {
+      ...req.body,
+    }
+  );
+
+  if (!course) {
+    return res.status(400).json({ error: "No such Course" });
+  }
+};
+//add course exercise
+const addCourseExercise = async (req, res) => {
+  const {
+    courseID, //637a197cbc66688b3924a864
+    question,
+    option1,
+    option2,
+    option3,
+    option4,
+    answer,
+  } = req.body;
+  const courseEx = (
+    await Course.findById({ _id: courseID }).select("exercises")
+  ).exercises;
+  exercise = {
+    question: question,
+    options: [option1, option2, option3, option4],
+    answer: answer,
+  };
+  courseEx.push(exercise);
+  const course = await Course.findByIdAndUpdate(
+    { _id: courseID },
+    { exercises: courseEx }
+  );
+  res.status(200).json(course);
 };
 
 //DELETE an individual Instructor
@@ -79,22 +156,21 @@ const deleteInstructor = (req, res) => {
 
 //GET a single individual Instructor
 const getInstructor = async (req, res) => {
- // const { id } = req.params
+  // const { id } = req.params
 
- // if (!mongoose.Types.ObjectId.isValid(id)) {
-   // return res.status(404).json({error: 'No such instructor'})
- // }
+  // if (!mongoose.Types.ObjectId.isValid(id)) {
+  // return res.status(404).json({error: 'No such instructor'})
+  // }
 
- // const instructor = await Instructor.findById(id)
-   const instructor = await Instructor.find({_id: "63715373d953904400b6a4d5"})
+  // const instructor = await Instructor.findById(id)
+  const instructor = await Instructor.find({ _id: "63715373d953904400b6a4d5" });
 
   //if (!instructor) {
-   // return res.status(404).json({error: 'No such instructor'})
+  // return res.status(404).json({error: 'No such instructor'})
   //}
 
-  res.status(200).json(instructor)
+  res.status(200).json(instructor);
 };
-
 
 //create new course
 const createCourse = async (req, res) => {
@@ -105,11 +181,10 @@ const createCourse = async (req, res) => {
     price,
     discount,
     discountValidUntil,
-    instructor,
+    //instructor,
     summary,
     previewURL,
     outline,
-    subtitles,
   } = req.body;
   try {
     const course = await Course.create({
@@ -119,11 +194,10 @@ const createCourse = async (req, res) => {
       price,
       discount,
       discountValidUntil,
-      instructor,
+      instructor: "63715373d953904400b6a4d5",
       summary,
       previewURL,
       outline,
-      subtitles,
     });
     //Course.create() is async that's why we put async around the handler fn, so u can use await right here
     //now we're storing the response of Course.create() (which is the doc created along with its is) in course
@@ -217,162 +291,282 @@ const filterSubRatePrice = async (req, res) => {
     prices[5] = [];
   }
   if (subCount > 0 && priceCount > 0 && rateCount > 0) {
-    const result = []
-    const courses = await Course.find({
-      subject: { $in: [subjects[0], subjects[1], subjects[2]] },
-        $or:[
-        {
-          price: { $gte: prices[0][0], $lte: prices[0][1] },
+    const result = [];
+    const courses = await Course.aggregate([
+      {
+        $lookup: {
+          from: "instructors",
+          localField: "instructor",
+          foreignField: "_id",
+          as: "instructorData",
         },
-        {
-          price: { $gte: prices[1][0], $lt: prices[1][1] },
+      },
+      {
+        $unwind: "$instructorData",
+      },
+      {
+        $match: {
+          subject: { $in: [subjects[0], subjects[1], subjects[2]] },
+          $or: [
+            {
+              price: { $gte: prices[0][0], $lte: prices[0][1] },
+            },
+            {
+              price: { $gte: prices[1][0], $lt: prices[1][1] },
+            },
+            {
+              price: { $gte: prices[2][0], $lt: prices[2][1] },
+            },
+            {
+              price: { $gte: prices[3][0], $lt: prices[3][1] },
+            },
+            {
+              price: { $gte: prices[4][0], $lt: prices[4][1] },
+            },
+            {
+              price: { $gte: prices[5][0], $lt: prices[5][1] },
+            },
+          ],
         },
-        {
-          price: { $gte: prices[2][0], $lt: prices[2][1] },
-        },
-        {
-          price: { $gte: prices[3][0], $lt: prices[3][1] },
-        },
-        {
-          price: { $gte: prices[4][0], $lt: prices[4][1] },
-        },
-        {
-          price: { $gte: prices[5][0], $lt: prices[5][1] },
-        },
-      ]});
-      let j = 0
-    for(i = 0; i<courses.length; i++){
-      if((courses[i].overallRating >= ratings[0][0] && courses[i].overallRating <= ratings[0][1]) ||
-      (courses[i].overallRating >= ratings[1][0] && courses[i].overallRating <= ratings[1][1]) ||
-      (courses[i].overallRating >= ratings[2][0] && courses[i].overallRating <= ratings[2][1])){
-        
-        result[j] = courses[i]
-        j++
+      },
+    ]);
+    let j = 0;
+    for (i = 0; i < courses.length; i++) {
+      if (
+        (courses[i].overallRating >= ratings[0][0] &&
+          courses[i].overallRating <= ratings[0][1]) ||
+        (courses[i].overallRating >= ratings[1][0] &&
+          courses[i].overallRating <= ratings[1][1]) ||
+        (courses[i].overallRating >= ratings[2][0] &&
+          courses[i].overallRating <= ratings[2][1])
+      ) {
+        result[j] = courses[i];
+        j++;
       }
     }
     res.status(200).json(result);
   } else if (subCount == 0 && priceCount > 0 && rateCount > 0) {
-    const courses = await Course.find({
-      $or: [
-        {
-          overallRating: { $gte: ratings[0][0], $lte: ratings[0][1] },
+    const courses = await Course.aggregate([
+      {
+        $lookup: {
+          from: "instructors",
+          localField: "instructor",
+          foreignField: "_id",
+          as: "instructorData",
         },
-        {
-          overallRating: { $gte: ratings[1][0], $lte: ratings[1][1] },
+      },
+      {
+        $unwind: "$instructorData",
+      },
+      {
+        $match: {
+          $or: [
+            {
+              overallRating: { $gte: ratings[0][0], $lte: ratings[0][1] },
+            },
+            {
+              overallRating: { $gte: ratings[1][0], $lte: ratings[1][1] },
+            },
+            {
+              overallRating: { $gte: ratings[2][0], $lte: ratings[2][1] },
+            },
+          ],
+          $or: [
+            {
+              price: { $gte: prices[0][0], $lte: prices[0][1] },
+            },
+            {
+              price: { $gte: prices[1][0], $lt: prices[1][1] },
+            },
+            {
+              price: { $gte: prices[2][0], $lt: prices[2][1] },
+            },
+            {
+              price: { $gte: prices[3][0], $lt: prices[3][1] },
+            },
+            {
+              price: { $gte: prices[4][0], $lt: prices[4][1] },
+            },
+            {
+              price: { $gte: prices[5][0], $lt: prices[5][1] },
+            },
+          ],
         },
-        {
-          overallRating: { $gte: ratings[2][0], $lte: ratings[2][1] },
-        },
-      ],
-      $or: [
-        {
-          price: { $gte: prices[0][0], $lte: prices[0][1] },
-        },
-        {
-          price: { $gte: prices[1][0], $lt: prices[1][1] },
-        },
-        {
-          price: { $gte: prices[2][0], $lt: prices[2][1] },
-        },
-        {
-          price: { $gte: prices[3][0], $lt: prices[3][1] },
-        },
-        {
-          price: { $gte: prices[4][0], $lt: prices[4][1] },
-        },
-        {
-          price: { $gte: prices[5][0], $lt: prices[5][1] },
-        },
-      ],
-    });
+      },
+    ]);
     res.status(200).json(courses);
   } else if (subCount > 0 && priceCount > 0 && rateCount == 0) {
-    const courses = await Course.find({
-      subject: { $in: [subjects[0], subjects[1], subjects[2]] },
-      $or: [
-        {
-          price: { $gte: prices[0][0], $lte: prices[0][1] },
+    const courses = await Course.aggregate([
+      {
+        $lookup: {
+          from: "instructors",
+          localField: "instructor",
+          foreignField: "_id",
+          as: "instructorData",
         },
-        {
-          price: { $gte: prices[1][0], $lt: prices[1][1] },
+      },
+      {
+        $unwind: "$instructorData",
+      },
+      {
+        $match: {
+          subject: { $in: [subjects[0], subjects[1], subjects[2]] },
+          $or: [
+            {
+              price: { $gte: prices[0][0], $lte: prices[0][1] },
+            },
+            {
+              price: { $gte: prices[1][0], $lt: prices[1][1] },
+            },
+            {
+              price: { $gte: prices[2][0], $lt: prices[2][1] },
+            },
+            {
+              price: { $gte: prices[3][0], $lt: prices[3][1] },
+            },
+            {
+              price: { $gte: prices[4][0], $lt: prices[4][1] },
+            },
+            {
+              price: { $gte: prices[5][0], $lt: prices[5][1] },
+            },
+          ],
         },
-        {
-          price: { $gte: prices[2][0], $lt: prices[2][1] },
-        },
-        {
-          price: { $gte: prices[3][0], $lt: prices[3][1] },
-        },
-        {
-          price: { $gte: prices[4][0], $lt: prices[4][1] },
-        },
-        {
-          price: { $gte: prices[5][0], $lt: prices[5][1] },
-        },
-      ],
-    });
+      },
+    ]);
     res.status(200).json(courses);
   } else if (subCount > 0 && priceCount == 0 && rateCount > 0) {
-    const courses = await Course.find({
-      subject: { $in: [subjects[0], subjects[1], subjects[2]] },
-      $or: [
-        {
-          overallRating: { $gte: ratings[0][0], $lte: ratings[0][1] },
+    const courses = await Course.aggregate([
+      {
+        $lookup: {
+          from: "instructors",
+          localField: "instructor",
+          foreignField: "_id",
+          as: "instructorData",
         },
-        {
-          overallRating: { $gte: ratings[1][0], $lte: ratings[1][1] },
+      },
+      {
+        $unwind: "$instructorData",
+      },
+      {
+        $match: {
+          subject: { $in: [subjects[0], subjects[1], subjects[2]] },
+          $or: [
+            {
+              overallRating: { $gte: ratings[0][0], $lte: ratings[0][1] },
+            },
+            {
+              overallRating: { $gte: ratings[1][0], $lte: ratings[1][1] },
+            },
+            {
+              overallRating: { $gte: ratings[2][0], $lte: ratings[2][1] },
+            },
+          ],
         },
-        {
-          overallRating: { $gte: ratings[2][0], $lte: ratings[2][1] },
-        },
-      ],
-    });
+      },
+    ]);
     res.status(200).json(courses);
   } else if (subCount > 0 && priceCount == 0 && rateCount == 0) {
-    const courses = await Course.find({
-      subject: { $in: [subjects[0], subjects[1], subjects[2]] },
-    });
+    const courses = await Course.aggregate([
+      {
+        $lookup: {
+          from: "instructors",
+          localField: "instructor",
+          foreignField: "_id",
+          as: "instructorData",
+        },
+      },
+      {
+        $unwind: "$instructorData",
+      },
+      {
+        $match: { subject: { $in: [subjects[0], subjects[1], subjects[2]] } },
+      },
+    ]);
     res.status(200).json(courses);
   } else if (subCount == 0 && priceCount > 0 && rateCount == 0) {
-    const courses = await Course.find({
-      $or: [
-        {
-          price: { $gte: prices[0][0], $lte: prices[0][1] },
+    const courses = await Course.aggregate([
+      {
+        $lookup: {
+          from: "instructors",
+          localField: "instructor",
+          foreignField: "_id",
+          as: "instructorData",
         },
-        {
-          price: { $gte: prices[1][0], $lt: prices[1][1] },
+      },
+      {
+        $unwind: "$instructorData",
+      },
+      {
+        $match: {
+          $or: [
+            {
+              price: { $gte: prices[0][0], $lte: prices[0][1] },
+            },
+            {
+              price: { $gte: prices[1][0], $lt: prices[1][1] },
+            },
+            {
+              price: { $gte: prices[2][0], $lt: prices[2][1] },
+            },
+            {
+              price: { $gte: prices[3][0], $lt: prices[3][1] },
+            },
+            {
+              price: { $gte: prices[4][0], $lt: prices[4][1] },
+            },
+            {
+              price: { $gte: prices[5][0], $lt: prices[5][1] },
+            },
+          ],
         },
-        {
-          price: { $gte: prices[2][0], $lt: prices[2][1] },
-        },
-        {
-          price: { $gte: prices[3][0], $lt: prices[3][1] },
-        },
-        {
-          price: { $gte: prices[4][0], $lt: prices[4][1] },
-        },
-        {
-          price: { $gte: prices[5][0], $lt: prices[5][1] },
-        },
-      ],
-    });
+      },
+    ]);
     res.status(200).json(courses);
   } else if (subCount == 0 && priceCount == 0 && rateCount > 0) {
-    const courses = await Course.find({
-      $or: [
-        {
-          overallRating: { $gte: ratings[0][0], $lte: ratings[0][1] },
+    const courses = await Course.aggregate([
+      {
+        $lookup: {
+          from: "instructors",
+          localField: "instructor",
+          foreignField: "_id",
+          as: "instructorData",
         },
-        {
-          overallRating: { $gte: ratings[1][0], $lte: ratings[1][1] },
+      },
+      {
+        $unwind: "$instructorData",
+      },
+      {
+        $match: {
+          $or: [
+            {
+              overallRating: { $gte: ratings[0][0], $lte: ratings[0][1] },
+            },
+            {
+              overallRating: { $gte: ratings[1][0], $lte: ratings[1][1] },
+            },
+            {
+              overallRating: { $gte: ratings[2][0], $lte: ratings[2][1] },
+            },
+          ],
         },
-        {
-          overallRating: { $gte: ratings[2][0], $lte: ratings[2][1] },
-        },
-      ],
-    });
+      },
+    ]);
     res.status(200).json(courses);
-  } else if(subCount == 0 && priceCount == 0 && rateCount == 0){
-    const courses = await Course.find({});
+  } else if (subCount == 0 && priceCount == 0 && rateCount == 0) {
+    const courses = await Course.aggregate([
+      {
+        $lookup: {
+          from: "instructors",
+          localField: "instructor",
+          foreignField: "_id",
+          as: "instructorData",
+        },
+      },
+      {
+        $unwind: "$instructorData",
+      },
+    ]);
     res.status(200).json(courses);
   }
 };
@@ -382,16 +576,30 @@ const searchAllCourses = async (req, res) => {
   var re = new RegExp(THEsearchterm, "i");
   //console.log(THEsearchterm)
   //const courses = await Course.find({instructor:{"$regex": re  }})
-  const courses = await Course.find({
-    $or: [
-      //{ instructor: { $regex: re } },
-      { title: { $regex: re } },
-      { subject: { $regex: re } },
-    ],
-  });
+  const courses = await Course.aggregate([
+    {
+      $lookup: {
+        from: "instructors",
+        localField: "instructor",
+        foreignField: "_id",
+        as: "instructorData",
+      },
+    },
+    {
+      $unwind: "$instructorData",
+    },
+    {
+      $match: {
+        $or: [
+          { "instructorData.name": { $regex: re } },
+          { title: { $regex: re } },
+          { subject: { $regex: re } },
+        ],
+      },
+    },
+  ]);
   res.status(200).json(courses);
 };
-
 
 const searchInstrCourses = async (req, res) => {
   const THEsearchterm = req.query.searchTerm;
@@ -399,13 +607,25 @@ const searchInstrCourses = async (req, res) => {
   //console.log(THEsearchterm)
   //const courses = await Course.find({instructor:{"$regex": re  }})
 
-  const courses = await Course.find({
-    instructor: "63715373d953904400b6a4d5", //id of Mariam Hossam
-    $or: [
-      { title: { $regex: re } },
-      { subject: { $regex: re } },
-    ],
-  });
+  const courses = await Course.aggregate([
+    {
+      $lookup: {
+        from: "instructors",
+        localField: "instructor",
+        foreignField: "_id",
+        as: "instructorData",
+      },
+    },
+    {
+      $unwind: "$instructorData",
+    },
+    {
+      $match: {
+        "instructorData.name": "Mariam Hossam",
+        $or: [{ title: { $regex: re } }, { subject: { $regex: re } }],
+      },
+    },
+  ]);
   res.status(200).json(courses);
 };
 
@@ -470,67 +690,205 @@ const filterInstPriceSub = async (req, res) => {
     prices[5] = [];
   }
   if (subCount > 0 && priceCount > 0) {
-    const courses = await Course.find({
-      subject: { $in: [subjects[0], subjects[1], subjects[2]] },
-      $or: [
-        {
-          price: { $gte: prices[0][0], $lte: prices[0][1] },
+    const courses = await Course.aggregate([
+      {
+        $lookup: {
+          from: "instructors",
+          localField: "instructor",
+          foreignField: "_id",
+          as: "instructorData",
         },
-        {
-          price: { $gte: prices[1][0], $lt: prices[1][1] },
+      },
+      {
+        $unwind: "$instructorData",
+      },
+      {
+        $match: {
+          subject: { $in: [subjects[0], subjects[1], subjects[2]] },
+          $or: [
+            {
+              price: { $gte: prices[0][0], $lte: prices[0][1] },
+            },
+            {
+              price: { $gte: prices[1][0], $lt: prices[1][1] },
+            },
+            {
+              price: { $gte: prices[2][0], $lt: prices[2][1] },
+            },
+            {
+              price: { $gte: prices[3][0], $lt: prices[3][1] },
+            },
+            {
+              price: { $gte: prices[4][0], $lt: prices[4][1] },
+            },
+            {
+              price: { $gte: prices[5][0], $lt: prices[5][1] },
+            },
+          ],
+          "instructorData.name": "Mariam Hossam",
         },
-        {
-          price: { $gte: prices[2][0], $lt: prices[2][1] },
-        },
-        {
-          price: { $gte: prices[3][0], $lt: prices[3][1] },
-        },
-        {
-          price: { $gte: prices[4][0], $lt: prices[4][1] },
-        },
-        {
-          price: { $gte: prices[5][0], $lt: prices[5][1] },
-        },
-      ],
-      instructor: "63715373d953904400b6a4d5", //id of Mariam Hossam
-    });
-    res.status(200).json(courses)
-  } else if (subCount == 0 && priceCount > 0) {
-    const courses = await Course.find({
-      $or: [
-        {
-          price: { $gte: prices[0][0], $lte: prices[0][1] },
-        },
-        {
-          price: { $gte: prices[1][0], $lt: prices[1][1] },
-        },
-        {
-          price: { $gte: prices[2][0], $lt: prices[2][1] },
-        },
-        {
-          price: { $gte: prices[3][0], $lt: prices[3][1] },
-        },
-        {
-          price: { $gte: prices[4][0], $lt: prices[4][1] },
-        },
-        {
-          price: { $gte: prices[5][0], $lt: prices[5][1] },
-        },
-      ],
-      instructor: "63715373d953904400b6a4d5", //id of Mariam Hossam
-    });
+      },
+    ]);
     res.status(200).json(courses);
-  } 
-    else if (subCount > 0 && priceCount == 0) {
-    const courses = await Course.find({
-      subject: { $in: [subjects[0], subjects[1], subjects[2]] },
-      instructor: "63715373d953904400b6a4d5", //id of Mariam Hossam
-    });
+  } else if (subCount == 0 && priceCount > 0) {
+    const courses = await Course.aggregate([
+      {
+        $lookup: {
+          from: "instructors",
+          localField: "instructor",
+          foreignField: "_id",
+          as: "instructorData",
+        },
+      },
+      {
+        $unwind: "$instructorData",
+      },
+      {
+        $match: {
+          $or: [
+            {
+              price: { $gte: prices[0][0], $lte: prices[0][1] },
+            },
+            {
+              price: { $gte: prices[1][0], $lt: prices[1][1] },
+            },
+            {
+              price: { $gte: prices[2][0], $lt: prices[2][1] },
+            },
+            {
+              price: { $gte: prices[3][0], $lt: prices[3][1] },
+            },
+            {
+              price: { $gte: prices[4][0], $lt: prices[4][1] },
+            },
+            {
+              price: { $gte: prices[5][0], $lt: prices[5][1] },
+            },
+          ],
+          "instructorData.name": "Mariam Hossam",
+        },
+      },
+    ]);
+    res.status(200).json(courses);
+  } else if (subCount > 0 && priceCount == 0) {
+    const courses = await Course.aggregate([
+      {
+        $lookup: {
+          from: "instructors",
+          localField: "instructor",
+          foreignField: "_id",
+          as: "instructorData",
+        },
+      },
+      {
+        $unwind: "$instructorData",
+      },
+      {
+        $match: {
+          "instructorData.name": "Mariam Hossam",
+          subject: { $in: [subjects[0], subjects[1], subjects[2]] },
+        },
+      },
+    ]);
     res.status(200).json(courses);
   } else {
-    const courses = await Course.find({ instructor: "63715373d953904400b6a4d5" }); //id of Mariam Hossam
+    const courses = await Course.aggregate([
+      {
+        $lookup: {
+          from: "instructors",
+          localField: "instructor",
+          foreignField: "_id",
+          as: "instructorData",
+        },
+      },
+      {
+        $unwind: "$instructorData",
+      },
+      {
+        $match: { "instructorData.name": "Mariam Hossam" },
+      },
+    ]);
     res.status(200).json(courses);
   }
+};
+
+const viewCorrectAnswer = async (req, res) => {
+  const {
+    course, //637a197cbc66688b3924a864
+    exercise, //637a197cbc66688b3924a867
+    answer,
+  } = req.body;
+
+  const exercises = (await Course.findById({ _id: course }).select("exercises"))
+    .exercises;
+  let reply = "";
+
+  for (i = 0; i < exercises.length; i++) {
+    if (exercises[i]._id == exercise) {
+      if (exercises[i].answer == answer) {
+        reply = "Your answer is correct";
+      } else {
+        reply = "The correct answer is: " + exercises[i].answer;
+      }
+    }
+    break;
+  }
+  res.status(200).json(reply);
+};
+
+const addCourseSub = async (req, res) => {
+  const id = req.query.id;
+  const {
+    //courseID, //637a197cbc66688b3924a864
+    title,
+    videoLink,
+    shortDescription,
+    totalHours,
+  } = req.body;
+  const videoId = getId(videoLink);
+  const embeddedLink = "//www.youtube.com/embed/" + videoId;
+  const courseSubs = (await Course.findById({ _id: id }).select("subtitles"))
+    .subtitles;
+  subtitle = {
+    title: title,
+    videoLink: embeddedLink,
+    shortDescription: shortDescription,
+    totalHours: totalHours,
+  };
+  courseSubs.push(subtitle);
+  const course = await Course.findByIdAndUpdate(
+    { _id: id },
+    { subtitles: courseSubs },
+    { new: true }
+  );
+  res.status(200).json(course);
+};
+
+/* 
+const videoId = getId('http://www.youtube.com/watch?v=zbYf5_S7oJo');
+const iframeMarkup = '<iframe width="560" height="315" src="//www.youtube.com/embed/' 
+  + videoId + '" frameborder="0" allowfullscreen></iframe>';
+
+console.log('Video ID:', videoId)
+*/
+
+const addCoursePreview = async (req, res) => {
+  const id = req.query.id;
+  const { videoPreviewURL } = req.body;
+  const videoId = getId(videoPreviewURL);
+  const embeddedLink = "//www.youtube.com/embed/" + videoId;
+  const course = await Course.findByIdAndUpdate(
+    { _id: id },
+    { previewURL: embeddedLink },
+    { new: true }
+  );
+  res.status(200).json(course);
+};
+
+const openMyCourse = async (req, res) => {
+  const id = req.query.id;
+  const course = await Course.findById({ _id: id });
+  res.status(200).json(course);
 };
 
 module.exports = {
@@ -543,5 +901,11 @@ module.exports = {
   filterSubRatePrice,
   getInstCourses,
   filterInstPriceSub,
-  searchInstrCourses
+  searchInstrCourses,
+  viewCorrectAnswer,
+  updateCourse,
+  addCourseExercise,
+  addCourseSub,
+  addCoursePreview,
+  openMyCourse,
 };
