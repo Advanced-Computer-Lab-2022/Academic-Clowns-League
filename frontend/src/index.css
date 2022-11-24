@@ -2,7 +2,8 @@
 @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;800&family=VT323&display=swap");
 
 /* layout */
-:root {  /*referenced during whole proj, primary is used in .course-details h4*/
+:root {
+  /*referenced during whole proj, primary is used in .course-details h4*/
   --primary: #1aac83;
   --error: #e7195a;
 }
@@ -11,10 +12,12 @@ body {
   margin: 0;
   font-family: "Poppins";
 }
-header { /*for the navbar*/
+header {
+  /*for the navbar*/
   background: #fff;
 }
-header .container { /*for the navbar*/
+header .container {
+  /*for the navbar*/
   max-width: 1400px;
   margin: 0 auto;
   padding: 10px 20px;
@@ -26,13 +29,15 @@ header a {
   color: #333;
   text-decoration: none;
 }
-.pages { /*used in App.js*/
+.pages {
+  /*used in App.js*/
   max-width: 1400px;
   padding: 20px;
   margin: 0 auto;
 }
 
-.popup { /* for Nourhan's pop up message */
+.popup {
+  /* for Nourhan's pop up message */
   height: 200px;
   width: 50%;
   background-color: white;
@@ -41,14 +46,26 @@ header a {
   right: 25%;
 }
 
-.popup-header { /* for Nourhan's pop up message */
+.popup-contract {
+  height: 200px;
+  width: 50%;
+  background-color: white;
+  position: absolute;
+  top: 50%;
+  left: 25%;
+  margin: 0 auto;
+}
+
+.popup-header {
+  /* for Nourhan's pop up message */
   display: flex;
   justify-content: space-between;
   padding: 0 30px 0 15px;
   border-bottom: 2px solid black;
 }
 
-.main { /* for Nourhan's pop up message */
+.main {
+  /* for Nourhan's pop up message */
   background-color: rgba(195, 162, 162, 0.408);
   height: 100%;
   width: 100%;
@@ -56,7 +73,8 @@ header a {
   top: 0;
 }
 
-.message { /* for Nourhan's pop up message */
+.message {
+  /* for Nourhan's pop up message */
   text-align: center;
 }
 
@@ -66,7 +84,8 @@ header a {
   grid-template-columns: 3fr 1fr;
   gap: 100px;
 }
-.course-details { /*for courseDetails.js*/
+.course-details {
+  /*for courseDetails.js*/
   background: #fff;
   border-radius: 4px;
   margin: 20px auto;
@@ -74,17 +93,20 @@ header a {
   position: relative;
   box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.05);
 }
-.course-details h4 { /*for courseDetails.js*/
+.course-details h4 {
+  /*for courseDetails.js*/
   margin: 0 0 10px 0;
   font-size: 1.2em;
   color: var(--primary);
 }
-.course-details p { /*for courseDetails.js*/
+.course-details p {
+  /*for courseDetails.js*/
   margin: 0;
   font-size: 0.9em;
   color: #555;
 }
-.course-details span { /*for courseDetails.js*/
+.course-details span {
+  /*for courseDetails.js*/
   position: absolute;
   top: 20px;
   right: 20px;

@@ -33,6 +33,13 @@ const cTraineeSchema = new Schema(
       type: mongoose.Types.ObjectId,
       ref:'courseModel'
     }],
+    grades: [{
+      courseID: mongoose.Types.ObjectId,
+      exercises: [{
+        exerciseID: mongoose.Types.ObjectId,
+        grade: Number
+      }]
+    }]
   },
   { timestamps: true }
 );
