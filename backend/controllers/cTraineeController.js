@@ -121,7 +121,23 @@ const getRegisteredCourses = async (req, res) => {
   ).courses;
   let courses = [];
   for (i = 0; i < ctraineeCourses.length; i++) {
-    courses.push(await Course.findOne({ _id: ctraineeCourses[i] }));
+    let course = await Course.aggregate([
+      {
+        $lookup: {
+          from: "instructors",
+          localField: "instructor",
+          foreignField: "_id",
+          as: "instructorData",
+        },
+      },
+      {
+        $unwind: "$instructorData",
+      },
+      {
+        $match: { _id : ctraineeCourses[i] },
+      }
+    ])
+    courses.push(course[0])
   }
   res.status(200).json(courses);
 };
