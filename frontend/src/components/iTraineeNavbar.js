@@ -7,7 +7,7 @@ import NavDropdown from 'react-bootstrap/NavDropdown';
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 
-const InstructorNavbar = () => {
+const ITraineeNavbar = () => {
   
 
   
@@ -35,10 +35,9 @@ const InstructorNavbar = () => {
             style={{ maxHeight: '100px' }}
             navbarScroll
           >
-            <Nav.Link href="/instructorHome">My Courses</Nav.Link>
-            <Nav.Link href="/searchInstrCourses">All Courses</Nav.Link>
-            <Nav.Link href="/filterInstCourses">Filter My Courses</Nav.Link>
-            <Nav.Link href="/filterAllCourses">Filter All Courses</Nav.Link>
+            <Nav.Link href="/individualTraineeHome">My Courses</Nav.Link>
+            <Nav.Link href="/iTraineeAllCourses">All Courses</Nav.Link>
+            <Nav.Link href="/iTraineeFilterAllCourses">Filter All Courses</Nav.Link>
 
 
             <NavDropdown title="Options" id="navbarScrollingDropdown">
@@ -83,4 +82,4 @@ const InstructorNavbar = () => {
     );
   }
   
-  export default InstructorNavbar;
+  export default ITraineeNavbar;

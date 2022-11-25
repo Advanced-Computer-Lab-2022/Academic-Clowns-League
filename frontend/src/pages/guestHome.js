@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 
 // components
 import CourseDetails from "../components/courseDetails";
+import GuestNavbar from "../components/guestNavbar";
 
 const GuestHome = () => {
   const [courses, setCourses] = useState(null);
@@ -52,10 +53,10 @@ const GuestHome = () => {
   }, []);
 
   return (
+    <div>
+      <GuestNavbar />
+    
     <div className="home">
-      <Link to="/filterAllCourses">
-        <button>Filter all Courses</button>
-      </Link>
       <form className="create" onSubmit={handleSubmit}>
         <h3>Search</h3>
 
@@ -77,6 +78,7 @@ const GuestHome = () => {
             <CourseDetails course={course} key={course._id} />
           ))}
       </div>
+    </div>
     </div>
   );
 };

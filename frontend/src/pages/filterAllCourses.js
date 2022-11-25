@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import CourseDetails from "../components/courseDetails";
+import InstructorNavbar from "../components/instructorNavbar";
 
 const Courses = () => {
   const [courses, setCourses] = useState(null);
@@ -65,6 +66,8 @@ const Courses = () => {
   }, []);
 
   return (
+    <div>
+    <InstructorNavbar />
     <div className="courses">
       <div className="all-courses">
         {courses &&
@@ -191,6 +194,7 @@ const Courses = () => {
         <button onClick={handleClick}>Clear Filter</button>
       </div>
     </div>
+  </div>
   );
 };
 

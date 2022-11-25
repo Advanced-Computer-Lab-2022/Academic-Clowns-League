@@ -63,9 +63,9 @@ router.patch("/addCoursePreview", addCoursePreview);
 //open my course
 router.get("/openMyCourse", openMyCourse);
 
-//moved this to the end so none of the requests map to it
+//moved this to the end so that "add course subtitle" doesn't map to it
 //UPDATE a single course
-router.patch("/:id", updateCourse);
+router.patch("/", updateCourse);
 
 //after creating all our routes , export the router with the routes attached to it
 module.exports = router;

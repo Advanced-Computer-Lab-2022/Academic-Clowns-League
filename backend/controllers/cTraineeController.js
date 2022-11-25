@@ -76,7 +76,7 @@ const createCTrainee = async (req, res) => {
 
 //UPDATE a corporate trainee
 const updateCTrainee = async (req, res) => {
-  const { id } = req.params;
+  const id = req.query.id;
 
   if (!mongoose.Types.ObjectId.isValid(id)) {
     return res.status(404).json({ error: "No such Corporate Trainee" });
@@ -111,16 +111,17 @@ const getAllCTrainee = (req, res) => {
   res.json({ mssg: "GET all corporate trainees" });
 };
 
+
 const getRegisteredCourses = async (req, res) => {
   //get course id's from courses array of ctrainee
   const ctraineeCourses = (
     await cTrainee
-      .findById({ _id: "637909641e794efbe229af85" })
+      .findById({ _id: "637a8c03f7740521fbe8246e" })
       .select("courses")
   ).courses;
   let courses = [];
   for (i = 0; i < ctraineeCourses.length; i++) {
-    courses.push(await Course.find({ _id: ctraineeCourses[i] }));
+    courses.push(await Course.findOne({ _id: ctraineeCourses[i] }));
   }
   res.status(200).json(courses);
 };

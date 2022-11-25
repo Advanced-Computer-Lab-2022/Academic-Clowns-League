@@ -35,7 +35,7 @@ const createITrainee = async (req, res) => {
 
 //UPDATE an individual trainee
 const updateITrainee = async (req, res) => {
-  const { id } = req.params;
+  const id = req.query.id;
 
   if (!mongoose.Types.ObjectId.isValid(id)) {
     return res.status(404).json({ error: "No such Individual Trainee" });
@@ -79,7 +79,7 @@ const getRegisteredCourses = async (req, res) => {
   ).courses;
   let courses = [];
   for (i = 0; i < itraineeCourses.length; i++) {
-    courses.push(await Course.find({ _id: itraineeCourses[i] }));
+    courses.push(await Course.findOne({ _id: itraineeCourses[i] }));
   }
   res.status(200).json(courses);
 };

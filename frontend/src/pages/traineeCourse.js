@@ -1,6 +1,7 @@
 
 import { useEffect, useState } from "react";
 import Subtitle from "../components/subtitle";
+import ITraineeNavbar from "../components/iTraineeNavbar";
 
 
 const TraineeCourse = () => {
@@ -32,6 +33,12 @@ const TraineeCourse = () => {
   
   return (
     <div className="">
+      <ITraineeNavbar />
+      <p> ITrainee course, ID: {id}</p>
+
+
+
+
         {course && course.subtitles && course.subtitles.map((subtitle) => (
             <Subtitle subtitle={subtitle} key={subtitle._id} />
           ))}
