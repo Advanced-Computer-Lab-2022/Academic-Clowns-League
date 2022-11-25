@@ -36,9 +36,9 @@ const InstructorNavbar = () => {
             navbarScroll
           >
             <Nav.Link href="/instructorHome">My Courses</Nav.Link>
-            <Nav.Link href="/searchInstrCourses">All Courses</Nav.Link>
-            <Nav.Link href="/filterInstCourses">Filter My Courses</Nav.Link>
-            <Nav.Link href="/filterAllCourses">Filter All Courses</Nav.Link>
+            <Nav.Link href="/instructorAllCourses">All Courses</Nav.Link>
+            <Nav.Link href="/instructorFilterMyCourses">Filter My Courses</Nav.Link>
+            <Nav.Link href="/instructorFilterAllCourses">Filter All Courses</Nav.Link>
 
 
             <NavDropdown title="Options" id="navbarScrollingDropdown">

@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import CourseDetails from "../components/courseDetails";
 import InstructorNavbar from "../components/instructorNavbar";
 
-const SearchInstrCourses = () => {
+const InstructorAllCourses = () => {
 
 
     const [courses, setCourses] = useState(null);
@@ -108,4 +108,4 @@ const SearchInstrCourses = () => {
 };
 
 
-export default SearchInstrCourses;
+export default InstructorAllCourses;

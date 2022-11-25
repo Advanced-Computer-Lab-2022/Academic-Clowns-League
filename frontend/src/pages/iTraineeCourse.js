@@ -4,7 +4,7 @@ import Subtitle from "../components/subtitle";
 import ITraineeNavbar from "../components/iTraineeNavbar";
 
 
-const TraineeCourse = () => {
+const ITraineeCourse = () => {
   //const { id } = useParams();
 
   //to get the id from  (query, in the URL)
@@ -64,4 +64,4 @@ const TraineeCourse = () => {
       </div>
 
  */
-export default TraineeCourse;
+export default ITraineeCourse;

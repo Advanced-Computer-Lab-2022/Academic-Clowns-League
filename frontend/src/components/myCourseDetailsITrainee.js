@@ -68,7 +68,7 @@ const MyCourseDetailsITrainee = ({ course }) => {
           backgroundColor: isActive ? "salmon" : "",
           color: isActive ? "white" : "",
         }}
-        onClick={() => window.location.href=`/traineeCourse?id=${course._id}`}
+        onClick={() => window.location.href=`/iTraineeCourse?id=${course._id}`}
       >
         Go to Course
       </button>

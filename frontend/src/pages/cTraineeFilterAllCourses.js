@@ -3,7 +3,7 @@ import CourseDetailsCTrainee from "../components/courseDetailsCTrainee";
 import CTraineeNavbar from "../components/cTraineeNavbar";
 
 
-const Courses = () => {
+const CTraineeFilterAllCourses = () => {
   const [courses, setCourses] = useState(null);
   const [subjects, setSubject] = useState({
     computer: false,
@@ -137,4 +137,4 @@ const Courses = () => {
   );
 };
 
-export default Courses;
+export default CTraineeFilterAllCourses;

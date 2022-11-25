@@ -1,13 +1,18 @@
 import { useEffect, useState } from "react";
-import MyCourseDetailsInstructor from "../components/myCourseDetailsInstructor";
+import CourseDetails from "../components/courseDetails";
 import InstructorNavbar from "../components/instructorNavbar";
 
-const Courses = () => {
+const InstructorFilterAllCourses = () => {
   const [courses, setCourses] = useState(null);
   const [subjects, setSubject] = useState({
     computer: false,
     digital: false,
     lab: false,
+  });
+  const [ratings, setRating] = useState({
+    zero: false,
+    four: false,
+    eight: false,
   });
   const [prices, setPrice] = useState({
     free: false,
@@ -22,18 +27,22 @@ const Courses = () => {
     setSubject({ ...subjects, [e.target.value]: e.target.checked });
   };
 
+  const onChangeRate = (e) => {
+    setRating({ ...ratings, [e.target.value]: e.target.checked });
+  };
+
   const onChangePrice = (e) => {
     setPrice({ ...prices, [e.target.value]: e.target.checked });
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const result = Object.assign(subjects, prices);
+    const result = Object.assign(subjects, ratings, prices);
     const response = await fetch(
-      `/api/courses/filterinstprice?${new URLSearchParams(result).toString()}`
+      `/api/courses/filtersubrat?${new URLSearchParams(result).toString()}`
     );
     const json = await response.json();
-    console.log(json);
+    console.log(json)
     if (response.ok) {
       setCourses(json);
     }
@@ -45,7 +54,7 @@ const Courses = () => {
 
   useEffect(() => {
     const getCourses = async () => {
-      const response = await fetch("/api/courses/instcourses");
+      const response = await fetch("/api/courses/");
       //fetch from that route using controller function
       const json = await response.json();
 
@@ -58,13 +67,12 @@ const Courses = () => {
 
   return (
     <div>
-      <InstructorNavbar />
-    
+    <InstructorNavbar />
     <div className="courses">
       <div className="all-courses">
         {courses &&
           courses.map((course) => (
-            <MyCourseDetailsInstructor key={course._id} course={course} />
+            <CourseDetails key={course._id} course={course} />
           ))}
       </div>
       <div>
@@ -153,13 +161,41 @@ const Courses = () => {
             value="lab"
           />
           <label>Lab Programming</label>
+          <h4>Rating</h4>
+          <input
+            type="checkbox"
+            id="rating"
+            name="rating"
+            checked={ratings.zero}
+            onChange={onChangeRate}
+            value="zero"
+          />
+          <label>0-3</label>
+          <input
+            type="checkbox"
+            id="rating"
+            name="rating"
+            checked={ratings.four}
+            onChange={onChangeRate}
+            value="four"
+          />
+          <label>4-7</label>
+          <input
+            type="checkbox"
+            id="rating"
+            name="rating"
+            checked={ratings.eight}
+            onChange={onChangeRate}
+            value="eight"
+          />
+          <label>8-10</label>
           <button>Apply</button>
         </form>
         <button onClick={handleClick}>Clear Filter</button>
       </div>
     </div>
-    </div>
+  </div>
   );
 };
 
-export default Courses;
+export default InstructorFilterAllCourses;

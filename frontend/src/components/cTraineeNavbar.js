@@ -37,7 +37,7 @@ const CTraineeNavbar = () => {
           >
             <Nav.Link href="/corporateTraineeHome">My Courses</Nav.Link>
             <Nav.Link href="/cTraineeAllCourses">All Courses</Nav.Link>
-            <Nav.Link href="/filterCorpCourses">Filter All Courses</Nav.Link>
+            <Nav.Link href="/cTraineeFilterAllCourses">Filter All Courses</Nav.Link>
 
 
             <NavDropdown title="Options" id="navbarScrollingDropdown">
