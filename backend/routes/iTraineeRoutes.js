@@ -6,7 +6,7 @@ const {
   deleteITrainee,
   updateITrainee,
   getRegisteredCourses,
-  //getGrade
+  getGrade
 } = require("../controllers/iTraineeController");
 
 const router = express.Router();
@@ -29,6 +29,6 @@ router.patch("/", updateITrainee);
 router.get('/registeredcourses', getRegisteredCourses);
 
 //get grade for an exercise
-//router.get('/getgrade', getGrade)
+router.get('/getgrade', getGrade)
 
 module.exports = router;

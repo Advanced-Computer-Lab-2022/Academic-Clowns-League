@@ -79,12 +79,29 @@ const getRegisteredCourses = async (req, res) => {
   ).courses;
   let courses = [];
   for (i = 0; i < itraineeCourses.length; i++) {
-    courses.push(await Course.findOne({ _id: itraineeCourses[i] }));
+    let course = await Course.aggregate([
+      {
+        $lookup: {
+          from: "instructors",
+          localField: "instructor",
+          foreignField: "_id",
+          as: "instructorData",
+        },
+      },
+      {
+        $unwind: "$instructorData",
+      },
+      {
+        $match: { _id : itraineeCourses[i] },
+      },
+    ])
+    courses.push(course[0]);
   }
   res.status(200).json(courses);
 };
 
-/*const getGrade = async (req, res) => {
+//this trainee id doesn't have grades, make a trainee with grades
+const getGrade = async (req, res) => {
   const itraineeGrades = (await iTrainee.findById({_id: '637a8c03f7740521fbe8246e'}).select('grades')).grades
   let grade = 0;
   for(i = 0; i < itraineeGrades.length; i++){
@@ -99,7 +116,7 @@ const getRegisteredCourses = async (req, res) => {
     }
   }
   res.status(200).json(grade)
-}*/
+}
 
 module.exports = {
   createITrainee,
@@ -108,5 +125,5 @@ module.exports = {
   deleteITrainee,
   updateITrainee,
   getRegisteredCourses,
-  //getGrade
+  getGrade
 };
