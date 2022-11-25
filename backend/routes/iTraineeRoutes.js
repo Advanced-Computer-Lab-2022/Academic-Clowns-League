@@ -23,7 +23,7 @@ router.post("/", createITrainee);
 router.delete("/:id", deleteITrainee);
 
 //UPDATE AN INDIVIDUAL TRAINEE
-router.patch("/:id", updateITrainee);
+router.patch("/", updateITrainee);
 
 //GET registered courses for ITrainee
 router.get('/registeredcourses', getRegisteredCourses);

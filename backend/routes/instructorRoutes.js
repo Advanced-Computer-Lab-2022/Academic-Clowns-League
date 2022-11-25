@@ -25,6 +25,6 @@ router.delete("/:id", deleteInstructor);
 //RATE an instructor
 router.patch("/rate", rateInstructor);
 
-router.patch("/:id", updateInstructor);
+router.patch("/", updateInstructor);
 
 module.exports = router;

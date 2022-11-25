@@ -60,9 +60,10 @@ const deleteCourse = (req, res) => {
 
 //Rate a course
 const rateCourse = async (req, res) => {
-  const { courseId, s1, s2, s3, s4, s5 } = req.body;
+  const id = req.query.id;
+  const { s1, s2, s3, s4, s5 } = req.body;
   let sum = 0;
-  const course = await Course.findOneAndUpdate({ _id: courseId });
+  const course = await Course.findOneAndUpdate({ _id: id });
   if (s1 == "true") {
     sum++;
   }
@@ -97,7 +98,7 @@ const rateCourse = async (req, res) => {
   console.log(overallR);
 
   const updatedcourse = await Course.findOneAndUpdate(
-    { _id: courseId },
+    { _id: id },
     { ratings: ratingsTemp, overallRating: overallR },
     { new: true }
   );
@@ -105,7 +106,7 @@ const rateCourse = async (req, res) => {
 };
 //update a course
 const updateCourse = async (req, res) => {
-  const { id } = req.params;
+  const id = req.query.id;
 
   if (!mongoose.Types.ObjectId.isValid(id)) {
     return res.status(404).json({ error: "No such Course" });
@@ -124,8 +125,8 @@ const updateCourse = async (req, res) => {
 };
 //add course exercise
 const addCourseExercise = async (req, res) => {
+  const id = req.query.id; //637a197cbc66688b3924a864
   const {
-    courseID, //637a197cbc66688b3924a864
     question,
     option1,
     option2,
@@ -134,7 +135,7 @@ const addCourseExercise = async (req, res) => {
     answer,
   } = req.body;
   const courseEx = (
-    await Course.findById({ _id: courseID }).select("exercises")
+    await Course.findById({ _id: id }).select("exercises")
   ).exercises;
   exercise = {
     question: question,
@@ -143,34 +144,12 @@ const addCourseExercise = async (req, res) => {
   };
   courseEx.push(exercise);
   const course = await Course.findByIdAndUpdate(
-    { _id: courseID },
+    { _id: id },
     { exercises: courseEx }
   );
   res.status(200).json(course);
 };
 
-//DELETE an individual Instructor
-const deleteInstructor = (req, res) => {
-  res.json({ mssg: "DELETE an individual Instructor" });
-};
-
-//GET a single individual Instructor
-const getInstructor = async (req, res) => {
-  // const { id } = req.params
-
-  // if (!mongoose.Types.ObjectId.isValid(id)) {
-  // return res.status(404).json({error: 'No such instructor'})
-  // }
-
-  // const instructor = await Instructor.findById(id)
-  const instructor = await Instructor.find({ _id: "63715373d953904400b6a4d5" });
-
-  //if (!instructor) {
-  // return res.status(404).json({error: 'No such instructor'})
-  //}
-
-  res.status(200).json(instructor);
-};
 
 //create new course
 const createCourse = async (req, res) => {
@@ -864,13 +843,6 @@ const addCourseSub = async (req, res) => {
   res.status(200).json(course);
 };
 
-/* 
-const videoId = getId('http://www.youtube.com/watch?v=zbYf5_S7oJo');
-const iframeMarkup = '<iframe width="560" height="315" src="//www.youtube.com/embed/' 
-  + videoId + '" frameborder="0" allowfullscreen></iframe>';
-
-console.log('Video ID:', videoId)
-*/
 
 const addCoursePreview = async (req, res) => {
   const id = req.query.id;

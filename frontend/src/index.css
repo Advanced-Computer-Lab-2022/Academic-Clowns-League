@@ -4,7 +4,7 @@
 /* layout */
 :root {
   /*referenced during whole proj, primary is used in .course-details h4*/
-  --primary: #b41212;
+  --primary: #c00418;
   --error: #e7195a;
 }
 body {
@@ -30,9 +30,9 @@ header a {
   text-decoration: none;
 }
 .pages {
-  /*used in App.js*/
-  max-width: 1400px;
-  padding: 20px;
+  /*used in App.js AND AFFECTS THE NEW NAVBAR*/ 
+  max-width: 100%;
+  padding: 0px;
   margin: 0 auto;
 }
 

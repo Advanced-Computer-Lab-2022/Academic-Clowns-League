@@ -1,9 +1,10 @@
 
 import { useEffect, useState } from "react";
 import Subtitle from "../components/subtitle";
+import ITraineeNavbar from "../components/iTraineeNavbar";
 
 
-const TraineeCourse = () => {
+const ITraineeCourse = () => {
   //const { id } = useParams();
 
   //to get the id from  (query, in the URL)
@@ -32,6 +33,12 @@ const TraineeCourse = () => {
   
   return (
     <div className="">
+      <ITraineeNavbar />
+      <p> ITrainee course, ID: {id}</p>
+
+
+
+
         {course && course.subtitles && course.subtitles.map((subtitle) => (
             <Subtitle subtitle={subtitle} key={subtitle._id} />
           ))}
@@ -57,4 +64,4 @@ const TraineeCourse = () => {
       </div>
 
  */
-export default TraineeCourse;
+export default ITraineeCourse;

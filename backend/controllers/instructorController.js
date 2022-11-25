@@ -39,7 +39,7 @@ const createInstructor = async (req, res) => {
     //inside create, u pass thru an object representing the doc u wanna create
 
     //status 200 to say everything is okay, and send back an obj which is the Instructor created
-    res.status(200).json(Instructor);
+    res.status(200).json(instructor);
   } catch (error) {
     res.status(400).json({ error: error.message });
   }
@@ -47,9 +47,10 @@ const createInstructor = async (req, res) => {
 
 //RATE an individual Instructor
 const rateInstructor = async (req, res) => {
-  const { instructorId, s1, s2, s3, s4, s5 } = req.body;
+  const id = req.query.id;
+  const { s1, s2, s3, s4, s5 } = req.body;
   let sum = 0;
-  const instructor = await Instructor.findOneAndUpdate({ _id: instructorId });
+  const instructor = await Instructor.findOneAndUpdate({ _id: id });
   if (s1 == "true") {
     sum++;
   }
@@ -84,7 +85,7 @@ const rateInstructor = async (req, res) => {
   console.log(overallRating);
 
   const updatedinstructor = await Instructor.findOneAndUpdate(
-    { _id: instructorId },
+    { _id: id },
     { ratings: ratingsTemp, rating: overallRating },
     { new: true }
   );
@@ -92,7 +93,8 @@ const rateInstructor = async (req, res) => {
 };
 //UPDATE an individual Instructor
 const updateInstructor = async (req, res) => {
-  const { id } = req.params;
+  const id = req.query.id;
+  
 
   if (!mongoose.Types.ObjectId.isValid(id)) {
     return res.status(404).json({ error: "No such Instructor" });

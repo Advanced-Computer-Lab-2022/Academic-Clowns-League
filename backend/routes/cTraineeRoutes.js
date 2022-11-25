@@ -24,7 +24,7 @@ router.post('/', createCTrainee);
 router.delete('/:id', deleteCTrainee);
 
 //UPDATE a corporate trainee
-router.patch('/:id', updateCTrainee);
+router.patch('/', updateCTrainee);
 
 //GET registered courses for CTrainee
 router.get('/registeredcourses', getRegisteredCourses);

@@ -1,7 +1,9 @@
 import { useEffect, useState } from "react";
 import CourseDetailsCTrainee from "../components/courseDetailsCTrainee";
+import CTraineeNavbar from "../components/cTraineeNavbar";
 
-const Courses = () => {
+
+const CTraineeFilterAllCourses = () => {
   const [courses, setCourses] = useState(null);
   const [subjects, setSubject] = useState({
     computer: false,
@@ -60,6 +62,9 @@ const Courses = () => {
   }, []);
 
   return (
+    <div>
+      <CTraineeNavbar />
+    
     <div className="courses">
       <div className="all-courses">
         {courses &&
@@ -128,7 +133,8 @@ const Courses = () => {
       </form>
       <button onClick={handleClick}>Clear Filter</button>
     </div>
+    </div>
   );
 };
 
-export default Courses;
+export default CTraineeFilterAllCourses;

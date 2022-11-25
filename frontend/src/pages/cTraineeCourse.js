@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import Subtitle from "../components/subtitle";
-import InstructorNavbar from "../components/instructorNavbar";
+import CTraineeNavbar from "../components/cTraineeNavbar";
 
 
-const InstructorCourse = () => {
+const CTraineeCourse = () => {
 
   //to get the id from  (query, in the URL)
   const params = new URLSearchParams(window.location.search);
@@ -29,12 +29,12 @@ const InstructorCourse = () => {
   
   return (
     <div className="">
-      <InstructorNavbar />
-      <p> Instructor course, ID: {id}</p>
+        <CTraineeNavbar />
+      <p> CTrainee course, ID: {id}</p>
     </div>
   );
 }
 
 
 
-export default InstructorCourse;
+export default CTraineeCourse;
