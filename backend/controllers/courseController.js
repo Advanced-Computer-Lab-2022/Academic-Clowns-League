@@ -149,28 +149,6 @@ const addCourseExercise = async (req, res) => {
   res.status(200).json(course);
 };
 
-//DELETE an individual Instructor
-const deleteInstructor = (req, res) => {
-  res.json({ mssg: "DELETE an individual Instructor" });
-};
-
-//GET a single individual Instructor
-const getInstructor = async (req, res) => {
-  // const { id } = req.params
-
-  // if (!mongoose.Types.ObjectId.isValid(id)) {
-  // return res.status(404).json({error: 'No such instructor'})
-  // }
-
-  // const instructor = await Instructor.findById(id)
-  const instructor = await Instructor.find({ _id: "63715373d953904400b6a4d5" });
-
-  //if (!instructor) {
-  // return res.status(404).json({error: 'No such instructor'})
-  //}
-
-  res.status(200).json(instructor);
-};
 
 //create new course
 const createCourse = async (req, res) => {

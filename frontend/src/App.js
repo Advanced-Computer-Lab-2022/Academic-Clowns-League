@@ -25,6 +25,7 @@ import FilterCorpCourses from "./pages/filterCorpCourses";
 import SearchInstrCourses from "./pages/searchInstrCourses";
 //import CourseDetails from './components/courseDetails';
 import TraineeCourse from "./pages/traineeCourse";
+import Testing from "./pages/testing";
 
 //BrowserRouter wraps all things involved with routes
 //Routes wraps the routes
@@ -34,25 +35,16 @@ function App() {
   return (
     <div className="App">
       <BrowserRouter>
-        <Navbar />
         <div className="pages">
           <Routes>
+            
             <Route path="/instructorHome" element={<InstructorHome />} />
             <Route path="/adminHome" element={<AdminHome />} />
             <Route path="/guestHome" element={<GuestHome />} />
-            <Route
-              path="/individualTraineeHome"
-              element={<IndividualTraineeHome />}
-            />
-            <Route
-              path="/corporateTraineeHome"
-              element={<CorporateTraineeHome />}
-            />
+            <Route path="/individualTraineeHome" element={<IndividualTraineeHome />} />
+            <Route path="/corporateTraineeHome" element={<CorporateTraineeHome />}  />
 
-            <Route
-              path="/searchInstrCourses"
-              element={<SearchInstrCourses />}
-            />
+            <Route path="/searchInstrCourses" element={<SearchInstrCourses />} />
             <Route path="/filterAllCourses" element={<FilterAllCourses />} />
             <Route path="/filterInstCourses" element={<FilterMyCourses />} />
             <Route path="/mycourses" element={<InstructorCourses />} />
@@ -60,7 +52,8 @@ function App() {
 
             <Route path="/traineeCourse" element={<TraineeCourse />} />
 
-            {/*<Route path="/courses/:id" element={<TraineeCourse />} /> */}
+            <Route path="/testing" element={<Testing />} />
+
           </Routes>
         </div>
       </BrowserRouter>

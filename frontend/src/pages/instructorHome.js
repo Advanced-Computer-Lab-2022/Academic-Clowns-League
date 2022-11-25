@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import {Link} from "react-router-dom"
+import InstructorNavbar from "../components/instructorNavbar";
 
 // components
 import CourseDetails from "../components/courseDetails";
@@ -53,6 +54,10 @@ const InstructorHome = () => {
   }, []);
 
   return (
+
+
+    <div>
+    <InstructorNavbar />
     <div className="home">
       <Link to="/filterAllCourses">
         <button>Filter all Courses</button>
@@ -85,6 +90,7 @@ const InstructorHome = () => {
           ))}
       </div>
       <CourseForm />
+    </div>
     </div>
   );
 };
