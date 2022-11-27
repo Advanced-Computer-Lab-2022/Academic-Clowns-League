@@ -1,14 +1,14 @@
-import Button from 'react-bootstrap/Button';
+import { useContext } from 'react';
 import Container from 'react-bootstrap/Container';
-import Form from 'react-bootstrap/Form';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import NavDropdown from 'react-bootstrap/NavDropdown';
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { NavLink } from 'react-router-dom';
+import { CurrencyContext } from '../contexts/CurrencyContext';
 
 
 const GuestNavbar = () => {
-  
+  const {toggleCurrency, country} = useContext(CurrencyContext)
 
   
     return (
@@ -35,8 +35,9 @@ const GuestNavbar = () => {
             style={{ maxHeight: '100px' }}
             navbarScroll
           >
-            <Nav.Link href="/guestHome">Home</Nav.Link>
-            <Nav.Link href="/guestFilterAllCourses">Filter All Courses</Nav.Link>
+
+            <Nav.Link><NavLink to="/" className="navlink">Home</NavLink></Nav.Link>
+            <Nav.Link><NavLink to="/guestFilterAllCourses" className="navlink">Filter All Courses</NavLink></Nav.Link>
 
 
             <NavDropdown title="Options" id="navbarScrollingDropdown">
@@ -48,6 +49,13 @@ const GuestNavbar = () => {
               <NavDropdown.Item href="#action5">
                 Something else here
               </NavDropdown.Item>
+            </NavDropdown>
+
+            <NavDropdown title={country} id="navbarScrollingDropdown" onSelect = {toggleCurrency}>
+              <NavDropdown.Item eventKey="Egypt">Egypt</NavDropdown.Item>
+              <NavDropdown.Item eventKey="United States">United States</NavDropdown.Item>
+              <NavDropdown.Item eventKey="Germany">Germany</NavDropdown.Item>
+              <NavDropdown.Item eventKey="United Arab Emirates">United Arab Emirates</NavDropdown.Item> 
             </NavDropdown>
 
             {/*

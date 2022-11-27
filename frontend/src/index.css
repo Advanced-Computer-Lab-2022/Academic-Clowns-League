@@ -116,3 +116,13 @@ header a {
   border-radius: 50%;
   color: #333;
 }
+
+.navlink {
+  color: var(--bs-nav-link-color);
+  text-decoration: none;
+  transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out;
+}
+
+.navlink:hover{
+  color: var(--bs-navbar-hover-color);
+}

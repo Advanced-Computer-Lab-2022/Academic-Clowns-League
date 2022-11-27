@@ -1,8 +1,11 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
+import { CurrencyContext } from "../contexts/CurrencyContext";
 //import {useLocation} from 'react-router-dom';
 //const cities = require('../country-json/src/country-by-currency-code.json')
 
 const CourseDetails = ({ course }) => {
+  const {currency, rate} = useContext(CurrencyContext)
+  const price = Math.round(course.price * rate)
   const [isActive, setIsActive] = useState(false);
   /*const location = useLocation();
   const  {state} = location.state
@@ -41,7 +44,7 @@ const CourseDetails = ({ course }) => {
       >
         <p>
           <strong>Price: </strong>
-          {course.price}
+          {price} {currency}
         </p>
         <p>
           <strong>Subject: </strong>
