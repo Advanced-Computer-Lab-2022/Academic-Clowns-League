@@ -54,8 +54,19 @@ const getCourse = (req, res) => {
 };
 
 //delete a course
-const deleteCourse = (req, res) => {
-  res.json({ mssg: "DELETE a course" });
+const deleteCourse = async (req, res) => {
+  const id = req.query.id
+
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    return res.status(404).json({ error: "No such Course" });
+  }
+
+  const course = await Course.findOneAndDelete({ _id: id });
+
+  if (!course) {
+    return res.status(400).json({ error: "No such Course" });
+  }
+
 };
 
 //Rate a course
@@ -160,11 +171,13 @@ const createCourse = async (req, res) => {
     price,
     discount,
     discountValidUntil,
-    //instructor,
     summary,
     previewURL,
-    outline,
   } = req.body;
+
+  const videoId = getId(previewURL);
+  const embeddedLink = "//www.youtube.com/embed/" + videoId;
+
   try {
     const course = await Course.create({
       title,
@@ -175,8 +188,7 @@ const createCourse = async (req, res) => {
       discountValidUntil,
       instructor: "63715373d953904400b6a4d5",
       summary,
-      previewURL,
-      outline,
+      previewURL: embeddedLink,
     });
     //Course.create() is async that's why we put async around the handler fn, so u can use await right here
     //now we're storing the response of Course.create() (which is the doc created along with its is) in course

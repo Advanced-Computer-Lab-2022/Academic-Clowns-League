@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
 import {Link} from "react-router-dom"
 import InstructorNavbar from "../components/instructorNavbar";
+import Button from 'react-bootstrap/Button';
 
 // components
 import MyCourseDetailsInstructor from "../components/myCourseDetailsInstructor";
-import CourseForm from "../components/courseForm";
 
 const InstructorHome = () => {
   const [courses, setCourses] = useState(null);
@@ -55,7 +55,9 @@ const InstructorHome = () => {
     <div>
     <InstructorNavbar />
     <div className="home">
-      
+      <div>
+        <Link to="/createCourse"><Button variant="outline-success">+ Create Course</Button>{' '}</Link>
+      </div>
       <form className="create" onSubmit={handleSubmit}>
         <h3>Search</h3>
 
@@ -77,10 +79,6 @@ const InstructorHome = () => {
             <MyCourseDetailsInstructor course={course} key={course._id} />
           ))}
       </div>
-
-
-
-      <CourseForm />
     </div>
     </div>
   );

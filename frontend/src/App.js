@@ -25,6 +25,9 @@ import GuestFilterAllCourses from "./pages/guestFilterAllCourses";
 import AdminHome from "./pages/adminHome";
 import Testing from "./pages/testing";
 import CurrencyContextProvider from "./contexts/CurrencyContext";
+import CreateCourse from './pages/createCourse';
+import AddSubtitle from './pages/addSubtitle';
+import AddExercise from './pages/addExercise';
 
 //BrowserRouter wraps all things involved with routes, Routes wraps the routes, Route is a single route
 function App() {
@@ -54,6 +57,9 @@ function App() {
 
             <Route path="/" element={<GuestHome />} />
             <Route path="/guestFilterAllCourses" element={<GuestFilterAllCourses />} />
+            <Route path="/createCourse" element={<CreateCourse />} />
+            <Route path="/addSubtitle" element={<AddSubtitle />} />
+            <Route path="/addExercise" element={<AddExercise />} />
 
 
             <Route path="/adminHome" element={<AdminHome />} />

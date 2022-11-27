@@ -56,9 +56,6 @@ const courseSchema = new Schema(
     ratings: {
       type: [Number],
     },
-    outline: {
-      type: String,
-    },
     subtitles: [
       {
         title: String,

@@ -48,11 +48,11 @@ header a {
 
 .popup-contract {
   height: 200px;
-  width: 50%;
+  width: 90%;
   background-color: white;
   position: absolute;
-  top: 50%;
-  left: 25%;
+  top: 25%;
+  left: 40px;
   margin: 0 auto;
 }
 
@@ -71,6 +71,16 @@ header a {
   width: 100%;
   position: absolute;
   top: 0;
+}
+
+.main-contract {
+  /* for Mariam's pop up message */
+  background-color: rgba(132, 32, 32, 0.953);
+  height: 80%;
+  width: 80%;
+  position: absolute;
+  top: 150px;
+  left: 100px;
 }
 
 .message {
