@@ -164,7 +164,7 @@ const addCourseExercise = async (req, res) => {
 
 //create new course
 const createCourse = async (req, res) => {
-  const {
+  let {
     title,
     hours,
     subject,
@@ -177,8 +177,16 @@ const createCourse = async (req, res) => {
 
   const videoId = getId(previewURL);
   const embeddedLink = "//www.youtube.com/embed/" + videoId;
+  let discountApp = false
 
   try {
+    let currentDate = new Date().toJSON().slice(0, 10);
+    if(discountValidUntil != null && discountValidUntil >= currentDate){
+      discountApp = true
+    }
+    else{
+      discount = 0
+    }
     const course = await Course.create({
       title,
       hours,
@@ -189,6 +197,8 @@ const createCourse = async (req, res) => {
       instructor: "63715373d953904400b6a4d5",
       summary,
       previewURL: embeddedLink,
+      overallRating: "0",
+      discountApplied: discountApp
     });
     //Course.create() is async that's why we put async around the handler fn, so u can use await right here
     //now we're storing the response of Course.create() (which is the doc created along with its is) in course

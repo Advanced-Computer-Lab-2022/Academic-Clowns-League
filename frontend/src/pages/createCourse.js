@@ -10,7 +10,7 @@ const CreateCourse = () => {
     const [hours,setHours] = useState('')
     const [subject,setSubject] = useState('')
     const [price,setPrice] = useState('')
-    const [discount,setDiscount] = useState('')
+    const [discount,setDiscount] = useState('0')
     const [discountValidUntil,setDiscountValidUntil] = useState('')
     const [summary,setSummary] = useState('')
     const [previewURL,setPreviewURL] = useState('')
@@ -90,25 +90,25 @@ const CreateCourse = () => {
         <>
         <InstructorNavbar />
         <br></br>
-        <h3>Enter Course Details</h3><br></br>
+        <h3>Enter Course Details - fields followed by * are required</h3><br></br>
              <FloatingLabel
                 controlId="floatingInput"
-                label="Title"
+                label="Title*"
                 className="mb-3"
               >
-        <Form.Control type="text" placeholder="Title" value={title} onChange={(e) => setTitle(e.target.value)}/>
+        <Form.Control type="text" placeholder="Title*" value={title} onChange={(e) => setTitle(e.target.value)}/>
       </FloatingLabel><br></br>
 
-      <FloatingLabel controlId="floatingSubject" label="Subject">
-        <Form.Control type="text" placeholder="Subject" value={subject} onChange = {(e) => setSubject(e.target.value)}/>
+      <FloatingLabel controlId="floatingSubject" label="Subject*">
+        <Form.Control type="text" placeholder="Subject*" value={subject} onChange = {(e) => setSubject(e.target.value)}/>
       </FloatingLabel><br></br>
 
-      <FloatingLabel controlId="floatingHours" label="Hours">
-        <Form.Control type="text" placeholder="Hours" value={hours} onChange = {(e) => setHours(e.target.value)}/>
+      <FloatingLabel controlId="floatingHours" label="Hours*">
+        <Form.Control type="text" placeholder="Hours*" value={hours} onChange = {(e) => setHours(e.target.value)}/>
       </FloatingLabel><br></br>
 
-      <FloatingLabel controlId="floatingPrice" label="Price">
-        <Form.Control type="text" placeholder="Price" value={price} onChange = {(e) => setPrice(e.target.value)}/>
+      <FloatingLabel controlId="floatingPrice" label="Price*">
+        <Form.Control type="text" placeholder="Price*" value={price} onChange = {(e) => setPrice(e.target.value)}/>
       </FloatingLabel><br></br>
 
       <FloatingLabel controlId="floatingDiscount" label="Discount">
@@ -119,12 +119,12 @@ const CreateCourse = () => {
         <Form.Control type="text" placeholder="Discount Valid Until" value={discountValidUntil} onChange = {(e) => setDiscountValidUntil(e.target.value)}/>
       </FloatingLabel><br></br>
 
-      <FloatingLabel controlId="floatingSummary" label="Summary">
-        <Form.Control type="text" placeholder="Summary" value={summary} onChange = {(e) => setSummary(e.target.value)}/>
+      <FloatingLabel controlId="floatingSummary" label="Summary*">
+        <Form.Control type="text" placeholder="Summary*" value={summary} onChange = {(e) => setSummary(e.target.value)}/>
       </FloatingLabel><br></br>
 
-      <FloatingLabel controlId="floatingPreview" label="Preview">
-        <Form.Control type="text" placeholder="Preview" value={previewURL} onChange = {(e) => setPreviewURL(e.target.value)}/>
+      <FloatingLabel controlId="floatingPreview" label="Preview*">
+        <Form.Control type="text" placeholder="Preview*" value={previewURL} onChange = {(e) => setPreviewURL(e.target.value)}/>
       </FloatingLabel><br></br>
 
       {error && <div className="error">{error}</div>}

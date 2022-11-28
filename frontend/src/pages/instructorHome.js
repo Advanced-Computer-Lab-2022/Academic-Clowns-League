@@ -56,7 +56,7 @@ const InstructorHome = () => {
     <InstructorNavbar />
     <div className="home">
       <div>
-        <Link to="/createCourse"><Button variant="outline-success">+ Create Course</Button>{' '}</Link>
+        <Link to="/createCourse"><Button variant="outline-danger" className="create-course">+ Create Course</Button>{' '}</Link>
       </div>
       <form className="create" onSubmit={handleSubmit}>
         <h3>Search</h3>

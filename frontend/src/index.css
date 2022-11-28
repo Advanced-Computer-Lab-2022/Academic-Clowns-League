@@ -98,6 +98,7 @@ header a {
   /*for courseDetails.js*/
   background: #fff;
   border-radius: 4px;
+  width: 500px;
   margin: 20px auto;
   padding: 20px;
   position: relative;
@@ -127,6 +128,24 @@ header a {
   color: #333;
 }
 
+.courses{
+  left: 1%;
+  position: absolute;
+  top: 30%
+}
+
+.courses-trainee{
+  left: 1%;
+  position: absolute;
+  top: 10%
+}
+
+.create{
+  top: 15%;
+  position: absolute;
+  left: 1%
+}
+
 .navlink {
   color: var(--bs-nav-link-color);
   text-decoration: none;
@@ -135,4 +154,10 @@ header a {
 
 .navlink:hover{
   color: var(--bs-navbar-hover-color);
+}
+
+.create-course{
+  top: 20%;
+  position: absolute;
+  left: 73%
 }

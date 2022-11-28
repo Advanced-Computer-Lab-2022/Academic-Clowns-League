@@ -26,7 +26,7 @@ const IndividualTraineeHome = () => {
 <ITraineeNavbar />
     
     <div className="home">
-      <div className="courses">
+      <div className="courses-trainee">
         {courses &&
           courses.map((course) => (
             <MyCourseDetailsITrainee course={course} key={course._id} />

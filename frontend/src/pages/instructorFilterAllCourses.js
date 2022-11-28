@@ -68,7 +68,7 @@ const InstructorFilterAllCourses = () => {
   return (
     <div>
     <InstructorNavbar />
-    <div className="courses">
+    <div className="courses-trainee">
       <div className="all-courses">
         {courses &&
           courses.map((course) => (

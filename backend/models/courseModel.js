@@ -43,9 +43,11 @@ const courseSchema = new Schema(
     }*/
     summary: {
       type: String,
+      required: true,
     },
     previewURL: {
       type: String,
+      required: true,
     },
     reviews: {
       type: [String],
@@ -77,13 +79,16 @@ const courseSchema = new Schema(
         answer: String,
       },
     ],
+    discountApplied: {
+      type: Boolean
+    }
   },
   { timestamps: true }
 );
 
 module.exports = mongoose.model("Course", courseSchema);
 
-module.exports = mongoose.model("Course", courseSchema);
+//module.exports = mongoose.model("Course", courseSchema);
 
 // this create a new schema, and we're passing as an argument an object where we define our schema, what should a typical course object (or document) look like
 //the 2nd argument has a timestamps property, it will automatically add a 'create at' property for us when a new document is created and updated
