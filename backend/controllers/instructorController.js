@@ -93,6 +93,63 @@ const rateInstructor = async (req, res) => {
   res.status(200).json(updatedinstructor);
 };
 //UPDATE an individual Instructor
+const resetPassword = async (req, res) => {
+  const id = req.query.id;
+
+  /* if (!mongoose.Types.ObjectId.isValid(id)) {
+    return res.status(404).json({ error: "No such Instructor" });
+  }
+
+  const instructor = await Instructor.findOneAndUpdate(
+    { _id: id },
+    {
+      ...req.body,
+    }
+  );
+
+  if (!instructor) {
+    return res.status(400).json({ error: "No such Instructor" });
+  }*/
+
+  // const { id } = req.params
+
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    return res.status(404).json({ error: "No such instructor" });
+  }
+
+  const instructor = await Instructor.findById(id);
+  //const instructor = await Instructor.find({ _id: "63715373d953904400b6a4d5" });
+
+  if (!instructor) {
+    return res.status(404).json({ error: "No such instructor" });
+  } else {
+    let mailTransporter = nodemailer.createTransport({
+      service: "gmail",
+      auth: {
+        user: "nourhan.khedr24@gmail.com",
+        pass: "wtcynstutwftvzyz",
+      },
+    });
+    let details = {
+      from: "nourhan.khedr24@gmail.com",
+      to: req.body.email,
+      subject: "Reset password",
+      text: " Reset Password Link",
+    };
+
+    mailTransporter.sendMail(details, (err) => {
+      if (err) {
+        console.log("error");
+        console.log(req.body.email);
+      } else {
+        console.log("email sent");
+      }
+    });
+  }
+
+  res.status(200).json(instructor);
+};
+
 const updateInstructor = async (req, res) => {
   const id = req.query.id;
 
@@ -109,52 +166,10 @@ const updateInstructor = async (req, res) => {
 
   if (!instructor) {
     return res.status(400).json({ error: "No such Instructor" });
-  } else {
-    let mailTransporter = nodemailer.createTransport({
-      service: "gmail",
-      auth: {
-        user: "nourhan.khedr24@gmail.com",
-        pass: "wtcynstutwftvzyz",
-      },
-    });
-    let details = {
-      from: "nourhan.khedr24@gmail.com",
-      to: req.body.email,
-      subject: "Reset password",
-      text: " Reset Password Link",
-    };
-    mailTransporter.sendMail(details, (err) => {
-      if (err) {
-        console.log("error");
-      } else {
-        console.log("email sent");
-      }
-    });
   }
 
   res.status(200).json(instructor);
 };
-
-/*const updateInstructor = async (req, res) => {
-  const id = req.query.id;
-
-  if (!mongoose.Types.ObjectId.isValid(id)) {
-    return res.status(404).json({ error: "No such Instructor" });
-  }
-
-  const instructor = await Instructor.findOneAndUpdate(
-    { _id: id },
-    {
-      ...req.body,
-    }
-  );
-
-  if (!instructor) {
-    return res.status(400).json({ error: "No such Instructor" });
-  }
-
-  res.status(200).json(instructor);
-};*/
 
 //DELETE an individual Instructor
 const deleteInstructor = (req, res) => {
@@ -191,5 +206,5 @@ module.exports = {
   deleteInstructor,
   rateInstructor,
   updateInstructor,
-  //resetPassword,
+  resetPassword,
 };

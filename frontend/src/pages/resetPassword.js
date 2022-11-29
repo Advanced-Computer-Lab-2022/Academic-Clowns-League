@@ -20,7 +20,9 @@ const ResetPassword = () => {
       email,
     };
 
-    const response = await fetch("/api/instructor/?id=" + id, {
+    //element.innerHTML = data.total;
+
+    const response = await fetch("/api/instructor/reset/?id=" + id, {
       method: "PATCH",
       //body: JSON.stringify(Password),
       body: JSON.stringify(Email),
@@ -28,6 +30,7 @@ const ResetPassword = () => {
         "Content-Type": "application/json",
       },
     });
+    //const response = await fetch("/api/instructor/reset/?id=" + id);
     const json = await response.json();
 
     if (!response.ok) {
