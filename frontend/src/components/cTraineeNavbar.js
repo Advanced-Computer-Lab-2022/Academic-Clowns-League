@@ -3,9 +3,9 @@ import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import NavDropdown from 'react-bootstrap/NavDropdown';
 import { NavLink } from "react-router-dom";
-import { useState, useContext } from 'react'
+import { useContext } from 'react'
 import { CurrencyContext } from '../contexts/CurrencyContext';
-
+const countries = require('../country-json-master/src/country-by-currency-code.json')
 
 const CTraineeNavbar = () => {
   const { country, toggleCurrency } = useContext(CurrencyContext)
@@ -53,10 +53,9 @@ const CTraineeNavbar = () => {
             </NavDropdown>
 
             <NavDropdown title={country} id="navbarScrollingDropdown" onSelect = {toggleCurrency}>
-              <NavDropdown.Item eventKey="Egypt">Egypt</NavDropdown.Item>
-              <NavDropdown.Item eventKey="United States">United States</NavDropdown.Item>
-              <NavDropdown.Item eventKey="Germany">Germany</NavDropdown.Item>
-              <NavDropdown.Item eventKey="United Arab Emirates">United Arab Emirates</NavDropdown.Item> 
+            {countries.map((country) => (
+                <NavDropdown.Item eventKey={country.country}>{country.country}</NavDropdown.Item>
+              ))}
             </NavDropdown>
 
             {/*

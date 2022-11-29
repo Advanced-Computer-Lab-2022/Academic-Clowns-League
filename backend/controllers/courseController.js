@@ -262,31 +262,31 @@ const filterSubRatePrice = async (req, res) => {
     prices[0] = [];
   }
   if (req.query.sixth == "true") {
-    prices[1] = [6000, 7000];
+    prices[1] = [60, 70];
     priceCount++;
   } else {
     prices[1] = [];
   }
   if (req.query.seventh == "true") {
-    prices[2] = [7000, 8000];
+    prices[2] = [70, 80];
     priceCount++;
   } else {
     prices[2] = [];
   }
   if (req.query.eighth == "true") {
-    prices[3] = [8000, 9000];
+    prices[3] = [80, 90];
     priceCount++;
   } else {
     prices[3] = [];
   }
   if (req.query.ninth == "true") {
-    prices[4] = [9000, 10000];
+    prices[4] = [90, 100];
     priceCount++;
   } else {
     prices[4] = [];
   }
   if (req.query.tenth == "true") {
-    prices[5] = [10000, 1000000000];
+    prices[5] = [100, 1000000000];
     priceCount++;
   } else {
     prices[5] = [];
@@ -661,31 +661,31 @@ const filterInstPriceSub = async (req, res) => {
     prices[0] = [];
   }
   if (req.query.sixth == "true") {
-    prices[1] = [6000, 7000];
+    prices[1] = [60, 70];
     priceCount++;
   } else {
     prices[1] = [];
   }
   if (req.query.seventh == "true") {
-    prices[2] = [7000, 8000];
+    prices[2] = [70, 80];
     priceCount++;
   } else {
     prices[2] = [];
   }
   if (req.query.eighth == "true") {
-    prices[3] = [8000, 9000];
+    prices[3] = [80, 90];
     priceCount++;
   } else {
     prices[3] = [];
   }
   if (req.query.ninth == "true") {
-    prices[4] = [9000, 10000];
+    prices[4] = [90, 100];
     priceCount++;
   } else {
     prices[4] = [];
   }
   if (req.query.tenth == "true") {
-    prices[5] = [10000, 1000000000];
+    prices[5] = [100, 1000000000];
     priceCount++;
   } else {
     prices[5] = [];

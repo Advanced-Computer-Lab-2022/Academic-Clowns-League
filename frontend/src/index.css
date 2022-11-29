@@ -99,7 +99,7 @@ header a {
   background: #fff;
   border-radius: 4px;
   width: 500px;
-  margin: 20px auto;
+  margin: 20px;
   padding: 20px;
   position: relative;
   box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.05);
@@ -135,7 +135,7 @@ header a {
 }
 
 .courses-trainee{
-  left: 1%;
+  left: 0;
   position: absolute;
   top: 10%
 }
@@ -160,4 +160,16 @@ header a {
   top: 20%;
   position: absolute;
   left: 73%
+}
+
+.checkboxes input{
+  margin: 0px 0px 0px 0px;
+}
+
+.checkboxes label{
+  margin: 0px 20px 0px 3px;
+}
+
+.checkboxes{
+  margin: 20px;
 }

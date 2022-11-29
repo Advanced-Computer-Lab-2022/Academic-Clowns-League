@@ -7,6 +7,10 @@ import SubtitleMap from "./subtitleMap";
 const CourseDetails = ({ course }) => {
   const {currency, rate} = useContext(CurrencyContext)
   const price = Math.round(course.price * rate)
+  let message = `Price after ${course.discount}% discount is applied -- original price = ${price} ${currency}`
+  if(course.discountApplied === false){
+    message = ''
+  }
   //console.log(course.exercises.length)
   const [isActive, setIsActive] = useState(false);
 
@@ -38,7 +42,7 @@ const CourseDetails = ({ course }) => {
         <p>
           <strong>Price: </strong>
           {Math.round(price*(100-course.discount)/100)} {currency} <br></br>
-          Price after {course.discount}% discount is applied
+          {message}
         </p>
         <p>
           <strong>Subject: </strong>
