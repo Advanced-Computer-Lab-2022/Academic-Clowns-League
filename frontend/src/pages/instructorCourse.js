@@ -1,17 +1,16 @@
 import { useEffect, useState } from "react";
 import Subtitle from "../components/subtitle";
 import InstructorNavbar from "../components/instructorNavbar";
-
+import { useNavigate } from "react-router-dom";
 
 const InstructorCourse = () => {
-
   //to get the id from  (query, in the URL)
   const params = new URLSearchParams(window.location.search);
-  const id = params.get('id');
-
+  const id = params.get("id");
 
   const [course, setCourse] = useState(null);
 
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchCourse = async () => {
@@ -24,17 +23,23 @@ const InstructorCourse = () => {
       }
     };
     fetchCourse();
-  }, []); 
+  }, []);
 
-  
   return (
     <div className="">
       <InstructorNavbar />
       <p> Instructor course, ID: {id}</p>
+
+      <button
+        onClick={() => {
+          window.location.href = `/addPromotion?id=${id}`;
+        }}
+      >
+        {" "}
+        Add Promotion{" "}
+      </button>
     </div>
   );
-}
-
-
+};
 
 export default InstructorCourse;

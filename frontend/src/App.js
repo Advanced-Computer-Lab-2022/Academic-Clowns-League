@@ -1,6 +1,5 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import 'bootstrap/dist/css/bootstrap.min.css';
-
+import "bootstrap/dist/css/bootstrap.min.css";
 
 import InstructorHome from "./pages/instructorHome";
 import InstructorAllCourses from "./pages/instructorAllCourses";
@@ -21,10 +20,13 @@ import CTraineeCourse from "./pages/cTraineeCourse";
 import GuestHome from "./pages/guestHome";
 import GuestFilterAllCourses from "./pages/guestFilterAllCourses";
 
-
 import AdminHome from "./pages/adminHome";
 import Testing from "./pages/testing";
-
+import AddPromotion from "./pages/addPromotion";
+import InstructorViewAndEditBio from "./pages/instructorViewAndEditBio";
+import EditEmail from "./pages/editEmail";
+import ChangePassword from "./pages/changePassword";
+import ResetPassword from "./pages/resetPassword";
 //BrowserRouter wraps all things involved with routes, Routes wraps the routes, Route is a single route
 function App() {
   return (
@@ -32,31 +34,66 @@ function App() {
       <BrowserRouter>
         <div className="pages">
           <Routes>
-
             <Route path="/instructorHome" element={<InstructorHome />} />
-            <Route path="/instructorAllCourses" element={<InstructorAllCourses />} />
-            <Route path="/instructorFilterAllCourses" element={<InstructorFilterAllCourses />} />
-            <Route path="/instructorFilterMyCourses" element={<InstructorFilterMyCourses />} />
+            <Route
+              path="/instructorAllCourses"
+              element={<InstructorAllCourses />}
+            />
+            <Route
+              path="/instructorFilterAllCourses"
+              element={<InstructorFilterAllCourses />}
+            />
+            <Route
+              path="/instructorFilterMyCourses"
+              element={<InstructorFilterMyCourses />}
+            />
             <Route path="/instructorCourse" element={<InstructorCourse />} />
 
-            <Route path="/individualTraineeHome" element={<IndividualTraineeHome />} />
-            <Route path="/iTraineeAllCourses" element={<ITraineeAllCourses />} />
-            <Route path="/iTraineeFilterAllCourses" element={<ITraineeFilterAllCourses />} />
+            <Route
+              path="/individualTraineeHome"
+              element={<IndividualTraineeHome />}
+            />
+            <Route
+              path="/iTraineeAllCourses"
+              element={<ITraineeAllCourses />}
+            />
+            <Route
+              path="/iTraineeFilterAllCourses"
+              element={<ITraineeFilterAllCourses />}
+            />
             <Route path="/iTraineeCourse" element={<ITraineeCourse />} />
             {/* test by typing   http://localhost:3000/traineeCourse?id=637d0729cee474fa712b4010 in the url */}
 
-            <Route path="/corporateTraineeHome" element={<CorporateTraineeHome />}  />
-            <Route path="/cTraineeAllCourses" element={<CTraineeAllCourses />}  />
-            <Route path="/cTraineeFilterAllCourses" element={<CTraineeFilterAllCourses />} />
+            <Route
+              path="/corporateTraineeHome"
+              element={<CorporateTraineeHome />}
+            />
+            <Route
+              path="/cTraineeAllCourses"
+              element={<CTraineeAllCourses />}
+            />
+            <Route
+              path="/cTraineeFilterAllCourses"
+              element={<CTraineeFilterAllCourses />}
+            />
             <Route path="/cTraineeCourse" element={<CTraineeCourse />} />
 
             <Route path="/guestHome" element={<GuestHome />} />
-            <Route path="/guestFilterAllCourses" element={<GuestFilterAllCourses />} />
-
+            <Route
+              path="/guestFilterAllCourses"
+              element={<GuestFilterAllCourses />}
+            />
 
             <Route path="/adminHome" element={<AdminHome />} />
             <Route path="/testing" element={<Testing />} />
-
+            <Route path="/addPromotion" element={<AddPromotion />} />
+            <Route
+              path="/instructorViewAndEditBio"
+              element={<InstructorViewAndEditBio />}
+            />
+            <Route path="/editEmail" element={<EditEmail />} />
+            <Route path="/changePassword" element={<ChangePassword />} />
+            <Route path="/resetPassword" element={<ResetPassword />} />
           </Routes>
         </div>
       </BrowserRouter>
