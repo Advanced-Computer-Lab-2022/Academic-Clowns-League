@@ -39,27 +39,6 @@ const ResetPassword = () => {
       setError(null);
       console.log("Password Updated", json);
     }
-
-    /*let mailTransporter = nodemailer.createTransport({
-      service: "gmail",
-      auth: {
-        user: "nourhan.khedr24@gmail.com",
-        pass: "wtcynstutwftvzyz",
-      },
-    });
-    let details = {
-      from: "nourhan.khedr24@gmail.com",
-      to: "nourhan.khedr24@gmail.com",
-      subject: "testing nodemailer",
-      text: " testing first send",
-    };
-    mailTransporter.sendMail(details, (err) => {
-      if (err) {
-        console.log("error");
-      } else {
-        console.log("email sent");
-      }
-    });*/
   };
 
   return (
