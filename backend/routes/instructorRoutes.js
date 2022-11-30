@@ -6,6 +6,7 @@ const {
   deleteInstructor,
   rateInstructor,
   updateInstructor,
+  resetPassword,
 } = require("../controllers/InstructorController");
 
 const router = express.Router();
@@ -26,5 +27,7 @@ router.delete("/:id", deleteInstructor);
 router.patch("/rate", rateInstructor);
 
 router.patch("/", updateInstructor);
+
+router.patch("/reset", resetPassword);
 
 module.exports = router;
