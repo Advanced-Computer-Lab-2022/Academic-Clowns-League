@@ -18,11 +18,13 @@ const ITraineeCourse = () => {
   const id = params.get("id");
 
   const [course, setCourse] = useState(null);
+  const [grade, setGrade] = useState("");
+  const [answersText, setAnswersText] = useState("");
 
   //values needed for Excercises
   const StudentAnswers = [];
   var CorrectAnswers = [];
-  var ResultDisplay = 0;
+  var ResultDisplay = "";
   var ResultText = "";
 
   //Handles Change in RadioButton values
@@ -32,6 +34,7 @@ const ITraineeCourse = () => {
   };
   //Handles Submit of Exercises.
   const handleSubmit = (event) => {
+    //
     CorrectAnswers = [];
     for (let i = 0; i < course.exercises.length; i++) {
       CorrectAnswers.push(course.exercises[i].answer);
@@ -59,8 +62,10 @@ const ITraineeCourse = () => {
           " Should be: " +
           CorrectAnswers[i];
       }
+      setAnswersText(ResultDisplay);
     }
     ResultDisplay = (Result / FullMark) * 100;
+    setGrade(ResultDisplay);
     console.log(ResultDisplay);
   };
 
@@ -72,12 +77,14 @@ const ITraineeCourse = () => {
       if (response.ok) {
         setCourse(json);
 
-        console.log(course.exercises);
+        //console.log(course.exercises);
 
-        for (let i = 0; i < course.exercises.length; i++) {
-          CorrectAnswers.push(course.exercises[i].answer);
+        if (course) {
+          for (let i = 0; i < course.exercises.length; i++) {
+            CorrectAnswers.push(course.exercises[i].answer);
+          }
+          console.log(CorrectAnswers);
         }
-        console.log(CorrectAnswers);
       }
     };
     fetchCourse();
@@ -115,36 +122,6 @@ const ITraineeCourse = () => {
               course.subtitles.map((subtitle) => (
                 <Subtitle subtitle={subtitle} key={subtitle._id} />
               ))}
-          </Col>
-
-          <Col sm={3} fixed-top style={{ backgroundColor: "#A9A9A9 " }}>
-            <p>
-              {" "}
-              <strong> Instructor: </strong> {course.instructorData.name}
-            </p>
-            <p>
-              {" "}
-              <strong> Subject: </strong> {course.subject}
-            </p>
-            <p>
-              {" "}
-              <strong> Rating: </strong> {course.overallRating}
-            </p>
-            <p>
-              {" "}
-              <strong> Total Hours: </strong> {course.hours} Hours
-            </p>
-            <p>
-              {" "}
-              <strong> Number of Lessons: </strong> {course.subtitles.length}
-            </p>
-            <p>
-              {" "}
-              <strong> Number of Questions: </strong>
-              {course.exercises.length}
-            </p>
-
-            <RateCourse course={course} myId="637a356c54c79d632507dc8a" />
 
             <h1>
               {" "}
@@ -192,8 +169,31 @@ const ITraineeCourse = () => {
                 ))}
               <input type="button" value="Submit" onClick={handleSubmit} />
             </form>
-            <h3>{ResultDisplay}</h3>
+            <h3>{grade}</h3>
+            <h3>{answersText}</h3>
+
+            <RateCourse course={course} myId="637a356c54c79d632507dc8a" />
+
             <RateInstructor course={course} myId="637a356c54c79d632507dc8a" />
+          </Col>
+
+          <Col sm={3} fixed-top style={{ backgroundColor: "#A9A9A9 " }}>
+            <p>
+              {" "}
+              <strong> Instructor: </strong> {course.instructorData.name}
+            </p>
+            <p>
+              {" "}
+              <strong> Subject: </strong> {course.subject}
+            </p>
+            <p>
+              {" "}
+              <strong> Rating: </strong> {course.overallRating}
+            </p>
+            <p>
+              {" "}
+              <strong> Total Hours: </strong> {course.hours} Hours
+            </p>
           </Col>
         </Row>
       )}

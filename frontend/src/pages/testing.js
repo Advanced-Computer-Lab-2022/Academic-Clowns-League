@@ -2,15 +2,11 @@
 import InstructorNavbar from "../components/instructorNavbar";
 
 const Testing = () => {
-  
+  return (
+    <div>
+      <InstructorNavbar />
+    </div>
+  );
+};
 
-  
-    return (
-  
-      <div>
-          <InstructorNavbar/>
-      </div>
-    );
-  }
-  
-  export default Testing;
+export default Testing;

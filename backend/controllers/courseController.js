@@ -55,7 +55,7 @@ const getCourse = (req, res) => {
 
 //delete a course
 const deleteCourse = async (req, res) => {
-  const id = req.query.id
+  const id = req.query.id;
 
   if (!mongoose.Types.ObjectId.isValid(id)) {
     return res.status(404).json({ error: "No such Course" });
@@ -66,7 +66,6 @@ const deleteCourse = async (req, res) => {
   if (!course) {
     return res.status(400).json({ error: "No such Course" });
   }
-
 };
 
 //Rate a course
@@ -81,36 +80,37 @@ const rateCourse = async (req, res) => {
   ratingsTemp.forEach(Function);
 
   function Function(value) {
-    if(value.userId==user){
-      found=true;
+    if (value.userId == user) {
+      found = true;
     }
   }
-  if(!found) {
-  console.log(ratingsTemp);
-  ratingsTemp.push({rating:Rating, userId:user});
-  console.log(ratingsTemp);
-  let len = ratingsTemp.length;
-  console.log(len);
-  let ratingsSum = 0;
-  ratingsTemp.forEach(myFunction);
+  if (!found) {
+    console.log(ratingsTemp);
+    ratingsTemp.push({ rating: Rating, userId: user });
+    console.log(ratingsTemp);
+    let len = ratingsTemp.length;
+    console.log(len);
+    let ratingsSum = 0;
+    ratingsTemp.forEach(myFunction);
 
-  function myFunction(value) {
-    ratingsSum += value.rating;
-  }
-  console.log(ratingsSum);
+    function myFunction(value) {
+      ratingsSum += value.rating;
+    }
+    console.log(ratingsSum);
 
-  const overallR = ratingsSum / len;
-  console.log(overallR);
+    const overallR = ratingsSum / len;
+    console.log(overallR);
 
-  const updatedcourse = await Course.findOneAndUpdate(
-    { _id: id },
-    { ratings: ratingsTemp, overallRating: overallR },
-    { new: true }
-  );
-  res.status(200).json(updatedcourse);
-  }
-  else{
-    return res.status(404).json({error: 'you have already rated this course'})
+    const updatedcourse = await Course.findOneAndUpdate(
+      { _id: id },
+      { ratings: ratingsTemp, overallRating: overallR },
+      { new: true }
+    );
+    res.status(200).json(updatedcourse);
+  } else {
+    return res
+      .status(404)
+      .json({ error: "you have already rated this course" });
   }
 };
 //update a course
@@ -135,17 +135,9 @@ const updateCourse = async (req, res) => {
 //add course exercise
 const addCourseExercise = async (req, res) => {
   const id = req.query.id; //637a197cbc66688b3924a864
-  const {
-    question,
-    option1,
-    option2,
-    option3,
-    option4,
-    answer,
-  } = req.body;
-  const courseEx = (
-    await Course.findById({ _id: id }).select("exercises")
-  ).exercises;
+  const { question, option1, option2, option3, option4, answer } = req.body;
+  const courseEx = (await Course.findById({ _id: id }).select("exercises"))
+    .exercises;
   exercise = {
     question: question,
     options: [option1, option2, option3, option4],
@@ -158,7 +150,6 @@ const addCourseExercise = async (req, res) => {
   );
   res.status(200).json(course);
 };
-
 
 //create new course
 const createCourse = async (req, res) => {
@@ -175,15 +166,14 @@ const createCourse = async (req, res) => {
 
   const videoId = getId(previewURL);
   const embeddedLink = "//www.youtube.com/embed/" + videoId;
-  let discountApp = false
+  let discountApp = false;
 
   try {
     let currentDate = new Date().toJSON().slice(0, 10);
-    if(discountValidUntil != null && discountValidUntil >= currentDate){
-      discountApp = true
-    }
-    else{
-      discount = 0
+    if (discountValidUntil != null && discountValidUntil >= currentDate) {
+      discountApp = true;
+    } else {
+      discount = 0;
     }
     const course = await Course.create({
       title,
@@ -196,7 +186,7 @@ const createCourse = async (req, res) => {
       summary,
       previewURL: embeddedLink,
       overallRating: "0",
-      discountApplied: discountApp
+      discountApplied: discountApp,
     });
     //Course.create() is async that's why we put async around the handler fn, so u can use await right here
     //now we're storing the response of Course.create() (which is the doc created along with its is) in course
@@ -863,7 +853,6 @@ const addCourseSub = async (req, res) => {
   res.status(200).json(course);
 };
 
-
 const addCoursePreview = async (req, res) => {
   const id = req.query.id;
   const { videoPreviewURL } = req.body;
@@ -876,7 +865,6 @@ const addCoursePreview = async (req, res) => {
   );
   res.status(200).json(course);
 };
-
 
 /*
 const openMyCourse = async (req, res) => {
@@ -902,12 +890,11 @@ const openMyCourse = async (req, res) => {
       $unwind: "$instructorData",
     },
     {
-      $match: {_id: newId },
+      $match: { _id: newId },
     },
   ]);
   res.status(200).json(courses[0]);
 };
-
 
 module.exports = {
   getAllCourses,

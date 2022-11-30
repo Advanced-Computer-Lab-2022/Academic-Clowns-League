@@ -1,21 +1,31 @@
 import { useEffect, useState } from "react";
 import Subtitle from "../components/subtitle";
 import CTraineeNavbar from "../components/cTraineeNavbar";
+import Exercise from "../components/excercise";
+
 import RateCourse from "../components/rateCourse";
 import RateInstructor from "../components/rateInstructor";
 
+import Ratio from "react-bootstrap/Ratio";
+import Row from "react-bootstrap/Row";
+import Col from "react-bootstrap/Col";
+
 const CTraineeCourse = () => {
+  //const { id } = useParams();
+
   //to get the id from  (query, in the URL)
   const params = new URLSearchParams(window.location.search);
   const id = params.get("id");
 
+  const [course, setCourse] = useState(null);
+  const [grade, setGrade] = useState("");
+  const [answersText, setAnswersText] = useState("");
+
   //values needed for Excercises
   const StudentAnswers = [];
   var CorrectAnswers = [];
-  var ResultDisplay = 0;
+  var ResultDisplay = "";
   var ResultText = "";
-
-  const [course, setCourse] = useState(null);
 
   //Handles Change in RadioButton values
   const handleChange = (event) => {
@@ -24,6 +34,7 @@ const CTraineeCourse = () => {
   };
   //Handles Submit of Exercises.
   const handleSubmit = (event) => {
+    //event.preventDefault();
     CorrectAnswers = [];
     for (let i = 0; i < course.exercises.length; i++) {
       CorrectAnswers.push(course.exercises[i].answer);
@@ -51,19 +62,29 @@ const CTraineeCourse = () => {
           " Should be: " +
           CorrectAnswers[i];
       }
+      setAnswersText(ResultDisplay);
     }
     ResultDisplay = (Result / FullMark) * 100;
+    setGrade(ResultDisplay);
     console.log(ResultDisplay);
   };
 
   useEffect(() => {
     const fetchCourse = async () => {
       const response = await fetch("/api/courses/openMyCourse/?id=" + id);
+
       const json = await response.json();
       if (response.ok) {
         setCourse(json);
-        console.log(json);
-        console.log(course);
+
+        //console.log(course.exercises);
+
+        if (course) {
+          for (let i = 0; i < course.exercises.length; i++) {
+            CorrectAnswers.push(course.exercises[i].answer);
+          }
+          console.log(CorrectAnswers);
+        }
       }
     };
     fetchCourse();
@@ -72,57 +93,110 @@ const CTraineeCourse = () => {
   return (
     <div className="">
       <CTraineeNavbar />
-      <p> CTrainee course, ID: {id}</p>
-
-      <h1>
-        {" "}
-        <b>Excersises</b>{" "}
-      </h1>
-      <form>
-        {course &&
-          course.exercises &&
-          course.exercises.map((exercise, index) => (
-            <div>
-              <h2>{exercise.question}</h2>
-              <div>
-                <input
-                  type="radio"
-                  value={exercise.options[0]}
-                  name={index}
-                  onChange={handleChange}
-                />{" "}
-                {exercise.options[0]} <br></br>
-                <input
-                  type="radio"
-                  value={exercise.options[1]}
-                  name={index}
-                  onChange={handleChange}
-                />{" "}
-                {exercise.options[1]}
-                <br></br>
-                <input
-                  type="radio"
-                  value={exercise.options[2]}
-                  name={index}
-                  onChange={handleChange}
-                />{" "}
-                {exercise.options[2]}
-                <br></br>
-                <input
-                  type="radio"
-                  value={exercise.options[3]}
-                  name={index}
-                  onChange={handleChange}
-                />{" "}
-                {exercise.options[3]}
-              </div>
+      {course && (
+        <Row>
+          <Col sm={9}>
+            <h1 style={{ fontSize: 80, margin: 10 }}> {course.title}</h1>
+            <p style={{ margin: 10 }}>
+              {" "}
+              <strong>Summary:</strong> {course.summary}
+            </p>
+            <p style={{ margin: 10 }}>
+              {" "}
+              <strong>Preview:</strong>{" "}
+            </p>
+            <div
+              style={{
+                width: "75%",
+                height: "auto",
+                padding: 10,
+                margin: 10,
+                position: "center",
+              }}
+            >
+              <Ratio aspectRatio="16x9">
+                <embed src={course.previewURL} />
+              </Ratio>
             </div>
-          ))}
-        <input type="button" value="Submit" onClick={handleSubmit} />
-      </form>
-      <h3>{ResultDisplay}</h3>
-      <RateCourse course={course} myId="637a8c03f7740521fbe8246e" />
-      <RateInstructor course={course} myId="637a8c03f7740521fbe8246e" />
+            {course.subtitles &&
+              course.subtitles.map((subtitle) => (
+                <Subtitle subtitle={subtitle} key={subtitle._id} />
+              ))}
+
+            <h1>
+              {" "}
+              <b>Excersises</b>{" "}
+            </h1>
+            <form>
+              {course &&
+                course.exercises &&
+                course.exercises.map((exercise, index) => (
+                  <div>
+                    <h2>{exercise.question}</h2>
+                    <div>
+                      <input
+                        type="radio"
+                        value={exercise.options[0]}
+                        name={index}
+                        onChange={handleChange}
+                      />{" "}
+                      {exercise.options[0]} <br></br>
+                      <input
+                        type="radio"
+                        value={exercise.options[1]}
+                        name={index}
+                        onChange={handleChange}
+                      />{" "}
+                      {exercise.options[1]}
+                      <br></br>
+                      <input
+                        type="radio"
+                        value={exercise.options[2]}
+                        name={index}
+                        onChange={handleChange}
+                      />{" "}
+                      {exercise.options[2]}
+                      <br></br>
+                      <input
+                        type="radio"
+                        value={exercise.options[3]}
+                        name={index}
+                        onChange={handleChange}
+                      />{" "}
+                      {exercise.options[3]}
+                    </div>
+                  </div>
+                ))}
+              <input type="button" value="Submit" onClick={handleSubmit} />
+            </form>
+            <h3>{grade}</h3>
+            <h3>{answersText}</h3>
+
+            <RateCourse course={course} myId="637a356c54c79d632507dc8a" />
+
+            <RateInstructor course={course} myId="637a356c54c79d632507dc8a" />
+          </Col>
+
+          <Col sm={3} fixed-top style={{ backgroundColor: "#A9A9A9 " }}>
+            <p>
+              {" "}
+              <strong> Instructor: </strong> {course.instructorData.name}
+            </p>
+            <p>
+              {" "}
+              <strong> Subject: </strong> {course.subject}
+            </p>
+            <p>
+              {" "}
+              <strong> Rating: </strong> {course.overallRating}
+            </p>
+            <p>
+              {" "}
+              <strong> Total Hours: </strong> {course.hours} Hours
+            </p>
+          </Col>
+        </Row>
+      )}
     </div>
   );
 };

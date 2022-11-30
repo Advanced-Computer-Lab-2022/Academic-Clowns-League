@@ -1,8 +1,10 @@
 import { useState } from "react";
 import SubtitleMap from "./subtitleMap";
+import { useNavigate } from "react-router-dom";
 
 const MyCourseDetailsCTrainee = ({ course }) => {
   const [isActive, setIsActive] = useState(false);
+  const navigate = useNavigate();
   const handleClick = () => {
     // 👇️ toggle
     setIsActive((current) => !current);
@@ -37,16 +39,17 @@ const MyCourseDetailsCTrainee = ({ course }) => {
           {course.instructorData.name}
         </p>
         <p>
-        <strong>Subtitles: </strong>
-        <ol>
-        {course.subtitles &&
-          course.subtitles.map((subtitle) => (
-            <SubtitleMap subtitle={subtitle} key={subtitle._id} />
-          ))}
-        <li>
-          {course.title} Exercises - Total Questions: {course.exercises.length}
-        </li>
-        </ol>
+          <strong>Subtitles: </strong>
+          <ol>
+            {course.subtitles &&
+              course.subtitles.map((subtitle) => (
+                <SubtitleMap subtitle={subtitle} key={subtitle._id} />
+              ))}
+            <li>
+              {course.title} Exercises - Total Questions:{" "}
+              {course.exercises.length}
+            </li>
+          </ol>
         </p>
       </div>
       <button
@@ -64,14 +67,10 @@ const MyCourseDetailsCTrainee = ({ course }) => {
           backgroundColor: isActive ? "salmon" : "",
           color: isActive ? "white" : "",
         }}
-        onClick={() => window.location.href=`/cTraineeCourse?id=${course._id}`}
+        onClick={() => navigate(`/cTraineeCourse?id=${course._id}`)}
       >
         Go to Course
       </button>
-
-
-
-
     </div>
   );
 };

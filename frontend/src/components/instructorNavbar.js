@@ -1,12 +1,5 @@
-import Button from "react-bootstrap/Button";
 import Container from "react-bootstrap/Container";
-import Form from "react-bootstrap/Form";
-import Nav from "react-bootstrap/Nav";
-import Navbar from "react-bootstrap/Navbar";
-import NavDropdown from "react-bootstrap/NavDropdown";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
-import Container from "react-bootstrap/Container";
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
 import NavDropdown from "react-bootstrap/NavDropdown";
@@ -67,18 +60,16 @@ const InstructorNavbar = () => {
 
             <NavDropdown title="Options" id="navbarScrollingDropdown">
               <NavDropdown.Item
-                onClick={() =>
-                  (window.location.href = "/instructorRatingsAndReviews")
-                }
+                onClick={() => navigate("/instructorRatingsAndReviews")}
               >
                 View my ratings and reviews
               </NavDropdown.Item>
               <NavDropdown.Item
                 onClick={() => {
-                  window.location.href = `/instructorViewAndEditBio?id=${id}`;
+                  navigate(`/instructorViewAndEditBio?id=${id}`);
                 }}
               >
-                View and Edit Biography
+                Edit Biography
               </NavDropdown.Item>
               <NavDropdown.Item
                 onClick={() => {
@@ -89,14 +80,14 @@ const InstructorNavbar = () => {
               </NavDropdown.Item>
               <NavDropdown.Item
                 onClick={() => {
-                  window.location.href = `/changePassword?id=${id}`;
+                  navigate(`/changePassword?id=${id}`);
                 }}
               >
                 Change password
               </NavDropdown.Item>
               <NavDropdown.Item
                 onClick={() => {
-                  window.location.href = `/resetPassword?id=${id}`;
+                  navigate(`/resetPassword?id=${id}`);
                 }}
               >
                 Forgot my password

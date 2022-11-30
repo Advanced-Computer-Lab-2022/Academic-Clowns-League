@@ -1,12 +1,18 @@
 import React, { useState, useContext } from "react";
 import { CurrencyContext } from "../contexts/CurrencyContext";
 import SubtitleMap from "./subtitleMap";
+import { useNavigate } from "react-router-dom";
 //import {useLocation} from 'react-router-dom';
 //const cities = require('../country-json/src/country-by-currency-code.json')
 
 const MyCourseDetailsInstructor = ({ course }) => {
-  const {currency, rate} = useContext(CurrencyContext)
-  const price = Math.round(course.price * rate)
+  const { currency, rate } = useContext(CurrencyContext);
+  const navigate = useNavigate();
+  const price = Math.round(course.price * rate);
+  let message = `Price after ${course.discount}% discount is applied -- original price = ${price} ${currency}`;
+  if (course.discountApplied === false) {
+    message = "";
+  }
   const [isActive, setIsActive] = useState(false);
   /*const location = useLocation();
   const  {state} = location.state
@@ -45,8 +51,9 @@ const MyCourseDetailsInstructor = ({ course }) => {
       >
         <p>
           <strong>Price: </strong>
-          {Math.round(price*(100-course.discount)/100)} {currency} <br></br>
-          Price after {course.discount}% discount is applied
+          {Math.round((price * (100 - course.discount)) / 100)} {currency}{" "}
+          <br></br>
+          {message}
         </p>
         <p>
           <strong>Subject: </strong>
@@ -57,16 +64,17 @@ const MyCourseDetailsInstructor = ({ course }) => {
           {course.instructorData.name}
         </p>
         <p>
-        <strong>Subtitles: </strong>
-        <ol>
-        {course.subtitles &&
-          course.subtitles.map((subtitle) => (
-            <SubtitleMap subtitle={subtitle} key={subtitle._id} />
-          ))}
-        <li>
-          {course.title} Exercises - Total Questions: {course.exercises.length}
-        </li>
-        </ol>
+          <strong>Subtitles: </strong>
+          <ol>
+            {course.subtitles &&
+              course.subtitles.map((subtitle) => (
+                <SubtitleMap subtitle={subtitle} key={subtitle._id} />
+              ))}
+            <li>
+              {course.title} Exercises - Total Questions:{" "}
+              {course.exercises.length}
+            </li>
+          </ol>
         </p>
       </div>
       <button
@@ -79,18 +87,15 @@ const MyCourseDetailsInstructor = ({ course }) => {
         View Details
       </button>
 
-
-
       <button
         style={{
           backgroundColor: isActive ? "salmon" : "",
           color: isActive ? "white" : "",
         }}
-        onClick={() => window.location.href=`/instructorCourse?id=${course._id}`}
+        onClick={() => navigate(`/instructorCourse?id=${course._id}`)}
       >
         Go to Course
       </button>
-
     </div>
   );
 };

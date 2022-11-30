@@ -160,11 +160,10 @@ header a {
   width: 30%;
 }
 .myDiv2 {
-  border: 5px outset rgb(15, 15, 15);
-  background-color: rgba(222, 231, 234, 0.625);
+  background-color: rgba(255, 255, 255, 0.625);
   text-align: left;
   left: 200;
-  width: 30%;
+  width: 40%;
 }
 
 .star-rating {
