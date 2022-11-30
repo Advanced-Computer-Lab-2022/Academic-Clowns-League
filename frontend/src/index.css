@@ -48,11 +48,11 @@ header a {
 
 .popup-contract {
   height: 200px;
-  width: 50%;
+  width: 90%;
   background-color: white;
   position: absolute;
-  top: 50%;
-  left: 25%;
+  top: 25%;
+  left: 40px;
   margin: 0 auto;
 }
 
@@ -73,6 +73,16 @@ header a {
   top: 0;
 }
 
+.main-contract {
+  /* for Mariam's pop up message */
+  background-color: rgba(132, 32, 32, 0.953);
+  height: 80%;
+  width: 80%;
+  position: absolute;
+  top: 150px;
+  left: 100px;
+}
+
 .message {
   /* for Nourhan's pop up message */
   text-align: center;
@@ -88,7 +98,8 @@ header a {
   /*for courseDetails.js*/
   background: #fff;
   border-radius: 4px;
-  margin: 20px auto;
+  width: 500px;
+  margin: 20px;
   padding: 20px;
   position: relative;
   box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.05);
@@ -115,4 +126,50 @@ header a {
   padding: 6px;
   border-radius: 50%;
   color: #333;
+}
+
+.courses{
+  left: 1%;
+  position: absolute;
+  top: 30%
+}
+
+.courses-trainee{
+  left: 0;
+  position: absolute;
+  top: 10%
+}
+
+.create{
+  top: 15%;
+  position: absolute;
+  left: 1%
+}
+
+.navlink {
+  color: var(--bs-nav-link-color);
+  text-decoration: none;
+  transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out;
+}
+
+.navlink:hover{
+  color: var(--bs-navbar-hover-color);
+}
+
+.create-course{
+  top: 20%;
+  position: absolute;
+  left: 73%
+}
+
+.checkboxes input{
+  margin: 0px 0px 0px 0px;
+}
+
+.checkboxes label{
+  margin: 0px 20px 0px 3px;
+}
+
+.checkboxes{
+  margin: 20px;
 }
