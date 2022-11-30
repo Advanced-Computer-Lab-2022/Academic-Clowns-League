@@ -7,6 +7,10 @@ import InstructorAllCourses from "./pages/instructorAllCourses";
 import InstructorFilterAllCourses from "./pages/instructorFilterAllCourses";
 import InstructorFilterMyCourses from "./pages/instructorFilterMyCourses";
 import InstructorCourse from "./pages/instructorCourse";
+import InstructorRatingsAndReviews from "./pages/instructorRatingsAndReviews";
+
+import CourseRatingsAndReviews from "./pages/courseRatingsAndReviews";
+
 
 import IndividualTraineeHome from "./pages/individualTraineeHome";
 import ITraineeAllCourses from "./pages/iTraineeAllCourses";
@@ -43,6 +47,9 @@ function App() {
             <Route path="/instructorFilterAllCourses" element={<InstructorFilterAllCourses />} />
             <Route path="/instructorFilterMyCourses" element={<InstructorFilterMyCourses />} />
             <Route path="/instructorCourse" element={<InstructorCourse />} />
+            <Route path="/instructorRatingsAndReviews" element={<InstructorRatingsAndReviews />} />
+
+            <Route path="/courseRatingsAndReviews" element={<CourseRatingsAndReviews />} />
 
             <Route path="/individualTraineeHome" element={<IndividualTraineeHome />} />
             <Route path="/iTraineeAllCourses" element={<ITraineeAllCourses />} />

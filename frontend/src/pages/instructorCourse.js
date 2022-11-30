@@ -29,8 +29,14 @@ const InstructorCourse = () => {
   
   return (
     <div className="">
-      <InstructorNavbar />
-      <p> Instructor course, ID: {id}</p>
+     <InstructorNavbar />
+     <p> Instructor course, ID: {id}</p>
+      <button class="button button3"
+        
+        onClick={() => window.location.href=`/courseRatingsAndReviews?id=${id}`}
+      >
+        view ratings and reviews
+  </button>
     </div>
   );
 }

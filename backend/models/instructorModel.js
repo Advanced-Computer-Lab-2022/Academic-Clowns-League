@@ -16,9 +16,13 @@ const InstructorSchema = new Schema(
       type: String,
       required: true,
     },
-    ratings: {
-      type: [Number],
-    },
+    ratings: [ {
+      rating: Number,
+      userId: String,
+
+      
+    }
+      ],
     reviews: {
       type: [String],
     },

@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const { stringify } = require("querystring");
 
 const Schema = mongoose.Schema; //fn to create a new schema
 
@@ -55,9 +56,12 @@ const courseSchema = new Schema(
     overallRating: {
       type: Number,
     },
-    ratings: {
-      type: [Number],
-    },
+    ratings: [
+      {
+        rating: Number,
+        userId: String,
+      },
+    ],
     subtitles: [
       {
         title: String,
@@ -80,8 +84,8 @@ const courseSchema = new Schema(
       },
     ],
     discountApplied: {
-      type: Boolean
-    }
+      type: Boolean,
+    },
   },
   { timestamps: true }
 );
