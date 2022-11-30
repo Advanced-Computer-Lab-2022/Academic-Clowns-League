@@ -33,12 +33,12 @@ router.get("/", getAllCourses);
 //router.get('/:id',getCourse)
 
 //DELETE a single course
-router.delete("/:id", deleteCourse);
+router.delete("/deletecourse", deleteCourse);
 
 //UPDATE a single course
 router.patch("/rate", rateCourse);
 //add exercise to course on creation
-router.patch("/addcoursex", addCourseExercise);
+router.patch("/addCourseEx", addCourseExercise);
 
 //POST a new course
 router.post("/", createCourse);

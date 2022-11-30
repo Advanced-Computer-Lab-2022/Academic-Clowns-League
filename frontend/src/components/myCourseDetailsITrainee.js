@@ -1,8 +1,12 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
+import { CurrencyContext } from "../contexts/CurrencyContext";
+import SubtitleMap from "./subtitleMap";
 //import {useLocation} from 'react-router-dom';
 //const cities = require('../country-json/src/country-by-currency-code.json')
 
 const MyCourseDetailsITrainee = ({ course }) => {
+  const{currency, rate} = useContext(CurrencyContext)
+  const price = Math.round(course.price * rate)
   const [isActive, setIsActive] = useState(false);
   /*const location = useLocation();
   const  {state} = location.state
@@ -41,7 +45,8 @@ const MyCourseDetailsITrainee = ({ course }) => {
       >
         <p>
           <strong>Price: </strong>
-          {course.price}
+          {Math.round(price*(100-course.discount)/100)} {currency} <br></br>
+          Price after {course.discount}% discount is applied
         </p>
         <p>
           <strong>Subject: </strong>
@@ -50,6 +55,18 @@ const MyCourseDetailsITrainee = ({ course }) => {
         <p>
           <strong>Instructor: </strong>
           {course.instructorData.name}
+        </p>
+        <p>
+        <strong>Subtitles: </strong>
+        <ol>
+        {course.subtitles &&
+          course.subtitles.map((subtitle) => (
+            <SubtitleMap subtitle={subtitle} key={subtitle._id} />
+          ))}
+        <li>
+          {course.title} Exercises - Total Questions: {course.exercises.length}
+        </li>
+        </ol>
         </p>
       </div>
       <button

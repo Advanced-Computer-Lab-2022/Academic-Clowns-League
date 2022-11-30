@@ -1,8 +1,10 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import MyCourseDetailsInstructor from "../components/myCourseDetailsInstructor";
 import InstructorNavbar from "../components/instructorNavbar";
+import { CurrencyContext } from "../contexts/CurrencyContext";
 
 const InstructorFilterMyCourses = () => {
+  const { rate, currency } = useContext(CurrencyContext)
   const [courses, setCourses] = useState(null);
   const [subjects, setSubject] = useState({
     computer: false,
@@ -60,17 +62,17 @@ const InstructorFilterMyCourses = () => {
     <div>
       <InstructorNavbar />
     
-    <div className="courses">
+    <div className="courses-trainee">
       <div className="all-courses">
         {courses &&
           courses.map((course) => (
             <MyCourseDetailsInstructor key={course._id} course={course} />
           ))}
       </div>
-      <div>
+      <div className="checkboxes">
         <form className="filter" onSubmit={handleSubmit}>
           <h3>Filter by: </h3>
-          <h4>Price</h4>
+          <h4>Price </h4><p>- filtering is done according to original price</p>
           <input
             type="checkbox"
             id="price"
@@ -88,7 +90,7 @@ const InstructorFilterMyCourses = () => {
             onChange={onChangePrice}
             value="sixth"
           />
-          <label>6000 - 7000</label>
+          <label>{Math.round(60 * rate)} - {Math.round(70 * rate)} {currency}</label>
           <input
             type="checkbox"
             id="price"
@@ -97,7 +99,7 @@ const InstructorFilterMyCourses = () => {
             onChange={onChangePrice}
             value="seventh"
           />
-          <label>7000 - 8000</label>
+          <label>{Math.round(70 * rate)} - {Math.round(80 * rate)} {currency}</label>
           <input
             type="checkbox"
             id="price"
@@ -106,7 +108,7 @@ const InstructorFilterMyCourses = () => {
             onChange={onChangePrice}
             value="eighth"
           />
-          <label>8000 - 9000</label>
+          <label>{Math.round(80 * rate)} - {Math.round(90 * rate)} {currency}</label>
           <input
             type="checkbox"
             id="price"
@@ -115,7 +117,7 @@ const InstructorFilterMyCourses = () => {
             onChange={onChangePrice}
             value="ninth"
           />
-          <label>9000 - 10000</label>
+          <label>{Math.round(90 * rate)} - {Math.round(100 * rate)} {currency}</label>
           <input
             type="checkbox"
             id="price"
@@ -124,7 +126,7 @@ const InstructorFilterMyCourses = () => {
             onChange={onChangePrice}
             value="tenth"
           />
-          <label>10000+</label>
+          <label>{Math.round(100 * rate)}+ {currency}</label>
           <h4>Subject</h4>
           <input
             type="checkbox"
