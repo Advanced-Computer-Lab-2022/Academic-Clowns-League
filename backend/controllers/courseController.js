@@ -857,11 +857,37 @@ const addCoursePreview = async (req, res) => {
   res.status(200).json(course);
 };
 
+
+/*
 const openMyCourse = async (req, res) => {
   const id = req.query.id;
   const course = await Course.findById({ _id: id });
   res.status(200).json(course);
 };
+*/
+
+const openMyCourse = async (req, res) => {
+  const id = req.query.id;
+  const newId = mongoose.Types.ObjectId(id);
+  const courses = await Course.aggregate([
+    {
+      $lookup: {
+        from: "instructors",
+        localField: "instructor",
+        foreignField: "_id",
+        as: "instructorData",
+      },
+    },
+    {
+      $unwind: "$instructorData",
+    },
+    {
+      $match: {_id: newId },
+    },
+  ]);
+  res.status(200).json(courses[0]);
+};
+
 
 module.exports = {
   getAllCourses,

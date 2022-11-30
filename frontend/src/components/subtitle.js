@@ -1,17 +1,32 @@
-import { useState } from "react";
+import Accordion from 'react-bootstrap/Accordion';
+
+
 
 const Subtitle = ({ subtitle }) => {
 
 
   return (
     <div>
+      <Accordion>
+      <Accordion.Item eventKey="0">
+        <Accordion.Header>{subtitle.title}</Accordion.Header>
+        <Accordion.Body>
+        <h4>Description: {subtitle.shortDescription}</h4>
+      <h4>Total Hours: {subtitle.totalHours}</h4>
+      <iframe width="480" height="360" src={subtitle.videoLink} frameBorder="0" allowFullScreen></iframe>
+        </Accordion.Body>
+      </Accordion.Item>
+      </Accordion>
       
 
-
+{/*
       <h1>{subtitle.title}</h1>
       <h4>Description: {subtitle.shortDescription}</h4>
       <h4>Total Hours: {subtitle.totalHours}</h4>
-      <iframe width="480" height="360" src={subtitle.videoLink} frameborder="0" allowfullscreen></iframe>
+      <iframe width="480" height="360" src={subtitle.videoLink} frameBorder="0" allowFullScreen></iframe>
+
+  */}
+    
 
 
 
