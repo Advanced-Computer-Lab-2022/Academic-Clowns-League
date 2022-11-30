@@ -7,6 +7,10 @@ import InstructorAllCourses from "./pages/instructorAllCourses";
 import InstructorFilterAllCourses from "./pages/instructorFilterAllCourses";
 import InstructorFilterMyCourses from "./pages/instructorFilterMyCourses";
 import InstructorCourse from "./pages/instructorCourse";
+import InstructorRatingsAndReviews from "./pages/instructorRatingsAndReviews";
+
+import CourseRatingsAndReviews from "./pages/courseRatingsAndReviews";
+
 
 import IndividualTraineeHome from "./pages/individualTraineeHome";
 import ITraineeAllCourses from "./pages/iTraineeAllCourses";
@@ -24,12 +28,17 @@ import GuestFilterAllCourses from "./pages/guestFilterAllCourses";
 
 import AdminHome from "./pages/adminHome";
 import Testing from "./pages/testing";
+import CurrencyContextProvider from "./contexts/CurrencyContext";
+import CreateCourse from './pages/createCourse';
+import AddSubtitle from './pages/addSubtitle';
+import AddExercise from './pages/addExercise';
 
 //BrowserRouter wraps all things involved with routes, Routes wraps the routes, Route is a single route
 function App() {
   return (
     <div className="App">
       <BrowserRouter>
+      <CurrencyContextProvider>
         <div className="pages">
           <Routes>
 
@@ -38,6 +47,9 @@ function App() {
             <Route path="/instructorFilterAllCourses" element={<InstructorFilterAllCourses />} />
             <Route path="/instructorFilterMyCourses" element={<InstructorFilterMyCourses />} />
             <Route path="/instructorCourse" element={<InstructorCourse />} />
+            <Route path="/instructorRatingsAndReviews" element={<InstructorRatingsAndReviews />} />
+
+            <Route path="/courseRatingsAndReviews" element={<CourseRatingsAndReviews />} />
 
             <Route path="/individualTraineeHome" element={<IndividualTraineeHome />} />
             <Route path="/iTraineeAllCourses" element={<ITraineeAllCourses />} />
@@ -50,8 +62,11 @@ function App() {
             <Route path="/cTraineeFilterAllCourses" element={<CTraineeFilterAllCourses />} />
             <Route path="/cTraineeCourse" element={<CTraineeCourse />} />
 
-            <Route path="/guestHome" element={<GuestHome />} />
+            <Route path="/" element={<GuestHome />} />
             <Route path="/guestFilterAllCourses" element={<GuestFilterAllCourses />} />
+            <Route path="/createCourse" element={<CreateCourse />} />
+            <Route path="/addSubtitle" element={<AddSubtitle />} />
+            <Route path="/addExercise" element={<AddExercise />} />
 
 
             <Route path="/adminHome" element={<AdminHome />} />
@@ -59,6 +74,7 @@ function App() {
 
           </Routes>
         </div>
+        </CurrencyContextProvider>
       </BrowserRouter>
     </div>
   );

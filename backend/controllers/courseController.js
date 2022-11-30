@@ -54,35 +54,40 @@ const getCourse = (req, res) => {
 };
 
 //delete a course
-const deleteCourse = (req, res) => {
-  res.json({ mssg: "DELETE a course" });
+const deleteCourse = async (req, res) => {
+  const id = req.query.id
+
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    return res.status(404).json({ error: "No such Course" });
+  }
+
+  const course = await Course.findOneAndDelete({ _id: id });
+
+  if (!course) {
+    return res.status(400).json({ error: "No such Course" });
+  }
+
 };
 
 //Rate a course
 const rateCourse = async (req, res) => {
   const id = req.query.id;
-  const { s1, s2, s3, s4, s5 } = req.body;
-  let sum = 0;
-  const course = await Course.findOneAndUpdate({ _id: id });
-  if (s1 == "true") {
-    sum++;
-  }
-  if (s2 == "true") {
-    sum++;
-  }
-  if (s3 == "true") {
-    sum++;
-  }
-  if (s4 == "true") {
-    sum++;
-  }
-  if (s5 == "true") {
-    sum++;
-  }
-  let ratingsTemp = [Number];
+  const Rating = req.query.rating;
+  const user = req.query.user;
+  const course = await Course.findById({ _id: id });
+  let ratingsTemp = [Object];
   ratingsTemp = course.ratings;
+  let found = false;
+  ratingsTemp.forEach(Function);
+
+  function Function(value) {
+    if(value.userId==user){
+      found=true;
+    }
+  }
+  if(!found) {
   console.log(ratingsTemp);
-  ratingsTemp.push(sum);
+  ratingsTemp.push({rating:Rating, userId:user});
   console.log(ratingsTemp);
   let len = ratingsTemp.length;
   console.log(len);
@@ -90,7 +95,7 @@ const rateCourse = async (req, res) => {
   ratingsTemp.forEach(myFunction);
 
   function myFunction(value) {
-    ratingsSum += value;
+    ratingsSum += value.rating;
   }
   console.log(ratingsSum);
 
@@ -103,6 +108,10 @@ const rateCourse = async (req, res) => {
     { new: true }
   );
   res.status(200).json(updatedcourse);
+  }
+  else{
+    return res.status(404).json({error: 'you have already rated this course'})
+  }
 };
 //update a course
 const updateCourse = async (req, res) => {
@@ -153,19 +162,29 @@ const addCourseExercise = async (req, res) => {
 
 //create new course
 const createCourse = async (req, res) => {
-  const {
+  let {
     title,
     hours,
     subject,
     price,
     discount,
     discountValidUntil,
-    //instructor,
     summary,
     previewURL,
-    outline,
   } = req.body;
+
+  const videoId = getId(previewURL);
+  const embeddedLink = "//www.youtube.com/embed/" + videoId;
+  let discountApp = false
+
   try {
+    let currentDate = new Date().toJSON().slice(0, 10);
+    if(discountValidUntil != null && discountValidUntil >= currentDate){
+      discountApp = true
+    }
+    else{
+      discount = 0
+    }
     const course = await Course.create({
       title,
       hours,
@@ -175,8 +194,9 @@ const createCourse = async (req, res) => {
       discountValidUntil,
       instructor: "63715373d953904400b6a4d5",
       summary,
-      previewURL,
-      outline,
+      previewURL: embeddedLink,
+      overallRating: "0",
+      discountApplied: discountApp
     });
     //Course.create() is async that's why we put async around the handler fn, so u can use await right here
     //now we're storing the response of Course.create() (which is the doc created along with its is) in course
@@ -240,31 +260,31 @@ const filterSubRatePrice = async (req, res) => {
     prices[0] = [];
   }
   if (req.query.sixth == "true") {
-    prices[1] = [6000, 7000];
+    prices[1] = [60, 70];
     priceCount++;
   } else {
     prices[1] = [];
   }
   if (req.query.seventh == "true") {
-    prices[2] = [7000, 8000];
+    prices[2] = [70, 80];
     priceCount++;
   } else {
     prices[2] = [];
   }
   if (req.query.eighth == "true") {
-    prices[3] = [8000, 9000];
+    prices[3] = [80, 90];
     priceCount++;
   } else {
     prices[3] = [];
   }
   if (req.query.ninth == "true") {
-    prices[4] = [9000, 10000];
+    prices[4] = [90, 100];
     priceCount++;
   } else {
     prices[4] = [];
   }
   if (req.query.tenth == "true") {
-    prices[5] = [10000, 1000000000];
+    prices[5] = [100, 1000000000];
     priceCount++;
   } else {
     prices[5] = [];
@@ -639,31 +659,31 @@ const filterInstPriceSub = async (req, res) => {
     prices[0] = [];
   }
   if (req.query.sixth == "true") {
-    prices[1] = [6000, 7000];
+    prices[1] = [60, 70];
     priceCount++;
   } else {
     prices[1] = [];
   }
   if (req.query.seventh == "true") {
-    prices[2] = [7000, 8000];
+    prices[2] = [70, 80];
     priceCount++;
   } else {
     prices[2] = [];
   }
   if (req.query.eighth == "true") {
-    prices[3] = [8000, 9000];
+    prices[3] = [80, 90];
     priceCount++;
   } else {
     prices[3] = [];
   }
   if (req.query.ninth == "true") {
-    prices[4] = [9000, 10000];
+    prices[4] = [90, 100];
     priceCount++;
   } else {
     prices[4] = [];
   }
   if (req.query.tenth == "true") {
-    prices[5] = [10000, 1000000000];
+    prices[5] = [100, 1000000000];
     priceCount++;
   } else {
     prices[5] = [];
@@ -857,11 +877,37 @@ const addCoursePreview = async (req, res) => {
   res.status(200).json(course);
 };
 
+
+/*
 const openMyCourse = async (req, res) => {
   const id = req.query.id;
   const course = await Course.findById({ _id: id });
   res.status(200).json(course);
 };
+*/
+
+const openMyCourse = async (req, res) => {
+  const id = req.query.id;
+  const newId = mongoose.Types.ObjectId(id);
+  const courses = await Course.aggregate([
+    {
+      $lookup: {
+        from: "instructors",
+        localField: "instructor",
+        foreignField: "_id",
+        as: "instructorData",
+      },
+    },
+    {
+      $unwind: "$instructorData",
+    },
+    {
+      $match: {_id: newId },
+    },
+  ]);
+  res.status(200).json(courses[0]);
+};
+
 
 module.exports = {
   getAllCourses,

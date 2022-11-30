@@ -1,4 +1,5 @@
 import { useState } from "react";
+import SubtitleMap from "./subtitleMap";
 
 const CourseDetailsCTrainee = ({ course }) => {
   const [isActive, setIsActive] = useState(false);
@@ -34,6 +35,18 @@ const CourseDetailsCTrainee = ({ course }) => {
         <p>
           <strong>Instructor: </strong>
           {course.instructorData.name}
+        </p>
+        <p>
+        <strong>Subtitles: </strong>
+        <ol>
+        {course.subtitles &&
+          course.subtitles.map((subtitle) => (
+            <SubtitleMap subtitle={subtitle} key={subtitle._id} />
+          ))}
+        <li>
+          {course.title} Exercises - Total Questions: {course.exercises.length}
+        </li>
+        </ol>
         </p>
       </div>
       <button

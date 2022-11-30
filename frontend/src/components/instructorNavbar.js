@@ -1,16 +1,16 @@
-import Button from 'react-bootstrap/Button';
 import Container from 'react-bootstrap/Container';
-import Form from 'react-bootstrap/Form';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import NavDropdown from 'react-bootstrap/NavDropdown';
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import React, {useContext} from 'react';
+import { NavLink } from 'react-router-dom';
+import { CurrencyContext } from '../contexts/CurrencyContext';
+const countries = require('../country-json-master/src/country-by-currency-code.json')
 
 
 const InstructorNavbar = () => {
-  
+  const { toggleCurrency, country } = useContext(CurrencyContext)
 
-  
     return (
 
       <Navbar sticky="top"  variant="dark" expand="lg" style={{backgroundColor: '#C00418'}}>
@@ -35,14 +35,14 @@ const InstructorNavbar = () => {
             style={{ maxHeight: '100px' }}
             navbarScroll
           >
-            <Nav.Link href="/instructorHome">My Courses</Nav.Link>
-            <Nav.Link href="/instructorAllCourses">All Courses</Nav.Link>
-            <Nav.Link href="/instructorFilterMyCourses">Filter My Courses</Nav.Link>
-            <Nav.Link href="/instructorFilterAllCourses">Filter All Courses</Nav.Link>
+            <Nav.Link><NavLink to="/instructorHome" className="navlink">My Courses</NavLink></Nav.Link>
+            <Nav.Link><NavLink to="/instructorAllCourses" className="navlink">All Courses</NavLink></Nav.Link>
+            <Nav.Link><NavLink to="/instructorFilterMyCourses" className="navlink">Filter My Courses</NavLink></Nav.Link>
+            <Nav.Link><NavLink to="/instructorFilterAllCourses" className="navlink">Filter All Courses</NavLink></Nav.Link>
 
 
             <NavDropdown title="Options" id="navbarScrollingDropdown">
-              <NavDropdown.Item href="#action3">Action</NavDropdown.Item>
+              <NavDropdown.Item onClick={() => window.location.href="/instructorRatingsAndReviews"}>view my ratings and reviews</NavDropdown.Item>
               <NavDropdown.Item href="#action4">
                 Another action
               </NavDropdown.Item>
@@ -50,6 +50,12 @@ const InstructorNavbar = () => {
               <NavDropdown.Item href="#action5">
                 Something else here
               </NavDropdown.Item>
+            </NavDropdown>
+
+            <NavDropdown title={country} id="navbarScrollingDropdown" onSelect = {toggleCurrency}>
+            {countries.map((country) => (
+                <NavDropdown.Item eventKey={country.country}>{country.country}</NavDropdown.Item>
+              ))}
             </NavDropdown>
 
             {/*
