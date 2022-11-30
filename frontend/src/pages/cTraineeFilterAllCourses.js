@@ -65,7 +65,7 @@ const CTraineeFilterAllCourses = () => {
     <div>
       <CTraineeNavbar />
     
-    <div className="courses">
+    <div className="courses-trainee">
       <div className="all-courses">
         {courses &&
           courses.map((course) => (

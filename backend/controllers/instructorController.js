@@ -49,28 +49,22 @@ const createInstructor = async (req, res) => {
 //RATE an individual Instructor
 const rateInstructor = async (req, res) => {
   const id = req.query.id;
-  const { s1, s2, s3, s4, s5 } = req.body;
-  let sum = 0;
-  const instructor = await Instructor.findOneAndUpdate({ _id: id });
-  if (s1 == "true") {
-    sum++;
-  }
-  if (s2 == "true") {
-    sum++;
-  }
-  if (s3 == "true") {
-    sum++;
-  }
-  if (s4 == "true") {
-    sum++;
-  }
-  if (s5 == "true") {
-    sum++;
-  }
-  let ratingsTemp = [Number];
+  const Rating = req.query.rating;
+  const user = req.query.user;
+  const instructor = await Instructor.findById({ _id: id });
+  let ratingsTemp = [Object];
   ratingsTemp = instructor.ratings;
+  let found = false;
+  ratingsTemp.forEach(Function);
+
+  function Function(value) {
+    if(value.userId==user){
+      found=true;
+    }
+  }
+  if(!found){
   console.log(ratingsTemp);
-  ratingsTemp.push(sum);
+  ratingsTemp.push({rating:Rating, userId:user});
   console.log(ratingsTemp);
   let len = ratingsTemp.length;
   console.log(len);
@@ -78,19 +72,23 @@ const rateInstructor = async (req, res) => {
   ratingsTemp.forEach(myFunction);
 
   function myFunction(value) {
-    ratingsSum += value;
+    ratingsSum += value.rating;
   }
   console.log(ratingsSum);
 
-  const overallRating = ratingsSum / len;
-  console.log(overallRating);
+  const overallR = ratingsSum / len;
+  console.log(overallR);
 
   const updatedinstructor = await Instructor.findOneAndUpdate(
     { _id: id },
-    { ratings: ratingsTemp, rating: overallRating },
+    { ratings: ratingsTemp, rating: overallR },
     { new: true }
   );
   res.status(200).json(updatedinstructor);
+  }
+  else{
+    return res.status(404).json({error: 'you have already rated this instructor'})
+  }
 };
 //UPDATE an individual Instructor
 const resetPassword = async (req, res) => {
@@ -185,7 +183,7 @@ const getInstructor = async (req, res) => {
   // }
 
   // const instructor = await Instructor.findById(id)
-  const instructor = await Instructor.find({ _id: "63715373d953904400b6a4d5" });
+  const instructor = await Instructor.findById({ _id: "63715373d953904400b6a4d5" });
 
   //if (!instructor) {
   // return res.status(404).json({error: 'No such instructor'})

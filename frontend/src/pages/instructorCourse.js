@@ -38,6 +38,14 @@ const InstructorCourse = () => {
         {" "}
         Add Promotion{" "}
       </button>
+      <button
+        class="button button3"
+        onClick={() =>
+          (window.location.href = `/courseRatingsAndReviews?id=${id}`)
+        }
+      >
+        view ratings and reviews
+      </button>
     </div>
   );
 };
