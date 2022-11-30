@@ -2,6 +2,10 @@
 import { useEffect, useState } from "react";
 import Subtitle from "../components/subtitle";
 import ITraineeNavbar from "../components/iTraineeNavbar";
+import RateCourse from "../components/rateCourse";
+import RateInstructor from "../components/rateInstructor";
+
+
 
 
 const ITraineeCourse = () => {
@@ -13,12 +17,13 @@ const ITraineeCourse = () => {
 
 
   const [course, setCourse] = useState(null);
+  
+
 
 
   useEffect(() => {
     const fetchCourse = async () => {
       const response = await fetch("/api/courses/openMyCourse/?id=" + id);
-
 
       const json = await response.json();
       if (response.ok) {
@@ -38,10 +43,15 @@ const ITraineeCourse = () => {
 
 
 
-
         {course && course.subtitles && course.subtitles.map((subtitle) => (
             <Subtitle subtitle={subtitle} key={subtitle._id} />
           ))}
+      
+        <RateCourse course={course} myId ="637a356c54c79d632507dc8a" />
+
+
+        <RateInstructor course={course}  myId ="637a356c54c79d632507dc8a"/>
+       
     </div>
   );
 }

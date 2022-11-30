@@ -61,28 +61,22 @@ const deleteCourse = (req, res) => {
 //Rate a course
 const rateCourse = async (req, res) => {
   const id = req.query.id;
-  const { s1, s2, s3, s4, s5 } = req.body;
-  let sum = 0;
-  const course = await Course.findOneAndUpdate({ _id: id });
-  if (s1 == "true") {
-    sum++;
-  }
-  if (s2 == "true") {
-    sum++;
-  }
-  if (s3 == "true") {
-    sum++;
-  }
-  if (s4 == "true") {
-    sum++;
-  }
-  if (s5 == "true") {
-    sum++;
-  }
-  let ratingsTemp = [Number];
+  const Rating = req.query.rating;
+  const user = req.query.user;
+  const course = await Course.findById({ _id: id });
+  let ratingsTemp = [Object];
   ratingsTemp = course.ratings;
+  let found = false;
+  ratingsTemp.forEach(Function);
+
+  function Function(value) {
+    if(value.userId==user){
+      found=true;
+    }
+  }
+  if(!found) {
   console.log(ratingsTemp);
-  ratingsTemp.push(sum);
+  ratingsTemp.push({rating:Rating, userId:user});
   console.log(ratingsTemp);
   let len = ratingsTemp.length;
   console.log(len);
@@ -90,7 +84,7 @@ const rateCourse = async (req, res) => {
   ratingsTemp.forEach(myFunction);
 
   function myFunction(value) {
-    ratingsSum += value;
+    ratingsSum += value.rating;
   }
   console.log(ratingsSum);
 
@@ -103,6 +97,10 @@ const rateCourse = async (req, res) => {
     { new: true }
   );
   res.status(200).json(updatedcourse);
+  }
+  else{
+    return res.status(404).json({error: 'you have already rated this course'})
+  }
 };
 //update a course
 const updateCourse = async (req, res) => {

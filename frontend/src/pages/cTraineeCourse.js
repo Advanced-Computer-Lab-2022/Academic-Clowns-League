@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import Subtitle from "../components/subtitle";
 import CTraineeNavbar from "../components/cTraineeNavbar";
+import RateCourse from "../components/rateCourse";
+import RateInstructor from "../components/rateInstructor";
 
 
 const CTraineeCourse = () => {
@@ -31,6 +33,9 @@ const CTraineeCourse = () => {
     <div className="">
         <CTraineeNavbar />
       <p> CTrainee course, ID: {id}</p>
+
+      <RateCourse course={course} myId="637a8c03f7740521fbe8246e" />
+     <RateInstructor course={course} myId="637a8c03f7740521fbe8246e" />
     </div>
   );
 }
