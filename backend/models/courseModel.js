@@ -86,6 +86,10 @@ const courseSchema = new Schema(
     discountApplied: {
       type: Boolean,
     },
+    numOfEnrolledTrainees: {
+      type: Number,
+      default: 0,
+    },
   },
   { timestamps: true }
 );

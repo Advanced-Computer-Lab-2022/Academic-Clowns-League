@@ -1,15 +1,10 @@
 //import the model
+const Request = require("../models/requestModel");
+const cTrainee = require("../models/cTraineeModel");
 const Course = require("../models/courseModel");
 const mongoose = require("mongoose");
 
-function getId(url) {
-  const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
-  const match = url.match(regExp);
-
-  return match && match[2].length === 11 ? match[2] : null;
-}
-
-//get all courses
+/*
 const getAllCourses = async (req, res) => {
   const courses = await Course.aggregate([
     {
@@ -866,37 +861,6 @@ const addCoursePreview = async (req, res) => {
   res.status(200).json(course);
 };
 
-/*
-const openMyCourse = async (req, res) => {
-  const id = req.query.id;
-  const course = await Course.findById({ _id: id });
-  res.status(200).json(course);
-};
-*/
-
-const openMyCourse = async (req, res) => {
-  const id = req.query.id;
-  const newId = mongoose.Types.ObjectId(id);
-  const courses = await Course.aggregate([
-    {
-      $lookup: {
-        from: "instructors",
-        localField: "instructor",
-        foreignField: "_id",
-        as: "instructorData",
-      },
-    },
-    {
-      $unwind: "$instructorData",
-    },
-    {
-      $match: { _id: newId },
-    },
-  ]);
-  res.status(200).json(courses[0]);
-};
-
-
 const getPopularCourses = async (req, res) => {
   const courses = await Course.aggregate([
     {
@@ -918,23 +882,77 @@ const getPopularCourses = async (req, res) => {
 
   res.status(200).json(courses);
 };
+*/
+
+const requestAccess = async (req, res) => {
+    const theCtraineeId = "637a8c03f7740521fbe8246e"; //replace by id of the loggedin ctrainee
+    const theCourseId = req.query.id;
+
+    const theCTrainee = await cTrainee.findOne({ _id: theCtraineeId });
+    const theCTraineeFirstName = theCTrainee.firstname;
+    const theCTraineeLastName = theCTrainee.lastname;
+    const fullname = theCTraineeFirstName+" "+theCTraineeLastName;
+
+    const theCourse = await Course.findOne({ _id: theCourseId });
+    const theCourseTitle = theCourse.title;
+
+    try {
+
+        const request = await Request.create({
+            courseId: theCourseId ,
+            courseTitle: theCourseTitle,
+            cTraineeId: theCtraineeId,
+            cTraineeName: fullname,
+        });
+        res.status(200).json(request);
+      } catch (error) {
+        res.status(400).json({ error: error.message });
+      }
+  };
+
+
+const getPendingRequests = async (req, res) => {
+    try {
+
+        const requests = await Request.find({status:"pending"});
+        res.status(200).json(requests);
+      } catch (error) {
+        res.status(400).json({ error: error.message });
+      }
+  };
+
+  const grantAccess = async (req, res) => {
+    try {
+        const requestId = req.query.id;
+
+        const theRequest = await Request.findOneAndUpdate(
+            { _id: requestId },{status: "approved"},{ new: true }
+          );
+
+        const theCourseId = theRequest.courseId;
+        const theCourse = await Course.findOne({ _id: theCourseId });
+        const newNum = ((theCourse.numOfEnrolledTrainees)+1);
+        const theCourseAfterUpdate = await Course.findOneAndUpdate({ _id: theCourseId },{numOfEnrolledTrainees: newNum},{ new: true });
+
+
+        const theCtraineeId = theRequest.cTraineeId;
+        const theCTrainee = await cTrainee.findOne({ _id: theCtraineeId });
+        const theCTraineeCourses = theCTrainee.courses;
+        theCTraineeCourses.push(theCourseId);
+        const theCTraineeAfterUpdate = await cTrainee.findOneAndUpdate({ _id: theCtraineeId },{courses: theCTraineeCourses},{ new: true });
+
+        //console.log(theRequest);
+        //console.log(theCTraineeAfterUpdate);
+        //console.log(theCourseAfterUpdate);
+
+        res.status(200).json(theRequest);
+      } catch (error) {
+        res.status(400).json({ error: error.message });
+      }
+  };
 
 module.exports = {
-  getAllCourses,
-  getCourse,
-  deleteCourse,
-  rateCourse,
-  createCourse,
-  searchAllCourses,
-  filterSubRatePrice,
-  getInstCourses,
-  filterInstPriceSub,
-  searchInstrCourses,
-  viewCorrectAnswer,
-  updateCourse,
-  addCourseExercise,
-  addCourseSub,
-  addCoursePreview,
-  openMyCourse,
-  getPopularCourses
+  requestAccess,
+  getPendingRequests,
+  grantAccess
 };
