@@ -16,10 +16,15 @@ const {
   addCourseSub,
   addCoursePreview,
   openMyCourse,
-  getPopularCourses
+  getPopularCourses,
+  adminAddDiscount
 } = require("../controllers/courseController");
 
 const router = express.Router();
+
+
+//admin adding a discount
+router.patch("/adminAddDiscount", adminAddDiscount);
 
 //search all courses
 router.get("/searchAllCourses", searchAllCourses);

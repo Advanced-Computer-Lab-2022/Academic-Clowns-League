@@ -919,6 +919,34 @@ const getPopularCourses = async (req, res) => {
   res.status(200).json(courses);
 };
 
+const adminAddDiscount = async (req, res) => {
+  const id = req.query.id;
+  let {
+    courseDiscount,
+    courseDiscountValidUntil,
+  } = req.body;
+  try {
+    let currentDate = new Date().toJSON().slice(0, 10);
+
+    if (courseDiscount !=null && (courseDiscount != 0) && courseDiscountValidUntil != null && courseDiscountValidUntil >= currentDate) {
+      const course = await Course.findByIdAndUpdate(
+        { _id: id },
+        { discount: courseDiscount, discountValidUntil:courseDiscountValidUntil ,discountApplied: true },
+        { new: true }
+      );
+      res.status(200).json(course);
+
+    } else {
+      res.status(400).json({ error: "Please enter a discount between 1-100 and a valid future expiry date." });
+    }
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+};
+
+
+
+
 module.exports = {
   getAllCourses,
   getCourse,
@@ -936,5 +964,6 @@ module.exports = {
   addCourseSub,
   addCoursePreview,
   openMyCourse,
-  getPopularCourses
+  getPopularCourses,
+  adminAddDiscount
 };
