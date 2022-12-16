@@ -7,6 +7,7 @@ const cTraineeRoutes = require("./routes/cTraineeRoutes");
 const iTraineeRoutes = require("./routes/iTraineeRoutes");
 const instructorRoutes = require("./routes/instructorRoutes");
 const adminRoutes = require("./routes/adminRoutes");
+const requestRoutes = require("./routes/requestRoutes");
 const problemRoutes = require("./routes/problemRoutes");
 const mongoose = require("mongoose");
 const app = express(); //this fn creates an express app for us
@@ -49,6 +50,7 @@ app.use("/api/ctrainee", cTraineeRoutes);
 app.use("/api/itrainee", iTraineeRoutes);
 app.use("/api/instructor", instructorRoutes);
 app.use("/api/admin", adminRoutes);
+app.use("/api/request", requestRoutes);
 app.use("/api/problem", problemRoutes);
 //means that when we fire a request to this URL, use these routes (courseRoutes)
 

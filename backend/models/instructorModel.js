@@ -23,9 +23,13 @@ const InstructorSchema = new Schema(
       
     }
       ],
-    reviews: {
-      type: [String],
-    },
+      reviews: [
+        {
+          content: String,
+          traineeId: String,
+          traineeName: String
+        },
+      ],
     email: {
       type: String,
       required: true,

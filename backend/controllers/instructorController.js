@@ -1,4 +1,7 @@
 const Instructor = require("../models/instructorModel");
+const Course = require("../models/courseModel");
+const iTrainee = require("../models/iTraineeModel");
+const cTrainee = require("../models/cTraineeModel");
 const mongoose = require("mongoose");
 const nodemailer = require("nodemailer");
 // create new Instructor
@@ -197,6 +200,108 @@ const getAllInstructor = (req, res) => {
   res.json({ mssg: "GET all individual Instructor" });
 };
 
+
+const reviewInstructor = async (req, res) => { //get the course id as query, and review the instructor of that course
+  try {
+    const traineeId = "637a356c54c79d632507dc8a"; //replace by id of the loggedin person
+    const reviewContent = req.body.content;
+
+    const courseId = req.query.id;
+    const theCourse = await Course.findOne({ _id: courseId });
+    const instructorId = theCourse.instructor;
+    
+    let theTrainee;
+      theTrainee = await cTrainee.findOne({ _id: traineeId });
+      if (theTrainee ==null){
+        theTrainee = await iTrainee.findOne({ _id: traineeId });
+      }
+      if (theTrainee ==null){
+        res.status(400).json({ error: "Invalid Trainee Id" });
+      }
+    const traineeName = theTrainee.firstname +" "+theTrainee.lastname;
+
+    review = 
+    {
+      content: reviewContent,
+      traineeId: traineeId,
+      traineeName: traineeName
+    }
+
+    const instructorReviews = (await Instructor.findById({ _id: instructorId }).select("reviews")).reviews;
+
+    for (var i =0;i<instructorReviews.length;i++){
+      if (instructorReviews[i].traineeId == traineeId){
+        res.status(400).json({ error: "You already reviewed that instructor!" });
+        return;
+      }
+    }
+    instructorReviews.push(review);
+    const instructor = await Instructor.findByIdAndUpdate(
+      { _id: instructorId },
+      { reviews: instructorReviews },
+      { new: true }
+    );
+    res.status(200).json(instructor);
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+}
+};
+
+const editMyInstructorReview = async (req, res) => {
+  try {
+    const traineeId = "637a8c03f7740521fbe8246e"; //replace by id of the loggedin person
+    const reviewContent = req.body.content;
+
+    const courseId = req.query.id;
+    const theCourse = await Course.findOne({ _id: courseId });
+    const instructorId = theCourse.instructor;
+
+    const instructorReviews = (await Instructor.findById({ _id: instructorId }).select("reviews")).reviews;
+
+    for (var i =0;i<instructorReviews.length;i++){
+      if (instructorReviews[i].traineeId == traineeId){
+        instructorReviews[i].content=reviewContent;
+      }
+    }
+    const instructor = await Instructor.findByIdAndUpdate(
+      { _id: instructorId },
+      { reviews: instructorReviews },
+      { new: true }
+    );
+    res.status(200).json(instructor);
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+}
+};
+
+const deleteMyInstructorReview = async (req, res) => {
+  try {
+    const traineeId = "637909641e794efbe229af85"; //replace by id of the loggedin person
+
+    const courseId = req.query.id;
+    const theCourse = await Course.findOne({ _id: courseId });
+    const instructorId = theCourse.instructor;
+
+    var instructorReviews = (await Instructor.findById({ _id: instructorId }).select("reviews")).reviews;
+
+    for (var i =0;i<instructorReviews.length;i++){
+      if (instructorReviews[i].traineeId == traineeId){
+        const removed = instructorReviews.splice(i,1); //splice returns the removed element not the list after the removal
+        break;
+      }
+    }
+
+    const instructor = await Instructor.findByIdAndUpdate(
+      { _id: instructorId },
+      { reviews: instructorReviews },
+      { new: true }
+    );
+    res.status(200).json(instructor);
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+}
+};
+
 module.exports = {
   createInstructor,
   getAllInstructor,
@@ -205,4 +310,7 @@ module.exports = {
   rateInstructor,
   updateInstructor,
   resetPassword,
+  reviewInstructor,
+  editMyInstructorReview,
+  deleteMyInstructorReview
 };

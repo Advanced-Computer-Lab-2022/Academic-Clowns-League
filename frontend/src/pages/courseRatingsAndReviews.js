@@ -42,7 +42,7 @@ const CourseRatingsAndReviews = () => {
         {course &&
           course.reviews.map((review) => (
             <div key={course._id} class="myDiv">
-              <h2>review: {review}</h2>
+              <h2>"{review.content}" - {review.traineeName}</h2>
             </div>
           ))}
       </div>

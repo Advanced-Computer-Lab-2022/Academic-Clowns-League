@@ -50,12 +50,13 @@ const courseSchema = new Schema(
       type: String,
       required: true,
     },
-    reviews: {
-      type: [String],
-    },
-    overallRating: {
-      type: Number,
-    },
+    reviews: [
+      {
+        content: String,
+        traineeId: String,
+        traineeName: String
+      },
+    ],
     ratings: [
       {
         rating: Number,
@@ -85,6 +86,10 @@ const courseSchema = new Schema(
     ],
     discountApplied: {
       type: Boolean,
+    },
+    numOfEnrolledTrainees: {
+      type: Number,
+      default: 0,
     },
   },
   { timestamps: true }
