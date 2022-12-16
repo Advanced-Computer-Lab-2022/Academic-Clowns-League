@@ -1,4 +1,5 @@
 const express = require('express')
+const { requireAuth } = require('../controllers/userController');
 const{
     getAllAdmins,
     getAdmin,
@@ -12,7 +13,7 @@ const router = express.Router()
 
 
 //GET all Admins
-router.get('/', getAllAdmins)    
+router.get('/',requireAuth, getAllAdmins)    
 
 
 //GET a single Admin   //the : means id is a route parameter

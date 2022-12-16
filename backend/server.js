@@ -7,8 +7,11 @@ const cTraineeRoutes = require("./routes/cTraineeRoutes");
 const iTraineeRoutes = require("./routes/iTraineeRoutes");
 const instructorRoutes = require("./routes/instructorRoutes");
 const adminRoutes = require("./routes/adminRoutes");
+const userRoutes = require("./routes/userRoutes");
 const mongoose = require("mongoose");
+const cookieParser = require('cookie-parser');
 const app = express(); //this fn creates an express app for us
+const bodyParser = require("body-parser")
 
 //connecting to the db
 mongoose
@@ -25,6 +28,9 @@ mongoose
 
 //middleware
 app.use(express.json());
+app.use(cookieParser());
+const urlencodedParser = bodyParser.urlencoded({extended:false})
+app.use(bodyParser.json(),urlencodedParser)
 //now any req that comes, it looks as if it has some body to the req, some data to the server, and ifit does, then it passes and attches it to the req obj so we can access it in the request handler
 //now we can say req.body
 //replaces body-parser in some videos
@@ -48,6 +54,8 @@ app.use("/api/ctrainee", cTraineeRoutes);
 app.use("/api/itrainee", iTraineeRoutes);
 app.use("/api/instructor", instructorRoutes);
 app.use("/api/admin", adminRoutes);
+app.use("/api/users",userRoutes);
+
 //means that when we fire a request to this URL, use these routes (courseRoutes)
 
 //GANNA'S TEST COMMENT
