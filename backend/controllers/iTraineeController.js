@@ -74,7 +74,7 @@ const getRegisteredCourses = async (req, res) => {
   //get course id's from courses array of ctrainee
   const itraineeCourses = (
     await iTrainee
-      .findById({ _id: "637a356c54c79d632507dc8a" })
+      .findById({ _id: req.user._id })
       .select("courses")
   ).courses;
   let courses = [];

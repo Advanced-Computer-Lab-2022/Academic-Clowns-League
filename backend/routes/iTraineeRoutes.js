@@ -1,4 +1,5 @@
 const express = require("express");
+const { requireAuth } = require('../controllers/userController');
 const {
   createITrainee,
   getAllITrainee,
@@ -26,7 +27,7 @@ router.delete("/:id", deleteITrainee);
 router.patch("/", updateITrainee);
 
 //GET registered courses for ITrainee
-router.get('/registeredcourses', getRegisteredCourses);
+router.get('/registeredcourses',requireAuth ,getRegisteredCourses);
 
 //get grade for an exercise
 router.get('/getgrade', getGrade)

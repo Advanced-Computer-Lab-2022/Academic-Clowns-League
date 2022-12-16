@@ -1,4 +1,5 @@
 const express = require("express");
+const { requireAuth } = require('../controllers/userController');
 const {
   createInstructor,
   getAllInstructor,

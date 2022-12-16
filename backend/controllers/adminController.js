@@ -30,7 +30,8 @@ const getAdmin = (req, res) => {
 
 //GET all individual Admins
 const getAllAdmins = (req, res) => {
-  res.json({ mssg: "GET all individual Admin" });
+  res.json({ mssg: "GET all individual Admin",
+username:req.user._id });
 };
 
 module.exports = {

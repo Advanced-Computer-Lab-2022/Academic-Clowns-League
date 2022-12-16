@@ -4,6 +4,8 @@ const jwt = require("jsonwebtoken")
 const bcrypt = require("bcrypt");
 const iTrainee = require("../models/iTraineeModel");
 const cTrainee = require("../models/cTraineeModel");
+const Instructor = require("../models/instructorModel");
+const Admin = require("../models/adminModel");
 require('dotenv').config()
 
 // create new User
@@ -38,8 +40,10 @@ res.json({message:"Success"})
 };
 
 const loginUser = async (req, res) => {
+ 
+ 
     const userLoggingIn = req.body;
-    User.findOne({username:userLoggingIn.username}).then(dbUser => {
+   await User.findOne({username:userLoggingIn.username}).then(dbUser => {
         if(!dbUser){
             console.log("Incorrect Username")
             return res.json({
@@ -49,12 +53,20 @@ const loginUser = async (req, res) => {
         bcrypt.compare(userLoggingIn.password,dbUser.password).then(async isCorrect=>
             {       if(isCorrect){
                    
-                    let payload;
+                   
 
                     if(dbUser.role == "iTrainee"){
-                         payload= await iTrainee.findOne({username:userLoggingIn.username})}
+                         var payload= await iTrainee.findOne({username:dbUser.username})
+                        console.log("itrainee",payload,dbUser.username)}
                     if(dbUser.role == "cTrainee"){
-                         payload= await cTrainee.findOne({username:userLoggingIn.username})}
+                         var payload= await cTrainee.findOne({username:dbUser.username})
+                        console.log(payload)}
+
+                    if(dbUser.role == "Instructor"){
+                         var payload= await Instructor.findOne({username:dbUser.username})}
+                         
+                    if(dbUser.role == "Admin"){
+                          var payload= await Admin.findOne({username:dbUser.username})}
                     
                     
                     
@@ -62,7 +74,8 @@ const loginUser = async (req, res) => {
                          res.cookie('jwtoken', token, { httpOnly: false, maxAge: 24*60*60*1000 })
                          return res.json({
                            message:"successful",
-                           cookie:res.cookies.jwtoken
+                           payload : payload
+                           
                          })
                          
                          
@@ -76,7 +89,7 @@ const loginUser = async (req, res) => {
 
 };
 const requireAuth = (req, res, next) => {
-    const token = req.cookies.jwt
+    const token = req.cookies.jwtoken
     console.log(token);
       
     // check json web token exists & is verified
@@ -85,7 +98,8 @@ const requireAuth = (req, res, next) => {
         if (err) return res.json({
           isLoggedIn:false,
           message: "Failed to Authenticate"}) 
-          req.user = decodedToken;
+          req.user = decodedToken.payload;
+          console.log("User ", decodedToken)
           next()
       })
     } else {
@@ -93,10 +107,17 @@ const requireAuth = (req, res, next) => {
       
     }
   }
+const logOut  = async (req, res) => {
+   res.cookie('jwtoken', "", { httpOnly: false, maxAge: -1 })
+   return res.json({
+    message: "Token Deleted"
+   })
+}
 
 module.exports = {
   createUser,
   loginUser,
   requireAuth,
+  logOut,
   
 };
