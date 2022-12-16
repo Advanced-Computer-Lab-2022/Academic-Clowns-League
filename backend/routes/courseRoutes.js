@@ -16,6 +16,7 @@ const {
   addCourseSub,
   addCoursePreview,
   openMyCourse,
+  moneyOwed
 } = require("../controllers/courseController");
 
 const router = express.Router();
@@ -66,6 +67,8 @@ router.get("/openMyCourse", openMyCourse);
 //moved this to the end so that "add course subtitle" doesn't map to it
 //UPDATE a single course
 router.patch("/", updateCourse);
+
+router.get("/moneyOwed", moneyOwed);
 
 //after creating all our routes , export the router with the routes attached to it
 module.exports = router;

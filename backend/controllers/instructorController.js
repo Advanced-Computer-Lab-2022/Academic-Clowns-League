@@ -1,6 +1,7 @@
 const Instructor = require("../models/instructorModel");
 const mongoose = require("mongoose");
 const nodemailer = require("nodemailer");
+const Course = require("../models/courseModel");
 // create new Instructor
 
 /*const createInstructor = async (req, res) => {

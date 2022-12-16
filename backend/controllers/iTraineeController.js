@@ -2,6 +2,8 @@ const iTrainee = require("../models/iTraineeModel");
 const mongoose = require("mongoose");
 // create new iTrainee
 const Course = require("../models/courseModel");
+const { json } = require("body-parser");
+const stripe = require("stripe")('sk_test_51MEY6KIUMr1PgLAYVRrB9eX8QBJmBt69FVExk91mUKPVjKRoVs0ahpOom28rFevJoSxq9zrZrZUIsD4OorI0nu4E00SfpJVKqt');
 
 // create new iTrainee ->  signing up of guest to become iTrainee
 
@@ -118,6 +120,62 @@ const getGrade = async (req, res) => {
   res.status(200).json(grade)
 }
 
+const calculateOrderAmount = async (items) => {
+
+  const course = await Course.findOne({_id: items.id});
+
+  if(course.discountApplied == true){
+    return Math.round(course.price * (100-course.discount)/100);
+  }
+  else{
+    return course.price
+  }
+};
+
+const payForCourse = async(req, res) => {
+  const { items } = req.body;
+
+  // Create a PaymentIntent with the order amount and currency
+  const paymentIntent = await stripe.paymentIntents.create({
+    amount: await (calculateOrderAmount(items)) * 100,
+    currency: "usd",
+    automatic_payment_methods: {
+      enabled: true,
+    },
+  });
+
+  res.send({
+    clientSecret: paymentIntent.client_secret,
+  });
+};
+
+ const registerForCourse = async (req, res) => {
+  //console.log(req.query.id)
+    const itraineeCourses = (
+      await iTrainee
+        .findById({ _id: "637a356c54c79d632507dc8a" })
+        .select("courses")
+      ).courses;
+    itraineeCourses.push(req.query.id);
+
+    const response = await iTrainee.findOneAndUpdate({_id: "637a356c54c79d632507dc8a"}, {courses: itraineeCourses});
+    res.status(200).json(response)
+};
+
+const applyRefund = async(req, res) => {
+  const money = req.body.money;
+  const itrainee = await iTrainee.findOne({_id: "637a356c54c79d632507dc8a"});
+
+  const newWallet = parseInt(itrainee.wallet) + parseInt(money);
+
+
+
+  const response = await iTrainee.findOneAndUpdate({_id: "637a356c54c79d632507dc8a"}, {wallet: newWallet});
+
+  res.status(200).json(response);
+
+}
+
 module.exports = {
   createITrainee,
   getAllITrainee,
@@ -125,5 +183,8 @@ module.exports = {
   deleteITrainee,
   updateITrainee,
   getRegisteredCourses,
-  getGrade
+  getGrade,
+  payForCourse,
+  registerForCourse,
+  applyRefund
 };

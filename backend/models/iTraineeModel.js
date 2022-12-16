@@ -32,15 +32,6 @@ const iTraineeSchema = new Schema(
       type: String,
       required: true,
     },
-    credNumber: {
-      type: String,
-    },
-    credCCV: {
-      type: String,
-    },
-    credExpDate: {
-      type: Date,
-    },
     courses: [{
         type: mongoose.Types.ObjectId,
         ref:'courseModel'
@@ -51,7 +42,12 @@ const iTraineeSchema = new Schema(
         exerciseID: mongoose.Types.ObjectId,
         grade: Number
       }]
-    }]
+    }],
+    wallet:{
+      type: Number,
+      default: 0,
+      min: 0
+    }
   },
   { timestamps: true }
 );
