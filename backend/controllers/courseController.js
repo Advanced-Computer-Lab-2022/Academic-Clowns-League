@@ -4,6 +4,8 @@ const iTrainee = require("../models/iTraineeModel");
 const cTrainee = require("../models/cTraineeModel");
 const mongoose = require("mongoose");
 const nodemailer = require("nodemailer");
+const user = require("../controllers/userController");
+//const user = require("../models/userModel");
 
 const PDFDocument = require("pdfkit");
 const { listeners } = require("process");
@@ -47,7 +49,7 @@ const getInstCourses = async (req, res) => {
       $unwind: "$instructorData",
     },
     {
-      $match: { "instructorData.name": "Mariam Hossam" },
+      $match: { "instructorData.name": req.user.name},
     },
   ]);
   res.status(200).json(courses);
@@ -189,7 +191,7 @@ const createCourse = async (req, res) => {
       price,
       discount,
       discountValidUntil,
-      instructor: "63715373d953904400b6a4d5",
+      instructor: req.user._id,
       summary,
       previewURL: embeddedLink,
       overallRating: "0",
@@ -598,7 +600,9 @@ const searchAllCourses = async (req, res) => {
 };
 
 const searchInstrCourses = async (req, res) => {
+  //console.log(req.user)
   const THEsearchterm = req.query.searchTerm;
+  console.log(req.user.name)
   var re = new RegExp(THEsearchterm, "i");
   //console.log(THEsearchterm)
   //const courses = await Course.find({instructor:{"$regex": re  }})
@@ -617,7 +621,7 @@ const searchInstrCourses = async (req, res) => {
     },
     {
       $match: {
-        "instructorData.name": "Mariam Hossam",
+        "instructorData.name": req.user.name,
         $or: [{ title: { $regex: re } }, { subject: { $regex: re } }],
       },
     },
@@ -885,7 +889,7 @@ const addNotes = async (req, res) => {
   const id = req.query.id;
   //const id = "6384b23ffa8e271ab3db7d0e";
   console.log(id);
-  const traineeID = "637a8c03f7740521fbe8246e";
+  const traineeID = req.user._id;
   const notes = await req.body.note;
   console.log(notes);
 
@@ -934,7 +938,7 @@ const printNotePDF = async (req, res, next) => {
   const id = req.query.id;
   //const id = "6384b23ffa8e271ab3db7d0e";
   //console.log(id);
-  const traineeID = "637a8c03f7740521fbe8246e";
+  const traineeID = req.user._id;
   let notes = "";
   const iTraineeNotes = await Course.findById({ _id: id }).select(
     "iTraineeNotes"
@@ -1133,7 +1137,7 @@ const adminAddDiscount = async (req, res) => {
 
 const reviewCourse = async (req, res) => {
   try {
-    const traineeId = "637a356c54c79d632507dc8a"; //replace by id of the loggedin person
+    const traineeId = req.user._id; //replace by id of the loggedin person
 
     const id = req.query.id;
     const reviewContent = req.body.content;
@@ -1177,7 +1181,7 @@ const reviewCourse = async (req, res) => {
 
 const editMyCourseReview = async (req, res) => {
   try {
-    const traineeId = "637a8c03f7740521fbe8246e"; //replace by id of the loggedin person
+    const traineeId = req.user._id; //replace by id of the loggedin person
 
     const id = req.query.id;
     const reviewContent = req.body.content;
@@ -1202,7 +1206,7 @@ const editMyCourseReview = async (req, res) => {
 
 const deleteMyCourseReview = async (req, res) => {
   try {
-    const traineeId = "637a356c54c79d632507dc8a"; //replace by id of the loggedin person
+    const traineeId = req.user._id; //replace by id of the loggedin person
     const id = req.query.id;
 
     var courseReviews = (await Course.findById({ _id: id }).select("reviews")).reviews;

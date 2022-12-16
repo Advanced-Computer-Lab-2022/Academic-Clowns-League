@@ -186,7 +186,7 @@ const getInstructor = async (req, res) => {
   // }
 
   // const instructor = await Instructor.findById(id)
-  const instructor = await Instructor.findById({ _id: "63715373d953904400b6a4d5" });
+  const instructor = await Instructor.findById({ _id: req.user._id });
 
   //if (!instructor) {
   // return res.status(404).json({error: 'No such instructor'})
@@ -203,7 +203,7 @@ const getAllInstructor = (req, res) => {
 
 const reviewInstructor = async (req, res) => { //get the course id as query, and review the instructor of that course
   try {
-    const traineeId = "637a356c54c79d632507dc8a"; //replace by id of the loggedin person
+    const traineeId = req.user._id; //replace by id of the loggedin person
     const reviewContent = req.body.content;
 
     const courseId = req.query.id;
@@ -249,7 +249,7 @@ const reviewInstructor = async (req, res) => { //get the course id as query, and
 
 const editMyInstructorReview = async (req, res) => {
   try {
-    const traineeId = "637a8c03f7740521fbe8246e"; //replace by id of the loggedin person
+    const traineeId = req.user._id; //replace by id of the loggedin person
     const reviewContent = req.body.content;
 
     const courseId = req.query.id;
@@ -276,7 +276,7 @@ const editMyInstructorReview = async (req, res) => {
 
 const deleteMyInstructorReview = async (req, res) => {
   try {
-    const traineeId = "637909641e794efbe229af85"; //replace by id of the loggedin person
+    const traineeId = req.user._id; //replace by id of the loggedin person
 
     const courseId = req.query.id;
     const theCourse = await Course.findOne({ _id: courseId });

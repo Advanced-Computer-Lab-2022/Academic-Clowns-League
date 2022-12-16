@@ -104,7 +104,7 @@ const getRegisteredCourses = async (req, res) => {
 
 //this trainee id doesn't have grades, make a trainee with grades
 const getGrade = async (req, res) => {
-  const itraineeGrades = (await iTrainee.findById({_id: '637a8c03f7740521fbe8246e'}).select('grades')).grades
+  const itraineeGrades = (await iTrainee.findById({_id: req.user._id}).select('grades')).grades
   let grade = 0;
   for(i = 0; i < itraineeGrades.length; i++){
     if(itraineeGrades[i].courseID == "637a197cbc66688b3924a864"){
@@ -153,24 +153,24 @@ const payForCourse = async(req, res) => {
   //console.log(req.query.id)
     const itraineeCourses = (
       await iTrainee
-        .findById({ _id: "637a356c54c79d632507dc8a" })
+        .findById({ _id: req.user._id })
         .select("courses")
       ).courses;
     itraineeCourses.push(req.query.id);
 
-    const response = await iTrainee.findOneAndUpdate({_id: "637a356c54c79d632507dc8a"}, {courses: itraineeCourses});
+    const response = await iTrainee.findOneAndUpdate({_id: req.user._id}, {courses: itraineeCourses});
     res.status(200).json(response)
 };
 
 const applyRefund = async(req, res) => {
   const money = req.body.money;
-  const itrainee = await iTrainee.findOne({_id: "637a356c54c79d632507dc8a"});
+  const itrainee = await iTrainee.findOne({_id: req.user._id});
 
   const newWallet = parseInt(itrainee.wallet) + parseInt(money);
 
 
 
-  const response = await iTrainee.findOneAndUpdate({_id: "637a356c54c79d632507dc8a"}, {wallet: newWallet});
+  const response = await iTrainee.findOneAndUpdate({_id: req.user._id}, {wallet: newWallet});
 
   res.status(200).json(response);
 

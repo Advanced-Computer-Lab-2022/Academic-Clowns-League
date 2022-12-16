@@ -116,7 +116,7 @@ const getRegisteredCourses = async (req, res) => {
   //get course id's from courses array of ctrainee
   const ctraineeCourses = (
     await cTrainee
-      .findById({ _id: "637a8c03f7740521fbe8246e" })
+      .findById({ _id: req.user._id })
       .select("courses")
   ).courses;
   let courses = [];
@@ -150,7 +150,7 @@ const getGrade = async (req, res) => {
   } = req.body;
   const ctraineeGrades = (
     await cTrainee
-      .findById({ _id: "637a8c03f7740521fbe8246e" })
+      .findById({ _id: req.user._id })
       .select("grades")
   ).grades;
   let grade = 0;

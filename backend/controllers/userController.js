@@ -30,7 +30,6 @@ const createUser = async (req, res) => {
         lastname:user.lastname,
         email:user.email,
         gender:user.gender,
-        country:user.country
         
     })
 dbUser.save()
@@ -57,16 +56,24 @@ const loginUser = async (req, res) => {
 
                     if(dbUser.role == "iTrainee"){
                          var payload= await iTrainee.findOne({username:dbUser.username})
-                        console.log("itrainee",payload,dbUser.username)}
+                         var role = "itrainee"
+                        //console.log("itrainee",payload,dbUser.username)
+                    }
                     if(dbUser.role == "cTrainee"){
                          var payload= await cTrainee.findOne({username:dbUser.username})
-                        console.log(payload)}
+                         var role = "ctrainee"
+                        //console.log(payload)
+                    }
 
                     if(dbUser.role == "Instructor"){
-                         var payload= await Instructor.findOne({username:dbUser.username})}
+                         var payload= await Instructor.findOne({username:dbUser.username})
+                         var role = "instructor"
+                        }
                          
                     if(dbUser.role == "Admin"){
-                          var payload= await Admin.findOne({username:dbUser.username})}
+                          var payload= await Admin.findOne({username:dbUser.username})
+                          var role = "admin"
+                        }
                     
                     
                     
@@ -74,7 +81,8 @@ const loginUser = async (req, res) => {
                          res.cookie('jwtoken', token, { httpOnly: false, maxAge: 24*60*60*1000 })
                          return res.json({
                            message:"successful",
-                           payload : payload
+                           payload : payload,
+                           role: role
                            
                          })
                          

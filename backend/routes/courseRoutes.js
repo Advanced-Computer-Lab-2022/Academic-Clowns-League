@@ -49,7 +49,7 @@ router.patch("/adminAddDiscount", adminAddDiscount);
 router.get("/searchAllCourses", searchAllCourses);
 
 //search in one instructor's courses
-router.get("/searchInstrCourses", searchInstrCourses);
+router.get("/searchInstrCourses", requireAuth, searchInstrCourses);
 
 //GET all courses
 router.get("/", getAllCourses);
