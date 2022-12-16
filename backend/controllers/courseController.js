@@ -1,7 +1,13 @@
 //import the model
 const Course = require("../models/courseModel");
+const iTrainee = require("../models/iTraineeModel");
+const cTrainee = require("../models/cTraineeModel");
 const mongoose = require("mongoose");
+const nodemailer = require("nodemailer");
 
+const PDFDocument = require("pdfkit");
+const pdfService = require("../service/pdf-service");
+const { listeners } = require("process");
 function getId(url) {
   const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
   const match = url.match(regExp);
@@ -113,6 +119,8 @@ const rateCourse = async (req, res) => {
       .json({ error: "you have already rated this course" });
   }
 };
+
+//Review course
 //update a course
 const updateCourse = async (req, res) => {
   const id = req.query.id;
@@ -874,6 +882,133 @@ const openMyCourse = async (req, res) => {
 };
 */
 
+const addNotes = async (req, res) => {
+  const id = req.query.id;
+  //const id = "6384b23ffa8e271ab3db7d0e";
+  console.log(id);
+  const traineeID = "637a8c03f7740521fbe8246e";
+  const notes = await req.body.note;
+  console.log(notes);
+
+  const cTraineeNotes = (
+    await Course.findById({ _id: id }).select("cTraineeNotes")
+  ).cTraineeNotes;
+
+  const iTraineeNotes = (
+    await Course.findById({ _id: id }).select("iTraineeNotes")
+  ).iTraineeNotes; //-----> getting the Arrays
+
+  const trainee = await iTrainee.findById({ _id: traineeID });
+  if (trainee != null) {
+    note = {
+      iTraineeID: traineeID,
+      note: notes,
+    };
+
+    iTraineeNotes.push(note);
+    const course = await Course.findByIdAndUpdate(
+      { _id: id },
+      { iTraineeNotes: iTraineeNotes },
+      { new: true }
+    );
+    res.status(200).json(course);
+  }
+
+  const find = await cTrainee.findById({ _id: traineeID });
+  if (find != null) {
+    note = {
+      cTraineeID: traineeID,
+      note: notes,
+    };
+
+    cTraineeNotes.push(note);
+    const course = await Course.findByIdAndUpdate(
+      { _id: id },
+      { cTraineeNotes: cTraineeNotes },
+      { new: true }
+    );
+    res.status(200).json(course);
+  }
+};
+
+const printNotePDF = async (req, res, next) => {
+  const id = req.query.id;
+  //const id = "6384b23ffa8e271ab3db7d0e";
+  //console.log(id);
+  const traineeID = "637a8c03f7740521fbe8246e";
+  let notes = "";
+  const iTraineeNotes = await Course.findById({ _id: id }).select(
+    "iTraineeNotes"
+  ).iTraineeNotes;
+
+  const cTraineeNotes = (
+    await Course.findById({ _id: id }).select("cTraineeNotes")
+  ).cTraineeNotes;
+
+  console.log(cTraineeNotes);
+
+  const trainee = await iTrainee.findById({ _id: traineeID });
+  if (trainee != null) {
+    for (i = 0; i < iTraineeNotes.length; i++) {
+      if (iTraineeNotes[i].iTraineeID == traineeID) {
+        notes = notes.concat("\n").concat(iTraineeNotes[i].note);
+      }
+    }
+  }
+
+  const find = await cTrainee.findById({ _id: traineeID });
+  if (find != null) {
+    for (i = 0; i < cTraineeNotes.length; i++) {
+      if (cTraineeNotes[i].cTraineeID == traineeID) {
+        notes = notes.concat("\n").concat(cTraineeNotes[i].note);
+      }
+    }
+  }
+
+  const stream = res.writeHead(200, {
+    "Content-Type": "application/pdf",
+    "Content-Disposition": "attachement;filename=Notes.pdf",
+  });
+
+  buildNotePDF(
+    (chunk) => stream.write(chunk),
+    () => stream.end(),
+    notes
+  );
+};
+
+function buildNotePDF(dataCallback, endCallback, notes) {
+  const doc = new PDFDocument();
+  doc.on("data", dataCallback);
+  doc.on("end", endCallback);
+  doc.fontSize(25).text(notes.toString());
+  doc.end();
+}
+
+const printCertificatePDF = async (req, res) => {
+  const stream = res.writeHead(200, {
+    "Content-Type": "application/pdf",
+    "Content-Disposition": "attachement;filename=Cetificate.pdf",
+  });
+
+  buildCertificatePDF(
+    (chunk) => stream.write(chunk),
+    () => stream.end()
+  );
+};
+
+function buildCertificatePDF(dataCallback, endCallback) {
+  const doc = new PDFDocument();
+  doc.on("data", dataCallback);
+  doc.on("end", endCallback);
+  doc
+    .image("public/certificate.png", 55, 250, { fit: [500, 500] })
+    //.rect(200, 30, 250, 250)
+    .stroke();
+  // .text("Fit", 320, 0);
+  doc.end();
+}
+
 const openMyCourse = async (req, res) => {
   const id = req.query.id;
   const newId = mongoose.Types.ObjectId(id);
@@ -896,6 +1031,202 @@ const openMyCourse = async (req, res) => {
   res.status(200).json(courses[0]);
 };
 
+const moneyOwed = async (req, res) => {
+  const courses = await Course.find({instructor: "63715373d953904400b6a4d5"});
+  let money = 0;
+
+  for(let i = 0; i < courses.length; i++){
+    if(courses[i].discountApplied == true){
+      money += (Math.round((courses[i].price * (100-courses[i].discount)/100) * 0.80)) * courses[i].numOfEnrolledTrainees //assuming website takes 20%
+    }
+    else{
+      money += (Math.round(courses[i].price * 0.80)) * courses[i].numOfEnrolledTrainees
+    }
+  }
+
+  res.status(200).json(money);
+}
+
+
+const sendCertificateMail = async (req, res) => {
+  // const id = req.query.id;
+  traineeEmail = "melnaggar815@gmail.com";
+  let mailTransporter = nodemailer.createTransport({
+    service: "gmail",
+    auth: {
+      user: "nourhan.khedr24@gmail.com",
+      pass: "wtcynstutwftvzyz",
+    },
+  });
+  let details = {
+    from: "nourhan.khedr24@gmail.com",
+    to: traineeEmail,
+    subject: "course certificate ",
+
+    html: "<h2>Congratulation!! you have successfuly completed the course</h2>",
+    text: "you can find below an attachement of your certificate,we hope you enjoyed the course",
+
+    attachments: [
+      {
+        filename: "certificate.pdf",
+        path: "public/certificate.pdf",
+      },
+    ],
+  };
+
+  mailTransporter.sendMail(details, (err) => {
+    if (err) {
+      console.log("error");
+      console.log(req.body.email);
+    } else {
+      console.log("email sent");
+    }
+  });
+};
+
+  //res.status(200).json(Course);
+const getPopularCourses = async (req, res) => {
+  const courses = await Course.aggregate([
+    {
+      $lookup: {
+        from: "instructors",
+        localField: "instructor",
+        foreignField: "_id",
+        as: "instructorData",
+      },
+    },
+    {
+      $unwind: "$instructorData",
+    },
+    {
+      $sort: { "numOfEnrolledTrainees":-1},
+    },
+    { $limit : 3}
+  ]);
+
+  res.status(200).json(courses);
+};
+
+const adminAddDiscount = async (req, res) => {
+  const id = req.query.id;
+  let {
+    courseDiscount,
+    courseDiscountValidUntil,
+  } = req.body;
+  try {
+    let currentDate = new Date().toJSON().slice(0, 10);
+
+    if (courseDiscount !=null && (courseDiscount != 0) && courseDiscountValidUntil != null && courseDiscountValidUntil >= currentDate) {
+      const course = await Course.findByIdAndUpdate(
+        { _id: id },
+        { discount: courseDiscount, discountValidUntil:courseDiscountValidUntil ,discountApplied: true },
+        { new: true }
+      );
+      res.status(200).json(course);
+
+    } else {
+      res.status(400).json({ error: "Please enter a discount between 1-100 and a valid future expiry date." });
+    }
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+};
+
+const reviewCourse = async (req, res) => {
+  try {
+    const traineeId = "637a356c54c79d632507dc8a"; //replace by id of the loggedin person
+
+    const id = req.query.id;
+    const reviewContent = req.body.content;
+    let theTrainee;
+      theTrainee = await cTrainee.findOne({ _id: traineeId });
+      if (theTrainee ==null){
+        theTrainee = await iTrainee.findOne({ _id: traineeId });
+      }
+      if (theTrainee ==null){
+        res.status(400).json({ error: "Invalid Trainee Id" });
+      }
+    const traineeName = theTrainee.firstname +" "+theTrainee.lastname;
+    review = 
+    {
+      content: reviewContent,
+      traineeId: traineeId,
+      traineeName: traineeName
+    }
+
+    const courseReviews = (await Course.findById({ _id: id }).select("reviews")).reviews;
+
+    for (var i =0;i<courseReviews.length;i++){
+      if (courseReviews[i].traineeId == traineeId){
+        res.status(400).json({ error: "You already reviewed that course!" });
+        return;
+      }
+    }
+
+    
+    courseReviews.push(review);
+    const course = await Course.findByIdAndUpdate(
+      { _id: id },
+      { reviews: courseReviews },
+      { new: true }
+    );
+    res.status(200).json(course);
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+}
+};
+
+const editMyCourseReview = async (req, res) => {
+  try {
+    const traineeId = "637a8c03f7740521fbe8246e"; //replace by id of the loggedin person
+
+    const id = req.query.id;
+    const reviewContent = req.body.content;
+
+    const courseReviews = (await Course.findById({ _id: id }).select("reviews")).reviews;
+
+    for (var i =0;i<courseReviews.length;i++){
+      if (courseReviews[i].traineeId == traineeId){
+        courseReviews[i].content=reviewContent;
+      }
+    }
+    const course = await Course.findByIdAndUpdate(
+      { _id: id },
+      { reviews: courseReviews },
+      { new: true }
+    );
+    res.status(200).json(course);
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+}
+};
+
+const deleteMyCourseReview = async (req, res) => {
+  try {
+    const traineeId = "637a356c54c79d632507dc8a"; //replace by id of the loggedin person
+    const id = req.query.id;
+
+    var courseReviews = (await Course.findById({ _id: id }).select("reviews")).reviews;
+
+
+    for (var i =0;i<courseReviews.length;i++){
+      if (courseReviews[i].traineeId == traineeId){
+        const removed = courseReviews.splice(i,1); //splice returns the removed element not the list after the removal
+        break;
+      }
+    }
+
+    const course = await Course.findByIdAndUpdate(
+      { _id: id },
+      { reviews: courseReviews },
+      { new: true }
+    );
+    res.status(200).json(course);
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+}
+};
+
 module.exports = {
   getAllCourses,
   getCourse,
@@ -913,4 +1244,14 @@ module.exports = {
   addCourseSub,
   addCoursePreview,
   openMyCourse,
+  moneyOwed,
+  addNotes,
+  printNotePDF,
+  printCertificatePDF,
+  sendCertificateMail,
+  getPopularCourses,
+  adminAddDiscount,
+  reviewCourse,
+  editMyCourseReview,
+  deleteMyCourseReview
 };

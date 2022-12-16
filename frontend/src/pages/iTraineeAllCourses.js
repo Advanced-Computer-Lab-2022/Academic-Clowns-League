@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import CourseDetails from "../components/courseDetails";
+import CourseDetailsITrainee from "../components/courseDetailsITrainee";
 import ITraineeNavbar from "../components/iTraineeNavbar";
 
 const ITraineeAllCourses = () => {
@@ -58,7 +58,7 @@ const ITraineeAllCourses = () => {
       <div className="courses">
         {courses &&
           courses.map((course) => (
-            <CourseDetails course={course} key={course._id} />
+            <CourseDetailsITrainee course={course} key={course._id} />
           ))}
       </div>
     </div>

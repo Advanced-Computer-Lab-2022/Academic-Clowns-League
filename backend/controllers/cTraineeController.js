@@ -171,7 +171,7 @@ const getGrade = async (req, res) => {
 module.exports = {
   createCTrainee,
   getAllCTrainee,
-  //getCTrainee,
+  getCTrainee,
   deleteCTrainee,
   updateCTrainee,
   getRegisteredCourses,

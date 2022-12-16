@@ -1,6 +1,7 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 
+
 import InstructorHome from "./pages/instructorHome";
 import InstructorAllCourses from "./pages/instructorAllCourses";
 import InstructorFilterAllCourses from "./pages/instructorFilterAllCourses";
@@ -34,6 +35,9 @@ import CurrencyContextProvider from "./contexts/CurrencyContext";
 import CreateCourse from "./pages/createCourse";
 import AddSubtitle from "./pages/addSubtitle";
 import AddExercise from "./pages/addExercise";
+
+import CheckoutPage from "./pages/checkoutPage";
+import PaymentCompletion from "./pages/paymentCompletion";
 
 //BrowserRouter wraps all things involved with routes, Routes wraps the routes, Route is a single route
 function App() {
@@ -115,6 +119,8 @@ function App() {
               <Route path="/editEmail" element={<EditEmail />} />
               <Route path="/changePassword" element={<ChangePassword />} />
               <Route path="/resetPassword" element={<ResetPassword />} />
+              <Route path="/checkoutPage" element={<CheckoutPage />} />
+              <Route path="/paymentCompletion" element={<PaymentCompletion />} />
             </Routes>
           </div>
         </CurrencyContextProvider>

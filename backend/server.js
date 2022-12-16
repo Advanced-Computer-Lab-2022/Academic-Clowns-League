@@ -8,11 +8,15 @@ const iTraineeRoutes = require("./routes/iTraineeRoutes");
 const instructorRoutes = require("./routes/instructorRoutes");
 const adminRoutes = require("./routes/adminRoutes");
 const userRoutes = require("./routes/userRoutes");
+const requestRoutes = require("./routes/requestRoutes");
+const problemRoutes = require("./routes/problemRoutes");
 const mongoose = require("mongoose");
 const cookieParser = require('cookie-parser');
 const app = express(); //this fn creates an express app for us
 const bodyParser = require("body-parser")
 
+
+//var bp = require("body-parser");
 //connecting to the db
 mongoose
   .connect(process.env.MONGO_URI) //this is asynchronous in nature and takes a bit of time to do
@@ -27,10 +31,14 @@ mongoose
   });
 
 //middleware
+app.use(express.static("public"));
 app.use(express.json());
 app.use(cookieParser());
 const urlencodedParser = bodyParser.urlencoded({extended:false})
 app.use(bodyParser.json(),urlencodedParser)
+
+/*app.use(bp.json());
+app.use(bp.urlencoded({ extended: true }));*/
 //now any req that comes, it looks as if it has some body to the req, some data to the server, and ifit does, then it passes and attches it to the req obj so we can access it in the request handler
 //now we can say req.body
 //replaces body-parser in some videos
@@ -40,6 +48,23 @@ app.use((req, res, next) => {
   console.log(req.path, req.method);
   next();
 });
+
+/*app.post("/create-payment-intent", async (req, res) => {
+  const { items } = req.body;
+
+  // Create a PaymentIntent with the order amount and currency
+  const paymentIntent = await stripe.paymentIntents.create({
+    amount: calculateOrderAmount(items),
+    currency: "gbp",
+    automatic_payment_methods: {
+      enabled: true,
+    },
+  });
+
+  res.send({
+    clientSecret: paymentIntent.client_secret,
+  });
+});*/
 
 //now we also want to react to requests, so we set up a route handler
 /*
@@ -56,6 +81,8 @@ app.use("/api/instructor", instructorRoutes);
 app.use("/api/admin", adminRoutes);
 app.use("/api/users",userRoutes);
 
+app.use("/api/request", requestRoutes);
+app.use("/api/problem", problemRoutes);
 //means that when we fire a request to this URL, use these routes (courseRoutes)
 
 //GANNA'S TEST COMMENT
