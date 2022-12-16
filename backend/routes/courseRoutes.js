@@ -1,3 +1,7 @@
+const { Router } = require("express");
+
+const pdfService = require("../service/pdf-service");
+
 const express = require("express");
 const {
   getAllCourses,
@@ -16,6 +20,10 @@ const {
   addCourseSub,
   addCoursePreview,
   openMyCourse,
+  addNotes,
+  printNotePDF,
+  printCertificatePDF,
+  sendCertificateMail,
   getPopularCourses,
   adminAddDiscount,
   reviewCourse,
@@ -84,6 +92,13 @@ router.get("/openMyCourse", openMyCourse);
 //UPDATE a single course
 router.patch("/", updateCourse);
 
+router.patch("/addNotes", addNotes);
+
+router.get("/printNotePDF", printNotePDF);
+
+router.get("/printCertificatePDF", printCertificatePDF);
+
+router.get("/sendCertificateMail", sendCertificateMail);
 //Get most popular courses
 router.get("/getPopularCourses", getPopularCourses);
 

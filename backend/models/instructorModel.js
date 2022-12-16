@@ -42,7 +42,7 @@ const InstructorSchema = new Schema(
       type: String,
       required: true,
     },
-    rating:{
+    rating: {
       type: Number,
     },
   },
