@@ -6,7 +6,6 @@ const mongoose = require("mongoose");
 const nodemailer = require("nodemailer");
 
 const PDFDocument = require("pdfkit");
-const pdfService = require("../service/pdf-service");
 const { listeners } = require("process");
 function getId(url) {
   const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;

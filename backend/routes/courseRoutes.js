@@ -1,7 +1,5 @@
 const { Router } = require("express");
 
-const pdfService = require("../service/pdf-service");
-
 const express = require("express");
 const { requireAuth } = require('../controllers/userController');
 const {

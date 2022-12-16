@@ -4,7 +4,6 @@ const iTrainee = require("../models/iTraineeModel");
 const cTrainee = require("../models/cTraineeModel");
 const mongoose = require("mongoose");
 const nodemailer = require("nodemailer");
-const Course = require("../models/courseModel");
 // create new Instructor
 
 /*const createInstructor = async (req, res) => {
