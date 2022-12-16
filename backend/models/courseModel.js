@@ -51,20 +51,6 @@ const courseSchema = new Schema(
         note: { type: String },
       },
     ],
-
-    iTraineeReviews: [
-      {
-        iTraineeID: mongoose.Types.ObjectId,
-        review: String,
-      },
-    ],
-
-    cTraineeReviews: [
-      {
-        cTraineeID: mongoose.Types.ObjectId,
-        notes: String,
-      },
-    ],
     /*{
         type: String, //String for now, may later be updated to be of type 'Instructor'
         required: true
@@ -77,12 +63,13 @@ const courseSchema = new Schema(
       type: String,
       required: true,
     },
-    reviews: {
-      type: [String],
-    },
-    overallRating: {
-      type: Number,
-    },
+    reviews: [
+      {
+        content: String,
+        traineeId: String,
+        traineeName: String
+      },
+    ],
     ratings: [
       {
         rating: Number,
@@ -112,6 +99,10 @@ const courseSchema = new Schema(
     ],
     discountApplied: {
       type: Boolean,
+    },
+    numOfEnrolledTrainees: {
+      type: Number,
+      default: 0,
     },
   },
   { timestamps: true }

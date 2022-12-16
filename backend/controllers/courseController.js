@@ -121,7 +121,6 @@ const rateCourse = async (req, res) => {
 };
 
 //Review course
-const reviewCourse = async (req, res) => {};
 //update a course
 const updateCourse = async (req, res) => {
   const id = req.query.id;
@@ -1066,8 +1065,149 @@ const sendCertificateMail = async (req, res) => {
       console.log("email sent");
     }
   });
+};
 
   //res.status(200).json(Course);
+const getPopularCourses = async (req, res) => {
+  const courses = await Course.aggregate([
+    {
+      $lookup: {
+        from: "instructors",
+        localField: "instructor",
+        foreignField: "_id",
+        as: "instructorData",
+      },
+    },
+    {
+      $unwind: "$instructorData",
+    },
+    {
+      $sort: { "numOfEnrolledTrainees":-1},
+    },
+    { $limit : 3}
+  ]);
+
+  res.status(200).json(courses);
+};
+
+const adminAddDiscount = async (req, res) => {
+  const id = req.query.id;
+  let {
+    courseDiscount,
+    courseDiscountValidUntil,
+  } = req.body;
+  try {
+    let currentDate = new Date().toJSON().slice(0, 10);
+
+    if (courseDiscount !=null && (courseDiscount != 0) && courseDiscountValidUntil != null && courseDiscountValidUntil >= currentDate) {
+      const course = await Course.findByIdAndUpdate(
+        { _id: id },
+        { discount: courseDiscount, discountValidUntil:courseDiscountValidUntil ,discountApplied: true },
+        { new: true }
+      );
+      res.status(200).json(course);
+
+    } else {
+      res.status(400).json({ error: "Please enter a discount between 1-100 and a valid future expiry date." });
+    }
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+};
+
+const reviewCourse = async (req, res) => {
+  try {
+    const traineeId = "637a356c54c79d632507dc8a"; //replace by id of the loggedin person
+
+    const id = req.query.id;
+    const reviewContent = req.body.content;
+    let theTrainee;
+      theTrainee = await cTrainee.findOne({ _id: traineeId });
+      if (theTrainee ==null){
+        theTrainee = await iTrainee.findOne({ _id: traineeId });
+      }
+      if (theTrainee ==null){
+        res.status(400).json({ error: "Invalid Trainee Id" });
+      }
+    const traineeName = theTrainee.firstname +" "+theTrainee.lastname;
+    review = 
+    {
+      content: reviewContent,
+      traineeId: traineeId,
+      traineeName: traineeName
+    }
+
+    const courseReviews = (await Course.findById({ _id: id }).select("reviews")).reviews;
+
+    for (var i =0;i<courseReviews.length;i++){
+      if (courseReviews[i].traineeId == traineeId){
+        res.status(400).json({ error: "You already reviewed that course!" });
+        return;
+      }
+    }
+
+    
+    courseReviews.push(review);
+    const course = await Course.findByIdAndUpdate(
+      { _id: id },
+      { reviews: courseReviews },
+      { new: true }
+    );
+    res.status(200).json(course);
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+}
+};
+
+const editMyCourseReview = async (req, res) => {
+  try {
+    const traineeId = "637a8c03f7740521fbe8246e"; //replace by id of the loggedin person
+
+    const id = req.query.id;
+    const reviewContent = req.body.content;
+
+    const courseReviews = (await Course.findById({ _id: id }).select("reviews")).reviews;
+
+    for (var i =0;i<courseReviews.length;i++){
+      if (courseReviews[i].traineeId == traineeId){
+        courseReviews[i].content=reviewContent;
+      }
+    }
+    const course = await Course.findByIdAndUpdate(
+      { _id: id },
+      { reviews: courseReviews },
+      { new: true }
+    );
+    res.status(200).json(course);
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+}
+};
+
+const deleteMyCourseReview = async (req, res) => {
+  try {
+    const traineeId = "637a356c54c79d632507dc8a"; //replace by id of the loggedin person
+    const id = req.query.id;
+
+    var courseReviews = (await Course.findById({ _id: id }).select("reviews")).reviews;
+
+
+    for (var i =0;i<courseReviews.length;i++){
+      if (courseReviews[i].traineeId == traineeId){
+        const removed = courseReviews.splice(i,1); //splice returns the removed element not the list after the removal
+        break;
+      }
+    }
+
+    const course = await Course.findByIdAndUpdate(
+      { _id: id },
+      { reviews: courseReviews },
+      { new: true }
+    );
+    res.status(200).json(course);
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+}
 };
 
 module.exports = {
@@ -1091,4 +1231,9 @@ module.exports = {
   printNotePDF,
   printCertificatePDF,
   sendCertificateMail,
+  getPopularCourses,
+  adminAddDiscount,
+  reviewCourse,
+  editMyCourseReview,
+  deleteMyCourseReview
 };
