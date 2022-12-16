@@ -11,6 +11,8 @@ const requestRoutes = require("./routes/requestRoutes");
 const problemRoutes = require("./routes/problemRoutes");
 const mongoose = require("mongoose");
 const app = express(); //this fn creates an express app for us
+
+
 //var bp = require("body-parser");
 //connecting to the db
 mongoose
@@ -26,6 +28,7 @@ mongoose
   });
 
 //middleware
+app.use(express.static("public"));
 app.use(express.json());
 
 /*app.use(bp.json());
@@ -39,6 +42,23 @@ app.use((req, res, next) => {
   console.log(req.path, req.method);
   next();
 });
+
+/*app.post("/create-payment-intent", async (req, res) => {
+  const { items } = req.body;
+
+  // Create a PaymentIntent with the order amount and currency
+  const paymentIntent = await stripe.paymentIntents.create({
+    amount: calculateOrderAmount(items),
+    currency: "gbp",
+    automatic_payment_methods: {
+      enabled: true,
+    },
+  });
+
+  res.send({
+    clientSecret: paymentIntent.client_secret,
+  });
+});*/
 
 //now we also want to react to requests, so we set up a route handler
 /*

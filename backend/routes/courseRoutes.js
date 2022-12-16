@@ -20,6 +20,7 @@ const {
   addCourseSub,
   addCoursePreview,
   openMyCourse,
+  moneyOwed,
   addNotes,
   printNotePDF,
   printCertificatePDF,
@@ -92,6 +93,7 @@ router.get("/openMyCourse", openMyCourse);
 //UPDATE a single course
 router.patch("/", updateCourse);
 
+router.get("/moneyOwed", moneyOwed);
 router.patch("/addNotes", addNotes);
 
 router.get("/printNotePDF", printNotePDF);

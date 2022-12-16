@@ -1031,6 +1031,23 @@ const openMyCourse = async (req, res) => {
   res.status(200).json(courses[0]);
 };
 
+const moneyOwed = async (req, res) => {
+  const courses = await Course.find({instructor: "63715373d953904400b6a4d5"});
+  let money = 0;
+
+  for(let i = 0; i < courses.length; i++){
+    if(courses[i].discountApplied == true){
+      money += (Math.round((courses[i].price * (100-courses[i].discount)/100) * 0.80)) * courses[i].numOfEnrolledTrainees //assuming website takes 20%
+    }
+    else{
+      money += (Math.round(courses[i].price * 0.80)) * courses[i].numOfEnrolledTrainees
+    }
+  }
+
+  res.status(200).json(money);
+}
+
+
 const sendCertificateMail = async (req, res) => {
   // const id = req.query.id;
   traineeEmail = "melnaggar815@gmail.com";
@@ -1227,6 +1244,7 @@ module.exports = {
   addCourseSub,
   addCoursePreview,
   openMyCourse,
+  moneyOwed,
   addNotes,
   printNotePDF,
   printCertificatePDF,

@@ -6,7 +6,10 @@ const {
   deleteITrainee,
   updateITrainee,
   getRegisteredCourses,
-  getGrade
+  getGrade,
+  payForCourse,
+  registerForCourse,
+  applyRefund
 } = require("../controllers/iTraineeController");
 
 const router = express.Router();
@@ -29,6 +32,14 @@ router.patch("/", updateITrainee);
 router.get('/registeredcourses', getRegisteredCourses);
 
 //get grade for an exercise
-router.get('/getgrade', getGrade)
+router.get('/getgrade', getGrade);
+
+//enter payment details and pay for course
+router.post('/create-payment-intent', payForCourse);
+
+//add course to courses array
+router.patch('/registercourse', registerForCourse);
+
+router.patch('/applyrefund', applyRefund)
 
 module.exports = router;

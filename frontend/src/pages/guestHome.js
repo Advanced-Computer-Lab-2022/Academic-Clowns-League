@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import CourseDetails from "../components/courseDetails";
 import GuestNavbar from "../components/guestNavbar";
 
+
 const GuestHome = () => {
   const [courses, setCourses] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
