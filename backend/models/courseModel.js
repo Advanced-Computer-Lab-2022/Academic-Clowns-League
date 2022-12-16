@@ -38,6 +38,33 @@ const courseSchema = new Schema(
       ref: "instructorModel",
     },
 
+    cTraineeNotes: [
+      {
+        cTraineeID: mongoose.Types.ObjectId,
+        note: { type: String },
+      },
+    ],
+
+    iTraineeNotes: [
+      {
+        iTraineeID: mongoose.Types.ObjectId,
+        note: { type: String },
+      },
+    ],
+
+    iTraineeReviews: [
+      {
+        iTraineeID: mongoose.Types.ObjectId,
+        review: String,
+      },
+    ],
+
+    cTraineeReviews: [
+      {
+        cTraineeID: mongoose.Types.ObjectId,
+        notes: String,
+      },
+    ],
     /*{
         type: String, //String for now, may later be updated to be of type 'Instructor'
         required: true

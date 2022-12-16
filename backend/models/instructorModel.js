@@ -16,13 +16,12 @@ const InstructorSchema = new Schema(
       type: String,
       required: true,
     },
-    ratings: [ {
-      rating: Number,
-      userId: String,
-
-      
-    }
-      ],
+    ratings: [
+      {
+        rating: Number,
+        userId: String,
+      },
+    ],
     reviews: {
       type: [String],
     },
@@ -38,9 +37,25 @@ const InstructorSchema = new Schema(
       type: String,
       required: true,
     },
-    rating:{
+    rating: {
       type: Number,
     },
+
+    iTraineeReviews: [
+      {
+        type: mongoose.Types.ObjectId,
+        ref: "iTraineeModel",
+        review: String,
+      },
+    ],
+
+    cTraineeReviews: [
+      {
+        type: mongoose.Types.ObjectId,
+        ref: "cTraineeModel",
+        notes: String,
+      },
+    ],
   },
   { timestamps: true }
 );

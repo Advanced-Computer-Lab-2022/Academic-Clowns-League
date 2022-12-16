@@ -1,3 +1,7 @@
+const { Router } = require("express");
+
+const pdfService = require("../service/pdf-service");
+
 const express = require("express");
 const {
   getAllCourses,
@@ -16,6 +20,10 @@ const {
   addCourseSub,
   addCoursePreview,
   openMyCourse,
+  addNotes,
+  printNotePDF,
+  printCertificatePDF,
+  sendCertificateMail,
 } = require("../controllers/courseController");
 
 const router = express.Router();
@@ -66,6 +74,14 @@ router.get("/openMyCourse", openMyCourse);
 //moved this to the end so that "add course subtitle" doesn't map to it
 //UPDATE a single course
 router.patch("/", updateCourse);
+
+router.patch("/addNotes", addNotes);
+
+router.get("/printNotePDF", printNotePDF);
+
+router.get("/printCertificatePDF", printCertificatePDF);
+
+router.get("/sendCertificateMail", sendCertificateMail);
 
 //after creating all our routes , export the router with the routes attached to it
 module.exports = router;
