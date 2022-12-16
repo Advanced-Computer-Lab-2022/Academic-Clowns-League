@@ -7,10 +7,13 @@ const cTraineeRoutes = require("./routes/cTraineeRoutes");
 const iTraineeRoutes = require("./routes/iTraineeRoutes");
 const instructorRoutes = require("./routes/instructorRoutes");
 const adminRoutes = require("./routes/adminRoutes");
+const userRoutes = require("./routes/userRoutes");
 const requestRoutes = require("./routes/requestRoutes");
 const problemRoutes = require("./routes/problemRoutes");
 const mongoose = require("mongoose");
+const cookieParser = require('cookie-parser');
 const app = express(); //this fn creates an express app for us
+const bodyParser = require("body-parser")
 
 
 //var bp = require("body-parser");
@@ -30,6 +33,9 @@ mongoose
 //middleware
 app.use(express.static("public"));
 app.use(express.json());
+app.use(cookieParser());
+const urlencodedParser = bodyParser.urlencoded({extended:false})
+app.use(bodyParser.json(),urlencodedParser)
 
 /*app.use(bp.json());
 app.use(bp.urlencoded({ extended: true }));*/
@@ -73,6 +79,8 @@ app.use("/api/ctrainee", cTraineeRoutes);
 app.use("/api/itrainee", iTraineeRoutes);
 app.use("/api/instructor", instructorRoutes);
 app.use("/api/admin", adminRoutes);
+app.use("/api/users",userRoutes);
+
 app.use("/api/request", requestRoutes);
 app.use("/api/problem", problemRoutes);
 //means that when we fire a request to this URL, use these routes (courseRoutes)

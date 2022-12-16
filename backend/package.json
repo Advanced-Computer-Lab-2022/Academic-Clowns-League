@@ -4,172 +4,50 @@
 
 
 
-  "name": "backend",
+
+
+
+"name": "backend",
   
 
 
 
 
-  "version": "1.0.0",
+
+
+
+"version": "1.0.0",
   
 
 
 
 
-  "description": "",
+
+
+
+"description": "",
   
 
 
 
 
-  "main": "server.js",
+
+
+
+"main": "server.js",
   
 
 
 
 
-  "scripts": {
+
+
+
+"scripts": {
   
 
 
 
-
-    
-
-
-
-
-  "test": "echo \"Error: no test specified\" && exit 1",
-  
-
-
-
-
-    
-
-
-
-
-  "start": "node server.js"
-  
-
-
-
-
-  },
-  
-
-
-
-
-  "keywords": [],
-  
-
-
-
-
-  "author": "",
-  
-
-
-
-
-  "license": "ISC",
-  
-
-
-
-
-  "dependencies": {
-  
-
-
-
-
-    
-
-
-
-
-  "dotenv": "^16.0.3",
-  
-
-
-
-
-    
-
-
-
-
-  "express": "^4.18.2",
-  
-
-
-
-
-    
-
-
-
-
-  "mongoose": "^6.6.6",
-  
-
-
-
-
-    
-
-
-
-
-  "node": "^19.0.0",
-  
-
-
-
-
-    
-
-
-
-
-  "nodemailer": "^6.8.0",
-  
-
-
-
-
-    
-
-
-
-
-  "nodemon": "^2.0.20",
-  
-
-
-
-
-    
-
-
-
-
-  "react": "^18.2.0",
-  
-
-
-
-
-    
-
-
-
-
-  "stripe": "^11.3.0",
-  
 
 
 
@@ -180,218 +58,265 @@
 
 
 
-  "name": "backend",
+
+
+"test": "echo \"Error: no test specified\" && exit 1",
   
 
 
 
 
 
-  "version": "1.0.0",
+
+
   
 
 
 
 
 
-  "description": "",
+
+
+"start": "node server.js"
   
 
 
 
 
 
-  "main": "server.js",
+
+
+},
   
 
 
 
 
 
-  "scripts": {
+
+
+"keywords": [],
   
 
 
 
 
 
-    
 
 
-
-
-
-  "test": "echo \"Error: no test specified\" && exit 1",
+"author": "",
   
 
 
 
 
 
-    
 
 
-
-
-
-  "start": "node server.js"
+"license": "ISC",
   
 
 
 
 
 
-  },
+
+
+"dependencies": {
   
 
 
 
 
 
-  "keywords": [],
+
+
   
 
 
 
 
 
-  "author": "",
+
+
+"bcrypt": "^5.1.0",
   
 
 
 
 
 
-  "license": "ISC",
+
+
   
 
 
 
 
 
-  "dependencies": {
+
+
+"cookie-parser": "^1.4.6",
   
 
 
 
 
 
-    
 
 
-
-
-
-  "body-parser": "^1.20.1",
   
 
 
 
 
 
-    
 
 
-
-
-
-  "dotenv": "^16.0.3",
+"cookieparser": "^0.1.0",
   
 
 
 
 
 
-    
 
 
-
-
-
-  "express": "^4.18.2",
   
 
 
 
 
 
-    
 
 
-
-
-
-  "mongoose": "^6.6.6",
+"dotenv": "^16.0.3",
   
 
 
 
 
 
-    
 
 
-
-
-
-  "node": "^19.0.0",
   
 
 
 
 
 
-    
 
 
-
-
-
-  "nodemailer": "^6.8.0",
+"express": "^4.18.2",
   
 
 
 
 
 
-    
 
 
-
-
-
-  "nodemon": "^2.0.20",
   
 
 
 
 
 
-    
 
 
-
-
-
-  "pdfkit": "^0.13.0",
+"jsonwebtoken": "^8.5.1",
   
 
 
 
 
 
-    
 
 
-
-
-
-  "react": "^18.2.0"
   
 
 
 
 
 
-  }
-}}
+
+
+"mongoose": "^6.6.6",
+  
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+"node": "^19.0.0",
+  
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+"nodemailer": "^6.8.0",
+  
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+"nodemon": "^2.0.20",
+  
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+"react": "^18.2.0"
+  
+
+
+
+
+
+
+
+}
+}
