@@ -17,11 +17,22 @@ const {
   addCoursePreview,
   openMyCourse,
   getPopularCourses,
-  adminAddDiscount
+  adminAddDiscount,
+  reviewCourse,
+  editMyCourseReview,
+  deleteMyCourseReview
 } = require("../controllers/courseController");
 
 const router = express.Router();
 
+//delete my course review
+router.patch("/deleteMyCourseReview", deleteMyCourseReview);
+
+//edit my course review
+router.patch("/editMyCourseReview", editMyCourseReview);
+
+//review a course
+router.patch("/reviewCourse", reviewCourse);
 
 //admin adding a discount
 router.patch("/adminAddDiscount", adminAddDiscount);

@@ -50,12 +50,13 @@ const courseSchema = new Schema(
       type: String,
       required: true,
     },
-    reviews: {
-      type: [String],
-    },
-    overallRating: {
-      type: Number,
-    },
+    reviews: [
+      {
+        content: String,
+        traineeId: String,
+        traineeName: String
+      },
+    ],
     ratings: [
       {
         rating: Number,

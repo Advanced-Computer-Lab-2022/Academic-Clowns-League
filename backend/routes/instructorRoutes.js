@@ -7,9 +7,18 @@ const {
   rateInstructor,
   updateInstructor,
   resetPassword,
+  reviewInstructor,
+  editMyInstructorReview,
+  deleteMyInstructorReview
 } = require("../controllers/InstructorController");
 
 const router = express.Router();
+
+
+
+router.patch("/reviewInstructor",reviewInstructor);
+router.patch("/editMyInstructorReview",editMyInstructorReview);
+router.patch("/deleteMyInstructorReview",deleteMyInstructorReview);
 
 //GET all  instructor
 router.get("/", getAllInstructor);
