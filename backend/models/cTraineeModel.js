@@ -4,7 +4,6 @@ const Schema = mongoose.Schema;
 
 const cTraineeSchema = new Schema(
   {
-
     firstname: {
       type: String,
       //required: true,
@@ -29,20 +28,25 @@ const cTraineeSchema = new Schema(
       type: String,
       //required: true,
     },
-    courses: [{
-      type: mongoose.Types.ObjectId,
-      ref:'courseModel'
-    }],
-    grades: [{
-      courseID: mongoose.Types.ObjectId,
-      exercises: [{
-        exerciseID: mongoose.Types.ObjectId,
-        grade: Number
-      }]
-    }]
+    courses: [
+      {
+        type: mongoose.Types.ObjectId,
+        ref: "courseModel",
+      },
+    ],
+    grades: [
+      {
+        courseID: mongoose.Types.ObjectId,
+        exercises: [
+          {
+            exerciseID: mongoose.Types.ObjectId,
+            grade: Number,
+          },
+        ],
+      },
+    ],
   },
   { timestamps: true }
 );
 
-
-module.exports =  mongoose.model("cTrainee", cTraineeSchema);
+module.exports = mongoose.model("cTrainee", cTraineeSchema);

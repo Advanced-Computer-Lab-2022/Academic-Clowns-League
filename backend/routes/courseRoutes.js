@@ -1,3 +1,7 @@
+const { Router } = require("express");
+
+const pdfService = require("../service/pdf-service");
+
 const express = require("express");
 const {
   getAllCourses,
@@ -16,10 +20,31 @@ const {
   addCourseSub,
   addCoursePreview,
   openMyCourse,
-  moneyOwed
+  moneyOwed,
+  addNotes,
+  printNotePDF,
+  printCertificatePDF,
+  sendCertificateMail,
+  getPopularCourses,
+  adminAddDiscount,
+  reviewCourse,
+  editMyCourseReview,
+  deleteMyCourseReview
 } = require("../controllers/courseController");
 
 const router = express.Router();
+
+//delete my course review
+router.patch("/deleteMyCourseReview", deleteMyCourseReview);
+
+//edit my course review
+router.patch("/editMyCourseReview", editMyCourseReview);
+
+//review a course
+router.patch("/reviewCourse", reviewCourse);
+
+//admin adding a discount
+router.patch("/adminAddDiscount", adminAddDiscount);
 
 //search all courses
 router.get("/searchAllCourses", searchAllCourses);
@@ -69,6 +94,15 @@ router.get("/openMyCourse", openMyCourse);
 router.patch("/", updateCourse);
 
 router.get("/moneyOwed", moneyOwed);
+router.patch("/addNotes", addNotes);
+
+router.get("/printNotePDF", printNotePDF);
+
+router.get("/printCertificatePDF", printCertificatePDF);
+
+router.get("/sendCertificateMail", sendCertificateMail);
+//Get most popular courses
+router.get("/getPopularCourses", getPopularCourses);
 
 //after creating all our routes , export the router with the routes attached to it
 module.exports = router;
