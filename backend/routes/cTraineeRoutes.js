@@ -28,9 +28,9 @@ router.delete('/:id', deleteCTrainee);
 router.patch('/', updateCTrainee);
 
 //GET registered courses for CTrainee
-router.get('/registeredcourses', getRegisteredCourses);
+router.get('/registeredcourses',requireAuth,getRegisteredCourses);
 
 //get grade for an exercise
-router.get('/getgrade', getGrade)
+router.get('/getgrade',requireAuth, getGrade)
 
 module.exports = router;

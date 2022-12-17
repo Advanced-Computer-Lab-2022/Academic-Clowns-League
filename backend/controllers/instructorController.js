@@ -4,6 +4,7 @@ const iTrainee = require("../models/iTraineeModel");
 const cTrainee = require("../models/cTraineeModel");
 const mongoose = require("mongoose");
 const nodemailer = require("nodemailer");
+const User = require("../models/userModel");
 // create new Instructor
 
 /*const createInstructor = async (req, res) => {
@@ -38,6 +39,12 @@ const createInstructor = async (req, res) => {
       miniBio,
       name,
     });
+    const dbUser =  new User({
+      username: username,
+      password : password,
+      role: "Instructor"
+  });
+  dbUser.save();
     //Instructor.create() is async that's why we put async around the handler fn, so u can use await right here
     //now we're storing the response of Instructor.create() (which is the doc created along with its is) in Instructor
     //inside create, u pass thru an object representing the doc u wanna create

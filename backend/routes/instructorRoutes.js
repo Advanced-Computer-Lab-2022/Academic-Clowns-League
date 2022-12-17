@@ -17,9 +17,9 @@ const router = express.Router();
 
 
 
-router.patch("/reviewInstructor",reviewInstructor);
-router.patch("/editMyInstructorReview",editMyInstructorReview);
-router.patch("/deleteMyInstructorReview",deleteMyInstructorReview);
+router.patch("/reviewInstructor",requireAuth,reviewInstructor);
+router.patch("/editMyInstructorReview",requireAuth,editMyInstructorReview);
+router.patch("/deleteMyInstructorReview",requireAuth,eleteMyInstructorReview);
 
 //GET all  instructor
 router.get("/", getAllInstructor);

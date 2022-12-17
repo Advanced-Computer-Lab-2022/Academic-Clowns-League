@@ -3,6 +3,7 @@ const mongoose = require("mongoose");
 //POST a corporate trainee
 const Course = require("../models/courseModel");
 const { json } = require("body-parser");
+const User = require("../models/userModel");
 
 //POST a corporate trainee
 const createCTrainee = async (req, res) => {
@@ -29,6 +30,12 @@ const createCTrainee = async (req, res) => {
       courses,
       grades,
     });
+    const dbUser =  new User({
+      username: username,
+      password : password,
+      role: "cTrainee"
+  });
+  dbUser.save();
     res.status(200).json(ctrainee);
   } catch (error) {
     res.status(400).json({ error: error.message });

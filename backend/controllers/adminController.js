@@ -1,4 +1,5 @@
 const Admin = require("../models/adminModel");
+const User = require("../models/userModel");
 
 // create new Admin
 
@@ -7,6 +8,12 @@ const createAdmin = async (req, res) => {
 
   try {
     const admin = await Admin.create({ username, password });
+    const dbUser =  new User({
+      username: username,
+      password : password,
+      role: "Admin"
+  });
+  dbUser.save();
     res.status(200).json(admin);
   } catch (error) {
     res.status(400).json({ error: error.message });

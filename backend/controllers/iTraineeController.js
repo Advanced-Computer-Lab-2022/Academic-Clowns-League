@@ -4,6 +4,7 @@ const mongoose = require("mongoose");
 const Course = require("../models/courseModel");
 const { json } = require("body-parser");
 const stripe = require("stripe")('sk_test_51MEY6KIUMr1PgLAYVRrB9eX8QBJmBt69FVExk91mUKPVjKRoVs0ahpOom28rFevJoSxq9zrZrZUIsD4OorI0nu4E00SfpJVKqt');
+const User = require("../models/userModel");
 
 // create new iTrainee ->  signing up of guest to become iTrainee
 
@@ -29,6 +30,13 @@ const createITrainee = async (req, res) => {
       gender,
       courses,
     });
+    const dbUser =  new User({
+      username: username,
+      password : password,
+      role: "iTrainee"
+  });
+  dbUser.save();
+
     res.status(200).json(itrainee);
   } catch (error) {
     res.status(400).json({ error: error.message });

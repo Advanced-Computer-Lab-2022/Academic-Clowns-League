@@ -1,5 +1,6 @@
 const express = require("express");
 const { requireAuth } = require('../controllers/userController');
+
 const {
   createITrainee,
   getAllITrainee,
@@ -33,14 +34,14 @@ router.patch("/", updateITrainee);
 router.get('/registeredcourses',requireAuth ,getRegisteredCourses);
 
 //get grade for an exercise
-router.get('/getgrade', getGrade);
+router.get('/getgrade',requireAuth, getGrade);
 
 //enter payment details and pay for course
 router.post('/create-payment-intent', payForCourse);
 
 //add course to courses array
-router.patch('/registercourse', registerForCourse);
+router.patch('/registercourse',requireAuth, registerForCourse);
 
-router.patch('/applyrefund', applyRefund)
+router.patch('/applyrefund',requireAuth, applyRefund)
 
 module.exports = router;
