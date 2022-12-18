@@ -37,7 +37,7 @@ const getAllCourses = async (req, res) => {
 
 //get instructor courses
 const getInstCourses = async (req, res) => {
-if(Instructor.findById(req.user._id)){
+if(await Instructor.findById(req.user._id)){
   const courses = await Course.aggregate([
     {
       $lookup: {
@@ -65,7 +65,7 @@ const getCourse = (req, res) => {
 
 //delete a course
 const deleteCourse = async (req, res) => {
-  if(Instructor.findById(req.user._id)){const id = req.query.id;
+  if(await Instructor.findById(req.user._id)){const id = req.query.id;
 
   if (!mongoose.Types.ObjectId.isValid(id)) {
     return res.status(404).json({ error: "No such Course" });
@@ -130,7 +130,7 @@ const rateCourse = async (req, res) => {
 //Review course
 //update a course
 const updateCourse = async (req, res) => {
-  if(Instructor.findById(req.user._id)){ const id = req.query.id;
+  if(await Instructor.findById(req.user._id)){ const id = req.query.id;
 
   if (!mongoose.Types.ObjectId.isValid(id)) {
     return res.status(404).json({ error: "No such Course" });
@@ -150,7 +150,7 @@ const updateCourse = async (req, res) => {
 };
 //add course exercise
 const addCourseExercise = async (req, res) => {
-  if(Instructor.findById(req.user._id)){  const id = req.query.id; //637a197cbc66688b3924a864
+  if(await Instructor.findById(req.user._id)){  const id = req.query.id; //637a197cbc66688b3924a864
   const { question, option1, option2, option3, option4, answer } = req.body;
   const courseEx = (await Course.findById({ _id: id }).select("exercises"))
     .exercises;
@@ -170,7 +170,7 @@ const addCourseExercise = async (req, res) => {
 
 //create new course
 const createCourse = async (req, res) => {
-  if(Instructor.findById(req.user._id)){ let {
+  if(await Instructor.findById(req.user._id)){ let {
     title,
     hours,
     subject,
@@ -640,7 +640,7 @@ const searchInstrCourses = async (req, res) => {
 
 //filter based on price for INSTRUCTOR
 const filterInstPriceSub = async (req, res) => {
-  if(Instructor.findById(req.user._id)){ const subjects = [];
+  if(await Instructor.findById(req.user._id)){ const subjects = [];
   const prices = [];
   let subCount = 0;
   let priceCount = 0;
@@ -848,7 +848,7 @@ const viewCorrectAnswer = async (req, res) => {
 };
 
 const addCourseSub = async (req, res) => {
-  if(Instructor.findById(req.user._id)){  const id = req.query.id;
+  if(await Instructor.findById(req.user._id)){  const id = req.query.id;
   const {
     //courseID, //637a197cbc66688b3924a864
     title,
@@ -880,7 +880,7 @@ const addCourseSub = async (req, res) => {
 
 };
 const addCoursePreview = async (req, res) => {
-  if(Instructor.findById(req.user._id)){  const id = req.query.id;
+  if(await Instructor.findById(req.user._id)){  const id = req.query.id;
   const { videoPreviewURL } = req.body;
   const videoId = getId(videoPreviewURL);
   const embeddedLink = "//www.youtube.com/embed/" + videoId;
@@ -1027,7 +1027,7 @@ function buildCertificatePDF(dataCallback, endCallback) {
 }
 
 const openMyCourse = async (req, res) => {
-  if(Instructor.findById(req.user._id)){  const id = req.query.id;
+  if(await Instructor.findById(req.user._id)){  const id = req.query.id;
   const newId = mongoose.Types.ObjectId(id);
   const courses = await Course.aggregate([
     {
@@ -1127,7 +1127,7 @@ const getPopularCourses = async (req, res) => {
 };
 
 const adminAddDiscount = async (req, res) => {
-  if(Admin.findById(req.user._id)){const id = req.query.id;
+  if(await Admin.findById(req.user._id)){const id = req.query.id;
   let {
     courseDiscount,
     courseDiscountValidUntil,
