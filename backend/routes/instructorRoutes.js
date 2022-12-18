@@ -19,7 +19,7 @@ const router = express.Router();
 
 router.patch("/reviewInstructor",requireAuth,reviewInstructor);
 router.patch("/editMyInstructorReview",requireAuth,editMyInstructorReview);
-router.patch("/deleteMyInstructorReview",requireAuth,eleteMyInstructorReview);
+router.patch("/deleteMyInstructorReview",requireAuth,deleteMyInstructorReview);
 
 //GET all  instructor
 router.get("/",requireAuth,getAllInstructor);
