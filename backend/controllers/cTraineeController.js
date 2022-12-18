@@ -4,6 +4,7 @@ const mongoose = require("mongoose");
 const Course = require("../models/courseModel");
 const { json } = require("body-parser");
 const User = require("../models/userModel");
+const Admin = require("../models/adminModel");
 
 //POST a corporate trainee
 const createCTrainee = async (req, res) => {
