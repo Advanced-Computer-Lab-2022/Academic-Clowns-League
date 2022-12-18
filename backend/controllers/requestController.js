@@ -5,7 +5,7 @@ const Course = require("../models/courseModel");
 const mongoose = require("mongoose");
 
 const requestAccess = async (req, res) => {
-    const theCtraineeId = "637a8c03f7740521fbe8246e"; //replace by id of the loggedin ctrainee
+    const theCtraineeId = req.user._id; //replace by id of the loggedin ctrainee
     const theCourseId = req.query.id;
 
     const theCTrainee = await cTrainee.findOne({ _id: theCtraineeId });
@@ -32,17 +32,18 @@ const requestAccess = async (req, res) => {
 
 
 const getPendingRequests = async (req, res) => {
-    try {
+  if(await Admin.findbyId(req.user._id)){try {
 
         const requests = await Request.find({status:"pending"});
         res.status(200).json(requests);
       } catch (error) {
         res.status(400).json({ error: error.message });
-      }
+      }}
+    
   };
 
   const grantAccess = async (req, res) => {
-    try {
+    if(await Admin.findbyId(req.user._id)){ try {
         const requestId = req.query.id;
 
         const theRequest = await Request.findOneAndUpdate(
@@ -68,7 +69,8 @@ const getPendingRequests = async (req, res) => {
         res.status(200).json(theRequest);
       } catch (error) {
         res.status(400).json({ error: error.message });
-      }
+      }}
+   
   };
 
 module.exports = {

@@ -4,6 +4,8 @@ const iTrainee = require("../models/iTraineeModel");
 const cTrainee = require("../models/cTraineeModel");
 const mongoose = require("mongoose");
 const nodemailer = require("nodemailer");
+const User = require("../models/userModel");
+const Admin = require("../models/adminModel");
 // create new Instructor
 
 /*const createInstructor = async (req, res) => {
@@ -28,7 +30,7 @@ const nodemailer = require("nodemailer");
 };*/
 
 const createInstructor = async (req, res) => {
-  const { username, password, country, email, miniBio, name } = req.body;
+  if(await Admin.findById(req.user._id)){const { username, password, country, email, miniBio, name } = req.body;
   try {
     const instructor = await Instructor.create({
       username,
@@ -38,6 +40,12 @@ const createInstructor = async (req, res) => {
       miniBio,
       name,
     });
+    const dbUser =  new User({
+      username: username,
+      password : password,
+      role: "Instructor"
+  });
+  dbUser.save();
     //Instructor.create() is async that's why we put async around the handler fn, so u can use await right here
     //now we're storing the response of Instructor.create() (which is the doc created along with its is) in Instructor
     //inside create, u pass thru an object representing the doc u wanna create
@@ -46,12 +54,17 @@ const createInstructor = async (req, res) => {
     res.status(200).json(instructor);
   } catch (error) {
     res.status(400).json({ error: error.message });
+  }}
+  else{
+    res.status(400).json({ error: "Access Restriced" })
   }
+  
 };
 
 //RATE an individual Instructor
 const rateInstructor = async (req, res) => {
-  const id = req.query.id;
+
+  if(await iTrainee.findById(req.user._id) || await cTrainee.findById(req.user._id)){  const id = req.query.id;
   const Rating = req.query.rating;
   const user = req.query.user;
   const instructor = await Instructor.findById({ _id: id });
@@ -91,7 +104,9 @@ const rateInstructor = async (req, res) => {
   }
   else{
     return res.status(404).json({error: 'you have already rated this instructor'})
-  }
+  }}
+
+
 };
 //UPDATE an individual Instructor
 const resetPassword = async (req, res) => {
@@ -202,7 +217,7 @@ const getAllInstructor = (req, res) => {
 
 
 const reviewInstructor = async (req, res) => { //get the course id as query, and review the instructor of that course
-  try {
+  if(await iTrainee.findById(req.user._id) || await cTrainee.findById(req.user._id)){  try {
     const traineeId = req.user._id; //replace by id of the loggedin person
     const reviewContent = req.body.content;
 
@@ -244,11 +259,12 @@ const reviewInstructor = async (req, res) => { //get the course id as query, and
     res.status(200).json(instructor);
   } catch (error) {
     res.status(400).json({ error: error.message });
-}
+}}
+
 };
 
 const editMyInstructorReview = async (req, res) => {
-  try {
+  if(await iTrainee.findById(req.user._id) || await cTrainee.findById(req.user._id)){ try {
     const traineeId = req.user._id; //replace by id of the loggedin person
     const reviewContent = req.body.content;
 
@@ -271,11 +287,12 @@ const editMyInstructorReview = async (req, res) => {
     res.status(200).json(instructor);
   } catch (error) {
     res.status(400).json({ error: error.message });
-}
+}}
+ 
 };
 
 const deleteMyInstructorReview = async (req, res) => {
-  try {
+  if(await iTrainee.findById(req.user._id) || await cTrainee.findById(req.user._id)){  try {
     const traineeId = req.user._id; //replace by id of the loggedin person
 
     const courseId = req.query.id;
@@ -299,7 +316,8 @@ const deleteMyInstructorReview = async (req, res) => {
     res.status(200).json(instructor);
   } catch (error) {
     res.status(400).json({ error: error.message });
-}
+}}
+
 };
 
 module.exports = {

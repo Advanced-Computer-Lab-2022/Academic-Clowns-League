@@ -4,6 +4,9 @@ const mongoose = require("mongoose");
 const Course = require("../models/courseModel");
 const { json } = require("body-parser");
 const stripe = require("stripe")('sk_test_51MEY6KIUMr1PgLAYVRrB9eX8QBJmBt69FVExk91mUKPVjKRoVs0ahpOom28rFevJoSxq9zrZrZUIsD4OorI0nu4E00SfpJVKqt');
+const User = require("../models/userModel");
+const Admin = require("../models/adminModel");
+const Instructor = require("../models/instructorModel");
 
 // create new iTrainee ->  signing up of guest to become iTrainee
 
@@ -29,6 +32,13 @@ const createITrainee = async (req, res) => {
       gender,
       courses,
     });
+    const dbUser =  new User({
+      username: username,
+      password : password,
+      role: "iTrainee"
+  });
+  dbUser.save();
+
     res.status(200).json(itrainee);
   } catch (error) {
     res.status(400).json({ error: error.message });
@@ -37,7 +47,7 @@ const createITrainee = async (req, res) => {
 
 //UPDATE an individual trainee
 const updateITrainee = async (req, res) => {
-  const id = req.query.id;
+  if(await iTrainee.findById(req.user._id)){  const id = req.query.id;
 
   if (!mongoose.Types.ObjectId.isValid(id)) {
     return res.status(404).json({ error: "No such Individual Trainee" });
@@ -54,7 +64,8 @@ const updateITrainee = async (req, res) => {
     return res.status(400).json({ error: "No such Individual Trainee" });
   }
 
-  res.status(200).json(itrainee);
+  res.status(200).json(itrainee);}
+
 };
 
 //DELETE an individual trainee
@@ -133,7 +144,7 @@ const calculateOrderAmount = async (items) => {
 };
 
 const payForCourse = async(req, res) => {
-  const { items } = req.body;
+  if(await iTrainee.findById(req.user._id)){  const { items } = req.body;
 
   // Create a PaymentIntent with the order amount and currency
   const paymentIntent = await stripe.paymentIntents.create({
@@ -147,10 +158,13 @@ const payForCourse = async(req, res) => {
   res.send({
     clientSecret: paymentIntent.client_secret,
   });
+
+  }
+
 };
 
  const registerForCourse = async (req, res) => {
-  //console.log(req.query.id)
+  if(await iTrainee.findById(req.user._id)){ //console.log(req.query.id)
     const itraineeCourses = (
       await iTrainee
         .findById({ _id: req.user._id })
@@ -159,11 +173,12 @@ const payForCourse = async(req, res) => {
     itraineeCourses.push(req.query.id);
 
     const response = await iTrainee.findOneAndUpdate({_id: req.user._id}, {courses: itraineeCourses});
-    res.status(200).json(response)
+    res.status(200).json(response)}
+ 
 };
 
 const applyRefund = async(req, res) => {
-  const money = req.body.money;
+  if(await Admin.findById(req.user._id)){const money = req.body.money;
   const itrainee = await iTrainee.findOne({_id: req.user._id});
 
   const newWallet = parseInt(itrainee.wallet) + parseInt(money);
@@ -174,6 +189,9 @@ const applyRefund = async(req, res) => {
 
   res.status(200).json(response);
 
+
+  }
+  
 }
 
 module.exports = {

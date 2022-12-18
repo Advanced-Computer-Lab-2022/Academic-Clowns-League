@@ -17,27 +17,27 @@ const router = express.Router();
 
 
 
-router.patch("/reviewInstructor",reviewInstructor);
-router.patch("/editMyInstructorReview",editMyInstructorReview);
-router.patch("/deleteMyInstructorReview",deleteMyInstructorReview);
+router.patch("/reviewInstructor",requireAuth,reviewInstructor);
+router.patch("/editMyInstructorReview",requireAuth,editMyInstructorReview);
+router.patch("/deleteMyInstructorReview",requireAuth,eleteMyInstructorReview);
 
 //GET all  instructor
-router.get("/", getAllInstructor);
+router.get("/",requireAuth,getAllInstructor);
 
 //GET a single  instructor
-router.get("/onlyone", getInstructor);
+router.get("/onlyone",requireAuth,getInstructor);
 
 //POST a new  instructor
-router.post("/", createInstructor);
+router.post("/",requireAuth,createInstructor);
 
 //DELETE a instructor
-router.delete("/:id", deleteInstructor);
+router.delete("/:id",requireAuth, deleteInstructor);
 
 //RATE an instructor
-router.patch("/rate", rateInstructor);
+router.patch("/rate", requireAuth,rateInstructor);
 
-router.patch("/", updateInstructor);
+router.patch("/",requireAuth,updateInstructor);
 
-router.patch("/reset", resetPassword);
+router.patch("/reset",requireAuth,resetPassword);
 
 module.exports = router;

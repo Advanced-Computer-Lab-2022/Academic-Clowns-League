@@ -4,6 +4,7 @@ const iTrainee = require("../models/iTraineeModel");
 const cTrainee = require("../models/cTraineeModel");
 const mongoose = require("mongoose");
 const nodemailer = require("nodemailer");
+const Admin = require("../models/adminModel");
 const user = require("../controllers/userController");
 //const user = require("../models/userModel");
 
@@ -36,6 +37,7 @@ const getAllCourses = async (req, res) => {
 
 //get instructor courses
 const getInstCourses = async (req, res) => {
+if(Instructor.findById(req.user._id)){
   const courses = await Course.aggregate([
     {
       $lookup: {
@@ -52,7 +54,8 @@ const getInstCourses = async (req, res) => {
       $match: { "instructorData.name": req.user.name},
     },
   ]);
-  res.status(200).json(courses);
+  res.status(200).json(courses);}
+  
 };
 
 //get a single course
@@ -62,7 +65,7 @@ const getCourse = (req, res) => {
 
 //delete a course
 const deleteCourse = async (req, res) => {
-  const id = req.query.id;
+  if(Instructor.findById(req.user._id)){const id = req.query.id;
 
   if (!mongoose.Types.ObjectId.isValid(id)) {
     return res.status(404).json({ error: "No such Course" });
@@ -72,12 +75,14 @@ const deleteCourse = async (req, res) => {
 
   if (!course) {
     return res.status(400).json({ error: "No such Course" });
-  }
+  }}
+  
+  
 };
 
 //Rate a course
 const rateCourse = async (req, res) => {
-  const id = req.query.id;
+  if(await iTrainee.findById(req.user._id) || await cTrainee.findById(req.user._id)){  const id = req.query.id;
   const Rating = req.query.rating;
   const user = req.query.user;
   const course = await Course.findById({ _id: id });
@@ -118,13 +123,14 @@ const rateCourse = async (req, res) => {
     return res
       .status(404)
       .json({ error: "you have already rated this course" });
-  }
+  }}
+
 };
 
 //Review course
 //update a course
 const updateCourse = async (req, res) => {
-  const id = req.query.id;
+  if(Instructor.findById(req.user._id)){ const id = req.query.id;
 
   if (!mongoose.Types.ObjectId.isValid(id)) {
     return res.status(404).json({ error: "No such Course" });
@@ -139,11 +145,12 @@ const updateCourse = async (req, res) => {
 
   if (!course) {
     return res.status(400).json({ error: "No such Course" });
-  }
+  }}
+ 
 };
 //add course exercise
 const addCourseExercise = async (req, res) => {
-  const id = req.query.id; //637a197cbc66688b3924a864
+  if(Instructor.findById(req.user._id)){  const id = req.query.id; //637a197cbc66688b3924a864
   const { question, option1, option2, option3, option4, answer } = req.body;
   const courseEx = (await Course.findById({ _id: id }).select("exercises"))
     .exercises;
@@ -157,12 +164,13 @@ const addCourseExercise = async (req, res) => {
     { _id: id },
     { exercises: courseEx }
   );
-  res.status(200).json(course);
+  res.status(200).json(course);}
+
 };
 
 //create new course
 const createCourse = async (req, res) => {
-  let {
+  if(Instructor.findById(req.user._id)){ let {
     title,
     hours,
     subject,
@@ -205,7 +213,8 @@ const createCourse = async (req, res) => {
     res.status(200).json(course);
   } catch (error) {
     res.status(400).json({ error: error.message });
-  }
+  }}
+ 
 };
 
 //filter based on subject and/or rating and/or price
@@ -631,7 +640,7 @@ const searchInstrCourses = async (req, res) => {
 
 //filter based on price for INSTRUCTOR
 const filterInstPriceSub = async (req, res) => {
-  const subjects = [];
+  if(Instructor.findById(req.user._id)){ const subjects = [];
   const prices = [];
   let subCount = 0;
   let priceCount = 0;
@@ -809,11 +818,12 @@ const filterInstPriceSub = async (req, res) => {
       },
     ]);
     res.status(200).json(courses);
-  }
+  }}
+ 
 };
 
 const viewCorrectAnswer = async (req, res) => {
-  const {
+  if(await iTrainee.findById(req.user._id) || await cTrainee.findById(req.user._id)){const {
     course, //637a197cbc66688b3924a864
     exercise, //637a197cbc66688b3924a867
     answer,
@@ -833,11 +843,12 @@ const viewCorrectAnswer = async (req, res) => {
     }
     break;
   }
-  res.status(200).json(reply);
+  res.status(200).json(reply);}
+  
 };
 
 const addCourseSub = async (req, res) => {
-  const id = req.query.id;
+  if(Instructor.findById(req.user._id)){  const id = req.query.id;
   const {
     //courseID, //637a197cbc66688b3924a864
     title,
@@ -864,8 +875,12 @@ const addCourseSub = async (req, res) => {
   res.status(200).json(course);
 };
 
+
+
+
+};
 const addCoursePreview = async (req, res) => {
-  const id = req.query.id;
+  if(Instructor.findById(req.user._id)){  const id = req.query.id;
   const { videoPreviewURL } = req.body;
   const videoId = getId(videoPreviewURL);
   const embeddedLink = "//www.youtube.com/embed/" + videoId;
@@ -874,9 +889,8 @@ const addCoursePreview = async (req, res) => {
     { previewURL: embeddedLink },
     { new: true }
   );
-  res.status(200).json(course);
-};
-
+  res.status(200).json(course);}
+}
 /*
 const openMyCourse = async (req, res) => {
   const id = req.query.id;
@@ -1013,7 +1027,7 @@ function buildCertificatePDF(dataCallback, endCallback) {
 }
 
 const openMyCourse = async (req, res) => {
-  const id = req.query.id;
+  if(Instructor.findById(req.user._id)){  const id = req.query.id;
   const newId = mongoose.Types.ObjectId(id);
   const courses = await Course.aggregate([
     {
@@ -1031,11 +1045,13 @@ const openMyCourse = async (req, res) => {
       $match: { _id: newId },
     },
   ]);
-  res.status(200).json(courses[0]);
+  res.status(200).json(courses[0]);}
+  
+
 };
 
 const moneyOwed = async (req, res) => {
-  const courses = await Course.find({instructor: "63715373d953904400b6a4d5"});
+  const courses = await Course.find({instructor: req.user._id});
   let money = 0;
 
   for(let i = 0; i < courses.length; i++){
@@ -1111,7 +1127,7 @@ const getPopularCourses = async (req, res) => {
 };
 
 const adminAddDiscount = async (req, res) => {
-  const id = req.query.id;
+  if(Admin.findById(req.user._id)){const id = req.query.id;
   let {
     courseDiscount,
     courseDiscountValidUntil,
@@ -1132,7 +1148,8 @@ const adminAddDiscount = async (req, res) => {
     }
   } catch (error) {
     res.status(400).json({ error: error.message });
-  }
+  }}
+  
 };
 
 const reviewCourse = async (req, res) => {

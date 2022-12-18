@@ -4,6 +4,7 @@ const Instructor = require("../models/instructorModel");
 const CTrainee = require("../models/cTraineeModel");
 const ITrainee = require("../models/iTraineeModel");
 const mongoose = require("mongoose");
+const Admin = require("../models/adminModel");
 
 
 
@@ -47,7 +48,7 @@ const reportProblem = async (req, res) => {
   };
 
   const  getAllProblems = async (req, res) => {
-    const problem = await Problem.find({}).sort({priority:1});
+    if(await Admin.findById(req.user._id)){const problem = await Problem.find({}).sort({priority:1});
    
     for(let i = 0; i < problem.length; i++) {
         let c = problem[i].courseId;
@@ -69,7 +70,8 @@ const reportProblem = async (req, res) => {
     }
 
     res.status(200).json(problem);
-  
+  }
+    
   };
 
   const problemStatus = async (req, res) => {
@@ -89,6 +91,7 @@ const reportProblem = async (req, res) => {
   };
 
   const problemFollowUp = async (req, res) => {
+    
     const id = req.query.id;
     const Comment = req.query.comment;
     let c;

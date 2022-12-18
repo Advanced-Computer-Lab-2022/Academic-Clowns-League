@@ -81,7 +81,8 @@ const courseSchema = new Schema(
         title: String,
         videoLink: String,
         shortDescription: String,
-        totalHours: Number,
+        totalHours: Number
+        
       },
     ],
 
