@@ -13,19 +13,19 @@ const {
 const router = express.Router();
 
 //GET all corporate trainees
-router.get('/', getAllCTrainee);
+router.get('/',requireAuth,getAllCTrainee);
 
 //GET a single corporate trainee
 //router.get('/:id', getCTrainee);
 
 //POST a new corporate trainee
-router.post('/', createCTrainee);
+router.post('/',requireAuth,createCTrainee);
 
 //DELETE a corporate trainee
 router.delete('/:id', deleteCTrainee);
 
 //UPDATE a corporate trainee
-router.patch('/', updateCTrainee);
+router.patch('/',requireAuth, updateCTrainee);
 
 //GET registered courses for CTrainee
 router.get('/registeredcourses',requireAuth,getRegisteredCourses);

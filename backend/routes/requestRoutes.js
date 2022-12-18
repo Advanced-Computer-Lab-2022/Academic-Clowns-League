@@ -4,14 +4,15 @@ const {
   getPendingRequests,
   grantAccess
 } = require("../controllers/requestController");
+const { requireAuth } = require("../controllers/userController");
 
 const router = express.Router();
 
-router.get("/requestAccess", requestAccess);
+router.get("/requestAccess",requireAuth,requestAccess);
 
-router.get("/getPendingRequests", getPendingRequests);
+router.get("/getPendingRequests",requireAuth, getPendingRequests);
 
-router.get("/grantAccess", grantAccess);
+router.get("/grantAccess",requireAuth, grantAccess);
 
 
 

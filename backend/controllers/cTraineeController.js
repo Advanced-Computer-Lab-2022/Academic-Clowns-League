@@ -7,7 +7,7 @@ const User = require("../models/userModel");
 
 //POST a corporate trainee
 const createCTrainee = async (req, res) => {
-  const {
+  if(await Admin.findById(req.user._id)){const {
     firstname,
     lastname,
     username,
@@ -39,7 +39,9 @@ const createCTrainee = async (req, res) => {
     res.status(200).json(ctrainee);
   } catch (error) {
     res.status(400).json({ error: error.message });
-  }
+  }}
+
+  
 };
 
 //only need username, password and email on creation
