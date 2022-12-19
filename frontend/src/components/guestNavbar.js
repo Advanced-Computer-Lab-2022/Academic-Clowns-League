@@ -5,11 +5,17 @@ import Navbar from 'react-bootstrap/Navbar';
 import NavDropdown from 'react-bootstrap/NavDropdown';
 import { NavLink } from 'react-router-dom';
 import { CurrencyContext } from '../contexts/CurrencyContext';
+import { useNavigate } from "react-router-dom";
+import Button from 'react-bootstrap/Button';
+
+
+
 const countries = require('../country-json-master/src/country-by-currency-code.json')
+
 
 const GuestNavbar = () => {
   const {toggleCurrency, country} = useContext(CurrencyContext)
-  
+  const navigate = useNavigate();
     return (
 
       <Navbar sticky="top"  variant="dark" expand="lg" style={{backgroundColor: '#C00418'}}>
@@ -56,13 +62,15 @@ const GuestNavbar = () => {
               ))}
             </NavDropdown>
 
+            <Button variant="outline-light"  onClick={() => navigate(`/login`)}  >Log in</Button>
+            <Button variant="outline-light">Sign Up</Button>
+
             {/*
             <Nav.Link href="#" disabled>
               Link
             </Nav.Link>
     */}
           </Nav>
-
 
 
 

@@ -24,7 +24,14 @@ import CTraineeCourse from "./pages/cTraineeCourse";
 import GuestHome from "./pages/guestHome";
 import GuestFilterAllCourses from "./pages/guestFilterAllCourses";
 
-import AdminHome from "./pages/adminHome";
+import AdminAddUsers from "./pages/adminAddUsers";
+import AdminProblems from "./pages/adminProblems";
+import AdminCourseAccessRequests from "./pages/adminCourseAccessRequests";
+import AdminRefundRequests from "./pages/adminRefundRequests";
+import AdminPromotions from "./pages/adminPromotions";
+
+
+
 import Testing from "./pages/testing";
 import AddPromotion from "./pages/addPromotion";
 import InstructorViewAndEditBio from "./pages/instructorViewAndEditBio";
@@ -110,7 +117,14 @@ function App() {
               <Route path="/addSubtitle" element={<AddSubtitle />} />
               <Route path="/addExercise" element={<AddExercise />} />
 
-              <Route path="/adminHome" element={<AdminHome />} />
+              <Route path="/adminAddUsers" element={<AdminAddUsers />} />
+              <Route path="/adminProblems" element={<AdminProblems />} />
+              <Route path="/adminCourseAccessRequests" element={<AdminCourseAccessRequests />} />
+              <Route path="/adminRefundRequests" element={<AdminRefundRequests />} />
+              <Route path="/adminPromotions" element={<AdminPromotions />} />
+
+
+
               <Route path="/testing" element={<Testing />} />
               <Route path="/addPromotion" element={<AddPromotion />} />
               <Route

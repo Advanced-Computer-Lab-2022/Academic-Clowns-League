@@ -2,14 +2,21 @@ import AdminForm from "../components/adminForm";
 import InstructorForm from "../components/instructorForm";
 import CTraineeForm from "../components/cTraineeForm";
 
-const AdminHome = () => {
+import AdminNavbar from "../components/adminNavbar";
+
+
+
+const AdminAddUsers = () => {
   return (
     <div>
+      <AdminNavbar/>
+      <div>
       <AdminForm />
       <InstructorForm />
       <CTraineeForm />
+      </div>
     </div>
   );
 };
 
-export default AdminHome;
+export default AdminAddUsers;
