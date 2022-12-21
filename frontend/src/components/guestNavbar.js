@@ -1,4 +1,4 @@
-import { useContext } from 'react';
+import { useContext, useState } from 'react';
 import Container from 'react-bootstrap/Container';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
@@ -7,6 +7,7 @@ import { NavLink } from 'react-router-dom';
 import { CurrencyContext } from '../contexts/CurrencyContext';
 import { useNavigate } from "react-router-dom";
 import Button from 'react-bootstrap/Button';
+import { MDBBtn, MDBIcon, MDBInput, MDBInputGroup } from 'mdb-react-ui-kit';
 
 
 
@@ -16,6 +17,7 @@ const countries = require('../country-json-master/src/country-by-currency-code.j
 const GuestNavbar = () => {
   const {toggleCurrency, country} = useContext(CurrencyContext)
   const navigate = useNavigate();
+
     return (
 
       <Navbar sticky="top"  variant="dark" expand="lg" style={{backgroundColor: '#C00418'}}>
@@ -41,20 +43,7 @@ const GuestNavbar = () => {
             navbarScroll
           >
 
-            <Nav.Link><NavLink to="/" className="navlink">Home</NavLink></Nav.Link>
-            <Nav.Link><NavLink to="/guestFilterAllCourses" className="navlink">Filter All Courses</NavLink></Nav.Link>
-
-
-            <NavDropdown title="Options" id="navbarScrollingDropdown">
-              <NavDropdown.Item href="#action3">Action</NavDropdown.Item>
-              <NavDropdown.Item href="#action4">
-                Another action
-              </NavDropdown.Item>
-              <NavDropdown.Divider />
-              <NavDropdown.Item href="#action5">
-                Something else here
-              </NavDropdown.Item>
-            </NavDropdown>
+            <Nav.Link><NavLink to="/" className="navlink">All Courses</NavLink></Nav.Link>
 
             <NavDropdown title={country} id="navbarScrollingDropdown" onSelect = {toggleCurrency}>
               {countries.map((country) => (
@@ -62,8 +51,16 @@ const GuestNavbar = () => {
               ))}
             </NavDropdown>
 
-            <Button variant="outline-light"  onClick={() => navigate(`/login`)}  >Log in</Button>
-            <Button variant="outline-light">Sign Up</Button>
+            
+
+            <MDBBtn className='login' style={{
+          backgroundColor: "#607D8B",
+          borderColor: "#78909C"
+        }} onClick={() => navigate(`/login`)}> Login </MDBBtn>
+            <MDBBtn className='signup' style={{
+          backgroundColor: "#607D8B",
+          borderColor: "#78909C"
+        }}> Sign Up </MDBBtn>
 
             {/*
             <Nav.Link href="#" disabled>

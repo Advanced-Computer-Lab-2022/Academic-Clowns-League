@@ -58,7 +58,7 @@ router.get("/", getAllCourses); //Guest
 //router.get('/:id',getCourse)
 
 //DELETE a single course
-router.delete("/deletecourse", deleteCourse);
+router.delete("/deletecourse", requireAuth, deleteCourse);
 
 //UPDATE a single course
 router.patch("/rate",requireAuth,rateCourse);
@@ -69,7 +69,7 @@ router.patch("/addCourseEx",requireAuth,addCourseExercise);
 router.post("/",requireAuth, createCourse);
 
 //filter courses by subject and/or rating and/or price
-router.get("/filtersubrat",requireAuth,filterSubRatePrice); //guest
+router.get("/filtersubrat",filterSubRatePrice); //guest can access it
 
 //get instructor courses
 router.get("/instcourses",requireAuth,getInstCourses);
@@ -99,9 +99,9 @@ router.get("/printNotePDF", requireAuth,printNotePDF);
 
 router.get("/printCertificatePDF",requireAuth,printCertificatePDF);
 
-router.get("/sendCertificateMail",requireAuth,sendCertificateMail);
+router.get("/sendCertificateMail", sendCertificateMail);
 //Get most popular courses
-router.get("/getPopularCourses",requireAuth,getPopularCourses);
+router.get("/getPopularCourses",getPopularCourses); //guest can access it
 
 //after creating all our routes , export the router with the routes attached to it
 module.exports = router;

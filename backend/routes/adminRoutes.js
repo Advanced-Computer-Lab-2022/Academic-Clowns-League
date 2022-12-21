@@ -28,7 +28,7 @@ router.patch('/:id',updateAdmin)
 
 
 //POST a new Admin
-router.post('/', createAdmin)
+router.post('/', requireAuth, createAdmin)
 
 
 //after creating all our routes , export the router with the routes attached to it

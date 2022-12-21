@@ -37,7 +37,7 @@ router.get('/registeredcourses',requireAuth ,getRegisteredCourses);
 router.get('/getgrade',requireAuth, getGrade);
 
 //enter payment details and pay for course
-router.post('/create-payment-intent', payForCourse);
+router.post('/create-payment-intent', requireAuth, payForCourse);
 
 //add course to courses array
 router.patch('/registercourse',requireAuth, registerForCourse);
