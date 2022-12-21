@@ -1063,7 +1063,7 @@ function buildCertificatePDF(dataCallback, endCallback) {
 }
 
 const openMyCourse = async (req, res) => {
-  if(await Instructor.findById(req.user._id)){  const id = req.query.id;
+  if(await Instructor.findById(req.user._id) || await iTrainee.findById(req.user._id) || await cTrainee.findById(req.user._id) ){  const id = req.query.id;
   const newId = mongoose.Types.ObjectId(id);
   const courses = await Course.aggregate([
     {
