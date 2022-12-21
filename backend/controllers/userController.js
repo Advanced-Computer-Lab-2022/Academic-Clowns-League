@@ -35,7 +35,7 @@ const createUser = async (req, res) => {
     })
     dbUser.save()
     res.status(200).json(iUser)
-    res.json({message:"Success"})
+    //res.json({message:"Success"})
     }
     catch(error){
       res.json({message:"Signup Failed", error: error.message})
