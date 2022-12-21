@@ -20,7 +20,7 @@ const createInstructor = async (req, res) => {
         const encryptedPassword = await bcrypt.hash(password,10)
         const instructor = await Instructor.create({
           username,
-          encryptedPassword,
+          password: encryptedPassword,
           country,
           email,
           miniBio,
