@@ -2,13 +2,15 @@ const cTrainee = require("../models/cTraineeModel");
 const mongoose = require("mongoose");
 //POST a corporate trainee
 const Course = require("../models/courseModel");
+const bcrypt = require("bcrypt");
 const { json } = require("body-parser");
 const User = require("../models/userModel");
 const Admin = require("../models/adminModel");
 
 //POST a corporate trainee
 const createCTrainee = async (req, res) => {
-  if(await Admin.findById(req.user._id)){const {
+  if(await Admin.findById(req.user._id)){
+    const {
     firstname,
     lastname,
     username,
@@ -19,74 +21,44 @@ const createCTrainee = async (req, res) => {
     grades,
   } = req.body;
 
-  // add ctrainee to DB
-  try {
-    const ctrainee = await cTrainee.create({
-      firstname,
-      lastname,
-      username,
-      password,
-      email,
-      country,
-      courses,
-      grades,
-    });
-    const dbUser =  new User({
-      username: username,
-      password : password,
-      role: "cTrainee"
-  });
-  dbUser.save();
-    res.status(200).json(ctrainee);
-  } catch (error) {
-    res.status(400).json({ error: error.message });
-  }}
-
-  
-};
-
-//only need username, password and email on creation
-
-/*const createCTrainee = async (req, res) => {
-  const {
-    firstName,
-    lastName,
-    username,
-    password,
-    email,
-    country,
-    credNumber,
-    credCCV,
-    credExpDate,
-    courses,
-  } = req.body;
-  try {
-    const ctrainee = await cTrainee.create({
-      firstName,
-      lastName,
-      username,
-      password,
-      email,
-      country,
-      credNumber,
-      credCCV,
-      credExpDate,
-      courses,
-    });
-    //Instructor.create() is async that's why we put async around the handler fn, so u can use await right here
-    //now we're storing the response of Instructor.create() (which is the doc created along with its is) in Instructor
-    //inside create, u pass thru an object representing the doc u wanna create
-
-    //status 200 to say everything is okay, and send back an obj which is the Instructor created
-    res.status(200).json(ctrainee);
-  } catch (error) {
-    res.status(400).json({ error: error.message });
+  const takenUsername = await User.findOne({username: username})
+    if (takenUsername){
+      res.json({message:"Username is taken"})
+    }
+    else{
+      try {
+        const encryptedPassword = await bcrypt.hash(password,10)
+        const ctrainee = await cTrainee.create({
+          firstname,
+          lastname,
+          username,
+          encryptedPassword,
+          email,
+          country,
+          courses,
+          grades,
+        });
+        const dbUser =  new User({
+          username: username,
+          password : encryptedPassword,
+          role: "cTrainee"
+      });
+        dbUser.save();
+        res.status(200).json(ctrainee);
+      } catch (error) {
+        res.status(400).json({ message: "Signup Failed", error: error.message });
+      }
+    }
   }
-};*/
+  else{
+    res.status(400).json({ error: "Access Restriced" })
+  } 
+};
 
 //UPDATE a corporate trainee
 const updateCTrainee = async (req, res) => {
-  const id = req.query.id;
+  if(await Admin.findById(req.user._id)){
+    const id = req.query.id;
 
   if (!mongoose.Types.ObjectId.isValid(id)) {
     return res.status(404).json({ error: "No such Corporate Trainee" });
@@ -104,6 +76,10 @@ const updateCTrainee = async (req, res) => {
   }
 
   res.status(200).json(ctrainee);
+  }
+  else{
+    res.status(400).json({ error: "Access Restriced" })
+  } 
 };
 
 //DELETE a corporate trainee
@@ -124,32 +100,37 @@ const getAllCTrainee = (req, res) => {
 
 const getRegisteredCourses = async (req, res) => {
   //get course id's from courses array of ctrainee
-  const ctraineeCourses = (
-    await cTrainee
-      .findById({ _id: req.user._id })
-      .select("courses")
-  ).courses;
-  let courses = [];
-  for (i = 0; i < ctraineeCourses.length; i++) {
-    let course = await Course.aggregate([
-      {
-        $lookup: {
-          from: "instructors",
-          localField: "instructor",
-          foreignField: "_id",
-          as: "instructorData",
+  if(await cTrainee.findById(req.user._id)){
+    const ctraineeCourses = (
+      await cTrainee
+        .findById({ _id: req.user._id })
+        .select("courses")
+    ).courses;
+    let courses = [];
+    for (i = 0; i < ctraineeCourses.length; i++) {
+      let course = await Course.aggregate([
+        {
+          $lookup: {
+            from: "instructors",
+            localField: "instructor",
+            foreignField: "_id",
+            as: "instructorData",
+          },
         },
-      },
-      {
-        $unwind: "$instructorData",
-      },
-      {
-        $match: { _id : ctraineeCourses[i] },
-      }
-    ])
-    courses.push(course[0])
+        {
+          $unwind: "$instructorData",
+        },
+        {
+          $match: { _id : ctraineeCourses[i] },
+        }
+      ])
+      courses.push(course[0])
+    }
+    res.status(200).json(courses);
   }
-  res.status(200).json(courses);
+  else{
+    res.status(400).json({ error: "Access Restriced" })
+  }
 };
 
 const getGrade = async (req, res) => {

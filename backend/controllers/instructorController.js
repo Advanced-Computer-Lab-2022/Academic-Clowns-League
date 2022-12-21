@@ -3,58 +3,41 @@ const Course = require("../models/courseModel");
 const iTrainee = require("../models/iTraineeModel");
 const cTrainee = require("../models/cTraineeModel");
 const mongoose = require("mongoose");
+const bcrypt = require("bcrypt");
 const nodemailer = require("nodemailer");
 const User = require("../models/userModel");
 const Admin = require("../models/adminModel");
-// create new Instructor
-
-/*const createInstructor = async (req, res) => {
-  const { username, password, country, ratings, reviews, email, miniBio } =
-    req.body;
-
-  //add instructor to DB
-  try {
-    const instructor = await Instructor.create({
-      username,
-      password,
-      country,
-      ratings,
-      reviews,
-      email,
-      miniBio,
-    });
-    res.status(200).json(instructor);
-  } catch (error) {
-    res.status(400).json({ error: error.message });
-  }
-};*/
 
 const createInstructor = async (req, res) => {
-  if(await Admin.findById(req.user._id)){const { username, password, country, email, miniBio, name } = req.body;
-  try {
-    const instructor = await Instructor.create({
-      username,
-      password,
-      country,
-      email,
-      miniBio,
-      name,
-    });
-    const dbUser =  new User({
-      username: username,
-      password : password,
-      role: "Instructor"
-  });
-  dbUser.save();
-    //Instructor.create() is async that's why we put async around the handler fn, so u can use await right here
-    //now we're storing the response of Instructor.create() (which is the doc created along with its is) in Instructor
-    //inside create, u pass thru an object representing the doc u wanna create
-
-    //status 200 to say everything is okay, and send back an obj which is the Instructor created
-    res.status(200).json(instructor);
-  } catch (error) {
-    res.status(400).json({ error: error.message });
-  }}
+  if(await Admin.findById(req.user._id)){
+    const { username, password, country, email, miniBio, name } = req.body;
+    const takenUsername = await User.findOne({username: username})
+    if (takenUsername){
+      res.json({message:"Username is taken"})
+    }
+    else{
+      try {
+        const encryptedPassword = await bcrypt.hash(password,10)
+        const instructor = await Instructor.create({
+          username,
+          encryptedPassword,
+          country,
+          email,
+          miniBio,
+          name,
+        });
+        const dbUser =  new User({
+          username: username,
+          password : encryptedPassword,
+          role: "Instructor"
+      });
+        dbUser.save();
+        res.status(200).json(instructor);
+      } catch (error) {
+        res.status(400).json({ message: "Signup Failed", error: error.message });
+      }
+    }
+  }
   else{
     res.status(400).json({ error: "Access Restriced" })
   }
@@ -105,12 +88,15 @@ const rateInstructor = async (req, res) => {
   else{
     return res.status(404).json({error: 'you have already rated this instructor'})
   }}
-
+  else{
+    res.status(400).json({ error: "Access Restriced" })
+  }
 
 };
 //UPDATE an individual Instructor
 const resetPassword = async (req, res) => {
-  const id = req.query.id;
+  if(await Instructor.findById(req.user._id)){
+    const id = req.query.id;
 
   /* if (!mongoose.Types.ObjectId.isValid(id)) {
     return res.status(404).json({ error: "No such Instructor" });
@@ -164,10 +150,15 @@ const resetPassword = async (req, res) => {
   }
 
   res.status(200).json(instructor);
+  }
+  else{
+    res.status(400).json({ error: "Access Restriced" })
+  }
 };
 
 const updateInstructor = async (req, res) => {
-  const id = req.query.id;
+  if(await Instructor.findById(req.user._id)){
+    const id = req.query.id;
 
   if (!mongoose.Types.ObjectId.isValid(id)) {
     return res.status(404).json({ error: "No such Instructor" });
@@ -185,6 +176,10 @@ const updateInstructor = async (req, res) => {
   }
 
   res.status(200).json(instructor);
+  }
+  else{
+    res.status(400).json({ error: "Access Restriced" })
+  }
 };
 
 //DELETE an individual Instructor
@@ -194,7 +189,8 @@ const deleteInstructor = (req, res) => {
 
 //GET a single individual Instructor
 const getInstructor = async (req, res) => {
-  // const { id } = req.params
+  if(await Instructor.findById(req.user._id)){
+    // const { id } = req.params
 
   // if (!mongoose.Types.ObjectId.isValid(id)) {
   // return res.status(404).json({error: 'No such instructor'})
@@ -208,6 +204,10 @@ const getInstructor = async (req, res) => {
   //}
 
   res.status(200).json(instructor);
+  }
+  else{
+    res.status(400).json({ error: "Access Restriced" })
+  }
 };
 
 //GET all individual Instructors
@@ -260,6 +260,9 @@ const reviewInstructor = async (req, res) => { //get the course id as query, and
   } catch (error) {
     res.status(400).json({ error: error.message });
 }}
+else{
+  res.status(400).json({ error: "Access Restriced" })
+}
 
 };
 
@@ -288,6 +291,9 @@ const editMyInstructorReview = async (req, res) => {
   } catch (error) {
     res.status(400).json({ error: error.message });
 }}
+else{
+  res.status(400).json({ error: "Access Restriced" })
+}
  
 };
 
@@ -317,6 +323,9 @@ const deleteMyInstructorReview = async (req, res) => {
   } catch (error) {
     res.status(400).json({ error: error.message });
 }}
+else{
+  res.status(400).json({ error: "Access Restriced" })
+}
 
 };
 

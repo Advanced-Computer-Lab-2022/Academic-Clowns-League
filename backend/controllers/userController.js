@@ -13,17 +13,13 @@ require('dotenv').config()
 const createUser = async (req, res) => {
     const user = req.body;
     const takenUsername = await User.findOne({username:user.username})
-    
 
     if (takenUsername)
         res.json({message:"Username is taken"})
-    else{user.password = await bcrypt.hash(req.body.password,10)
-    const dbUser = new User({
-        username: user.username.toLowerCase(),
-        password : user.password,
-        role: user.role
-    })
-    const iUser = new iTrainee({
+    else{
+    try{
+      user.password = await bcrypt.hash(req.body.password,10)
+      const iUser = await iTrainee.create({
         username: user.username.toLowerCase(),
         password : user.password,
         firstname:user.firstname,
@@ -32,47 +28,53 @@ const createUser = async (req, res) => {
         gender:user.gender,
         
     })
-dbUser.save()
-iUser.save()
-res.json({message:"Success"})
+      const dbUser = new User({
+        username: user.username.toLowerCase(),
+        password : user.password,
+        role: "iTrainee"
+    })
+    dbUser.save()
+    res.status(200).json(iUser)
+    res.json({message:"Success"})
+    }
+    catch(error){
+      res.json({message:"Signup Failed", error: error.message})
+    }
     }   
 };
 
 const loginUser = async (req, res) => {
- 
- 
+
     const userLoggingIn = req.body;
-   await User.findOne({username:userLoggingIn.username}).then(dbUser => {
+    if(userLoggingIn.username != null && userLoggingIn.password != null){
+      await User.findOne({username:userLoggingIn.username}).then(dbUser => {
         if(!dbUser){
             console.log("Incorrect Username")
             return res.json({
-                message:"invalid username or password"
+                message:"Invalid Username or Password"
             })
         }
         bcrypt.compare(userLoggingIn.password,dbUser.password).then(async isCorrect=>
             {       if(isCorrect){
-                   
-                   
-
                     if(dbUser.role == "iTrainee"){
                          var payload= await iTrainee.findOne({username:dbUser.username})
-                         var role = "itrainee"
+                         var role = "iTrainee"
                         //console.log("itrainee",payload,dbUser.username)
                     }
                     if(dbUser.role == "cTrainee"){
                          var payload= await cTrainee.findOne({username:dbUser.username})
-                         var role = "ctrainee"
+                         var role = "cTrainee"
                         //console.log(payload)
                     }
 
                     if(dbUser.role == "Instructor"){
                          var payload= await Instructor.findOne({username:dbUser.username})
-                         var role = "instructor"
+                         var role = "Instructor"
                         }
                          
                     if(dbUser.role == "Admin"){
                           var payload= await Admin.findOne({username:dbUser.username})
-                          var role = "admin"
+                          var role = "Admin"
                         }
                     
                     
@@ -89,12 +91,15 @@ const loginUser = async (req, res) => {
                          
             } else{
                 return res.json({
-                    message:"Invalid Username or password"
+                    message:"Invalid Username or Password"
                 })
             }
             })
     })
-
+    }
+    else{
+      res.json({message: "Please enter all fields"})
+    }
 };
 const requireAuth = (req, res, next) => {
     const token = req.cookies.jwtoken
@@ -115,6 +120,7 @@ const requireAuth = (req, res, next) => {
       
     }
   }
+
 const logOut  = async (req, res) => {
    res.cookie('jwtoken', "", { httpOnly: false, maxAge: -1 })
    return res.json({

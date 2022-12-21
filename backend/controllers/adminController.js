@@ -1,22 +1,34 @@
 const Admin = require("../models/adminModel");
 const User = require("../models/userModel");
+const bcrypt = require("bcrypt");
 
 // create new Admin
 
 const createAdmin = async (req, res) => {
-  const { username, password } = req.body;
-
-  try {
-    const admin = await Admin.create({ username, password });
-    const dbUser =  new User({
-      username: username,
-      password : password,
-      role: "Admin"
-  });
-  dbUser.save();
-    res.status(200).json(admin);
-  } catch (error) {
-    res.status(400).json({ error: error.message });
+  if(await Admin.findById(req.user._id)){
+    const { username, password } = req.body;
+    const takenUsername = await User.findOne({username: username})
+    if (takenUsername){
+      res.json({message:"Username is taken"})
+    }
+    else{
+      try {
+        const encryptedPassword = await bcrypt.hash(password,10)
+        const admin = await Admin.create({ username: username, password: encryptedPassword });
+        const dbUser =  new User({
+          username: username,
+          password : encryptedPassword,
+          role: "Admin"
+      });
+      dbUser.save();
+      res.status(200).json(admin);
+      } catch (error) {
+        res.json({message:"Signup Failed", error: error.message})
+      }
+    }
+  }
+  else{
+    res.status(400).json({ error: "Access Restriced" })
   }
 };
 

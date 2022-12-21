@@ -1,11 +1,14 @@
 import React, { useContext, useState } from "react";
 import { CurrencyContext } from "../contexts/CurrencyContext";
 import SubtitleMap from "./subtitleMap";
+import { MDBBtn } from 'mdb-react-ui-kit';
+import { useNavigate } from "react-router-dom";
 //import {useLocation} from 'react-router-dom';
 //const cities = require('../country-json/src/country-by-currency-code.json')
 
 const CourseDetails = ({ course }) => {
   const {currency, rate} = useContext(CurrencyContext)
+  const navigate = useNavigate()
   const price = Math.round(course.price * rate)
   let message = `Price after ${course.discount}% discount is applied -- original price = ${price} ${currency}`
   if(course.discountApplied === false){
@@ -24,6 +27,10 @@ const CourseDetails = ({ course }) => {
 
   return (
     <div className="course-details">
+      <div className="course-video">
+      <iframe width="100" height="100" src={course.previewURL} frameBorder="0" allowFullScreen></iframe>
+      </div>
+      <div className="course-info">
       <h4>{course.title}</h4>
 
       <p>
@@ -53,7 +60,7 @@ const CourseDetails = ({ course }) => {
           {course.instructorData.name}
         </p>
         <p>
-        <strong>Subtitles: </strong>
+        <strong>Course Outline: </strong>
         <ol>
         {course.subtitles &&
           course.subtitles.map((subtitle) => (
@@ -65,15 +72,32 @@ const CourseDetails = ({ course }) => {
         </ol>
         </p>
       </div>
-      <button
+      <MDBBtn rounded
         style={{
-          backgroundColor: isActive ? "salmon" : "",
+          backgroundColor: isActive ? "#C00418" : "#607D8B",
           color: isActive ? "white" : "",
+          height: 35,
+          textAlign: "center",
+          borderColor: "#78909C"
         }}
         onClick={handleClick}
       >
         View Details
-      </button>
+      </MDBBtn>
+      <MDBBtn rounded
+        style={{
+          backgroundColor: "#607D8B",
+          color: isActive ? "white" : "",
+          height: 35,
+          textAlign: "center",
+          marginLeft: 10,
+          borderColor: "#78909C"
+        }}
+        onClick={() => navigate('/login')}
+      >
+        Register for Course
+      </MDBBtn>
+      </div>
     </div>
   );
 };

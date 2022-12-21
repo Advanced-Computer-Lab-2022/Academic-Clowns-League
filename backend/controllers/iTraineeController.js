@@ -85,32 +85,37 @@ const getAllITrainee = (req, res) => {
 
 const getRegisteredCourses = async (req, res) => {
   //get course id's from courses array of ctrainee
-  const itraineeCourses = (
-    await iTrainee
-      .findById({ _id: req.user._id })
-      .select("courses")
-  ).courses;
-  let courses = [];
-  for (i = 0; i < itraineeCourses.length; i++) {
-    let course = await Course.aggregate([
-      {
-        $lookup: {
-          from: "instructors",
-          localField: "instructor",
-          foreignField: "_id",
-          as: "instructorData",
+  if(await iTrainee.findById(req.user._id)){
+    const itraineeCourses = (
+      await iTrainee
+        .findById({ _id: req.user._id })
+        .select("courses")
+    ).courses;
+    let courses = [];
+    for (i = 0; i < itraineeCourses.length; i++) {
+      let course = await Course.aggregate([
+        {
+          $lookup: {
+            from: "instructors",
+            localField: "instructor",
+            foreignField: "_id",
+            as: "instructorData",
+          },
         },
-      },
-      {
-        $unwind: "$instructorData",
-      },
-      {
-        $match: { _id : itraineeCourses[i] },
-      },
-    ])
-    courses.push(course[0]);
+        {
+          $unwind: "$instructorData",
+        },
+        {
+          $match: { _id : itraineeCourses[i] },
+        },
+      ])
+      courses.push(course[0]);
+    }
+    res.status(200).json(courses);
   }
-  res.status(200).json(courses);
+  else{
+    res.status(400).json({ error: "Access Restriced" })
+  }
 };
 
 //this trainee id doesn't have grades, make a trainee with grades
@@ -160,6 +165,9 @@ const payForCourse = async(req, res) => {
   });
 
   }
+  else{
+    res.status(400).json({ error: "Access Restriced" })
+  }
 
 };
 
@@ -174,6 +182,9 @@ const payForCourse = async(req, res) => {
 
     const response = await iTrainee.findOneAndUpdate({_id: req.user._id}, {courses: itraineeCourses});
     res.status(200).json(response)}
+    else{
+      res.status(400).json({ error: "Access Restriced" })
+    }
  
 };
 
@@ -188,8 +199,9 @@ const applyRefund = async(req, res) => {
   const response = await iTrainee.findOneAndUpdate({_id: req.user._id}, {wallet: newWallet});
 
   res.status(200).json(response);
-
-
+  }
+  else{
+    res.status(400).json({ error: "Access Restriced" })
   }
   
 }

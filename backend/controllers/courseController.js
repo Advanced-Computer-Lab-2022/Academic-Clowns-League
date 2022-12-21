@@ -2,10 +2,10 @@
 const Course = require("../models/courseModel");
 const iTrainee = require("../models/iTraineeModel");
 const cTrainee = require("../models/cTraineeModel");
+const Instructor = require("../models/instructorModel");
 const mongoose = require("mongoose");
 const nodemailer = require("nodemailer");
 const Admin = require("../models/adminModel");
-const user = require("../controllers/userController");
 //const user = require("../models/userModel");
 
 const PDFDocument = require("pdfkit");
@@ -55,7 +55,9 @@ if(await Instructor.findById(req.user._id)){
     },
   ]);
   res.status(200).json(courses);}
-  
+  else{
+    res.status(400).json({ error: "Access Restriced" })
+  }
 };
 
 //get a single course
@@ -65,7 +67,8 @@ const getCourse = (req, res) => {
 
 //delete a course
 const deleteCourse = async (req, res) => {
-  if(await Instructor.findById(req.user._id)){const id = req.query.id;
+  if(await Instructor.findById(req.user._id)){
+  const id = req.query.id;
 
   if (!mongoose.Types.ObjectId.isValid(id)) {
     return res.status(404).json({ error: "No such Course" });
@@ -76,7 +79,9 @@ const deleteCourse = async (req, res) => {
   if (!course) {
     return res.status(400).json({ error: "No such Course" });
   }}
-  
+  else{
+    res.status(400).json({ error: "Access Restriced" })
+  }
   
 };
 
@@ -124,6 +129,9 @@ const rateCourse = async (req, res) => {
       .status(404)
       .json({ error: "you have already rated this course" });
   }}
+  else{
+    res.status(400).json({ error: "Access Restriced" })
+  }
 
 };
 
@@ -146,6 +154,9 @@ const updateCourse = async (req, res) => {
   if (!course) {
     return res.status(400).json({ error: "No such Course" });
   }}
+  else{
+    res.status(400).json({ error: "Access Restriced" })
+  }
  
 };
 //add course exercise
@@ -165,6 +176,9 @@ const addCourseExercise = async (req, res) => {
     { exercises: courseEx }
   );
   res.status(200).json(course);}
+  else{
+    res.status(400).json({ error: "Access Restriced" })
+  }
 
 };
 
@@ -214,7 +228,9 @@ const createCourse = async (req, res) => {
   } catch (error) {
     res.status(400).json({ error: error.message });
   }}
- 
+  else{
+    res.status(400).json({ error: "Access Restriced" })
+  }
 };
 
 //filter based on subject and/or rating and/or price
@@ -610,7 +626,8 @@ const searchAllCourses = async (req, res) => {
 
 const searchInstrCourses = async (req, res) => {
   //console.log(req.user)
-  const THEsearchterm = req.query.searchTerm;
+  if(await Instructor.findById(req.user._id)){
+    const THEsearchterm = req.query.searchTerm;
   console.log(req.user.name)
   var re = new RegExp(THEsearchterm, "i");
   //console.log(THEsearchterm)
@@ -636,6 +653,10 @@ const searchInstrCourses = async (req, res) => {
     },
   ]);
   res.status(200).json(courses);
+  }
+  else{
+    res.status(400).json({ error: "Access Restriced" })
+  }
 };
 
 //filter based on price for INSTRUCTOR
@@ -819,7 +840,9 @@ const filterInstPriceSub = async (req, res) => {
     ]);
     res.status(200).json(courses);
   }}
- 
+  else{
+    res.status(400).json({ error: "Access Restriced" })
+  }
 };
 
 const viewCorrectAnswer = async (req, res) => {
@@ -844,7 +867,9 @@ const viewCorrectAnswer = async (req, res) => {
     break;
   }
   res.status(200).json(reply);}
-  
+  else{
+    res.status(400).json({ error: "Access Restriced" })
+  }
 };
 
 const addCourseSub = async (req, res) => {
@@ -873,10 +898,10 @@ const addCourseSub = async (req, res) => {
     { new: true }
   );
   res.status(200).json(course);
-};
-
-
-
+}
+else{
+  res.status(400).json({ error: "Access Restriced" })
+}
 
 };
 const addCoursePreview = async (req, res) => {
@@ -890,17 +915,14 @@ const addCoursePreview = async (req, res) => {
     { new: true }
   );
   res.status(200).json(course);}
+  else{
+    res.status(400).json({ error: "Access Restriced" })
+  }
 }
-/*
-const openMyCourse = async (req, res) => {
-  const id = req.query.id;
-  const course = await Course.findById({ _id: id });
-  res.status(200).json(course);
-};
-*/
 
 const addNotes = async (req, res) => {
-  const id = req.query.id;
+  if(await iTrainee.findById(req.user._id) || await cTrainee.findById(req.user._id)){
+    const id = req.query.id;
   //const id = "6384b23ffa8e271ab3db7d0e";
   console.log(id);
   const traineeID = req.user._id;
@@ -946,10 +968,15 @@ const addNotes = async (req, res) => {
     );
     res.status(200).json(course);
   }
+  }
+  else{
+    res.status(400).json({ error: "Access Restriced" })
+  }
 };
 
 const printNotePDF = async (req, res, next) => {
-  const id = req.query.id;
+  if(await iTrainee.findById(req.user._id) || await cTrainee.findById(req.user._id)){
+    const id = req.query.id;
   //const id = "6384b23ffa8e271ab3db7d0e";
   //console.log(id);
   const traineeID = req.user._id;
@@ -992,6 +1019,10 @@ const printNotePDF = async (req, res, next) => {
     () => stream.end(),
     notes
   );
+  }
+  else{
+    res.status(400).json({ error: "Access Restriced" })
+  }
 };
 
 function buildNotePDF(dataCallback, endCallback, notes) {
@@ -1003,15 +1034,20 @@ function buildNotePDF(dataCallback, endCallback, notes) {
 }
 
 const printCertificatePDF = async (req, res) => {
-  const stream = res.writeHead(200, {
-    "Content-Type": "application/pdf",
-    "Content-Disposition": "attachement;filename=Cetificate.pdf",
-  });
-
-  buildCertificatePDF(
-    (chunk) => stream.write(chunk),
-    () => stream.end()
-  );
+  if(await iTrainee.findById(req.user._id) || await cTrainee.findById(req.user._id)){
+    const stream = res.writeHead(200, {
+      "Content-Type": "application/pdf",
+      "Content-Disposition": "attachement;filename=Cetificate.pdf",
+    });
+  
+    buildCertificatePDF(
+      (chunk) => stream.write(chunk),
+      () => stream.end()
+    );
+  }
+  else{
+    res.status(400).json({ error: "Access Restriced" })
+  }
 };
 
 function buildCertificatePDF(dataCallback, endCallback) {
@@ -1046,12 +1082,15 @@ const openMyCourse = async (req, res) => {
     },
   ]);
   res.status(200).json(courses[0]);}
-  
+  else{
+    res.status(400).json({ error: "Access Restriced" })
+  }
 
 };
 
 const moneyOwed = async (req, res) => {
-  const courses = await Course.find({instructor: req.user._id});
+  if(await Instructor.findById(req.user._id)){
+    const courses = await Course.find({instructor: req.user._id});
   let money = 0;
 
   for(let i = 0; i < courses.length; i++){
@@ -1063,13 +1102,19 @@ const moneyOwed = async (req, res) => {
     }
   }
 
-  res.status(200).json(money);
+  const instructor = await Instructor.findOneAndUpdate({_id: req.user._id}, {wallet: money})
+
+  res.status(200).json(instructor);
+  }
+  else{
+    res.status(400).json({ error: "Access Restriced" })
+  }
 }
 
 
 const sendCertificateMail = async (req, res) => {
   // const id = req.query.id;
-  traineeEmail = "melnaggar815@gmail.com";
+  traineeEmail = req.user.email;
   let mailTransporter = nodemailer.createTransport({
     service: "gmail",
     auth: {
@@ -1149,102 +1194,120 @@ const adminAddDiscount = async (req, res) => {
   } catch (error) {
     res.status(400).json({ error: error.message });
   }}
+  else{
+    res.status(400).json({ error: "Access Restriced" })
+  }
   
 };
 
 const reviewCourse = async (req, res) => {
-  try {
-    const traineeId = req.user._id; //replace by id of the loggedin person
-
-    const id = req.query.id;
-    const reviewContent = req.body.content;
-    let theTrainee;
-      theTrainee = await cTrainee.findOne({ _id: traineeId });
-      if (theTrainee ==null){
-        theTrainee = await iTrainee.findOne({ _id: traineeId });
+  if(await iTrainee.findById(req.user._id) || await cTrainee.findById(req.user._id)){
+    try {
+      const traineeId = req.user._id; //replace by id of the loggedin person
+  
+      const id = req.query.id;
+      const reviewContent = req.body.content;
+      let theTrainee;
+        theTrainee = await cTrainee.findOne({ _id: traineeId });
+        if (theTrainee ==null){
+          theTrainee = await iTrainee.findOne({ _id: traineeId });
+        }
+        if (theTrainee ==null){
+          res.status(400).json({ error: "Invalid Trainee Id" });
+        }
+      const traineeName = theTrainee.firstname +" "+theTrainee.lastname;
+      review = 
+      {
+        content: reviewContent,
+        traineeId: traineeId,
+        traineeName: traineeName
       }
-      if (theTrainee ==null){
-        res.status(400).json({ error: "Invalid Trainee Id" });
+  
+      const courseReviews = (await Course.findById({ _id: id }).select("reviews")).reviews;
+  
+      for (var i =0;i<courseReviews.length;i++){
+        if (courseReviews[i].traineeId == traineeId){
+          res.status(400).json({ error: "You already reviewed that course!" });
+          return;
+        }
       }
-    const traineeName = theTrainee.firstname +" "+theTrainee.lastname;
-    review = 
-    {
-      content: reviewContent,
-      traineeId: traineeId,
-      traineeName: traineeName
-    }
-
-    const courseReviews = (await Course.findById({ _id: id }).select("reviews")).reviews;
-
-    for (var i =0;i<courseReviews.length;i++){
-      if (courseReviews[i].traineeId == traineeId){
-        res.status(400).json({ error: "You already reviewed that course!" });
-        return;
-      }
-    }
-
-    
-    courseReviews.push(review);
-    const course = await Course.findByIdAndUpdate(
-      { _id: id },
-      { reviews: courseReviews },
-      { new: true }
-    );
-    res.status(200).json(course);
-  } catch (error) {
-    res.status(400).json({ error: error.message });
-}
+  
+      
+      courseReviews.push(review);
+      const course = await Course.findByIdAndUpdate(
+        { _id: id },
+        { reviews: courseReviews },
+        { new: true }
+      );
+      res.status(200).json(course);
+    } catch (error) {
+      res.status(400).json({ error: error.message });
+  }
+  }
+  else{
+    res.status(400).json({ error: "Access Restriced" })
+  }
 };
 
 const editMyCourseReview = async (req, res) => {
-  try {
-    const traineeId = req.user._id; //replace by id of the loggedin person
-
-    const id = req.query.id;
-    const reviewContent = req.body.content;
-
-    const courseReviews = (await Course.findById({ _id: id }).select("reviews")).reviews;
-
-    for (var i =0;i<courseReviews.length;i++){
-      if (courseReviews[i].traineeId == traineeId){
-        courseReviews[i].content=reviewContent;
+  if(await iTrainee.findById(req.user._id) || await cTrainee.findById(req.user._id)){
+    try {
+      const traineeId = req.user._id; //replace by id of the loggedin person
+  
+      const id = req.query.id;
+      const reviewContent = req.body.content;
+  
+      const courseReviews = (await Course.findById({ _id: id }).select("reviews")).reviews;
+  
+      for (var i =0;i<courseReviews.length;i++){
+        if (courseReviews[i].traineeId == traineeId){
+          courseReviews[i].content=reviewContent;
+        }
       }
-    }
-    const course = await Course.findByIdAndUpdate(
-      { _id: id },
-      { reviews: courseReviews },
-      { new: true }
-    );
-    res.status(200).json(course);
-  } catch (error) {
-    res.status(400).json({ error: error.message });
-}
+      const course = await Course.findByIdAndUpdate(
+        { _id: id },
+        { reviews: courseReviews },
+        { new: true }
+      );
+      res.status(200).json(course);
+    } catch (error) {
+      res.status(400).json({ error: error.message });
+  }
+  }
+  else{
+    res.status(400).json({ error: "Access Restriced" })
+  }
 };
 
 const deleteMyCourseReview = async (req, res) => {
-  try {
-    const traineeId = req.user._id; //replace by id of the loggedin person
-    const id = req.query.id;
-
-    var courseReviews = (await Course.findById({ _id: id }).select("reviews")).reviews;
-
-
-    for (var i =0;i<courseReviews.length;i++){
-      if (courseReviews[i].traineeId == traineeId){
-        const removed = courseReviews.splice(i,1); //splice returns the removed element not the list after the removal
-        break;
+  if(await iTrainee.findById(req.user._id) || await cTrainee.findById(req.user._id)){
+    try {
+      const traineeId = req.user._id; //replace by id of the loggedin person
+      const id = req.query.id;
+  
+      var courseReviews = (await Course.findById({ _id: id }).select("reviews")).reviews;
+  
+  
+      for (var i =0;i<courseReviews.length;i++){
+        if (courseReviews[i].traineeId == traineeId){
+          const removed = courseReviews.splice(i,1); //splice returns the removed element not the list after the removal
+          break;
+        }
       }
-    }
-
-    const course = await Course.findByIdAndUpdate(
-      { _id: id },
-      { reviews: courseReviews },
-      { new: true }
-    );
-    res.status(200).json(course);
-  } catch (error) {
-    res.status(400).json({ error: error.message });
-}
+  
+      const course = await Course.findByIdAndUpdate(
+        { _id: id },
+        { reviews: courseReviews },
+        { new: true }
+      );
+      res.status(200).json(course);
+    } catch (error) {
+      res.status(400).json({ error: error.message });
+  }
+  }
+  else{
+    res.status(400).json({ error: "Access Restriced" })
+  }
 };
 
 module.exports = {

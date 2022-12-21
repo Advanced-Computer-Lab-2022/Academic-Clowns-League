@@ -45,6 +45,11 @@ const InstructorSchema = new Schema(
     rating: {
       type: Number,
     },
+    wallet:{
+      type: Number,
+      default: 0,
+      min: 0
+    }
   },
   { timestamps: true }
 );

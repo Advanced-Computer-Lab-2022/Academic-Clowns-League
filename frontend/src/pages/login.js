@@ -37,13 +37,13 @@ const Login = () => {
             setUsername("");
             setPassword("");
             setError(null);
-            if(json.role == "itrainee"){
+            if(json.role == "iTrainee"){
                 navigate("/individualTraineeHome")
             }
-            else if(json.role == "ctrainee"){
+            else if(json.role == "cTrainee"){
                 navigate("/corporateTraineeHome")
             }
-            else if(json.role == "instructor"){
+            else if(json.role == "Instructor"){
                 navigate("/instructorHome")
             }
             else{
