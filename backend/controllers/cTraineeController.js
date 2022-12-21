@@ -32,7 +32,7 @@ const createCTrainee = async (req, res) => {
           firstname,
           lastname,
           username,
-          encryptedPassword,
+          password: encryptedPassword,
           email,
           country,
           courses,
