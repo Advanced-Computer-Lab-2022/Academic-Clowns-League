@@ -28,10 +28,20 @@ const {
   adminAddDiscount,
   reviewCourse,
   editMyCourseReview,
-  deleteMyCourseReview
+  deleteMyCourseReview,
+  addToProgress,
+  getMyProgress
 } = require("../controllers/courseController");
 
 const router = express.Router();
+
+
+//get my progress
+router.get("/getMyProgress",requireAuth, getMyProgress);
+
+//add to progress
+router.get("/addToProgress",requireAuth, addToProgress);
+
 
 //delete my course review
 router.patch("/deleteMyCourseReview",requireAuth,deleteMyCourseReview);

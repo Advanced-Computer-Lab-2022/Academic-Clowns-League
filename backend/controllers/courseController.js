@@ -165,10 +165,12 @@ const addCourseExercise = async (req, res) => {
   const { question, option1, option2, option3, option4, answer } = req.body;
   const courseEx = (await Course.findById({ _id: id }).select("exercises"))
     .exercises;
+  const index = courseEx.length;
   exercise = {
     question: question,
     options: [option1, option2, option3, option4],
     answer: answer,
+    index: index
   };
   courseEx.push(exercise);
   const course = await Course.findByIdAndUpdate(
@@ -1063,7 +1065,8 @@ function buildCertificatePDF(dataCallback, endCallback) {
 }
 
 const openMyCourse = async (req, res) => {
-  if(await Instructor.findById(req.user._id)){  const id = req.query.id;
+  if(await Instructor.findById(req.user._id) || await iTrainee.findById(req.user._id) || await cTrainee.findById(req.user._id) )
+  {  const id = req.query.id;
   const newId = mongoose.Types.ObjectId(id);
   const courses = await Course.aggregate([
     {
@@ -1310,6 +1313,64 @@ const deleteMyCourseReview = async (req, res) => {
   }
 };
 
+const addToProgress = async (req, res) => {
+  const courseId = req.query.courseId;
+  const component = req.query.component;
+  
+  const loggedInTraineeID = req.user._id;
+  let traineesProgress = (await Course.findById({ _id: courseId }).select("traineesProgress")).traineesProgress;
+
+  let found = false;
+
+  for (var i =0;i<traineesProgress.length;i++){
+    if ( traineesProgress[i].traineeId == (loggedInTraineeID) && traineesProgress[i].content==component ){
+      found = true;
+      break;
+    }
+  }
+  if (found){
+    let course =await Course.findById({ _id: courseId });
+    res.status(200).json(course);
+  }
+  else{
+    progress =
+    {
+      traineeId: loggedInTraineeID,
+      content: component
+    };
+  
+    traineesProgress.push(progress);
+  
+        const course = await Course.findByIdAndUpdate(
+          { _id: courseId },
+          { traineesProgress: traineesProgress },
+          { new: true }
+        );
+        res.status(200).json(course);
+  }
+};
+
+
+const getMyProgress = async (req, res) => {
+  const courseId = req.query.courseId;
+
+  let myProgress = 0;
+  
+  let subtitles = (await Course.findById({ _id: courseId }).select("subtitles")).subtitles;
+  const totalItems = (subtitles.length + 1);
+
+  let traineesProgress = (await Course.findById({ _id: courseId }).select("traineesProgress")).traineesProgress;
+
+  for (var i =0;i<traineesProgress.length;i++){
+    if ( traineesProgress[i].traineeId == req.user._id){
+      myProgress++;
+    }
+  }
+  res.status(200).json({data:(myProgress/totalItems) * 100} );
+};
+
+
+
 module.exports = {
   getAllCourses,
   getCourse,
@@ -1336,5 +1397,7 @@ module.exports = {
   adminAddDiscount,
   reviewCourse,
   editMyCourseReview,
-  deleteMyCourseReview
+  deleteMyCourseReview,
+  addToProgress,
+  getMyProgress
 };

@@ -51,10 +51,7 @@ const courseSchema = new Schema(
         note: { type: String },
       },
     ],
-    /*{
-        type: String, //String for now, may later be updated to be of type 'Instructor'
-        required: true
-    }*/
+
     summary: {
       type: String,
       required: true,
@@ -86,16 +83,12 @@ const courseSchema = new Schema(
       },
     ],
 
-    /*
-    {
-        type: [String] //may be changed to Array of subtitles later
-    }
-    */
     exercises: [
       {
         question: String,
         options: [String],
         answer: String,
+        index: Number
       },
     ],
     discountApplied: {
@@ -105,7 +98,14 @@ const courseSchema = new Schema(
       type: Number,
       min: 0,
       default: 0
-    }
+    },
+    traineesProgress: [
+      {
+        traineeId: String,
+        content: String
+      },
+    ]
+
   },
   { timestamps: true }
 );
