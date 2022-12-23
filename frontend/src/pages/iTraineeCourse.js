@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import Subtitle from "../components/subtitle";
 import ITraineeNavbar from "../components/iTraineeNavbar";
 import Exercise from "../components/excercise";
+import YouTube from 'react-youtube';
 
 import RateCourse from "../components/rateCourse";
 import RateInstructor from "../components/rateInstructor";
@@ -12,13 +13,12 @@ import Col from "react-bootstrap/Col";
 import Accordion from 'react-bootstrap/Accordion';
 import Button from 'react-bootstrap/Button';
 import ProgressBar from 'react-bootstrap/ProgressBar';
-import Nav from 'react-bootstrap/Nav';
-import Navbar from 'react-bootstrap/Navbar';
-import NavDropdown from 'react-bootstrap/NavDropdown';
-import { NavLink } from 'react-router-dom';
+import Sidebar from "react-sidebar";
+import Form from 'react-bootstrap/Form';
+
+
 
 function getColor(submitted, chosenOption, correctAnswer, studentAnswer) {
-  console.log(studentAnswer);
  if (submitted && chosenOption == correctAnswer)
  return 'green';
  if (submitted && chosenOption == studentAnswer)
@@ -26,13 +26,21 @@ function getColor(submitted, chosenOption, correctAnswer, studentAnswer) {
 return ' black';
 }
 function getWeight(submitted, chosenOption, correctAnswer, studentAnswer) {
-  console.log(studentAnswer);
  if ( submitted && (chosenOption == correctAnswer || chosenOption == studentAnswer))
   return 'bold';
 return 'normal';
 }
+function getId(url) {
+  const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
+  const match = url.match(regExp);
+
+  return match && match[2].length === 11 ? match[2] : null;
+}
 
 const ITraineeCourse = () => {
+
+
+
   //const { id } = useParams();
 
   //to get the id from  (query, in the URL)
@@ -45,6 +53,8 @@ const ITraineeCourse = () => {
   const [submitted, setSubmitted] = useState(false);
   const [studentAnswersState, setStudentAnswersState] = useState([]);
   const [myProgress, setMyProgress] = useState(null);
+  const [notes, setNotes] = useState('');
+
 
 
   //values needed for Excercises
@@ -52,6 +62,13 @@ const ITraineeCourse = () => {
   var CorrectAnswers = [];
   var ResultDisplay = "";
 
+  const opts = {
+    height: '390',
+    width: '640',
+    playerVars: {
+      autoplay: 0,
+    },
+  };
 
   //Handles Change in RadioButton values
   const handleChange = (event) => {
@@ -93,17 +110,7 @@ const ITraineeCourse = () => {
     }
     ResultDisplay = (Result / FullMark) * 100;
     if (ResultDisplay >= 50){
-        const response = await fetch("/api/courses/addToProgress/?courseId=" + course._id+"&component=exercise");
-
-
-        const progress = await fetch("/api/courses/getMyProgress/?courseId=" + course._id);
-        const json = await progress.json();
-        if (progress.ok) {
-          setMyProgress(json);
-        }
-
-
-
+      markAsCompleted("exercise");
     }
     setGrade("Score: " + ResultDisplay+"%");
 
@@ -116,15 +123,66 @@ const ITraineeCourse = () => {
   };
 
 
+  const handleDownloadCertificate = async(event) => {
+    //const certificate = await fetch("api/courses/printCertificatePDF");
+    fetch("api/courses/printCertificatePDF").then(response => {
+      response.blob().then(blob => {
+          // Creating new object of PDF file
+          const fileURL = window.URL.createObjectURL(blob);
+          // Setting various property values
+          let alink = document.createElement('a');
+          alink.href = fileURL;
+          alink.download = 'Certificate.pdf';
+          alink.click();
+      })
+  })
+  };
+
   
 
+
+  const handleChangeNotes = event => {
+    setNotes(event.target.value);
+
+    console.log('Notes:', event.target.value);
+  };
+
+  const handleAddNotes = async(event) => {
+    event.preventDefault();
+    const noteJson = { notes};
+    const response = await fetch("/api/courses/addNotes/?id=" + id, {
+      method: "PATCH",
+      body: JSON.stringify(noteJson),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    const json = await response.json();
+    if (response.ok) {
+      console.log("Notes Added", json);
+    }
+  };
+
   const markAsCompleted = async(component) => {
+    const oldProgress = myProgress.data;
+    if (oldProgress < 100){
       const response = await fetch("/api/courses/addToProgress/?courseId=" + course._id+"&component="+component);
       const progress = await fetch("/api/courses/getMyProgress/?courseId=" + course._id);
-        const json = await progress.json();
-        if (progress.ok) {
-          setMyProgress(json);
-        }
+ const json = await progress.json();
+         setMyProgress(json);
+         if (progress.ok) {
+           
+           const newProgress = json.data;
+           if (newProgress >= 100){
+             
+             const sendEmail = await fetch("api/courses/sendCertificateMail");
+         }
+       }
+
+
+
+
+    }
 
   };
 
@@ -137,40 +195,14 @@ const ITraineeCourse = () => {
     Promise.all([resCourse.json(),resMyProgress.json()])
     ).then(([dataCourse, dataMyProgress]) =>
     {
+
       setCourse(dataCourse);
       setMyProgress(dataMyProgress);
+      console.log("USEEFFECT");
     });
   }, []);
 
 
-//the following part was all inside the curly bracket of the useEffect
-/*
-    const fetchCourse = async () => {
-      const response = await fetch("/api/courses/openMyCourse/?id=" + id);
-      const json = await response.json();
-      if (response.ok) {
-        setCourse(json);
-        if (course) {
-          for (let i = 0; i < course.exercises.length; i++) {
-            CorrectAnswers.push(course.exercises[i].answer);
-          }
-          const progress = await fetch("/api/courses/getMyProgress/?courseId=" + course._id);
-          console.log(progress);
-            const json2 = await progress.json();
-            console.log(json2);
-            setMyProgress(json2.data);
-            if (progress.ok) {
-              setMyProgress(0);
-              //console.log(myProgress);
-              if (myProgress){
-                setMyProgress(json2.data);
-                console.log(myProgress);
-              }
-            }
-        }
-      }
-    };
-    fetchCourse(); */
 
 
 
@@ -212,15 +244,8 @@ const ITraineeCourse = () => {
                       <Accordion.Header>{subtitle.title}</Accordion.Header>
                       <Accordion.Body>
                         <h4>Description: {subtitle.shortDescription}</h4>
-                        <h4>Total Hours: {subtitle.totalHours}</h4>
-                        <iframe width="480" height="360" src={subtitle.videoLink} frameBorder="0" allowFullScreen></iframe>
-                        <Button variant="danger" onClick={() => markAsCompleted(subtitle._id)}>Mark As Completed</Button>{' '}
-                      
-
-
-
-
-
+                        <h4>Total Hours: {subtitle.totalHours}</h4>     
+                        <YouTube videoId={getId(subtitle.videoLink)} opts={opts} onPlay={() => markAsCompleted(subtitle._id)} />
                       </Accordion.Body>
                     </Accordion.Item>
                   </Accordion>
@@ -304,9 +329,12 @@ const ITraineeCourse = () => {
             <RateCourse course={course} myId="637a356c54c79d632507dc8a" />
 
             <RateInstructor course={course} myId="637a356c54c79d632507dc8a" />
+
           </Col>
 
-          <Col sm={3} fixed-top style={{ backgroundColor: "#A9A9A9 " }}>
+          <Col sm={3} fixed-top style={{backgroundColor: "#A9A9A9 "}}>
+
+
             <p>
               {" "}
               <strong> Instructor: </strong> {course.instructorData.name}
@@ -324,9 +352,30 @@ const ITraineeCourse = () => {
               <strong> Total Hours: </strong> {course.hours} Hours
             </p>
 
-
             <ProgressBar animated now={myProgress.data} label={`${(myProgress.data).toString().slice(0,5)}%`} />
-            
+           
+
+    <div className="d-grid gap-2">
+      <Button variant="danger" size="lg"
+      disabled={myProgress.data==100?false:true}
+      onClick={handleDownloadCertificate}
+      >
+        Download Certificate
+      </Button>
+    </div>
+
+    <Form>
+      <Form.Group className="mb-3" controlId="formBasicNotes">
+        <Form.Label>Take Some Notes</Form.Label>
+        <Form.Control onChange={handleChangeNotes} type="text" placeholder="Start taking notes..." />
+      </Form.Group>
+
+      <Button variant="primary" type="submit" onClick={handleAddNotes}>
+        Submit
+      </Button>
+    </Form>
+    
+
           </Col>
         </Row>
       )}

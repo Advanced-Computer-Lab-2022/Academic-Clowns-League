@@ -1128,10 +1128,10 @@ const sendCertificateMail = async (req, res) => {
   let details = {
     from: "nourhan.khedr24@gmail.com",
     to: traineeEmail,
-    subject: "course certificate ",
+    subject: "CanCham Course Certificate",
 
-    html: "<h2>Congratulation!! you have successfuly completed the course</h2>",
-    text: "you can find below an attachement of your certificate,we hope you enjoyed the course",
+    html: "<h2>Congratulations! You have successfully completed a course on CanCham's Online Learning Platform.</h2>",
+    text: "Kindly find your certificate attached.",
 
     attachments: [
       {

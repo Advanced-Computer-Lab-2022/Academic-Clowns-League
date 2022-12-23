@@ -109,7 +109,7 @@ router.get("/printNotePDF", requireAuth,printNotePDF);
 
 router.get("/printCertificatePDF",requireAuth,printCertificatePDF);
 
-router.get("/sendCertificateMail", sendCertificateMail);
+router.get("/sendCertificateMail", requireAuth, sendCertificateMail);
 //Get most popular courses
 router.get("/getPopularCourses",getPopularCourses); //guest can access it
 
