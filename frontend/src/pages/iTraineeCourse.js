@@ -15,7 +15,8 @@ import Button from 'react-bootstrap/Button';
 import ProgressBar from 'react-bootstrap/ProgressBar';
 import Sidebar from "react-sidebar";
 import Form from 'react-bootstrap/Form';
-
+import Modal from 'react-bootstrap/Modal';
+import { BsFillTrashFill ,BsFillPencilFill} from "react-icons/bs";
 
 
 function getColor(submitted, chosenOption, correctAnswer, studentAnswer) {
@@ -53,9 +54,42 @@ const ITraineeCourse = () => {
   const [submitted, setSubmitted] = useState(false);
   const [studentAnswersState, setStudentAnswersState] = useState([]);
   const [myProgress, setMyProgress] = useState(null);
-  const [notes, setNotes] = useState('');
+  const [note, setNote] = useState('');
+  const [noteMessage, setNoteMessage] = useState('');
 
+  const [myCourseReview, setMyCourseReview] = useState(null);
+  const [tempCourseReview, setTempCourseReview] = useState('');
+  const [showAddCourseReview, setShowAddCourseReview] = useState(false);
+  const [addCourseReviewMessage, setAddCourseReviewMessage] = useState('');
+  const [showDeleteCourseReview, setShowDeleteCourseReview] = useState(false);
+  const [showEditCourseReview, setShowEditCourseReview] = useState(false);
+  const [deleteCourseReviewIconColor, setDeleteCourseReviewIconColor] = useState('');
+  const [editCourseReviewIconColor, setEditCourseReviewIconColor] = useState('');
 
+  const [myInstReview, setMyInstReview] = useState(null);
+  const [tempInstReview, setTempInstReview] = useState('');
+  const [showAddInstReview, setShowAddInstReview] = useState(false);
+  const [addInstReviewMessage, setAddInstReviewMessage] = useState('');
+  const [showDeleteInstReview, setShowDeleteInstReview] = useState(false);
+  const [showEditInstReview, setShowEditInstReview] = useState(false);
+  const [deleteInstReviewIconColor, setDeleteInstReviewIconColor] = useState('');
+  const [editInstReviewIconColor, setEditInstReviewIconColor] = useState('');
+
+  useEffect(() => {
+    Promise.all([
+      fetch("/api/courses/openMyCourse/?id=" + id),
+      fetch("/api/courses/getMyProgress/?courseId=" +id),
+      fetch("/api/courses/getMyCourseReview?id=" +id)
+    ]).then(([resCourse, resMyProgress,resMyCourseReview])=>
+    Promise.all([resCourse.json(),resMyProgress.json(),resMyCourseReview.json()])
+    ).then(([dataCourse, dataMyProgress,dataMyCourseReview]) =>
+    {
+      setCourse(dataCourse);
+      setMyProgress(dataMyProgress);
+      setMyCourseReview(dataMyCourseReview);
+      console.log("USEEFFECT");
+    });
+  }, []);
 
   //values needed for Excercises
   const StudentAnswers = [];
@@ -138,18 +172,25 @@ const ITraineeCourse = () => {
   })
   };
 
-  
-
-
-  const handleChangeNotes = event => {
-    setNotes(event.target.value);
-
-    console.log('Notes:', event.target.value);
+  const handleDownloadNotes = async(event) => {
+    //const certificate = await fetch("api/courses/printCertificatePDF");
+    fetch("api/courses/printNotePDF?id=" + id).then(response => {
+      response.blob().then(blob => {
+          // Creating new object of PDF file
+          const fileURL = window.URL.createObjectURL(blob);
+          // Setting various property values
+          let alink = document.createElement('a');
+          alink.href = fileURL;
+          alink.download = 'Course Notes.pdf';
+          alink.click();
+      })
+  })
   };
 
   const handleAddNotes = async(event) => {
     event.preventDefault();
-    const noteJson = { notes};
+    const noteJson = { note};
+
     const response = await fetch("/api/courses/addNotes/?id=" + id, {
       method: "PATCH",
       body: JSON.stringify(noteJson),
@@ -161,7 +202,11 @@ const ITraineeCourse = () => {
     if (response.ok) {
       console.log("Notes Added", json);
     }
+    setNote("");
+    setNoteMessage("Note added successfully.");
   };
+
+
 
   const markAsCompleted = async(component) => {
     const oldProgress = myProgress.data;
@@ -187,20 +232,178 @@ const ITraineeCourse = () => {
   };
 
 
-  useEffect(() => {
-    Promise.all([
-      fetch("/api/courses/openMyCourse/?id=" + id),
-      fetch("/api/courses/getMyProgress/?courseId=" +id)
-    ]).then(([resCourse, resMyProgress])=>
-    Promise.all([resCourse.json(),resMyProgress.json()])
-    ).then(([dataCourse, dataMyProgress]) =>
-    {
+  const handleCloseAddCourseReview = () => {
+    setShowAddCourseReview(false);
+    setAddCourseReviewMessage('');
+  }
+  const handleShowAddCourseReview = () => setShowAddCourseReview(true);
+  const handleSaveAddCourseReview = async() => {
+    if (tempCourseReview == ''){
+      setAddCourseReviewMessage('   Your review cannot be blank!');
+    }
+    else{
+      setShowAddCourseReview(false);
+      setAddCourseReviewMessage('');
+      const reviewJson = {
+        content: tempCourseReview
+      }
+      const response = await fetch("/api/courses/reviewCourse?id=" + id, {
+        method: "PATCH",
+        body: JSON.stringify(reviewJson),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      const currentReview = {
+        text: tempCourseReview
+      }
+      setMyCourseReview(currentReview);
+    }
+  }
 
-      setCourse(dataCourse);
-      setMyProgress(dataMyProgress);
-      console.log("USEEFFECT");
+  const handleShowDeleteCourseReview = () => setShowDeleteCourseReview(true);
+  const handleCloseDeleteCourseReview = () => setShowDeleteCourseReview(false);
+  const handleDeleteCourseReview = async() => {
+    const response = await fetch("/api/courses/deleteMyCourseReview?id=" + id, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+      },
     });
-  }, []);
+    setShowDeleteCourseReview(false);
+    const currentReview = {
+      text: ''
+    }
+    setMyCourseReview(currentReview);
+    setTempCourseReview('');
+  }
+
+  const handleCloseEditCourseReview = () => {
+    setShowEditCourseReview(false);
+    setAddCourseReviewMessage('');
+  }
+  const handleShowEditCourseReview = () => {
+    setTempCourseReview(myCourseReview.text);
+    setShowEditCourseReview(true);
+  }
+
+  const handleSaveEditCourseReview = async() => {
+    if (tempCourseReview == ''){
+      setAddCourseReviewMessage('   Your review cannot be blank!');
+    }
+    else{
+      setShowEditCourseReview(false);
+      setAddCourseReviewMessage('');
+      const reviewJson = {
+        content: tempCourseReview
+      }
+      const response = await fetch("/api/courses/editMyCourseReview?id=" + id, {
+        method: "PATCH",
+        body: JSON.stringify(reviewJson),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      const currentReview = {
+        text: tempCourseReview
+      }
+      setMyCourseReview(currentReview);
+    }
+  }
+  
+  
+      
+
+
+/*
+  const [myInstReview, setMyInstReview] = useState(null);
+  const [tempInstReview, setTempInstReview] = useState('');
+  const [showAddInstReview, setShowAddInstReview] = useState(false);
+  const [addInstReviewMessage, setAddInstReviewMessage] = useState('');
+  const [showDeleteInstReview, setShowDeleteInstReview] = useState(false);
+  const [showEditInstReview, setShowEditInstReview] = useState(false);
+  const [deleteInstReviewIconColor, setDeleteInstReviewIconColor] = useState('');
+  const [editInstReviewIconColor, setEditInstReviewIconColor] = useState('');  */
+
+
+  const handleCloseAddInstReview = () => {
+    setShowAddInstReview(false);
+    setAddInstReviewMessage('');
+  }
+  const handleShowAddInstReview = () => setShowAddInstReview(true);
+  const handleSaveAddInstReview = async() => {
+    if (tempInstReview == ''){
+      setAddInstReviewMessage('   Your review cannot be blank!');
+    }
+    else{
+      setShowAddInstReview(false);
+      setAddInstReviewMessage('');
+      const reviewJson = {
+        content: tempInstReview
+      }
+      const response = await fetch("/api/instructor/reviewInstructor?id=" + id, {
+        method: "PATCH",
+        body: JSON.stringify(reviewJson),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      const currentReview = {
+        text: tempInstReview
+      }
+      setMyInstReview(currentReview);
+    }
+  }
+
+  const handleShowDeleteInstReview = () => setShowDeleteInstReview(true);
+  const handleCloseDeleteInstReview = () => setShowDeleteInstReview(false);
+  const handleDeleteInstReview = async() => {
+    const response = await fetch("/api/instructor/deleteMyInstructorReview?id=" + id, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    setShowDeleteInstReview(false);
+    const currentReview = {
+      text: ''
+    }
+    setMyInstReview(currentReview);
+    setTempInstReview('');
+  }
+
+  const handleCloseEditInstReview = () => {
+    setShowEditInstReview(false);
+    setAddInstReviewMessage('');
+  }
+  const handleShowEditInstReview = () => {
+    setTempInstReview(myInstReview.text);
+    setShowEditInstReview(true);
+  }
+
+  const handleSaveEditInstReview = async() => {
+    if (tempInstReview == ''){
+      setAddInstReviewMessage('   Your review cannot be blank!');
+    }
+    else{
+      setShowEditInstReview(false);
+      setAddInstReviewMessage('');
+      const reviewJson = {
+        content: tempInstReview
+      }
+      const response = await fetch("/api/instructor/editMyInstructorReview?id=" + id, {
+        method: "PATCH",
+        body: JSON.stringify(reviewJson),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      const currentReview = {
+        text: tempInstReview
+      }
+      setMyInstReview(currentReview);
+    }
+  }
 
 
 
@@ -367,14 +570,103 @@ const ITraineeCourse = () => {
     <Form>
       <Form.Group className="mb-3" controlId="formBasicNotes">
         <Form.Label>Take Some Notes</Form.Label>
-        <Form.Control onChange={handleChangeNotes} type="text" placeholder="Start taking notes..." />
+        <Form.Control value={note}  onChange={event => setNote(event.target.value)} type="text" placeholder="Start taking notes..." />
       </Form.Group>
 
       <Button variant="primary" type="submit" onClick={handleAddNotes}>
         Submit
       </Button>
+      <p style={{color: 'green'}}> {noteMessage}</p>
     </Form>
+    <div className="d-grid gap-2">
+      <Button variant="danger" size="lg"
+     
+      onClick={handleDownloadNotes}
+      >
+        Download Notes
+      </Button>
+    </div>
+
+
+    <div className="d-grid gap-2">
+      <Button variant="danger" size="lg"
+      
+      hidden={myCourseReview.text==""?false:true}
+      onClick={handleShowAddCourseReview}>
+        Review Course
+      </Button>
+    </div>
+
+    <p hidden={myCourseReview.text==""?true:false}> You reviewed that course: "{myCourseReview.text}"
     
+    <BsFillTrashFill onMouseEnter={() => setDeleteCourseReviewIconColor('red')}
+        onMouseLeave={() => setDeleteCourseReviewIconColor('')} onClick={handleShowDeleteCourseReview} style={{color: deleteCourseReviewIconColor}} />
+    <BsFillPencilFill onMouseEnter={() => setEditCourseReviewIconColor('red')}
+        onMouseLeave={() => setEditCourseReviewIconColor('')} onClick={handleShowEditCourseReview} style={{color: editCourseReviewIconColor}} />
+    </p>
+
+    
+    
+
+    
+
+    <Modal show={showAddCourseReview} onHide={handleCloseAddCourseReview}>
+        <Modal.Header closeButton>
+          <Modal.Title>Review Course</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+        <Form.Control as="textarea" rows={3} value={tempCourseReview}  onChange={event => setTempCourseReview(event.target.value)} placeholder="Write a review about the course..." />
+        </Modal.Body>
+        <p style={{color: 'red'}}> {addCourseReviewMessage}</p>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleCloseAddCourseReview}>
+            Close
+          </Button>
+          <Button variant="primary" onClick={handleSaveAddCourseReview}>
+            Save
+          </Button>
+        </Modal.Footer>
+      </Modal>
+      
+      <Modal show={showEditCourseReview} onHide={handleCloseEditCourseReview}>
+        <Modal.Header closeButton>
+          <Modal.Title>Edit your review of the course</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+        <Form.Control as="textarea" rows={3} value={tempCourseReview}  onChange={event => setTempCourseReview(event.target.value)} placeholder="Edit your review about the course..." />
+        </Modal.Body>
+        <p style={{color: 'red'}}> {addCourseReviewMessage}</p>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleCloseEditCourseReview}>
+            Close
+          </Button>
+          <Button variant="primary" onClick={handleSaveEditCourseReview}>
+            Save
+          </Button>
+        </Modal.Footer>
+      </Modal>
+
+
+      
+
+      <Modal show={showDeleteCourseReview} onHide={handleCloseDeleteCourseReview}>
+        <Modal.Header closeButton>
+          <Modal.Title>Delete your course review</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+        <p> Are you sure you want to delete your review of this course? </p>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleCloseDeleteCourseReview}>
+            Close
+          </Button>
+          <Button variant="danger" onClick={handleDeleteCourseReview}>
+            Delete
+          </Button>
+        </Modal.Footer>
+      </Modal>
+
+
 
           </Col>
         </Row>

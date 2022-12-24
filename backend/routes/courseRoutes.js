@@ -30,11 +30,16 @@ const {
   editMyCourseReview,
   deleteMyCourseReview,
   addToProgress,
-  getMyProgress
+  getMyProgress,
+  getMyCourseReview
 } = require("../controllers/courseController");
 
 const router = express.Router();
 
+
+
+//get my course review
+router.get("/getMyCourseReview",requireAuth, getMyCourseReview);
 
 //get my progress
 router.get("/getMyProgress",requireAuth, getMyProgress);

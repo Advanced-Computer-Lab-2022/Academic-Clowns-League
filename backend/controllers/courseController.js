@@ -979,17 +979,11 @@ const addNotes = async (req, res) => {
 const printNotePDF = async (req, res, next) => {
   if(await iTrainee.findById(req.user._id) || await cTrainee.findById(req.user._id)){
     const id = req.query.id;
-  //const id = "6384b23ffa8e271ab3db7d0e";
-  //console.log(id);
   const traineeID = req.user._id;
   let notes = "";
-  const iTraineeNotes = await Course.findById({ _id: id }).select(
-    "iTraineeNotes"
-  ).iTraineeNotes;
+  const iTraineeNotes = (await Course.findById({ _id: id }).select("iTraineeNotes")).iTraineeNotes;
 
-  const cTraineeNotes = (
-    await Course.findById({ _id: id }).select("cTraineeNotes")
-  ).cTraineeNotes;
+  const cTraineeNotes = (await Course.findById({ _id: id }).select("cTraineeNotes")).cTraineeNotes;
 
   console.log(cTraineeNotes);
 
@@ -1313,6 +1307,35 @@ const deleteMyCourseReview = async (req, res) => {
   }
 };
 
+const getMyCourseReview = async (req, res) => {
+  if(await iTrainee.findById(req.user._id) || await cTrainee.findById(req.user._id)){
+    try {
+      const traineeId = req.user._id;
+      const id = req.query.id;
+  
+      var courseReviews = (await Course.findById({ _id: id }).select("reviews")).reviews;
+      let myReview = "";
+  
+      for (var i =0;i<courseReviews.length;i++){
+        if (courseReviews[i].traineeId == traineeId){
+          myReview = courseReviews[i].content;
+          break;
+        }
+      }
+      response = {
+          text: myReview
+      } //either the content of the review or an empty string
+      res.status(200).json(response);
+    } catch (error) {
+      res.status(400).json({ error: error.message });
+  }
+  }
+  else{
+    res.status(400).json({ error: "Access Restriced" })
+  }
+};
+
+
 const addToProgress = async (req, res) => {
   const courseId = req.query.courseId;
   const component = req.query.component;
@@ -1399,5 +1422,6 @@ module.exports = {
   editMyCourseReview,
   deleteMyCourseReview,
   addToProgress,
-  getMyProgress
+  getMyProgress,
+  getMyCourseReview
 };
