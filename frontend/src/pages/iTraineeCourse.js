@@ -79,14 +79,16 @@ const ITraineeCourse = () => {
     Promise.all([
       fetch("/api/courses/openMyCourse/?id=" + id),
       fetch("/api/courses/getMyProgress/?courseId=" +id),
-      fetch("/api/courses/getMyCourseReview?id=" +id)
-    ]).then(([resCourse, resMyProgress,resMyCourseReview])=>
-    Promise.all([resCourse.json(),resMyProgress.json(),resMyCourseReview.json()])
-    ).then(([dataCourse, dataMyProgress,dataMyCourseReview]) =>
+      fetch("/api/courses/getMyCourseReview?id=" +id),
+      fetch("/api/instructor/getMyInstReview?id=" +id)
+    ]).then(([resCourse, resMyProgress,resMyCourseReview,resMyInstReview])=>
+    Promise.all([resCourse.json(),resMyProgress.json(),resMyCourseReview.json(),resMyInstReview.json()])
+    ).then(([dataCourse, dataMyProgress,dataMyCourseReview,dataMyInstReview]) =>
     {
       setCourse(dataCourse);
       setMyProgress(dataMyProgress);
       setMyCourseReview(dataMyCourseReview);
+      setMyInstReview(dataMyInstReview);
       console.log("USEEFFECT");
     });
   }, []);
@@ -570,7 +572,7 @@ const ITraineeCourse = () => {
     <Form>
       <Form.Group className="mb-3" controlId="formBasicNotes">
         <Form.Label>Take Some Notes</Form.Label>
-        <Form.Control value={note}  onChange={event => setNote(event.target.value)} type="text" placeholder="Start taking notes..." />
+        <Form.Control value={note}  onChange={event => setNote(event.target.value)} as="textarea" rows={3} placeholder="Start taking notes..." />
       </Form.Group>
 
       <Button variant="primary" type="submit" onClick={handleAddNotes}>
@@ -661,6 +663,103 @@ const ITraineeCourse = () => {
             Close
           </Button>
           <Button variant="danger" onClick={handleDeleteCourseReview}>
+            Delete
+          </Button>
+        </Modal.Footer>
+      </Modal>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      <div className="d-grid gap-2">
+      <Button variant="danger" size="lg"
+      
+      hidden={myInstReview.text==""?false:true}
+      onClick={handleShowAddInstReview}>
+        Review Instructor
+      </Button>
+    </div>
+
+    <p hidden={myInstReview.text==""?true:false}> You reviewed this instructor: "{myInstReview.text}"
+    
+    <BsFillTrashFill onMouseEnter={() => setDeleteInstReviewIconColor('red')}
+        onMouseLeave={() => setDeleteInstReviewIconColor('')} onClick={handleShowDeleteInstReview} style={{color: deleteInstReviewIconColor}} />
+    <BsFillPencilFill onMouseEnter={() => setEditInstReviewIconColor('red')}
+        onMouseLeave={() => setEditInstReviewIconColor('')} onClick={handleShowEditInstReview} style={{color: editInstReviewIconColor}} />
+    </p>
+
+    
+    
+
+    
+
+    <Modal show={showAddInstReview} onHide={handleCloseAddInstReview}>
+        <Modal.Header closeButton>
+          <Modal.Title>Review Instructor</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+        <Form.Control as="textarea" rows={3} value={tempInstReview}  onChange={event => setTempInstReview(event.target.value)} placeholder="Write a review about the instructor..." />
+        </Modal.Body>
+        <p style={{color: 'red'}}> {addInstReviewMessage}</p>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleCloseAddInstReview}>
+            Close
+          </Button>
+          <Button variant="primary" onClick={handleSaveAddInstReview}>
+            Save
+          </Button>
+        </Modal.Footer>
+      </Modal>
+      
+      <Modal show={showEditInstReview} onHide={handleCloseEditInstReview}>
+        <Modal.Header closeButton>
+          <Modal.Title>Edit your review of the instructor</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+        <Form.Control as="textarea" rows={3} value={tempInstReview}  onChange={event => setTempInstReview(event.target.value)} placeholder="Edit your review about the instructor..." />
+        </Modal.Body>
+        <p style={{color: 'red'}}> {addInstReviewMessage}</p>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleCloseEditInstReview}>
+            Close
+          </Button>
+          <Button variant="primary" onClick={handleSaveEditInstReview}>
+            Save
+          </Button>
+        </Modal.Footer>
+      </Modal>
+
+
+      
+
+      <Modal show={showDeleteInstReview} onHide={handleCloseDeleteInstReview}>
+        <Modal.Header closeButton>
+          <Modal.Title>Delete your instructor review</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+        <p> Are you sure you want to delete your review of this instructor? </p>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleCloseDeleteInstReview}>
+            Close
+          </Button>
+          <Button variant="danger" onClick={handleDeleteInstReview}>
             Delete
           </Button>
         </Modal.Footer>

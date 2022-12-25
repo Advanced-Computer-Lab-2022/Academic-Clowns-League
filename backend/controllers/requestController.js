@@ -1,6 +1,7 @@
 //import the model
 const Request = require("../models/requestModel");
 const cTrainee = require("../models/cTraineeModel");
+const Admin = require("../models/adminModel");
 const Course = require("../models/courseModel");
 const mongoose = require("mongoose");
 
@@ -30,9 +31,8 @@ const requestAccess = async (req, res) => {
       }
   };
 
-
 const getPendingRequests = async (req, res) => {
-  if(await Admin.findbyId(req.user._id)){try {
+  if(await Admin.findById(req.user._id)){try {
 
         const requests = await Request.find({status:"pending"});
         res.status(200).json(requests);
@@ -42,8 +42,9 @@ const getPendingRequests = async (req, res) => {
     
   };
 
+
   const grantAccess = async (req, res) => {
-    if(await Admin.findbyId(req.user._id)){ try {
+    if(await Admin.findById(req.user._id)){ try {
         const requestId = req.query.id;
 
         const theRequest = await Request.findOneAndUpdate(
