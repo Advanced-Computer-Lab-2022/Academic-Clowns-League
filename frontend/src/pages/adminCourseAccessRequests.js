@@ -15,34 +15,28 @@ const AdminCourseAccessRequests = () => {
   let numberOfRequests = 0;
 
 
-  const grantAccess = (request) => {
-    setChosenRequest(request);
-    setShowModal(true);
-  };
-  
-
-  const handleConfirmGrantAccess = async() => {
+  const grantAccess = async() => {
     const response = await fetch("/api/request/grantAccess?id=" + chosenRequest._id);
-
-
-    const response2 = await fetch("/api/request/getPendingRequests");
-    setRequests(response2);
     setChosenRequest(null);
-    setShowModal(false);
   };
-
 
 
   useEffect(() => {
     const fetchRequests = async () => {
+    if (chosenRequest == null){
+      setShowModal(false);
+    }
+    else{
+      setShowModal(true);
+    }
       const response = await fetch("/api/request/getPendingRequests");
       const json = await response.json();
       if (response.ok) {
         setRequests(json);
       }
-    };
+  };
     fetchRequests();
-  }, []);
+  },[chosenRequest]);
 
 
     return (
@@ -69,7 +63,7 @@ const AdminCourseAccessRequests = () => {
                   <td>{request.cTraineeName}</td>
                   <td>{request.courseTitle}</td>
                   <td>
-                  <Button variant="outline-danger" onClick={() => grantAccess(request)} >Grant Access</Button>{' '}
+                  <Button variant="outline-danger" onClick={() => setChosenRequest(request)} >Grant Access</Button>{' '}
                   </td>
                 </tr>    
       ))}
@@ -79,18 +73,24 @@ const AdminCourseAccessRequests = () => {
 
 
 
-    <Modal show={showModal} onHide={() => setShowModal(false)}>
+    <Modal show={showModal} onHide={() => {setChosenRequest(null)}}>
         <Modal.Header closeButton>
           <Modal.Title>Granting access</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-        <p> Are you sure you want to grant this trainee access to the course? </p>
+
+
+        {chosenRequest &&
+        <p> Are you sure you want to grant {chosenRequest.cTraineeName} access to "{chosenRequest.courseTitle}"? </p>
+          }
+
+        
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="secondary" onClick={() => setShowModal(false)}>
+          <Button variant="secondary" onClick={() => setChosenRequest(null)}>
             Cancel
           </Button>
-          <Button variant="danger" onClick={handleConfirmGrantAccess}>
+          <Button variant="danger" onClick={grantAccess}>
             Yes, I'm Sure
           </Button>
         </Modal.Footer>
