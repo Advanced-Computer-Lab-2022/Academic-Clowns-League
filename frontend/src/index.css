@@ -104,6 +104,49 @@ header a {
   position: relative;
   box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.05);
 }
+
+.course-details-instructor {
+  /*for courseDetails.js*/
+  display: flex;
+  flex: 1;
+  background: #fff;
+  border-radius: 4px;
+  width:max-content;
+  margin: 20px 20px 20px 2%;
+  padding: 20px;
+  position: relative;
+  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.05);
+}
+
+.course-details-instructor h4 {
+  /*for courseDetails.js*/
+  margin: 0 0 10px 0;
+  font-size: 1.2em;
+  color: var(--primary);
+}
+.course-details-instructor p {
+  /*for courseDetails.js*/
+  margin: 0;
+  font-size: 0.9em;
+  color: #555;
+}
+.course-details-instructor span {
+  /*for courseDetails.js*/
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  cursor: pointer;
+  background: #f1f1f1;
+  padding: 6px;
+  border-radius: 50%;
+  color: #333;
+}
+
+.instructor-buttons{
+  display: flex;
+  flex: 1
+}
+
 .course-details h4 {
   /*for courseDetails.js*/
   margin: 0 0 10px 0;
@@ -234,6 +277,34 @@ header a {
 }
 
 .navlink:hover {
+  color: var(--bs-navbar-hover-color);
+}
+
+.navlink-profile {
+  color: rgb(208, 208, 208);
+  text-decoration: none;
+  transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out,
+    border-color 0.15s ease-in-out;
+  margin-right: 10%
+}
+
+.navlink-profile:hover {
+  color: var(--bs-navbar-hover-color);
+}
+
+.navlink-profile-instructor {
+  color: rgb(208, 208, 208);
+  text-decoration: none;
+  transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out,
+    border-color 0.15s ease-in-out;
+  right: 10%
+}
+
+.navlink-profile-instructor:hover {
+  color: var(--bs-navbar-hover-color);
+}
+
+.money:hover{
   color: var(--bs-navbar-hover-color);
 }
 
@@ -431,7 +502,7 @@ header a {
 }
 
 .courses-element{
-  margin-top: 3%;
+  margin-top: 2%;
   margin-left: 2%
 }
 
@@ -445,6 +516,18 @@ header a {
   height: 35px
 }
 
+.sort-popular{
+  left: 25%;
+  margin-top: 1.9%;
+  height: 35px
+}
+
+.sort-length{
+  left: 26%;
+  margin-top: 1.9%;
+  height: 35px
+}
+
 .course-info{
   margin-left: 2%
 }
@@ -453,7 +536,18 @@ header a {
   margin-top: 1%
 }
 
-#navbarScrollingDown{
-  height: 50px;
-  overflow: auto;
+.money{
+  right: 9%;
+  color:rgb(208, 208, 208);
+}
+
+.money-button{
+  margin-right: 3%;
+  background-color: transparent;
+  border-style: none;
+}
+
+.courses-element-instructor{
+  margin-top: 7%;
+  left: 2%
 }

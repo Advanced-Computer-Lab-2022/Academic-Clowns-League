@@ -1,30 +1,23 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import { CurrencyContext } from "../contexts/CurrencyContext";
 import SubtitleMap from "./subtitleMap";
 import { MDBBtn } from 'mdb-react-ui-kit';
-import { useNavigate } from "react-router-dom";
-//import {useLocation} from 'react-router-dom';
+import { useNavigate} from 'react-router-dom';
 //const cities = require('../country-json/src/country-by-currency-code.json')
 
-const MyCourseDetailsITrainee = ({ course }) => {
-  const { currency, rate } = useContext(CurrencyContext);
-  const navigate = useNavigate();
-  const price = Math.round(course.price * rate);
-  let message = `Price after ${course.discount}% discount is applied -- original price = ${price} ${currency}`;
-  if (course.discountApplied === false) {
-    message = "";
+
+const AllCourseDetailsInstructor = ({ course }) => {
+  const {currency, rate} = useContext(CurrencyContext)
+  const navigate = useNavigate()
+
+  let price = Math.round(course.price * rate)
+  let message = `Price after ${course.discount}% discount is applied -- original price = ${price} ${currency}`
+  if(course.discountApplied === false){
+    message = ''
   }
+  //console.log(course.exercises.length)
   const [isActive, setIsActive] = useState(false);
-  /*const location = useLocation();
-  const  {state} = location.state
-  console.log(state)
-  let currency = ''
-  for(let i = 0; i < cities.length; i++){
-    if(cities[i].country === state){
-      currency = cities[i].currency_code
-      break
-    }
-  }*/
+
   const handleClick = () => {
     // 👇️ toggle
     setIsActive((current) => !current);
@@ -56,10 +49,10 @@ const MyCourseDetailsITrainee = ({ course }) => {
       >
         <p>
           <strong>Price: </strong>
-          {Math.round((price * (100 - course.discount)) / 100)} {currency}{" "}
-          <br></br>
+          {Math.round(price*(100-course.discount)/100)} {currency} <br></br>
           {message}
         </p>
+        
         <p>
           <strong>Subject: </strong>
           {course.subject}
@@ -69,17 +62,16 @@ const MyCourseDetailsITrainee = ({ course }) => {
           {course.instructorData.name}
         </p>
         <p>
-          <strong>Course Outline: </strong>
-          <ol>
-            {course.subtitles &&
-              course.subtitles.map((subtitle) => (
-                <SubtitleMap subtitle={subtitle} key={subtitle._id} />
-              ))}
-            <li>
-              {course.title} Exercises - Total Questions:{" "}
-              {course.exercises.length}
-            </li>
-          </ol>
+        <strong>Course Outline: </strong>
+        <ol>
+        {course.subtitles &&
+          course.subtitles.map((subtitle) => (
+            <SubtitleMap subtitle={subtitle} key={subtitle._id} />
+          ))}
+        <li>
+          {course.title} Exercises - Total Questions: {course.exercises.length}
+        </li>
+        </ol>
         </p>
       </div>
       <MDBBtn rounded
@@ -94,7 +86,6 @@ const MyCourseDetailsITrainee = ({ course }) => {
       >
         View Details
       </MDBBtn>
-
       <MDBBtn rounded
         style={{
           backgroundColor: "#607D8B",
@@ -104,7 +95,7 @@ const MyCourseDetailsITrainee = ({ course }) => {
           marginLeft: 10,
           borderColor: "#78909C"
         }}
-        onClick={() => navigate(`/iTraineeCourse?id=${course._id}`)}
+        onClick={() => navigate(`/instructorCourse?id=${course._id}`)}
       >
         Go to Course
       </MDBBtn>
@@ -113,4 +104,4 @@ const MyCourseDetailsITrainee = ({ course }) => {
   );
 };
 
-export default MyCourseDetailsITrainee;
+export default AllCourseDetailsInstructor;

@@ -105,6 +105,14 @@ const courseSchema = new Schema(
       type: Number,
       min: 0,
       default: 0
+    },
+    published: {
+      type: Boolean,
+      default: true
+    },
+    open:{
+      type: Boolean,
+      default: false
     }
   },
   { timestamps: true }

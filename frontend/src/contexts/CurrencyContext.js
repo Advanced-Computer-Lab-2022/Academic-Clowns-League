@@ -1,11 +1,12 @@
 import React, {createContext, useState} from 'react';
+import { BiWorld } from 'react-icons/bi';
 const cities = require('../country-json-master/src/country-by-currency-code.json')
 
 export const CurrencyContext = createContext()
 
 const CurrencyContextProvider = (props) => {
     const [currency, setCurrency] = useState('USD')
-    const [country, setCountry] = useState('Select Country')
+    const [country, setCountry] = useState('Select Country');
     const [rate, setRate] = useState('1')
 
     const toggleCurrency = async (e) => {

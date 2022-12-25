@@ -35,7 +35,6 @@ const createUser = async (req, res) => {
     })
     dbUser.save()
     res.status(200).json(iUser)
-    res.json({message:"Success"})
     }
     catch(error){
       res.json({message:"Signup Failed", error: error.message})
@@ -103,7 +102,7 @@ const loginUser = async (req, res) => {
 };
 const requireAuth = (req, res, next) => {
     const token = req.cookies.jwtoken
-    console.log(token);
+    //console.log(token);
       
     // check json web token exists & is verified
     if (token) {
@@ -112,7 +111,7 @@ const requireAuth = (req, res, next) => {
           isLoggedIn:false,
           message: "Failed to Authenticate"}) 
           req.user = decodedToken.payload;
-          console.log("User ", decodedToken)
+          //console.log("User ", decodedToken)
           next()
       })
     } else {

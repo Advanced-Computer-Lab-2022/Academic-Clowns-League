@@ -28,7 +28,13 @@ const {
   adminAddDiscount,
   reviewCourse,
   editMyCourseReview,
-  deleteMyCourseReview
+  deleteMyCourseReview,
+  getCourseLength,
+  getInstPub,
+  getInstUnpub,
+  publishCourse,
+  closeCourse,
+  getCourseInfo
 } = require("../controllers/courseController");
 
 const router = express.Router();
@@ -102,6 +108,20 @@ router.get("/printCertificatePDF",requireAuth,printCertificatePDF);
 router.get("/sendCertificateMail", sendCertificateMail);
 //Get most popular courses
 router.get("/getPopularCourses",getPopularCourses); //guest can access it
+
+router.get("/getCourseLength",getCourseLength);
+
+router.get('/getInstPub', requireAuth, getInstPub);
+
+router.get('/getInstUnpub', requireAuth, getInstUnpub);
+
+router.patch('/publishCourse', requireAuth, publishCourse);
+
+router.patch('/closeCourse', requireAuth, closeCourse);
+
+router.get('/getCourse', requireAuth, getCourse);
+
+router.get('/getCourseInfo', requireAuth, getCourseInfo);
 
 //after creating all our routes , export the router with the routes attached to it
 module.exports = router;

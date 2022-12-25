@@ -5,15 +5,18 @@ import { MDBBtn } from 'mdb-react-ui-kit';
 import { useNavigate} from 'react-router-dom';
 //const cities = require('../country-json/src/country-by-currency-code.json')
 
-const CourseDetailsITrainee = ({ course }) => {
+const CourseDetailsInstructor = ({ course }) => {
   const {currency, rate} = useContext(CurrencyContext)
   const navigate = useNavigate()
   const [myCourse, setMyCourse] = useState("")
+  //const [exercises, setExercises] = useState("")
+  //const [instructorName, setInstructorName] = useState("")
   
   useEffect(() => {
     const fetchCourse = async () => {
-      const response = await fetch(`api/itrainee/getcourseinfo/?id=${course._id}`);
+      const response = await fetch(`api/courses/getCourseInfo/?id=${course._id}`);
       const json = await response.json();
+      console.log(json)
       if (response.status == 200) {
         setMyCourse(json);
       }
@@ -23,11 +26,11 @@ const CourseDetailsITrainee = ({ course }) => {
 
   let price = Math.round(myCourse.price * rate)
   let message = `Price after ${myCourse.discount}% discount is applied -- original price = ${price} ${currency}`
-  let button = 'Pay for Course'
+  let button = ''
   if(myCourse.discountApplied === false){
     message = ''
   }
-  if(myCourse.register === true){
+  if(myCourse.mine === true){
     button = 'Go to Course'
   }
   //console.log(course.exercises.length)
@@ -89,6 +92,7 @@ const CourseDetailsITrainee = ({ course }) => {
         </ol>
         </p>
       </div>
+      <div className="instructor-buttons">
       <MDBBtn rounded
         style={{
           backgroundColor: isActive ? "#C00418" : "#607D8B",
@@ -108,22 +112,16 @@ const CourseDetailsITrainee = ({ course }) => {
           height: 35,
           textAlign: "center",
           marginLeft: 10,
-          borderColor: "#78909C"
+          borderColor: "#78909C",
+          display: myCourse.mine ? "block" : "none"
         }}
-        onClick={() => {
-          if(myCourse.register == true){
-            navigate(`/iTraineeCourse?id=${myCourse._id}`)
-          }
-          else{
-            navigate(`/checkoutPage?id=${myCourse._id}&title=${myCourse.title}`)
-          }
-        }}
-      >
-        {button}
+        onClick={() => navigate(`/instructorCourse?id=${myCourse._id}`)}
+      >{button}
       </MDBBtn>
+      </div>
       </div>
     </div>
   );
 };
 
-export default CourseDetailsITrainee;
+export default CourseDetailsInstructor;

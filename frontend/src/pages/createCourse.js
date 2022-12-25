@@ -2,10 +2,12 @@ import FloatingLabel from 'react-bootstrap/FloatingLabel';
 import Form from 'react-bootstrap/Form';
 import InstructorNavbar from "../components/instructorNavbar";
 import Button from 'react-bootstrap/Button';
-import { useState} from 'react';
+import { useContext, useState} from 'react';
 import { useNavigate } from 'react-router-dom';
+import { CurrencyContext } from '../contexts/CurrencyContext';
 
 const CreateCourse = () => {
+    const { rate } = useContext(CurrencyContext)
     const [title,setTitle] = useState('')
     const [hours,setHours] = useState('')
     const [subject,setSubject] = useState('')
@@ -15,43 +17,20 @@ const CreateCourse = () => {
     const [summary,setSummary] = useState('')
     const [previewURL,setPreviewURL] = useState('')
     const [error, setError] = useState(null);
-    const [courseData, setCourse] = useState(null);
-    const [popup, setPop] = useState(false);
 
     const navigate = useNavigate();
 
-    const closePopup = async () => {
-        setPop(false);
-        const response = await fetch("/api/courses/deletecourse/?id=" + courseData._id,{
-            method: "DELETE"
-        })
-
-        const json = await response.json();
-
-        if (!response.ok) {
-            setError(json.error);
-        }
-        if(response.ok){
-            setTitle('')
-            setHours('')
-            setSubject('')
-            setPrice('')
-            setDiscount('')
-            setDiscountValidUntil('')
-            setSummary('')
-            setPreviewURL('')
-            setError(null);
-        }
-    };
-
     const handleSubmit = async (e) => {
         e.preventDefault()
-        setPop(!popup);
-        const course = {
+        if(title == '' || hours == '' || subject == '' || price == '' || summary == '' || previewURL == ''){
+          setError('Please fill in all the fields')
+        }
+        else{
+          const course = {
             title,
             hours,
             subject,
-            price,
+            price: Math.round(price/rate),
             discount,
             discountValidUntil,
             summary,
@@ -66,12 +45,13 @@ const CreateCourse = () => {
             })
 
             const json = await response.json()
-            setCourse(json)
 
-            if (!response.ok) {
+            if (response.status == 400) {
                 setError(json.error);
             }
-            if (response.ok){
+            if (response.status == 200){
+                //setCourse(json)
+                navigate(`/addSubtitle?id=${json._id}`)
                 setTitle('')
                 setHours('')
                 setSubject('')
@@ -81,8 +61,8 @@ const CreateCourse = () => {
                 setSummary('')
                 setPreviewURL('')
                 setError(null);
-                console.log("new course added", json);
             }
+        }
     }
 
 
@@ -90,25 +70,27 @@ const CreateCourse = () => {
         <>
         <InstructorNavbar />
         <br></br>
-        <h3>Enter Course Details - fields followed by * are required</h3><br></br>
+        <h3>Enter Course Details</h3>
+        <div style={{color: "black", fontSize: "small"}}>- fields followed by * are required</div>
+        <br></br>
              <FloatingLabel
                 controlId="floatingInput"
-                label="Title*"
+                label="Title *"
                 className="mb-3"
               >
-        <Form.Control type="text" placeholder="Title*" value={title} onChange={(e) => setTitle(e.target.value)}/>
+        <Form.Control type="text" placeholder="Title *" value={title} onChange={(e) => setTitle(e.target.value)}/>
       </FloatingLabel><br></br>
 
-      <FloatingLabel controlId="floatingSubject" label="Subject*">
-        <Form.Control type="text" placeholder="Subject*" value={subject} onChange = {(e) => setSubject(e.target.value)}/>
+      <FloatingLabel controlId="floatingSubject" label="Subject *">
+        <Form.Control type="text" placeholder="Subject *" value={subject} onChange = {(e) => setSubject(e.target.value)}/>
       </FloatingLabel><br></br>
 
-      <FloatingLabel controlId="floatingHours" label="Hours*">
-        <Form.Control type="text" placeholder="Hours*" value={hours} onChange = {(e) => setHours(e.target.value)}/>
+      <FloatingLabel controlId="floatingHours" label="Hours *">
+        <Form.Control type="text" placeholder="Hours *" value={hours} onChange = {(e) => setHours(e.target.value)}/>
       </FloatingLabel><br></br>
 
-      <FloatingLabel controlId="floatingPrice" label="Price*">
-        <Form.Control type="text" placeholder="Price*" value={price} onChange = {(e) => setPrice(e.target.value)}/>
+      <FloatingLabel controlId="floatingPrice" label="Price *">
+        <Form.Control type="text" placeholder="Price *" value={price} onChange = {(e) => setPrice(e.target.value)}/>
       </FloatingLabel><br></br>
 
       <FloatingLabel controlId="floatingDiscount" label="Discount">
@@ -119,36 +101,17 @@ const CreateCourse = () => {
         <Form.Control type="text" placeholder="Discount Valid Until" value={discountValidUntil} onChange = {(e) => setDiscountValidUntil(e.target.value)}/>
       </FloatingLabel><br></br>
 
-      <FloatingLabel controlId="floatingSummary" label="Summary*">
-        <Form.Control type="text" placeholder="Summary*" value={summary} onChange = {(e) => setSummary(e.target.value)}/>
+      <FloatingLabel controlId="floatingSummary" label="Summary *">
+        <Form.Control type="text" placeholder="Summary *" value={summary} onChange = {(e) => setSummary(e.target.value)}/>
       </FloatingLabel><br></br>
 
-      <FloatingLabel controlId="floatingPreview" label="Preview*">
-        <Form.Control type="text" placeholder="Preview*" value={previewURL} onChange = {(e) => setPreviewURL(e.target.value)}/>
+      <FloatingLabel controlId="floatingPreview" label="Preview *">
+        <Form.Control type="text" placeholder="Preview *" value={previewURL} onChange = {(e) => setPreviewURL(e.target.value)}/>
       </FloatingLabel><br></br>
 
-      {error && <div className="error">{error}</div>}
+      {error && <div className="error" style={{color: "red", fontSize: "small"}}>{error}</div>}
 
-      <Button variant="outline-success" onClick={handleSubmit}>Next</Button>{' '}
-
-      <div>
-    {popup ? (
-      <div className="main-contract">
-        <div className="popup-contract">
-          <div>
-            <p className="message-header">Please read the following contract carefully:</p>
-            <p className="message">This is a contract to signify that the company will own the rights
-            to the posted videos and materials of this registered course and will take a share of 20%
-            on each video per registered trainee if you choose to proceed.</p>
-          </div>
-          <Button variant="danger" onClick={closePopup}>Cancel</Button>{' '}
-          <Button variant="success" onClick={() => navigate(`/addSubtitle?id=${courseData._id}`)}>Agree & Proceed</Button>{' '}
-        </div>
-      </div>
-    ) : (
-      ""
-    )}
-  </div>
+      <Button variant="danger" onClick={handleSubmit} type="button">Next</Button>{' '}
         </>
     );
 }

@@ -1,7 +1,6 @@
 import { useEffect, useState, useContext } from "react";
 import { MDBInputGroup, MDBInput, MDBBtn } from 'mdb-react-ui-kit';
 import { GoSearch } from 'react-icons/go'
-import Accordion from 'react-bootstrap/Accordion';
 
 // components
 import CourseDetails from "../components/courseDetails";
@@ -12,7 +11,8 @@ import { CurrencyContext } from "../contexts/CurrencyContext";
 const GuestHome = () => {
   const { rate, currency } = useContext(CurrencyContext)
   const [courses, setCourses] = useState(null);
-  const [mostPopular, setMostPopular] = useState(null);
+  const [isActivePopular, setIsActivePopular] = useState(false);
+  const [isActiveLength, setIsActiveLength] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [subjects, setSubject] = useState({
     computer: false,
@@ -71,22 +71,50 @@ const GuestHome = () => {
     );
 
     const json = await response.json();
-    //console.log(json);
     setCourses(json);
-
-    /* 
-    if(response.ok){
-        setCourses(response);
-    }
-    else {
-        console.log('not okay')
-
-    } */
   };
 
   const handleClick = async () => {
     window.location.reload(true);
   };
+
+  const getPopular = async () => {
+    setIsActivePopular((current) => !current);
+    if(!isActivePopular){
+      const response = await fetch("api/courses/getPopularCourses")
+      const json = await response.json()
+      if (response.ok) {
+        setCourses(json);
+      }
+    }
+    else{
+      const response = await fetch("/api/courses");
+      const json = await response.json();
+
+      if (response.ok) {
+        setCourses(json);
+      }
+    }
+  }
+
+  const getLength = async () => {
+    setIsActiveLength((current) => !current);
+    if(!isActiveLength){
+      const response = await fetch("api/courses/getCourseLength")
+      const json = await response.json()
+      if (response.ok) {
+        setCourses(json);
+      }
+    }
+    else{
+      const response = await fetch("/api/courses");
+      const json = await response.json();
+
+      if (response.ok) {
+        setCourses(json);
+      }
+    }
+  }
 
   useEffect(() => {
     const fetchCourses = async () => {
@@ -97,16 +125,6 @@ const GuestHome = () => {
         setCourses(json);
       }
     };
-
-    const getCourses = async () => {
-      const response = await fetch("/api/courses/getPopularCourses");
-      const json = await response.json();
-
-      if (response.ok) {
-        setMostPopular(json);
-      }
-    };
-    getCourses();
     fetchCourses();
   }, []);
 
@@ -133,18 +151,21 @@ const GuestHome = () => {
         }} onClick={handleClick}>
         Clear Search
       </MDBBtn>
+      <MDBBtn rounded className='sort-popular' style={{
+          backgroundColor: isActivePopular ? "#C00418" : "#607D8B",
+          borderColor: "#78909C"
+        }} onClick={getPopular}>
+        Sort by Most Popular
+      </MDBBtn>
+      <MDBBtn rounded className='sort-length' style={{
+          backgroundColor: isActiveLength ? "#C00418" : "#607D8B",
+          borderColor: "#78909C"
+        }} onClick={getLength}>
+        Sort by Course Length
+      </MDBBtn>
     </div>
     <div className="guest-home">
     <div className="courses-element">
-    <div>
-    <h4 className="popular">Most Popular Courses</h4>
-    <div className="courses-popular">
-        {mostPopular &&
-          mostPopular.map((course) => (
-            <CourseDetails course={course} key={course._id} />
-          ))}
-      </div>
-      </div>
       <div>
       <h4 className="popular">All Courses</h4>
       <div>
