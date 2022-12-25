@@ -11,10 +11,17 @@ const {
   getGrade,
   payForCourse,
   registerForCourse,
-  applyRefund
+  applyRefund,
+  getITraineeInfo
 } = require("../controllers/iTraineeController");
 
 const router = express.Router();
+
+
+
+router.get("/getITraineeInfo",requireAuth, getITraineeInfo);
+
+
 //GET ALL INDIVIUAL TRAINEES
 router.get("/", getAllITrainee);
 

@@ -1,4 +1,10 @@
-import { useContext} from 'react';
+import React from 'react';
+
+import { MDBCol, MDBContainer, MDBRow, MDBCard, MDBCardText, MDBCardBody, MDBCardImage, MDBTypography, MDBIcon } from 'mdb-react-ui-kit';
+
+import Modal from 'react-bootstrap/Modal';
+import { useNavigate } from "react-router-dom";
+import { useContext, useState} from 'react';
 import Container from 'react-bootstrap/Container';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
@@ -8,10 +14,10 @@ import { CurrencyContext } from '../contexts/CurrencyContext';
 const countries = require('../country-json-master/src/country-by-currency-code.json')
 
 const ITraineeNavbar = () => {
-  const {toggleCurrency, country} = useContext(CurrencyContext)
+  const {toggleCurrency, country} = useContext(CurrencyContext);
+  const navigate = useNavigate();
   
     return (
-
       <Navbar sticky="top"  variant="dark" expand="lg" style={{backgroundColor: '#C00418'}}>
       <Container fluid>
       <Navbar.Brand href="#home">
@@ -41,9 +47,11 @@ const ITraineeNavbar = () => {
 
 
             <NavDropdown title="Options" id="navbarScrollingDropdown">
-              <NavDropdown.Item href="#action3">Action</NavDropdown.Item>
-              <NavDropdown.Item href="#action4">
-                Another action
+              <NavDropdown.Item  onClick={() => {
+                  navigate(`/iTraineeProfile`);
+                }}>
+                My Profile
+              
               </NavDropdown.Item>
               <NavDropdown.Divider />
               <NavDropdown.Item href="#action5">
@@ -82,9 +90,6 @@ const ITraineeNavbar = () => {
         </Navbar.Collapse>
       </Container>
     </Navbar>
-
-    
-
     );
   }
   

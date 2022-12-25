@@ -206,6 +206,23 @@ const applyRefund = async(req, res) => {
   
 }
 
+
+const getITraineeInfo = async(req, res) => {
+  if(await iTrainee.findById(req.user._id)){
+  const result  ={
+
+    name: req.user.firstname +" "+ req.user.lastname,
+    username: req.user.username,
+    email: req.user.email,
+  };
+  res.status(200).json(result);
+  }
+  else{
+    res.status(400).json({ error: "Access Restriced" })
+  }
+}
+
+
 module.exports = {
   createITrainee,
   getAllITrainee,
@@ -216,5 +233,6 @@ module.exports = {
   getGrade,
   payForCourse,
   registerForCourse,
-  applyRefund
+  applyRefund,
+  getITraineeInfo
 };

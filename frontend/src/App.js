@@ -15,6 +15,7 @@ import IndividualTraineeHome from "./pages/individualTraineeHome";
 import ITraineeAllCourses from "./pages/iTraineeAllCourses";
 import ITraineeFilterAllCourses from "./pages/iTraineeFilterAllCourses";
 import ITraineeCourse from "./pages/iTraineeCourse";
+import ITraineeProfile from "./pages/iTraineeProfile";
 
 import CorporateTraineeHome from "./pages/corporateTraineeHome";
 import CTraineeAllCourses from "./pages/cTraineeAllCourses";
@@ -87,6 +88,13 @@ function App() {
                 path="/iTraineeAllCourses"
                 element={<ITraineeAllCourses />}
               />
+
+<Route
+                path="/iTraineeProfile"
+                element={<ITraineeProfile />}
+              />
+
+
               <Route
                 path="/iTraineeFilterAllCourses"
                 element={<ITraineeFilterAllCourses />}
