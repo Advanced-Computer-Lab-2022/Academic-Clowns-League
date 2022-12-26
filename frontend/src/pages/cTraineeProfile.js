@@ -1,4 +1,4 @@
-import ITraineeNavbar from "../components/iTraineeNavbar";
+import CTraineeNavbar from "../components/cTraineeNavbar";
 
 
 import { useEffect, useState } from "react";
@@ -10,30 +10,37 @@ import { MDBCol, MDBContainer, MDBRow, MDBCard, MDBCardText, MDBCardBody, MDBCar
 
     
 
-const ITraineeProfile = () => {
+const CTraineeProfile = () => {
+
+    
 
  
-    const [iTrainee, setITrainee] = useState(null);
+    const [cTrainee, setCTrainee] = useState(null);
     const [courses, setCourses] = useState(null);
 
 
     useEffect(() => {
         Promise.all([
-          fetch("/api/itrainee/getITraineeInfo"),
-          fetch("/api/itrainee/registeredcourses"),
-        ]).then(([resITrainee, resCourses])=>
-        Promise.all([resITrainee.json(),resCourses.json()])
-        ).then(([dataITrainee, dataCourses]) =>
+          fetch("/api/ctrainee/getCTraineeInfo"),
+          fetch("/api/ctrainee/registeredcourses"),
+        ]).then(([resCTrainee, resCourses])=>
+        Promise.all([resCTrainee.json(),resCourses.json()])
+        ).then(([dataCTrainee, dataCourses]) =>
         {
-            setITrainee(dataITrainee);
+            setCTrainee(dataCTrainee);
             setCourses(dataCourses);
         });
       }, []);
 
+
+
     
   return (
+
+
+
     <div>
-      <ITraineeNavbar/>
+      <CTraineeNavbar/>
 
 
     
@@ -59,15 +66,15 @@ const ITraineeProfile = () => {
                     <MDBRow className="pt-1">
                       <MDBCol size="4" className="mb-3">
                         <MDBTypography tag="h6">Name</MDBTypography>
-                        <MDBCardText className="text-muted">{iTrainee && iTrainee.name}</MDBCardText>
+                        <MDBCardText className="text-muted">{cTrainee && cTrainee.name}</MDBCardText>
                       </MDBCol>
                       <MDBCol size="4" className="mb-3">
                         <MDBTypography tag="h6">Username</MDBTypography>
-                        <MDBCardText className="text-muted">@{iTrainee && iTrainee.username}</MDBCardText>
+                        <MDBCardText className="text-muted">@{cTrainee && cTrainee.username}</MDBCardText>
                       </MDBCol>
                       <MDBCol size="4" className="mb-3">
                         <MDBTypography tag="h6">Email</MDBTypography>
-                        <MDBCardText className="text-muted">{iTrainee && iTrainee.email}</MDBCardText>
+                        <MDBCardText className="text-muted">{cTrainee && cTrainee.email}</MDBCardText>
                       </MDBCol>
                     </MDBRow>
 
@@ -98,18 +105,18 @@ const ITraineeProfile = () => {
         </MDBRow>
       </MDBContainer>
     </section>
-
-
-
-
-
-
-
-
-
-
     </div>
+
+
+
+
+
+
+
+
+
+
   );
 };
 
-export default ITraineeProfile;
+export default CTraineeProfile;

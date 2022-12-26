@@ -21,6 +21,7 @@ import CorporateTraineeHome from "./pages/corporateTraineeHome";
 import CTraineeAllCourses from "./pages/cTraineeAllCourses";
 import CTraineeFilterAllCourses from "./pages/cTraineeFilterAllCourses";
 import CTraineeCourse from "./pages/cTraineeCourse";
+import CTraineeProfile from "./pages/cTraineeProfile";
 
 import GuestHome from "./pages/guestHome";
 import GuestFilterAllCourses from "./pages/guestFilterAllCourses";
@@ -92,6 +93,12 @@ function App() {
 <Route
                 path="/iTraineeProfile"
                 element={<ITraineeProfile />}
+              />
+
+
+<Route
+                path="/cTraineeProfile"
+                element={<CTraineeProfile />}
               />
 
 

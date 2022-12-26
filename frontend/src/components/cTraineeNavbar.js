@@ -5,10 +5,13 @@ import NavDropdown from 'react-bootstrap/NavDropdown';
 import { NavLink } from "react-router-dom";
 import { useContext } from 'react'
 import { CurrencyContext } from '../contexts/CurrencyContext';
+import { useNavigate } from "react-router-dom";
+
 const countries = require('../country-json-master/src/country-by-currency-code.json')
 
 const CTraineeNavbar = () => {
-  const { country, toggleCurrency } = useContext(CurrencyContext)
+  const { country, toggleCurrency } = useContext(CurrencyContext);
+  const navigate = useNavigate();
 
   
     return (
@@ -42,9 +45,11 @@ const CTraineeNavbar = () => {
 
 
             <NavDropdown title="Options" id="navbarScrollingDropdown">
-              <NavDropdown.Item href="#action3">Action</NavDropdown.Item>
-              <NavDropdown.Item href="#action4">
-                Another action
+            <NavDropdown.Item  onClick={() => {
+                  navigate(`/cTraineeProfile`);
+                }}>
+                My Profile
+              
               </NavDropdown.Item>
               <NavDropdown.Divider />
               <NavDropdown.Item href="#action5">

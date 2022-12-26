@@ -1,8 +1,6 @@
 import React from 'react';
 
-import { MDBCol, MDBContainer, MDBRow, MDBCard, MDBCardText, MDBCardBody, MDBCardImage, MDBTypography, MDBIcon } from 'mdb-react-ui-kit';
 
-import Modal from 'react-bootstrap/Modal';
 import { useNavigate } from "react-router-dom";
 import { useContext, useState} from 'react';
 import Container from 'react-bootstrap/Container';

@@ -209,11 +209,11 @@ const applyRefund = async(req, res) => {
 
 const getITraineeInfo = async(req, res) => {
   if(await iTrainee.findById(req.user._id)){
+  const itrainee = await iTrainee.findOne({_id: req.user._id});
   const result  ={
-
-    name: req.user.firstname +" "+ req.user.lastname,
-    username: req.user.username,
-    email: req.user.email,
+    name: itrainee.firstname +" "+ itrainee.lastname,
+    username: itrainee.username,
+    email: itrainee.email,
   };
   res.status(200).json(result);
   }

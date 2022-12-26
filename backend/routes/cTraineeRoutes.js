@@ -7,10 +7,20 @@ const {
     deleteCTrainee,
     updateCTrainee,
     getRegisteredCourses,
-    getGrade
+    getGrade,
+    getCTraineeInfo
 } = require('../controllers/cTraineeController');
 
 const router = express.Router();
+
+
+
+
+
+
+router.get("/getCTraineeInfo",requireAuth, getCTraineeInfo);
+
+
 
 //GET all corporate trainees
 router.get('/',requireAuth,getAllCTrainee);
