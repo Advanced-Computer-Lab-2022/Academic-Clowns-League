@@ -7,6 +7,8 @@ import { NavLink } from 'react-router-dom';
 import { CurrencyContext } from '../contexts/CurrencyContext';
 import { useNavigate } from "react-router-dom";
 import Button from 'react-bootstrap/Button';
+import { BiWorld } from 'react-icons/bi';
+import { GoSearch } from 'react-icons/go'
 import { MDBBtn, MDBIcon, MDBInput, MDBInputGroup } from 'mdb-react-ui-kit';
 
 
@@ -14,9 +16,29 @@ import { MDBBtn, MDBIcon, MDBInput, MDBInputGroup } from 'mdb-react-ui-kit';
 const countries = require('../country-json-master/src/country-by-currency-code.json')
 
 
-const GuestNavbar = () => {
-  const {toggleCurrency, country} = useContext(CurrencyContext)
+const GuestNavbar = ({updateCourses}) => {
+  const {toggleCurrency} = useContext(CurrencyContext)
+  const [searchTerm, setSearchTerm] = useState("");
   const navigate = useNavigate();
+
+  const handleSubmit = async (e) => {
+    e.preventDefault(); //to prevent the default action which is refreshing the page
+
+    //DON'T CALL THE CONST BELOW searchTerm PLEASE
+    const searchTerm2 = { searchTerm }; //a dummy obj i'll use in backend
+    //const response = await fetch('/api/courses/63598f85fb000a4726c4e5d8')
+    const response = await fetch(
+      `/api/courses/searchAllCourses?${new URLSearchParams(
+        searchTerm2
+      ).toString()}`
+    );
+    const json = await response.json();
+    updateCourses(json)
+    }
+  
+    const handleClick = async () => {
+      window.location.reload(true);
+    };
 
     return (
 
@@ -44,9 +66,55 @@ const GuestNavbar = () => {
           >
 
             <Nav.Link><NavLink to="/" className="navlink">All Courses</NavLink></Nav.Link>
+        
+    
+          </Nav>
+      <div className='search-navbar'>
+        
+      <form className="create" onSubmit={handleSubmit}>
 
-            <NavDropdown title={country} id="navbarScrollingDropdown" onSelect = {toggleCurrency}>
-              {countries.map((country) => (
+      <MDBInputGroup className="search">
+      <MDBInput label='Search' onChange={(e) => setSearchTerm(e.target.value)} style={{
+          backgroundColor: "#E0E0E0",
+          borderColor: "#E0E0E0",
+          color: "black"}}/>
+      <MDBBtn rounded rippleColor='dark' style={{
+          backgroundColor: "#E0E0E0",
+          borderColor: "#E0E0E0",
+          color: "black"
+        }}>
+      <GoSearch />
+      </MDBBtn>
+      </MDBInputGroup>
+      </form>
+      <div className="clear-search-navbar">
+      <MDBBtn rounded style={{
+          backgroundColor: "#E0E0E0",
+          borderColor: "#E0E0E0",
+          color: "black",
+          height: 37,
+        }} onClick={handleClick}>
+        Clear Search
+      </MDBBtn>
+      </div>
+      </div>
+          <div className='login-buttons-navbar'>
+          <MDBBtn className='login' style={{
+          backgroundColor: "transparent",
+          borderColor: "transparent",
+          textDecoration:"none",
+          color:"#D0D0D0"
+        }} onClick={() => navigate(`/login`)} color="link"> Login </MDBBtn>
+            <MDBBtn className='signup' style={{
+          backgroundColor: "transparent",
+          borderColor: "transparent",
+          textDecoration:"none",
+          color:"#D0D0D0"
+        }} color="link"> Sign Up </MDBBtn>
+        </div>
+
+          <NavDropdown title={<BiWorld size={25}/>} id="navbarScrollingDropdown" onSelect = {toggleCurrency} className='navlink-world' align="end">
+            {countries.map((country) => (
                 <NavDropdown.Item eventKey={country.country}>{country.country}</NavDropdown.Item>
               ))}
             </NavDropdown>
@@ -60,14 +128,13 @@ const GuestNavbar = () => {
             <MDBBtn className='signup' style={{
           backgroundColor: "#607D8B",
           borderColor: "#78909C"
-        }}> Sign Up </MDBBtn>
+        }} onClick={() => navigate(`/signup`)}> Sign Up </MDBBtn>
 
             {/*
             <Nav.Link href="#" disabled>
               Link
             </Nav.Link>
     */}
-          </Nav>
 
 
 

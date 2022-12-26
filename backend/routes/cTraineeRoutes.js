@@ -1,6 +1,7 @@
 const express = require("express");
 const { requireAuth } = require("../controllers/userController");
 const {
+<<<<<<< HEAD
   createCTrainee,
   getAllCTrainee,
   //getCTrainee,
@@ -11,8 +12,29 @@ const {
   resetPassword,
   cTraineeUpdatePassword,
 } = require("../controllers/cTraineeController");
+=======
+    createCTrainee,
+    getAllCTrainee,
+    //getCTrainee,
+    deleteCTrainee,
+    updateCTrainee,
+    getRegisteredCourses,
+    getGrade,
+    getCTraineeInfo,
+    getCourse
+} = require('../controllers/cTraineeController');
+>>>>>>> main
 
 const router = express.Router();
+
+
+
+
+
+
+router.get("/getCTraineeInfo",requireAuth, getCTraineeInfo);
+
+
 
 //GET all corporate trainees
 router.get("/", requireAuth, getAllCTrainee);
@@ -35,6 +57,12 @@ router.get("/registeredcourses", requireAuth, getRegisteredCourses);
 //get grade for an exercise
 router.get("/getgrade", requireAuth, getGrade);
 
+<<<<<<< HEAD
 router.patch("/cTraineeUpdatePassword", requireAuth, cTraineeUpdatePassword);
 
 module.exports = router;
+=======
+router.get('/getcourseinfo', requireAuth, getCourse);
+
+module.exports = router;
+>>>>>>> main

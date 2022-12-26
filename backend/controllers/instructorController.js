@@ -49,20 +49,20 @@ const rateInstructor = async (req, res) => {
     (await iTrainee.findById(req.user._id)) ||
     (await cTrainee.findById(req.user._id))
   ) {
-    const id = req.query.id;
-    const Rating = req.query.rating;
-    const user = req.query.user;
-    const instructor = await Instructor.findById({ _id: id });
-    let ratingsTemp = [Object];
-    ratingsTemp = instructor.ratings;
-    let found = false;
-    ratingsTemp.forEach(Function);
+  const id = req.query.id;
+  const Rating = req.query.rating;
+  const user = req.user._id;
+  const instructor = await Instructor.findById({ _id: id });
+  let ratingsTemp = [Object];
+  ratingsTemp = instructor.ratings;
+  let found = false;
+  ratingsTemp.forEach(Function);
 
-    function Function(value) {
-      if (value.userId == user) {
-        found = true;
-      }
+  function Function(value) {
+    if(value.userId==user){
+      found=true;
     }
+  }
     if (!found) {
       console.log(ratingsTemp);
       ratingsTemp.push({ rating: Rating, userId: user });
@@ -91,10 +91,10 @@ const rateInstructor = async (req, res) => {
         .status(404)
         .json({ error: "you have already rated this instructor" });
     }
-  } else {
-    res.status(400).json({ error: "Access Restriced" });
   }
-};
+else {
+  res.status(400).json({ error: "Access Restriced" });
+}};
 //UPDATE an individual Instructor
 
 const updateInstructor = async (req, res) => {
@@ -181,8 +181,8 @@ const getInstructor = async (req, res) => {
     // return res.status(404).json({error: 'No such instructor'})
     // }
 
-    // const instructor = await Instructor.findById(id)
-    const instructor = await Instructor.findById({ _id: req.user._id });
+  // const instructor = await Instructor.findById(id)
+  const instructor = await Instructor.findOne({ _id: req.user._id });
 
     //if (!instructor) {
     // return res.status(404).json({error: 'No such instructor'})
@@ -329,6 +329,37 @@ const deleteMyInstructorReview = async (req, res) => {
   }
 };
 
+
+const getMyInstReview = async (req, res) => {
+  if(await iTrainee.findById(req.user._id) || await cTrainee.findById(req.user._id)){
+    try {
+      const traineeId = req.user._id;
+      const courseId = req.query.id;
+      const theCourse = await Course.findOne({ _id: courseId });
+      const instructorId = theCourse.instructor;
+      var instructorReviews = (await Instructor.findById({ _id: instructorId }).select("reviews")).reviews;
+  
+      let myReview = "";
+
+      for (var i =0;i<instructorReviews.length;i++){
+        if (instructorReviews[i].traineeId == traineeId){
+          myReview = instructorReviews[i].content;
+          break;
+        }
+      }
+      response = {
+          text: myReview
+      } //either the content of the review or an empty string
+      res.status(200).json(response);
+    } catch (error) {
+      res.status(400).json({ error: error.message });
+  }
+  }
+  else{
+    res.status(400).json({ error: "Access Restriced" })
+  }
+};
+
 module.exports = {
   createInstructor,
   getAllInstructor,
@@ -340,4 +371,5 @@ module.exports = {
   editMyInstructorReview,
   deleteMyInstructorReview,
   updatePassword,
+  getMyInstReview
 };

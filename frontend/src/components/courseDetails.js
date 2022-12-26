@@ -74,27 +74,25 @@ const CourseDetails = ({ course }) => {
       </div>
       <MDBBtn rounded
         style={{
-          backgroundColor: isActive ? "#C00418" : "#607D8B",
-          color: isActive ? "white" : "",
+          backgroundColor: isActive ? "#E0E0E0" : "",
+          color: isActive ? "black" : "",
           height: 35,
           textAlign: "center",
-          borderColor: "#78909C"
+          borderColor: isActive ? "black" : "#B71C1C"
         }}
-        onClick={handleClick}
-      >
+        onClick={handleClick} color="danger">
         View Details
       </MDBBtn>
       <MDBBtn rounded
         style={{
-          backgroundColor: "#607D8B",
-          color: isActive ? "white" : "",
+          backgroundColor: isActive ? "#E0E0E0" : "",
+          color: isActive ? "black" : "",
           height: 35,
           textAlign: "center",
+          borderColor: isActive ? "black" : "#B71C1C",
           marginLeft: 10,
-          borderColor: "#78909C"
         }}
-        onClick={() => navigate('/login')}
-      >
+        onClick={() => navigate('/login')} color="danger">
         Register for Course
       </MDBBtn>
       </div>

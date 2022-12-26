@@ -13,17 +13,20 @@ const UserSchema = new Schema(
       required: true,
     },
     role: {
-      type: String,
-      enum: ["cTrainee", "iTrainee", "Instructor", "Admin"],
-      default: "iTrainee",
-    },
+        type: String,
+        enum: ["cTrainee", "iTrainee","Instructor","Admin"],
+        default: "iTrainee",
+      },
+      contract :{
+        type: Boolean,
+        default:false
 
-    email: {
-      type: String,
-      required: false,
-    },
-  },
-  { timestamps: true }
-);
+      },
+      email: {
+        type: String,
+        required: false,
+      },
+   
+}, {timestamps: true})
 
 module.exports = mongoose.model("User", UserSchema);

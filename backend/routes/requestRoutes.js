@@ -2,7 +2,9 @@ const express = require("express");
 const {
   requestAccess,
   getPendingRequests,
-  grantAccess
+  grantAccess,
+  createRefundRequest,
+  getRefundRequests
 } = require("../controllers/requestController");
 const { requireAuth } = require("../controllers/userController");
 
@@ -13,6 +15,10 @@ router.get("/requestAccess",requireAuth,requestAccess);
 router.get("/getPendingRequests",requireAuth, getPendingRequests);
 
 router.get("/grantAccess",requireAuth, grantAccess);
+
+router.get("/createRefundRequest", requireAuth, createRefundRequest);
+
+router.get("/getRefundRequests", requireAuth, getRefundRequests);
 
 
 

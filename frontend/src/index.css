@@ -132,6 +132,47 @@ header a {
   align-items: relative;
   justify-content: center;
 }
+.course-details-instructor {
+  /*for courseDetails.js*/
+  display: flex;
+  flex: 1;
+  background: #fff;
+  border-radius: 4px;
+  width:max-content;
+  margin: 20px 20px 20px 2%;
+  padding: 20px;
+  position: relative;
+  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.05);
+}
+
+.course-details-instructor h4 {
+  /*for courseDetails.js*/
+  margin: 0 0 10px 0;
+  font-size: 1.2em;
+  color: var(--primary);
+}
+.course-details-instructor p {
+  /*for courseDetails.js*/
+  margin: 0;
+  font-size: 0.9em;
+  color: #555;
+}
+.course-details-instructor span {
+  /*for courseDetails.js*/
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  cursor: pointer;
+  background: #f1f1f1;
+  padding: 6px;
+  border-radius: 50%;
+  color: #333;
+}
+
+.instructor-buttons{
+  display: flex;
+  flex: 1
+}
 
 .course-details h4 {
   /*for courseDetails.js*/
@@ -274,6 +315,73 @@ header a {
 }
 
 .navlink:hover {
+  color: var(--bs-navbar-hover-color);
+}
+
+.navlink-profile {
+  color: rgb(208, 208, 208);
+  text-decoration: none;
+  transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out,
+    border-color 0.15s ease-in-out;
+  margin-right: 2%
+}
+
+.navlink-profile:hover {
+  color: var(--bs-navbar-hover-color);
+}
+
+.navlink-world {
+  color: rgb(208, 208, 208);
+  text-decoration: none;
+  transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out,
+    border-color 0.15s ease-in-out;
+  margin-right: 1%;
+}
+
+.navlink-world:hover {
+  color: var(--bs-navbar-hover-color);
+}
+
+.login-buttons{
+  margin-right: 20%;
+  color: rgb(208, 208, 208);
+  text-decoration: none;
+  transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out,
+  border-color 0.15s ease-in-out;
+}
+
+.login-buttons:hover{
+  color: var(--bs-navbar-hover-color);
+}
+
+.login-buttons-navbar{
+  display:flex;
+  flex: 1;
+  margin-right: 18%;
+  color: rgb(208, 208, 208);
+  text-decoration: none;
+  transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out,
+  border-color 0.15s ease-in-out;
+}
+
+.login-buttons-navbar:hover{
+  color: var(--bs-navbar-hover-color);
+}
+
+
+.navlink-profile-instructor {
+  color: rgb(208, 208, 208);
+  text-decoration: none;
+  transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out,
+    border-color 0.15s ease-in-out;
+  margin-right: 2%
+}
+
+.navlink-profile-instructor:hover {
+  color: var(--bs-navbar-hover-color);
+}
+
+.money:hover{
   color: var(--bs-navbar-hover-color);
 }
 
@@ -451,11 +559,19 @@ header a {
 
 .login {
   height: 35px;
-  left: 90%;
+  left: 99%;
   text-align: center;
 }
 
-.signup {
+.login:hover{
+  color: var(--bs-navbar-hover-color);
+}
+
+.signup:hover{
+  color: var(--bs-navbar-hover-color);
+}
+
+.signup{
   height: 35px;
   left: 95%;
   text-align: center;
@@ -473,6 +589,29 @@ header a {
   margin-top: 3%;
   margin-left: 2%;
 }
+.search-navbar{
+  display: flex;
+  flex: 1
+}
+
+.create{
+  left: 43%;
+  margin-top: 0.2%
+}
+
+.clear-search-navbar{
+  margin-left: 122%;
+  margin-top: 0.3%;
+}
+
+.guest-home{
+  display: flex
+}
+
+.courses-element{
+  margin-top: 2%;
+  margin-left: 2%
+}
 
 .popular {
   margin-left: 2%;
@@ -484,8 +623,20 @@ header a {
   height: 35px;
 }
 
-.course-info {
-  margin-left: 2%;
+.sort-popular{
+  left: 3%;
+  margin-top: 1.9%;
+  height: 35px
+}
+
+.sort-length{
+  left: 4%;
+  margin-top: 1.9%;
+  height: 35px
+}
+
+.course-info{
+  margin-left: 2%
 }
 
 .course-video {
@@ -495,4 +646,58 @@ header a {
 #navbarScrollingDown {
   height: 50px;
   overflow: auto;
+}
+
+.money{
+  right: 4%;
+  color:rgb(208, 208, 208);
+}
+
+.money-button{
+  margin-right: 0.5%;
+  background-color: transparent;
+  border-style: none;
+}
+
+.courses-element-instructor{
+  margin-top: 7%;
+  left: 2%
+}
+
+.courses-element-instructor-search{
+  margin-top: 2%;
+  left: 2%
+}
+
+.home-search{
+  display:flex;
+  flex:1
+}
+
+.create-search{
+  margin-left: 2%;
+
+}
+
+.create-instructor{
+  margin-left: 9%;
+
+}
+
+.clear-search-instructor{
+  margin-left: 1%;
+}
+
+.clear-search-instructor-nav{
+  margin-left: 6%;
+
+}
+
+.clear-search-button{
+  height: 35px;
+}
+
+.create-course{
+  left: 25%;
+  top: 15%
 }

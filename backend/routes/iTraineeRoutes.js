@@ -15,15 +15,26 @@ const {
   payForCourse,
   registerForCourse,
   applyRefund,
+<<<<<<< HEAD
   iTraineeUpdatePassword,
+=======
+  getITraineeInfo,
+  getCourse,
+>>>>>>> main
 } = require("../controllers/iTraineeController");
 
 const router = express.Router();
+
+
+
+router.get("/getITraineeInfo",requireAuth, getITraineeInfo);
+
+
 //GET ALL INDIVIUAL TRAINEES
 router.get("/", getAllITrainee);
 
 //GET AN INDIVIDUAL TRAINEE
-//router.get("/:id", getITrainee);
+router.get("/getitrainee", requireAuth, getITrainee);
 
 //POST AN INDIVIDUAL TRAINEE
 router.post("/", createITrainee);
@@ -46,8 +57,14 @@ router.post("/create-payment-intent", requireAuth, payForCourse);
 //add course to courses array
 router.patch("/registercourse", requireAuth, registerForCourse);
 
+<<<<<<< HEAD
 router.patch("/applyrefund", requireAuth, applyRefund);
 
 router.patch("/iTraineeUpdatePassword", requireAuth, iTraineeUpdatePassword);
+=======
+router.get('/applyrefund',requireAuth, applyRefund)
+
+router.get('/getcourseinfo', requireAuth, getCourse)
+>>>>>>> main
 
 module.exports = router;

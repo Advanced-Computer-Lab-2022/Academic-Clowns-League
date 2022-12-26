@@ -1,7 +1,6 @@
 import { useEffect, useState, useContext } from "react";
 import { MDBInputGroup, MDBInput, MDBBtn } from 'mdb-react-ui-kit';
 import { GoSearch } from 'react-icons/go'
-import Accordion from 'react-bootstrap/Accordion';
 
 // components
 import CourseDetails from "../components/courseDetails";
@@ -12,8 +11,8 @@ import { CurrencyContext } from "../contexts/CurrencyContext";
 const GuestHome = () => {
   const { rate, currency } = useContext(CurrencyContext)
   const [courses, setCourses] = useState(null);
-  const [mostPopular, setMostPopular] = useState(null);
-  const [searchTerm, setSearchTerm] = useState("");
+  const [isActivePopular, setIsActivePopular] = useState(false);
+  const [isActiveLength, setIsActiveLength] = useState(false);
   const [subjects, setSubject] = useState({
     computer: false,
     digital: false,
@@ -32,6 +31,10 @@ const GuestHome = () => {
     ninth: false,
     tenth: false,
   });
+
+  const updateCourses = (courses) => {
+    setCourses(courses)
+  }
 
   const onChangeSub = (e) => {
     setSubject({ ...subjects, [e.target.value]: e.target.checked });
@@ -58,35 +61,47 @@ const GuestHome = () => {
     }
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault(); //to prevent the default action which is refreshing the page
-
-    //DON'T CALL THE CONST BELOW searchTerm PLEASE
-    const searchTerm2 = { searchTerm }; //a dummy obj i'll use in backend
-    //const response = await fetch('/api/courses/63598f85fb000a4726c4e5d8')
-    const response = await fetch(
-      `/api/courses/searchAllCourses?${new URLSearchParams(
-        searchTerm2
-      ).toString()}`
-    );
-
-    const json = await response.json();
-    //console.log(json);
-    setCourses(json);
-
-    /* 
-    if(response.ok){
-        setCourses(response);
-    }
-    else {
-        console.log('not okay')
-
-    } */
-  };
-
   const handleClick = async () => {
     window.location.reload(true);
   };
+
+  const getPopular = async () => {
+    setIsActivePopular((current) => !current);
+    if(!isActivePopular){
+      const response = await fetch("api/courses/getPopularCourses")
+      const json = await response.json()
+      if (response.ok) {
+        setCourses(json);
+      }
+    }
+    else{
+      const response = await fetch("/api/courses");
+      const json = await response.json();
+
+      if (response.ok) {
+        setCourses(json);
+      }
+    }
+  }
+
+  const getLength = async () => {
+    setIsActiveLength((current) => !current);
+    if(!isActiveLength){
+      const response = await fetch("api/courses/getCourseLength")
+      const json = await response.json()
+      if (response.ok) {
+        setCourses(json);
+      }
+    }
+    else{
+      const response = await fetch("/api/courses");
+      const json = await response.json();
+
+      if (response.ok) {
+        setCourses(json);
+      }
+    }
+  }
 
   useEffect(() => {
     const fetchCourses = async () => {
@@ -97,54 +112,31 @@ const GuestHome = () => {
         setCourses(json);
       }
     };
-
-    const getCourses = async () => {
-      const response = await fetch("/api/courses/getPopularCourses");
-      const json = await response.json();
-
-      if (response.ok) {
-        setMostPopular(json);
-      }
-    };
-    getCourses();
     fetchCourses();
   }, []);
 
   return (
     <div>
-      <GuestNavbar />
+      <GuestNavbar updateCourses={updateCourses}/>
     
     <div className="home">
-      <form className="create" onSubmit={handleSubmit}>
-
-      <MDBInputGroup className="search">
-      <MDBInput label='Search' onChange={(e) => setSearchTerm(e.target.value)}/>
-      <MDBBtn rounded rippleColor='dark' style={{
-          backgroundColor: "#607D8B",
-          borderColor: "#78909C"
-        }}>
-      <GoSearch />
+      <MDBBtn rounded className='sort-popular' style={{
+          backgroundColor: isActivePopular ? "#E0E0E0" : "",
+          borderColor: isActivePopular ? "#000000" : "#B71C1C",
+          color: isActivePopular ? "#000000": "",
+        }} onClick={getPopular} color="danger">
+        Sort by Most Popular
       </MDBBtn>
-      </MDBInputGroup>
-      </form>
-      <MDBBtn rounded className='clear-search' style={{
-          backgroundColor: "#607D8B",
-          borderColor: "#78909C"
-        }} onClick={handleClick}>
-        Clear Search
+      <MDBBtn rounded className='sort-length' style={{
+          backgroundColor: isActiveLength ? "#E0E0E0" : "",
+          color: isActiveLength ? "#000000": "",
+          borderColor: isActiveLength ? "#000000" : "#B71C1C"
+        }} onClick={getLength} color="danger">
+        Sort by Course Length
       </MDBBtn>
     </div>
     <div className="guest-home">
     <div className="courses-element">
-    <div>
-    <h4 className="popular">Most Popular Courses</h4>
-    <div className="courses-popular">
-        {mostPopular &&
-          mostPopular.map((course) => (
-            <CourseDetails course={course} key={course._id} />
-          ))}
-      </div>
-      </div>
       <div>
       <h4 className="popular">All Courses</h4>
       <div>
@@ -284,15 +276,13 @@ const GuestHome = () => {
           <label>8-10</label>
           <br></br>
           <MDBBtn rounded className='filter' style={{
-          backgroundColor: "#607D8B",
-          borderColor: "#78909C"
-        }}>
+          borderColor: "#B71C1C"
+        }} color="danger">
         Apply
       </MDBBtn>
       <MDBBtn rounded className='filter-clear' style={{
-          backgroundColor: "#607D8B",
-          borderColor: "#78909C"
-        }} onClick={handleClick}>
+          borderColor: "#B71C1C"
+        }} onClick={handleClick} color="danger">
         Clear Filter
       </MDBBtn>
         </form>

@@ -18,7 +18,7 @@ const problemSchema = new Schema(
       status: {
         type: String,
         required: true,
-        default: "Unseen",
+        default: "Unresolved",
       },
       courseId: {
         type: String,
@@ -38,6 +38,7 @@ const problemSchema = new Schema(
       followUp: {
         
         type: String,
+        default:"",
         },
 
         priority: {

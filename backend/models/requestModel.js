@@ -22,7 +22,19 @@ const requestSchema = new Schema(
     status: {
         type: String,
         default: "pending"
-      }
+      },
+    iTraineeId: {
+      type: mongoose.Types.ObjectId,
+      ref: "iTraineeModel",
+    },
+    iTraineeName: {
+      type: String
+    },
+    requestType: {
+      type: String,
+      enum: ["access", "refund", "null"],
+      default: "access"
+    }
   },
   { timestamps: true }
 );
