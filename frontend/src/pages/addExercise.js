@@ -114,16 +114,15 @@ const AddExercise = () => {
     return(
         <>
         <InstructorNavbar />
-        <br></br>
+        <div className='create-course'>
         <h3>Enter Exercise Details</h3>
         <div style={{color: "black", fontSize: "small"}}>- fields followed by * are required</div>
         <br></br>
              <FloatingLabel
                 controlId="floatingInput"
                 label="Question *"
-                className="mb-3"
               >
-        <Form.Control type="text" placeholder="Question *" value={question} onChange={(e) => setQuestion(e.target.value)}/>
+        <Form.Control type="text" placeholder="Question *" value={question} onChange={(e) => setQuestion(e.target.value)} style={{width: 600}}/>
       </FloatingLabel><br></br>
 
       <FloatingLabel controlId="floatingSubject" label="Option 1 *">
@@ -164,6 +163,7 @@ const AddExercise = () => {
           </MDBModalContent>
         </MDBModalDialog>
       </MDBModal>
+      </div>
         </>
     )
 }

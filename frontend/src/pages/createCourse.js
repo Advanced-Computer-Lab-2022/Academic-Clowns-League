@@ -69,16 +69,15 @@ const CreateCourse = () => {
     return(
         <>
         <InstructorNavbar />
-        <br></br>
+        <div className="create-course">
         <h3>Enter Course Details</h3>
         <div style={{color: "black", fontSize: "small"}}>- fields followed by * are required</div>
         <br></br>
              <FloatingLabel
                 controlId="floatingInput"
                 label="Title *"
-                className="mb-3"
               >
-        <Form.Control type="text" placeholder="Title *" value={title} onChange={(e) => setTitle(e.target.value)}/>
+        <Form.Control type="text" placeholder="Title *" value={title} onChange={(e) => setTitle(e.target.value)} style={{width: 600}}/>
       </FloatingLabel><br></br>
 
       <FloatingLabel controlId="floatingSubject" label="Subject *">
@@ -112,6 +111,7 @@ const CreateCourse = () => {
       {error && <div className="error" style={{color: "red", fontSize: "small"}}>{error}</div>}
 
       <Button variant="danger" onClick={handleSubmit} type="button">Next</Button>{' '}
+      </div>
         </>
     );
 }

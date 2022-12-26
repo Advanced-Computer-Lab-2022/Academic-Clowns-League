@@ -85,16 +85,16 @@ const AddSubtitle = () => {
     return(
         <>
         <InstructorNavbar />
-        <br></br>
+        <div className='create-course'>
         <h3>Enter Subtitle Details</h3>
         <div style={{color: "black", fontSize: "small"}}>- fields followed by * are required</div>
         <br></br>
              <FloatingLabel
                 controlId="floatingInput"
                 label="Title *"
-                className="mb-3"
+                
               >
-        <Form.Control type="text" placeholder="Title *" value={title} onChange={(e) => setTitle(e.target.value)}/>
+        <Form.Control type="text" placeholder="Title *" value={title} onChange={(e) => setTitle(e.target.value)} style={{width: 600}}/>
       </FloatingLabel><br></br>
 
       <FloatingLabel controlId="floatingSubject" label="Video Link *">
@@ -127,6 +127,7 @@ const AddSubtitle = () => {
           </MDBModalContent>
         </MDBModalDialog>
       </MDBModal>
+      </div>
         </>
     )
 }

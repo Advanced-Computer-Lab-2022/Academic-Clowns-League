@@ -7,8 +7,6 @@ import Modal from 'react-bootstrap/Modal';
 
 import AdminNavbar from "../components/adminNavbar";
 
-import { useNavigate } from "react-router-dom";
-
 const AdminCourseAccessRequests = () => {
 
   const [requests, setRequests] = useState(null);
@@ -49,7 +47,7 @@ const AdminCourseAccessRequests = () => {
     return (
       <div>
         <AdminNavbar/>
-        <h1 style={{ fontSize: 36, margin: 10 }}>The following individual trainees are requesting refunds to these courses</h1>
+        <h1 style={{ fontSize: 36, margin: 10 }}>The following individual trainees are requesting refunds to the following courses</h1>
         <br></br>
         <Table className="text-center" striped bordered hover>
       <thead>

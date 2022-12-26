@@ -200,41 +200,34 @@ const MyCourseDetailsInstructor = ({ course }) => {
       <div className="instructor-buttons">
       <MDBBtn rounded
         style={{
-          backgroundColor: isActive ? "#C00418" : "#607D8B",
-          color: isActive ? "white" : "",
+          backgroundColor: isActive ? "#E0E0E0" : "",
+          color: isActive ? "black" : "",
           height: 35,
           textAlign: "center",
-          borderColor: "#78909C"
+          borderColor: isActive ? "black" : "#B71C1C"
         }}
-        onClick={handleClick}
-      >
+        onClick={handleClick} color="danger">
         View Details
       </MDBBtn>
       <MDBBtn rounded
         style={{
-          backgroundColor: "#607D8B",
-          color: isActive ? "white" : "",
           height: 35,
           textAlign: "center",
           marginLeft: 10,
-          borderColor: "#78909C"
+          borderColor: "#B71C1C"
         }}
-        onClick={() => navigate(`/instructorCourse?id=${course._id}`)}
-      >
+        onClick={() => navigate(`/instructorCourse?id=${course._id}`)} color="danger">
         Go to Course
       </MDBBtn>
       <MDBBtn rounded
         style={{
-          backgroundColor: "#607D8B",
-          color: isActive ? "white" : "",
           height: 35,
           textAlign: "center",
           marginLeft: 10,
-          borderColor: "#78909C",
+          borderColor: "#B71C1C",
           display: isPublished ? "none" : "block"
         }}
-        onClick={toggleShow}
-      >
+        onClick={toggleShow} color="danger">
         Edit Course
       </MDBBtn>
       <MDBModal show={basicModal} setShow={setBasicModal} tabIndex='-1'>
@@ -286,9 +279,9 @@ const MyCourseDetailsInstructor = ({ course }) => {
 
             </MDBModalBody>
             <MDBModalFooter>
-              <MDBBtn onClick={() => navigate(`/addExercise?id=${course._id}`)}>Add Exercises</MDBBtn>
-              <MDBBtn onClick={() => navigate(`/addSubtitle?id=${course._id}`)}>Add Subtitles</MDBBtn>
-              <MDBBtn onClick={handleSubmit} type="button">Save changes</MDBBtn>
+              <MDBBtn onClick={() => navigate(`/addExercise?id=${course._id}`)} color="danger">Add Exercises</MDBBtn>
+              <MDBBtn onClick={() => navigate(`/addSubtitle?id=${course._id}`)} color="danger">Add Subtitles</MDBBtn>
+              <MDBBtn onClick={handleSubmit} type="button" color="danger">Save changes</MDBBtn>
             </MDBModalFooter>
           </MDBModalContent>
         </MDBModalDialog>
@@ -306,54 +299,45 @@ const MyCourseDetailsInstructor = ({ course }) => {
       </MDBModal>
       <MDBBtn rounded
         style={{
-          backgroundColor: "#607D8B",
-          color: isActive ? "white" : "",
           height: 35,
           textAlign: "center",
           marginLeft: 10,
-          borderColor: "#78909C",
+          borderColor: "#B71C1C",
           display: isPublished ? "none" : "block"
         }}
         onClick={(e) => {
           handleDelete(e);
           window.location.reload(true);
-        }}
-      >
+        }} color="danger">
         Delete Course
       </MDBBtn>
       <MDBBtn rounded
         style={{
-          backgroundColor: "#607D8B",
-          color: isActive ? "white" : "",
           height: 35,
           textAlign: "center",
           marginLeft: 10,
-          borderColor: "#78909C",
+          borderColor: "#B71C1C",
           display: isPublished ? "none" : "block"
         }}
         onClick={(e) => {
           handlePublish(e);
           window.location.reload(true);
-        }}
-      >
+        }} color="danger">
         Publish Course
       </MDBBtn>
       <MDBBtn rounded
         style={{
-          backgroundColor: "#607D8B",
-          color: isActive ? "white" : "",
           height: 35,
           textAlign: "center",
           marginLeft: 10,
-          borderColor: "#78909C",
+          borderColor: "#B71C1C",
           display: isPublished ? "block" : "none",
         }}
         onClick={(e) => {
           handleClose(e);
           window.location.reload(true);
         }}
-        disabled={!isOpen}
-      >
+        disabled={!isOpen} color="danger">
         Close Course
       </MDBBtn>
       </div>

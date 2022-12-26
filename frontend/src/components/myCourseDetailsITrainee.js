@@ -84,20 +84,20 @@ const MyCourseDetailsITrainee = ({ course }) => {
       </div>
       <MDBBtn rounded
         style={{
-          backgroundColor: isActive ? "#C00418" : "#607D8B",
+          backgroundColor: isActive ? "#607D8B" : "",
           color: isActive ? "white" : "",
           height: 35,
           textAlign: "center",
           borderColor: "#78909C"
         }}
         onClick={handleClick}
+        color="danger"
       >
         View Details
       </MDBBtn>
 
       <MDBBtn rounded
         style={{
-          backgroundColor: "#607D8B",
           color: isActive ? "white" : "",
           height: 35,
           textAlign: "center",
@@ -105,6 +105,7 @@ const MyCourseDetailsITrainee = ({ course }) => {
           borderColor: "#78909C"
         }}
         onClick={() => navigate(`/iTraineeCourse?id=${course._id}`)}
+        color="danger"
       >
         Go to Course
       </MDBBtn>

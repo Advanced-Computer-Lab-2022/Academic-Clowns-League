@@ -165,28 +165,30 @@ const InstructorHome = () => {
         </div>
         </MDBTabsPane>
         <MDBTabsPane show={justifyActive === 'tab3'}>
-        <div className="home">
-      <form className="create" onSubmit={handleSubmit}>
+      <div className="home-search">
+      <div className="create-search">
+      <form onSubmit={handleSubmit}>
 
       <MDBInputGroup className="search-instructor">
       <MDBInput label='Search' onChange={(e) => setSearchTerm(e.target.value)}/>
       <MDBBtn rounded rippleColor='dark' style={{
-          backgroundColor: "#607D8B",
-          borderColor: "#78909C"
-        }}>
+          borderColor: "#B71C1C"
+        }} color="danger">
       <GoSearch />
       </MDBBtn>
       </MDBInputGroup>
       </form>
-      <MDBBtn rounded className='clear-search' style={{
-          backgroundColor: "#607D8B",
-          borderColor: "#78909C"
-        }} onClick={handleClick}>
+      </div>
+      <div className="clear-search-instructor">
+      <MDBBtn rounded className='clear-search-button' style={{
+          borderColor: "#B71C1C"
+        }} onClick={handleClick} color="danger">
         Clear Search
       </MDBBtn>
+      </div>
     </div>
     <div className="guest-home">
-    <div className="courses-element-instructor">
+    <div className="courses-element-instructor-search">
       <div>
       <div>
         {courses &&
@@ -294,15 +296,13 @@ const InstructorHome = () => {
           <br></br>
           <br></br>
           <MDBBtn rounded className='filter' style={{
-          backgroundColor: "#607D8B",
-          borderColor: "#78909C"
-        }}>
+          borderColor: "#B71C1C"
+        }} color="danger">
         Apply
       </MDBBtn>
       <MDBBtn rounded className='filter-clear' style={{
-          backgroundColor: "#607D8B",
-          borderColor: "#78909C"
-        }} onClick={handleClick}>
+          borderColor: "#B71C1C"
+        }} onClick={handleClick} color="danger">
         Clear Filter
       </MDBBtn>
         </form>

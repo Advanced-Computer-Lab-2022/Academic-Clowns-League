@@ -285,19 +285,58 @@ header a {
   text-decoration: none;
   transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out,
     border-color 0.15s ease-in-out;
-  margin-right: 10%
+  margin-right: 2%
 }
 
 .navlink-profile:hover {
   color: var(--bs-navbar-hover-color);
 }
 
+.navlink-world {
+  color: rgb(208, 208, 208);
+  text-decoration: none;
+  transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out,
+    border-color 0.15s ease-in-out;
+  margin-right: 1%;
+}
+
+.navlink-world:hover {
+  color: var(--bs-navbar-hover-color);
+}
+
+.login-buttons{
+  margin-right: 20%;
+  color: rgb(208, 208, 208);
+  text-decoration: none;
+  transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out,
+  border-color 0.15s ease-in-out;
+}
+
+.login-buttons:hover{
+  color: var(--bs-navbar-hover-color);
+}
+
+.login-buttons-navbar{
+  display:flex;
+  flex: 1;
+  margin-right: 18%;
+  color: rgb(208, 208, 208);
+  text-decoration: none;
+  transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out,
+  border-color 0.15s ease-in-out;
+}
+
+.login-buttons-navbar:hover{
+  color: var(--bs-navbar-hover-color);
+}
+
+
 .navlink-profile-instructor {
   color: rgb(208, 208, 208);
   text-decoration: none;
   transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out,
     border-color 0.15s ease-in-out;
-  right: 10%
+  margin-right: 2%
 }
 
 .navlink-profile-instructor:hover {
@@ -483,8 +522,16 @@ header a {
 
 .login{
   height: 35px;
-  left: 90%;
+  left: 99%;
   text-align: center;
+}
+
+.login:hover{
+  color: var(--bs-navbar-hover-color);
+}
+
+.signup:hover{
+  color: var(--bs-navbar-hover-color);
 }
 
 .signup{
@@ -495,6 +542,21 @@ header a {
 
 .search{
   left: 5%
+}
+
+.search-navbar{
+  display: flex;
+  flex: 1
+}
+
+.create{
+  left: 43%;
+  margin-top: 0.2%
+}
+
+.clear-search-navbar{
+  margin-left: 122%;
+  margin-top: 0.3%;
 }
 
 .guest-home{
@@ -517,13 +579,13 @@ header a {
 }
 
 .sort-popular{
-  left: 25%;
+  left: 3%;
   margin-top: 1.9%;
   height: 35px
 }
 
 .sort-length{
-  left: 26%;
+  left: 4%;
   margin-top: 1.9%;
   height: 35px
 }
@@ -537,12 +599,12 @@ header a {
 }
 
 .money{
-  right: 9%;
+  right: 4%;
   color:rgb(208, 208, 208);
 }
 
 .money-button{
-  margin-right: 3%;
+  margin-right: 0.5%;
   background-color: transparent;
   border-style: none;
 }
@@ -550,4 +612,42 @@ header a {
 .courses-element-instructor{
   margin-top: 7%;
   left: 2%
+}
+
+.courses-element-instructor-search{
+  margin-top: 2%;
+  left: 2%
+}
+
+.home-search{
+  display:flex;
+  flex:1
+}
+
+.create-search{
+  margin-left: 2%;
+
+}
+
+.create-instructor{
+  margin-left: 9%;
+
+}
+
+.clear-search-instructor{
+  margin-left: 1%;
+}
+
+.clear-search-instructor-nav{
+  margin-left: 6%;
+
+}
+
+.clear-search-button{
+  height: 35px;
+}
+
+.create-course{
+  left: 25%;
+  top: 15%
 }

@@ -13,7 +13,6 @@ const GuestHome = () => {
   const [courses, setCourses] = useState(null);
   const [isActivePopular, setIsActivePopular] = useState(false);
   const [isActiveLength, setIsActiveLength] = useState(false);
-  const [searchTerm, setSearchTerm] = useState("");
   const [subjects, setSubject] = useState({
     computer: false,
     digital: false,
@@ -32,6 +31,10 @@ const GuestHome = () => {
     ninth: false,
     tenth: false,
   });
+
+  const updateCourses = (courses) => {
+    setCourses(courses)
+  }
 
   const onChangeSub = (e) => {
     setSubject({ ...subjects, [e.target.value]: e.target.checked });
@@ -56,22 +59,6 @@ const GuestHome = () => {
     if (response.ok) {
       setCourses(json);
     }
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault(); //to prevent the default action which is refreshing the page
-
-    //DON'T CALL THE CONST BELOW searchTerm PLEASE
-    const searchTerm2 = { searchTerm }; //a dummy obj i'll use in backend
-    //const response = await fetch('/api/courses/63598f85fb000a4726c4e5d8')
-    const response = await fetch(
-      `/api/courses/searchAllCourses?${new URLSearchParams(
-        searchTerm2
-      ).toString()}`
-    );
-
-    const json = await response.json();
-    setCourses(json);
   };
 
   const handleClick = async () => {
@@ -130,37 +117,21 @@ const GuestHome = () => {
 
   return (
     <div>
-      <GuestNavbar />
+      <GuestNavbar updateCourses={updateCourses}/>
     
     <div className="home">
-      <form className="create" onSubmit={handleSubmit}>
-
-      <MDBInputGroup className="search">
-      <MDBInput label='Search' onChange={(e) => setSearchTerm(e.target.value)}/>
-      <MDBBtn rounded rippleColor='dark' style={{
-          backgroundColor: "#607D8B",
-          borderColor: "#78909C"
-        }}>
-      <GoSearch />
-      </MDBBtn>
-      </MDBInputGroup>
-      </form>
-      <MDBBtn rounded className='clear-search' style={{
-          backgroundColor: "#607D8B",
-          borderColor: "#78909C"
-        }} onClick={handleClick}>
-        Clear Search
-      </MDBBtn>
       <MDBBtn rounded className='sort-popular' style={{
-          backgroundColor: isActivePopular ? "#C00418" : "#607D8B",
-          borderColor: "#78909C"
-        }} onClick={getPopular}>
+          backgroundColor: isActivePopular ? "#E0E0E0" : "",
+          borderColor: isActivePopular ? "#000000" : "#B71C1C",
+          color: isActivePopular ? "#000000": "",
+        }} onClick={getPopular} color="danger">
         Sort by Most Popular
       </MDBBtn>
       <MDBBtn rounded className='sort-length' style={{
-          backgroundColor: isActiveLength ? "#C00418" : "#607D8B",
-          borderColor: "#78909C"
-        }} onClick={getLength}>
+          backgroundColor: isActiveLength ? "#E0E0E0" : "",
+          color: isActiveLength ? "#000000": "",
+          borderColor: isActiveLength ? "#000000" : "#B71C1C"
+        }} onClick={getLength} color="danger">
         Sort by Course Length
       </MDBBtn>
     </div>
@@ -305,15 +276,13 @@ const GuestHome = () => {
           <label>8-10</label>
           <br></br>
           <MDBBtn rounded className='filter' style={{
-          backgroundColor: "#607D8B",
-          borderColor: "#78909C"
-        }}>
+          borderColor: "#B71C1C"
+        }} color="danger">
         Apply
       </MDBBtn>
       <MDBBtn rounded className='filter-clear' style={{
-          backgroundColor: "#607D8B",
-          borderColor: "#78909C"
-        }} onClick={handleClick}>
+          borderColor: "#B71C1C"
+        }} onClick={handleClick} color="danger">
         Clear Filter
       </MDBBtn>
         </form>

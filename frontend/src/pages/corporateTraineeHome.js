@@ -26,11 +26,14 @@ const CorporateTraineeHome = () => {
 
     <CTraineeNavbar />
     <div className="home">
-      <div className="courses-trainee">
+    <div className="courses-element">
+    <h4 className="popular">My Courses</h4>
+      <div className="my-courses">
         {courses &&
           courses.map((course) => (
             <MyCourseDetailsCTrainee course={course} key={course._id} />
           ))}
+      </div>
       </div>
     </div>
     </div>
