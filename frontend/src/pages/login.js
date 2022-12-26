@@ -103,11 +103,11 @@ const Login = () => {
                 navigate("/instructorHome")
             }
             else if(json.role == "Admin"){
-                navigate("/adminHome")
-            }}
-           
+                navigate("/adminAddUsers")
+            }
         }
     }
+}
     return(
         <div>
             <GuestNavbar/>

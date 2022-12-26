@@ -1,9 +1,11 @@
-import React, { useEffect, useState } from "react";
+{/*import React, { useEffect, useState } from "react";
 import {
   PaymentElement,
   useStripe,
   useElements
 } from "@stripe/react-stripe-js";
+
+import { useNavigate } from "react-router-dom";
 
 const CheckoutForm = () => {
   const stripe = useStripe();
@@ -87,16 +89,16 @@ const CheckoutForm = () => {
     <div className="root">
     <form id="payment-form" onSubmit={handleSubmit}>
       <PaymentElement id="payment-element" options={paymentElementOptions} />
-      <button disabled={isLoading || !stripe || !elements} id="submit">
+      <button disabled={isLoading || !stripe || !elements} id="submit" style={{backgroundColor:"#C62828"}}>
         <span id="button-text">
           {isLoading ? <div className="spinner" id="spinner"></div> : "Pay now"}
         </span>
       </button>
-      {/* Show any error or success messages */}
+      {/* Show any error or success messages 
       {message && <div id="payment-message">{message}</div>}
     </form>
     </div>
   );
-}
+} 
 
-export default CheckoutForm
+export default CheckoutForm  */}
