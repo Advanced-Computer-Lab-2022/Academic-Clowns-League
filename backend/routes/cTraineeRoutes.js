@@ -1,18 +1,6 @@
 const express = require("express");
 const { requireAuth } = require("../controllers/userController");
 const {
-<<<<<<< HEAD
-  createCTrainee,
-  getAllCTrainee,
-  //getCTrainee,
-  deleteCTrainee,
-  updateCTrainee,
-  getRegisteredCourses,
-  getGrade,
-  resetPassword,
-  cTraineeUpdatePassword,
-} = require("../controllers/cTraineeController");
-=======
     createCTrainee,
     getAllCTrainee,
     //getCTrainee,
@@ -21,9 +9,10 @@ const {
     getRegisteredCourses,
     getGrade,
     getCTraineeInfo,
-    getCourse
+    getCourse,
+    resetPassword,
+    cTraineeUpdatePassword,
 } = require('../controllers/cTraineeController');
->>>>>>> main
 
 const router = express.Router();
 
@@ -57,12 +46,7 @@ router.get("/registeredcourses", requireAuth, getRegisteredCourses);
 //get grade for an exercise
 router.get("/getgrade", requireAuth, getGrade);
 
-<<<<<<< HEAD
 router.patch("/cTraineeUpdatePassword", requireAuth, cTraineeUpdatePassword);
-
-module.exports = router;
-=======
 router.get('/getcourseinfo', requireAuth, getCourse);
 
 module.exports = router;
->>>>>>> main

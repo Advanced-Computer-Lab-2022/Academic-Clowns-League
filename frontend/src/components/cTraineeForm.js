@@ -79,7 +79,7 @@ const CTraineeForm = () => {
           top: "40px",
           width: "500px",
           height: "-200px",
-          transform: "translate(90%, 20%)",
+        //  transform: "translate(90%, 20%)",
         }}
       >
         <MDBCardHeader>Add Corporate Trainee</MDBCardHeader>
@@ -108,7 +108,7 @@ const CTraineeForm = () => {
           <button
             style={{ allign: "center", top: "-15px" }}
             className="button4"
-            onClick={handleClickOpen}
+            onClick={handleSubmit}
           >
             Add corporate Trainee
           </button>

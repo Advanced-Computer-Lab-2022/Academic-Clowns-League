@@ -113,6 +113,10 @@ const courseSchema = new Schema(
     open:{
       type: Boolean,
       default: false
+    },
+    overallRating:{
+      type: Number,
+      default: 0
     }
   },
   { timestamps: true }

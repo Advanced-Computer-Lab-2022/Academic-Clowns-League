@@ -11,16 +11,12 @@ const {
   reviewInstructor,
   editMyInstructorReview,
   deleteMyInstructorReview,
-<<<<<<< HEAD
   updatePassword,
-=======
   getMyInstReview
->>>>>>> main
 } = require("../controllers/InstructorController");
 
 const router = express.Router();
 
-<<<<<<< HEAD
 router.patch("/reviewInstructor", requireAuth, reviewInstructor);
 router.patch("/editMyInstructorReview", requireAuth, editMyInstructorReview);
 router.patch(
@@ -28,7 +24,6 @@ router.patch(
   requireAuth,
   deleteMyInstructorReview
 );
-=======
 
 
 
@@ -38,7 +33,6 @@ router.get("/getMyInstReview",requireAuth, getMyInstReview);
 router.patch("/reviewInstructor",requireAuth,reviewInstructor);
 router.patch("/editMyInstructorReview",requireAuth,editMyInstructorReview);
 router.patch("/deleteMyInstructorReview",requireAuth,deleteMyInstructorReview);
->>>>>>> main
 
 //GET all  instructor
 router.get("/", requireAuth, getAllInstructor);

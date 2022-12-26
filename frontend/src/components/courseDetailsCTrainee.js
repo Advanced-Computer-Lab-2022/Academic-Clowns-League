@@ -19,6 +19,12 @@ const CourseDetailsCTrainee = ({ course }) => {
     // setIsActive(true);
   };
 
+  const handleSubmit = async(e) =>{
+    e.preventDefault()
+    const response = await fetch(`api/request/requestAccess/?id=${course._id}`);
+      const json = await response.json();
+  }
+
   useEffect(() => {
     const fetchCourse = async () => {
       const response = await fetch(`api/ctrainee/getcourseinfo/?id=${course._id}`);
@@ -92,12 +98,12 @@ const CourseDetailsCTrainee = ({ course }) => {
           marginLeft: 10,
           borderColor: "#B71C1C",
         }}
-        onClick={() => {
+        onClick={(e) => {
           if(myCourse.register == true){
             navigate(`/cTraineeCourse?id=${myCourse._id}`)
           }
           else{
-            //navigate(`/checkoutPage?id=${myCourse._id}&title=${myCourse.title}`)
+            handleSubmit(e)
           }
         }}
         color="danger"

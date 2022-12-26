@@ -15,12 +15,9 @@ const {
   payForCourse,
   registerForCourse,
   applyRefund,
-<<<<<<< HEAD
   iTraineeUpdatePassword,
-=======
   getITraineeInfo,
   getCourse,
->>>>>>> main
 } = require("../controllers/iTraineeController");
 
 const router = express.Router();
@@ -57,14 +54,9 @@ router.post("/create-payment-intent", requireAuth, payForCourse);
 //add course to courses array
 router.patch("/registercourse", requireAuth, registerForCourse);
 
-<<<<<<< HEAD
-router.patch("/applyrefund", requireAuth, applyRefund);
-
 router.patch("/iTraineeUpdatePassword", requireAuth, iTraineeUpdatePassword);
-=======
 router.get('/applyrefund',requireAuth, applyRefund)
 
 router.get('/getcourseinfo', requireAuth, getCourse)
->>>>>>> main
 
 module.exports = router;

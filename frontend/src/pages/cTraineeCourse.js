@@ -10,10 +10,8 @@ import RateInstructor from "../components/rateInstructor";
 import Ratio from "react-bootstrap/Ratio";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
-import Button from 'react-bootstrap/Button';
 import Accordion from 'react-bootstrap/Accordion';
 import { useNavigate } from "react-router-dom";
-import Accordion from 'react-bootstrap/Accordion';
 import Button from 'react-bootstrap/Button';
 import ProgressBar from 'react-bootstrap/ProgressBar';
 import Sidebar from "react-sidebar";
@@ -576,10 +574,6 @@ const CTraineeCourse = () => {
               <p style={{ fontSize: '40px' }}>{grade}</p>
               <p style={{ color: 'red' }}> {message}</p>
             </form>
-
-            <RateCourse course={course} myId="637a356c54c79d632507dc8a" />
-
-            <RateInstructor course={course} myId="637a356c54c79d632507dc8a" />
 
           </Col>
 

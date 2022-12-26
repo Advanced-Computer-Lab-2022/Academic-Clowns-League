@@ -6,12 +6,18 @@ import NavDropdown from "react-bootstrap/NavDropdown";
 import React, { useContext } from "react";
 import { NavLink } from "react-router-dom";
 import { CurrencyContext } from "../contexts/CurrencyContext";
+import { CgProfile } from 'react-icons/cg';
+import { BiWorld } from 'react-icons/bi';
 const countries = require("../country-json-master/src/country-by-currency-code.json");
 
 
 const AdminNavbar = () => {
   const { toggleCurrency, country } = useContext(CurrencyContext);
   const navigate = useNavigate();
+  const handleClose = async () => {
+    const response = await fetch ("api/users/logout");
+  navigate("/");
+  }
   return (
     <Navbar
       sticky="top"
@@ -56,7 +62,7 @@ const AdminNavbar = () => {
 
             <Nav.Link>
               <NavLink to="/adminPromotions" className="navlink">
-                Add Promotions
+                Promotions
               </NavLink>
             </Nav.Link>
 
@@ -64,43 +70,30 @@ const AdminNavbar = () => {
 
             <Nav.Link>
               <NavLink to="/adminCourseAccessRequests" className="navlink">
-                Course Access Requests
+                Access Requests
               </NavLink>
             </Nav.Link>
 
 
             <Nav.Link>
               <NavLink to="/adminRefundRequests" className="navlink">
-                Refund Requests
+                Refunds
               </NavLink>
             </Nav.Link>
 
+          </Nav>
 
-
-            <NavDropdown title="Options" id="navbarScrollingDropdown">
-              <NavDropdown.Item href="#action3">Action</NavDropdown.Item>
-              <NavDropdown.Item href="#action4">
-                Another action
-              </NavDropdown.Item>
-              <NavDropdown.Divider />
-              <NavDropdown.Item href="#action5">
-                Something else here
+          <NavDropdown title={<CgProfile size={25}/>} id="navbarScrollingDropdown" className='navlink-profile-instructor' align="end">
+              <NavDropdown.Item onClick={handleClose}>
+                Logout
               </NavDropdown.Item>
             </NavDropdown>
 
-            <NavDropdown
-              title={country}
-              id="navbarScrollingDropdown"
-              onSelect={toggleCurrency}
-            >
-              {countries.map((country) => (
-                <NavDropdown.Item eventKey={country.country}>
-                  {country.country}
-                </NavDropdown.Item>
+            <NavDropdown title={<BiWorld size={25}/>} id="navbarScrollingDropdown" onSelect = {toggleCurrency} className='navlink-world' align="end">
+            {countries.map((country) => (
+                <NavDropdown.Item eventKey={country.country}>{country.country}</NavDropdown.Item>
               ))}
             </NavDropdown>
-
-          </Nav>
 
         </Navbar.Collapse>
       </Container>

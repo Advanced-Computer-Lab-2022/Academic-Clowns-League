@@ -1,4 +1,4 @@
-import AdminNavbar from "../components/adminNavbar";
+/*import AdminNavbar from "../components/adminNavbar";
 import InputGroup from "react-bootstrap/InputGroup";
 import { useEffect, useState } from "react";
 import CourseDetailsAdmin from "../components/courseDetailsAdmin";
@@ -79,4 +79,4 @@ const AdminPromotions = () => {
   );
 };
 
-export default AdminPromotions;
+export default AdminPromotions;*/

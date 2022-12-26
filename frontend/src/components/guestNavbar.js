@@ -110,7 +110,7 @@ const GuestNavbar = ({updateCourses}) => {
           borderColor: "transparent",
           textDecoration:"none",
           color:"#D0D0D0"
-        }} color="link"> Sign Up </MDBBtn>
+        }} color="link" onClick={() => navigate('/signup')}> Sign Up </MDBBtn>
         </div>
 
           <NavDropdown title={<BiWorld size={25}/>} id="navbarScrollingDropdown" onSelect = {toggleCurrency} className='navlink-world' align="end">
@@ -118,17 +118,6 @@ const GuestNavbar = ({updateCourses}) => {
                 <NavDropdown.Item eventKey={country.country}>{country.country}</NavDropdown.Item>
               ))}
             </NavDropdown>
-
-            
-
-            <MDBBtn className='login' style={{
-          backgroundColor: "#607D8B",
-          borderColor: "#78909C"
-        }} onClick={() => navigate(`/login`)}> Login </MDBBtn>
-            <MDBBtn className='signup' style={{
-          backgroundColor: "#607D8B",
-          borderColor: "#78909C"
-        }} onClick={() => navigate(`/signup`)}> Sign Up </MDBBtn>
 
             {/*
             <Nav.Link href="#" disabled>

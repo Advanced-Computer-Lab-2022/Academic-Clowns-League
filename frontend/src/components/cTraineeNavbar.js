@@ -18,6 +18,11 @@ const CTraineeNavbar = ({updateCourses}) => {
   const [searchTerm, setSearchTerm] = useState("");
   const navigate = useNavigate();
 
+  const handleClose = async () => {
+    const response = await fetch ("api/users/logout");
+  navigate("/");
+  }
+
   const handleSubmit = async (e) => {
     e.preventDefault(); //to prevent the default action which is refreshing the page
 
@@ -127,7 +132,7 @@ const CTraineeNavbar = ({updateCourses}) => {
                 Requests & Problems
               </NavDropdown.Item>
               <NavDropdown.Divider />
-              <NavDropdown.Item href="#action5">
+              <NavDropdown.Item onClick={handleClose}>
                 Logout
               </NavDropdown.Item>
             </NavDropdown>

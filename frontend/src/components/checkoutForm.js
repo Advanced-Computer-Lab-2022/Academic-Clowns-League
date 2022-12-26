@@ -1,4 +1,4 @@
-{/*import React, { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   PaymentElement,
   useStripe,
@@ -94,11 +94,11 @@ const CheckoutForm = () => {
           {isLoading ? <div className="spinner" id="spinner"></div> : "Pay now"}
         </span>
       </button>
-      {/* Show any error or success messages 
+      {/* Show any error or success messages */}
       {message && <div id="payment-message">{message}</div>}
     </form>
     </div>
   );
 } 
 
-export default CheckoutForm  */}
+export default CheckoutForm 

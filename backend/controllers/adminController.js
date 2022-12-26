@@ -22,7 +22,6 @@ const createAdmin = async (req, res) => {
         const dbUser = new User({
           username: username,
           password: encryptedPassword,
-
           role: "Admin",
         });
         dbUser.save();

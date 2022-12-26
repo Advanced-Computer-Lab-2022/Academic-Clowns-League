@@ -4,7 +4,6 @@ const cTrainee = require("../models/cTraineeModel");
 const Admin = require("../models/adminModel");
 const Course = require("../models/courseModel");
 const iTrainee = require("../models/iTraineeModel");
-const Admin = require("../models/adminModel");
 const mongoose = require("mongoose");
 
 const requestAccess = async (req, res) => {

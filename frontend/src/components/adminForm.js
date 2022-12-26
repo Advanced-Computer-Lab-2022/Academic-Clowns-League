@@ -58,7 +58,7 @@ const AdminForm = () => {
           top: "70px",
           width: "500px",
           height: "-200px",
-          transform: "translate(90%, 20%)",
+         // transform: "translate(90%, 20%)",
         }}
       >
         <MDBCardHeader>Add Admin</MDBCardHeader>
@@ -80,7 +80,7 @@ const AdminForm = () => {
           <button
             style={{ allign: "center", top: "-15px" }}
             className="button4"
-            onClick={handleClickOpen}
+            onClick={handleSubmit}
           >
             Add Admin
           </button>

@@ -1,4 +1,4 @@
-/*import { loadStripe } from "@stripe/stripe-js";
+import { loadStripe } from "@stripe/stripe-js";
 import { Elements } from "@stripe/react-stripe-js";
 import Badge from 'react-bootstrap/Badge';
 import React, { useState, useEffect } from "react";
@@ -14,6 +14,7 @@ const CheckoutPage = () => {
     const title = params.get("title");
     const id = params.get("id");
 
+    
     useEffect(() => {
         // Create PaymentIntent as soon as the page loads
         fetch('api/itrainee/create-payment-intent', {
@@ -50,4 +51,4 @@ const CheckoutPage = () => {
       );   
 }
 
-export default CheckoutPage */
+export default CheckoutPage

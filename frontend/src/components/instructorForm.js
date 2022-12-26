@@ -67,7 +67,7 @@ const InstructorForm = () => {
           top: "40px",
           width: "500px",
           height: "-200px",
-          transform: "translate(90%, 1%)",
+         // transform: "translate(90%, 1%)",
         }}
       >
         <MDBCardHeader>Add Instructor</MDBCardHeader>
@@ -115,9 +115,9 @@ const InstructorForm = () => {
             value={miniBio}
           />{" "}
           <button
-            style={{ allign: "center", top: "-15px" }}
+            style={{ align: "center", top: "-15px" }}
             className="button4"
-            onClick={handleClickOpen}
+            onClick={handleSubmit}
           >
             Add Instructor
           </button>

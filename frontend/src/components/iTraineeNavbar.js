@@ -12,8 +12,8 @@ import {GiMoneyStack} from 'react-icons/gi';
 import { BiWorld } from 'react-icons/bi';
 import { NavLink, Link } from 'react-router-dom';
 import { CurrencyContext } from '../contexts/CurrencyContext';
-import { Navigate, useNavigate } from 'react-router-dom';
-import Button from 'react-bootstrap/Button';
+import { GoSearch } from 'react-icons/go'
+import { MDBBtn, MDBIcon, MDBInput, MDBInputGroup } from 'mdb-react-ui-kit';
 const countries = require('../country-json-master/src/country-by-currency-code.json')
 
 
@@ -129,7 +129,9 @@ const ITraineeNavbar = ({updateCourses}) => {
                 }}>
                 Change Password
               </NavDropdown.Item>
-              <NavDropdown.Item href="#action4">
+              <NavDropdown.Item onClick={() => {
+                  navigate(`/iTraineeProblems`);
+                }}>
                 Reports & Problems
               </NavDropdown.Item>
               <NavDropdown.Divider />
@@ -152,7 +154,7 @@ const ITraineeNavbar = ({updateCourses}) => {
             <Popover id={`popover-positioned-bottom`}>
               <Popover.Header as="h3">{`${iTrainee.firstname} ${iTrainee.lastname}'s Wallet`}</Popover.Header>
               <Popover.Body>
-                <h6>Current Balance: </h6> {iTrainee.wallet*rate} {currency}
+                <h6>Current Balance: </h6> {Math.round(iTrainee.wallet*rate)} {currency}
               </Popover.Body>
             </Popover>
           }

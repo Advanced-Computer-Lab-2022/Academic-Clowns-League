@@ -22,6 +22,11 @@ const InstructorNavbar = ({updateCourses}) => {
   const [searchTerm, setSearchTerm] = useState("");
   const [instructorMoney, setInstructorMoney] =  useState("")
 
+  const handleClose = async () => {
+    const response = await fetch ("api/users/logout");
+  navigate("/");
+  }
+
   useEffect(() => {
     const fetchInstructor = async () => {
       const response = await fetch('api/instructor/onlyone');
@@ -138,14 +143,7 @@ const InstructorNavbar = ({updateCourses}) => {
           <NavDropdown.Item
                 onClick={() => navigate("/instructorRatingsAndReviews")}
               >
-                View my ratings and reviews
-              </NavDropdown.Item>
-              <NavDropdown.Item
-                onClick={() => {
-                  navigate(`/instructorViewAndEditBio?id=${instructor._id}`);
-                }}
-              >
-                Edit Biography
+                View my Ratings and Reviews
               </NavDropdown.Item>
 
               <NavDropdown.Item
@@ -153,15 +151,7 @@ const InstructorNavbar = ({updateCourses}) => {
                   navigate("/instructorProblems");
                 }}
               >
-                Requests and problems
-              </NavDropdown.Item>
-
-              <NavDropdown.Item
-                onClick={() => {
-                  navigate("/editEmail");
-                }}
-              >
-                Edit Email
+                Requests and Problems
               </NavDropdown.Item>
 
               <NavDropdown.Item
@@ -185,6 +175,10 @@ const InstructorNavbar = ({updateCourses}) => {
                 }}
               >
                 Forgot my password
+              </NavDropdown.Item>
+              <NavDropdown.Divider />
+              <NavDropdown.Item onClick={handleClose}>
+                Logout
               </NavDropdown.Item>
             </NavDropdown>
 

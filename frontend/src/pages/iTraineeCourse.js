@@ -21,13 +21,11 @@ import Accordion from 'react-bootstrap/Accordion';
 
 import Button from 'react-bootstrap/Button';
 import { useNavigate } from "react-router-dom";
-import Button from 'react-bootstrap/Button';
 import ProgressBar from 'react-bootstrap/ProgressBar';
 import Sidebar from "react-sidebar";
 import Form from 'react-bootstrap/Form';
 import Modal from 'react-bootstrap/Modal';
 import Offcanvas from 'react-bootstrap/Offcanvas';
-import { useNavigate } from "react-router-dom";
 
 
 import { BsFillTrashFill, BsFillPencilFill } from "react-icons/bs";
@@ -628,8 +626,6 @@ const ITraineeCourse = () => {
             </form>
 
 
-        
-            <RateInstructor course={course} myId="637a356c54c79d632507dc8a" />
 
           </Col>
 

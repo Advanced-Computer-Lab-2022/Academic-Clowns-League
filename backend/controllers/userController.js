@@ -16,7 +16,7 @@ const createUser = async (req, res) => {
   const user = req.body;
   const takenUsername = await User.findOne({ username: user.username });
 
-  if (takenUsername) res.json({ message: "Username is taken" });
+  if (takenUsername) res.status(400).json({ message: "Username is taken" });
   else {
     try {
       user.password = await bcrypt.hash(req.body.password, 10);
@@ -31,13 +31,16 @@ const createUser = async (req, res) => {
       const dbUser = new User({
         username: user.username.toLowerCase(),
         password: user.password,
+        email: user.email,
         role: "iTrainee",
+        contract: true
       });
       dbUser.save();
       res.status(200).json(iUser);
       //res.json({message:"Success"})
     } catch (error) {
-      res.json({ message: "Signup Failed", error: error.message });
+      res.status(400).json({ message: "Signup Failed", error: error.message });
+
     }
   }
 };

@@ -13,7 +13,7 @@ const createInstructor = async (req, res) => {
     const { username, password, country, email, miniBio, name } = req.body;
     const takenUsername = await User.findOne({ username: username });
     if (takenUsername) {
-      res.json({ message: "Username is taken" });
+      res.status(400).json({ message: "Username is taken" });
     } else {
       try {
         const encryptedPassword = await bcrypt.hash(password, 10);
@@ -28,6 +28,7 @@ const createInstructor = async (req, res) => {
         const dbUser = new User({
           username: username,
           password: encryptedPassword,
+          email: email,
           role: "Instructor",
         });
         dbUser.save();

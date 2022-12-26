@@ -12,7 +12,7 @@ import {
   MDBTabsPane,
 } from "mdb-react-ui-kit";
 
-const AdminAddUsers = () => {
+/*const AdminAddUsers = () => {
   return (
     <div>
       <AdminNavbar />
@@ -21,7 +21,7 @@ const AdminAddUsers = () => {
       </p>
     </div>
   );
-};
+};*/
 
 /*<p>
         <InstructorForm />
@@ -61,7 +61,7 @@ const AdminAddUsers = () => {
   );
 };*/
 
-/*const AdminAddUsers = () => {
+const AdminAddUsers = () => {
   const [basicActive, setBasicActive] = useState("admin");
   const value = "";
   const handleBasicClick = (value) => {
@@ -74,6 +74,8 @@ const AdminAddUsers = () => {
   };
 
   return (
+    <div>
+      <AdminNavbar/>
     <form>
       <MDBTabs pills className="mb-3">
         <MDBTabsItem>
@@ -116,7 +118,8 @@ const AdminAddUsers = () => {
         </MDBTabsPane>
       </MDBTabsContent>
     </form>
+    </div>
   );
-};*/
+};
 
 export default AdminAddUsers;

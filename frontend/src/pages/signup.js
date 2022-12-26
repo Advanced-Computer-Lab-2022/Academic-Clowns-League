@@ -52,28 +52,13 @@ const Signup = () => {
         })
         
         const json2 = await signUpresponse.json()
-        console.log(json2)
+        console.log(json2);
 
-
-        const response = await fetch ("api/users/login",{
-            method: 'POST',
-            body:JSON.stringify(login),
-            headers: {
-                'Content-Type':'application/json'
-            }
-        })
-        
-
-        const json = await response.json()
-        console.log(json)
-
-        if (!signUpresponse.ok) {
+        if (signUpresponse.status == 400) {
             setError("Signup Error "+json2.error);
         }
-        if (signUpresponse.ok){
-
-
-            
+        
+        if (signUpresponse.status == 200){
             const response = await fetch ("api/users/login",{
                 method: 'POST',
                 body:JSON.stringify(login),
@@ -88,7 +73,7 @@ const Signup = () => {
             if (!response.ok) {
             setError(json.error);
         }
-        if (response.ok){
+        if (response.status == 200){
            
             setUsername("");
             setPassword("");
@@ -102,14 +87,10 @@ const Signup = () => {
             else if(json.role == "Instructor"){
                 navigate("/instructorHome")
             }
-            else{
-                navigate("/adminHome")
+            else if(json.role == "Admin"){
+                navigate("/adminAddUsers")
             }
         }
-
-
-
-
         }
         
     }
