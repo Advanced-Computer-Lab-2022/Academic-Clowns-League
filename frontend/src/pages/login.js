@@ -1,9 +1,10 @@
-import FloatingLabel from 'react-bootstrap/FloatingLabel';
-import Form from 'react-bootstrap/Form';
-import Button from 'react-bootstrap/Button';
-import { useState } from 'react';
-import { Navigate, useNavigate } from 'react-router-dom';
-import GuestNavbar from '../components/guestNavbar';
+import FloatingLabel from "react-bootstrap/FloatingLabel";
+import Form from "react-bootstrap/Form";
+import Button from "react-bootstrap/Button";
+import { useState } from "react";
+import { Link, Navigate, useNavigate } from "react-router-dom";
+import GuestNavbar from "../components/guestNavbar";
+import NavLink from "react-bootstrap/esm/NavLink";
 import Modal from 'react-bootstrap/Modal'
 
 const Login = () => {
@@ -14,12 +15,6 @@ const Login = () => {
     const [show, setShow] = useState(false);
     var json;
     const handleClose = async () => {
-
-      
-        
-
-        
-
         const response = await fetch ("api/users/contract",{
             method:'POST',
            
@@ -64,21 +59,21 @@ const Login = () => {
     const handleShow = (role) => {setShow(true);}
     
 
-    const handleSubmit = async(e) => {
-        e.preventDefault()
+  const handleSubmit = async (e) => {
+    e.preventDefault();
 
-        const login = {
-            username, 
-            password
-        }
+    const login = {
+      username,
+      password,
+    };
 
-        const response = await fetch ("api/users/login",{
-            method: 'POST',
-            body:JSON.stringify(login),
-            headers: {
-                'Content-Type':'application/json'
-            }
-        })
+    const response = await fetch("api/users/login", {
+      method: "POST",
+      body: JSON.stringify(login),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
 
          json = await response.json()
         console.log(json)
@@ -122,6 +117,9 @@ const Login = () => {
             <Form.Control type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)}/>
             </FloatingLabel>
             {error && <div className="error">{error}</div>}
+            <div>
+            <Link to="/resetPassword">Forgot Password ?</Link>
+            </div>
             <Button variant="success" onClick={handleSubmit}>Login</Button>
 
 

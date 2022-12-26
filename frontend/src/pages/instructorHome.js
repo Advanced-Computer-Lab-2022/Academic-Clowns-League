@@ -72,7 +72,6 @@ const InstructorHome = () => {
 
     const json = await response.json();
     setCourses(json);
-
   };
 
 
@@ -129,6 +128,37 @@ const InstructorHome = () => {
   return (
     <div>
       <InstructorNavbar />
+      <div className="home">
+        <div>
+          <Link to="/createCourse">
+            <Button variant="outline-danger" className="create-course">
+              + Create Course
+            </Button>{" "}
+          </Link>
+        </div>
+        <form className="create" onSubmit={handleSubmit}>
+          <h3>Search</h3>
+
+          <label>Enter your search term:</label>
+          <input
+            id="searchTerm"
+            name="searchTerm"
+            placeholder="Search"
+            type="text"
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
+
+          <button>Search</button>
+          <button onClick={handleClick}>Clear Search</button>
+        </form>
+        <div className="courses">
+          {courses &&
+            courses.map((course) => (
+              <MyCourseDetailsInstructor course={course} key={course._id} />
+            ))}
+        </div>
+      </div>
+    
       <MDBTabs justify className='mb-3'>
         <MDBTabsItem>
           <MDBTabsLink onClick={() => handleJustifyClick('tab1')} active={justifyActive === 'tab1'}>

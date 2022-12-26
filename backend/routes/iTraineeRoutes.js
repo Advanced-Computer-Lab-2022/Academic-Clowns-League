@@ -1,5 +1,8 @@
 const express = require("express");
-const { requireAuth } = require('../controllers/userController');
+const {
+  requireAuth,
+  //updatePassword,
+} = require("../controllers/userController");
 
 const {
   createITrainee,
@@ -12,8 +15,12 @@ const {
   payForCourse,
   registerForCourse,
   applyRefund,
+<<<<<<< HEAD
+  iTraineeUpdatePassword,
+=======
   getITraineeInfo,
   getCourse,
+>>>>>>> main
 } = require("../controllers/iTraineeController");
 
 const router = express.Router();
@@ -39,19 +46,25 @@ router.delete("/:id", deleteITrainee);
 router.patch("/", updateITrainee);
 
 //GET registered courses for ITrainee
-router.get('/registeredcourses',requireAuth ,getRegisteredCourses);
+router.get("/registeredcourses", requireAuth, getRegisteredCourses);
 
 //get grade for an exercise
-router.get('/getgrade',requireAuth, getGrade);
+router.get("/getgrade", requireAuth, getGrade);
 
 //enter payment details and pay for course
-router.post('/create-payment-intent', requireAuth, payForCourse);
+router.post("/create-payment-intent", requireAuth, payForCourse);
 
 //add course to courses array
-router.patch('/registercourse',requireAuth, registerForCourse);
+router.patch("/registercourse", requireAuth, registerForCourse);
 
+<<<<<<< HEAD
+router.patch("/applyrefund", requireAuth, applyRefund);
+
+router.patch("/iTraineeUpdatePassword", requireAuth, iTraineeUpdatePassword);
+=======
 router.get('/applyrefund',requireAuth, applyRefund)
 
 router.get('/getcourseinfo', requireAuth, getCourse)
+>>>>>>> main
 
 module.exports = router;

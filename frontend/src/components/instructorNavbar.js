@@ -163,6 +163,15 @@ const InstructorNavbar = ({updateCourses}) => {
               >
                 Edit Email
               </NavDropdown.Item>
+
+              <NavDropdown.Item
+                onClick={() => {
+                  navigate(`/viewAndEditInfo?id`);
+                }}
+              >
+                View And Edit Information
+              </NavDropdown.Item>
+
               <NavDropdown.Item
                 onClick={() => {
                   navigate(`/changePassword?id=${instructor._id}`);

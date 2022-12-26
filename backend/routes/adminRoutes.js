@@ -1,35 +1,29 @@
-const express = require('express')
-const { requireAuth } = require('../controllers/userController');
-const{
-    getAllAdmins,
-    getAdmin,
-    deleteAdmin,
-    updateAdmin,
-    createAdmin
-} = require('../controllers/AdminController')
+const express = require("express");
+const { requireAuth } = require("../controllers/userController");
+const {
+  getAllAdmins,
+  getAdmin,
+  deleteAdmin,
+  updateAdmin,
+  createAdmin,
+} = require("../controllers/AdminController");
 
-const router = express.Router()
-
-
+const router = express.Router();
 
 //GET all Admins
-router.get('/',requireAuth, getAllAdmins)    
-
+router.get("/", requireAuth, getAllAdmins);
 
 //GET a single Admin   //the : means id is a route parameter
-router.get('/:id',getAdmin)
-
+router.get("/:id", getAdmin);
 
 //DELETE a single Admin
-router.delete('/:id',deleteAdmin)
+router.delete("/:id", deleteAdmin);
 
 //UPDATE a single Admin
-router.patch('/:id',updateAdmin)
-
+router.patch("/:id", updateAdmin);
 
 //POST a new Admin
-router.post('/', requireAuth, createAdmin)
-
+router.post("/", requireAuth, createAdmin);
 
 //after creating all our routes , export the router with the routes attached to it
-module.exports = router
+module.exports = router;

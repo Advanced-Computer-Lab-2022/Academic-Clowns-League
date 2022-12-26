@@ -1,34 +1,56 @@
 import InstructorNavbar from "../components/instructorNavbar";
 import { useState } from "react";
+import { Routes, Route, useNavigate } from "react-router-dom";
 
 const ChangePassword = () => {
   const params = new URLSearchParams(window.location.search);
-  //const id = params.get("id");
-  const id = "63715373d953904400b6a4d5";
-  const [password, setPassword] = useState(" ");
+  const id = params.get("id");
+  //const id = "63715373d953904400b6a4d5";
+  const [password, setPassword] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState(null);
+  const navigate = useNavigate();
+
+  //const [showResults, setShowResults] = React.useState(false);
+
+  //const navigateToLogin = navigate("/login");
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const Password = {
+    console.log("IM HERE");
+
+    /*const Password = {
       password,
     };
 
-    const response = await fetch("/api/instructor/?id=" + id, {
+    const NewPassword = {
+      newPassword,
+    };*/
+
+    const response = await fetch("/api/instructor/updatePassword", {
       method: "PATCH",
-      body: JSON.stringify(Password),
+      body: JSON.stringify({
+        password: password,
+        newPassword: newPassword,
+        confirmPassword: confirmPassword,
+      }),
       headers: {
         "Content-Type": "application/json",
       },
     });
-    const json = await response.json();
 
+    const json = await response.json();
     if (!response.ok) {
       setError(json.error);
     }
     if (response.ok) {
       setPassword("");
+      setNewPassword("");
+      setConfirmPassword("");
       setError(null);
+      window.location.href = "/login";
       console.log("Password Updated", json);
     }
   };
@@ -37,19 +59,61 @@ const ChangePassword = () => {
     <div>
       <InstructorNavbar />
 
-      <form className="update" onSubmit={handleSubmit}>
-        <h3>Change password</h3>
+      <form
+        className="changePassword"
+        style={{ left: "50%", top: "30%", transform: "translate(-50%, -50%)" }}
+        onSubmit={handleSubmit}
+      >
+        <h3
+          style={{
+            fontSize: 20,
+            margin: 20,
+            left: "50%",
+            top: "30%",
+            transform: "translate(-5%, -50%)",
+            alignContent: "center",
+          }}
+        >
+          Change password{" "}
+        </h3>
 
-        <li>
-          <label>Password:</label>
-          <input
-            type="text"
-            onChange={(e) => setPassword(e.target.value)}
-            value={password}
-          />
-        </li>
+        <div className="mb-3">
+          <p>
+            <label>Password:</label>
+            <line> </line>
+            <input
+              type="password"
+              onChange={(e) => setPassword(e.target.value)}
+              value={password}
+            />
+          </p>
+        </div>
 
-        <button>Change Password</button>
+        <div className="mb-3">
+          <p>
+            <label>New Password:</label>
+            <line> </line>
+            <input
+              type="password"
+              onChange={(e) => setNewPassword(e.target.value)}
+              value={newPassword}
+            />
+          </p>
+        </div>
+
+        <div className="mb-3">
+          <p>
+            <label>Confirm Password:</label>
+            <line> </line>
+            <input
+              type="password"
+              onChange={(e) => setConfirmPassword(e.target.value)}
+              value={confirmPassword}
+            />
+          </p>
+        </div>
+
+        <button className="button4">Change Password</button>
 
         {error && <div className="error">{error}</div>}
       </form>

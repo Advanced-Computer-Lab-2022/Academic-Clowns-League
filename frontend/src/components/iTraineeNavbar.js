@@ -72,14 +72,12 @@ const ITraineeNavbar = ({updateCourses}) => {
           </Navbar.Brand>
         <Navbar.Toggle aria-controls="navbarScroll" />
         <Navbar.Collapse id="navbarScroll">
-
-
-
           <Nav
             className="me-auto my-2 my-lg-0"
-            style={{ maxHeight: '100px' }}
+            style={{ maxHeight: "100px" }}
             navbarScroll
           >
+
 
             <Nav.Link><NavLink to="/individualTraineeHome" className="navlink">My Courses</NavLink></Nav.Link>
             <Nav.Link><NavLink to="/iTraineeAllCourses" className="navlink">All Courses</NavLink></Nav.Link>
@@ -126,7 +124,9 @@ const ITraineeNavbar = ({updateCourses}) => {
               <NavDropdown.Item onClick={() => {
                   navigate(`/iTraineeProfile`);
                 }}>My Profile</NavDropdown.Item>
-              <NavDropdown.Item href="#action4">
+              <NavDropdown.Item onClick={() => {
+                  navigate(`/iTraineeChangePassword`);
+                }}>
                 Change Password
               </NavDropdown.Item>
               <NavDropdown.Item href="#action4">
@@ -174,7 +174,6 @@ const ITraineeNavbar = ({updateCourses}) => {
             <Button variant="outline-success">Search</Button>
           </Form>
   */}
-
         </Navbar.Collapse>
     </Navbar>
     );

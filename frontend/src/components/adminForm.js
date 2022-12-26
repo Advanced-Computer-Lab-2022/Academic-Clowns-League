@@ -1,16 +1,28 @@
 import { useState } from "react";
+import {
+  MDBCard,
+  MDBCardHeader,
+  MDBCardBody,
+  MDBCardTitle,
+  MDBCardText,
+  MDBBtn,
+  MDBInput,
+} from "mdb-react-ui-kit";
 
 const AdminForm = () => {
   const [popup, setPop] = useState(false);
+  const [message, setMessage] = useState(true);
   const handleClickOpen = () => {
-    setPop(!popup);
+    // setPop(!popup);
+    setMessage(false);
   };
 
-  const closePopup = () => {
+  /*const closePopup = () => {
     setPop(false);
-  };
+  };*/
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  //const [email, setEmail] = useState("");
   const [error, setError] = useState(null);
 
   const handleSubmit = async (e) => {
@@ -18,7 +30,7 @@ const AdminForm = () => {
 
     const admin = { username, password };
 
-    const response = await fetch("/api/admin", {
+    const response = await fetch("/api/admin/", {
       method: "POST",
       body: JSON.stringify(admin),
       headers: {
@@ -33,6 +45,7 @@ const AdminForm = () => {
     if (response.ok) {
       setUsername("");
       setPassword("");
+      //setEmail("");
       setError(null);
       console.log("New Admin is Added", json);
     }
@@ -40,42 +53,50 @@ const AdminForm = () => {
 
   return (
     <form className="create" onSubmit={handleSubmit}>
-      <h3>Add a new Admin</h3>
-      <li>
-        <label>Admin Username:</label>
-        <input
-          type="text"
-          onChange={(e) => setUsername(e.target.value)}
-          value={username}
-        />{" "}
-      </li>
+      <MDBCard
+        style={{
+          top: "70px",
+          width: "500px",
+          height: "-200px",
+          transform: "translate(90%, 20%)",
+        }}
+      >
+        <MDBCardHeader>Add Admin</MDBCardHeader>
+        <MDBCardBody>
+          <MDBCardTitle>Username:</MDBCardTitle>
+          <MDBInput
+            label="Username"
+            type="text"
+            onChange={(e) => setUsername(e.target.value)}
+            value={username}
+          />{" "}
+          <MDBCardTitle>Password:</MDBCardTitle>
+          <MDBInput
+            label="Password"
+            type="text"
+            onChange={(e) => setPassword(e.target.value)}
+            value={password}
+          />{" "}
+          <button
+            style={{ allign: "center", top: "-15px" }}
+            className="button4"
+            onClick={handleClickOpen}
+          >
+            Add Admin
+          </button>
+        </MDBCardBody>
+      </MDBCard>
+      <p style={{ align: "center", transform: "translate(115%, 570%)" }}>
+        <message
+          style={{
+            display: message ? "none" : "inline-block",
+            top: "70px",
+          }}
+        >
+          New Admin is added successfully
+        </message>
+      </p>
 
-      <li>
-        {" "}
-        <label>Password:</label>
-        <input
-          type="text"
-          onChange={(e) => setPassword(e.target.value)}
-          value={password}
-        />{" "}
-      </li>
-      <button onClick={handleClickOpen}>Add new Admin</button>
-      <div>
-        {popup ? (
-          <div className="main">
-            <div className="popup">
-              <div className="popup-header">
-                <h1 onClick={closePopup}>X</h1>
-              </div>
-              <div>
-                <p className="message">A new Admin is added</p>
-              </div>
-            </div>
-          </div>
-        ) : (
-          ""
-        )}
-      </div>
       {error && <div className="error">{error}</div>}
     </form>
   );

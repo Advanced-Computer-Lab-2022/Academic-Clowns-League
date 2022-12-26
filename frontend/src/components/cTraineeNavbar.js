@@ -63,39 +63,17 @@ const CTraineeNavbar = ({updateCourses}) => {
           </Navbar.Brand>
         <Navbar.Toggle aria-controls="navbarScroll" />
         <Navbar.Collapse id="navbarScroll">
-
-
-
           <Nav
             className="me-auto my-2 my-lg-0"
-            style={{ maxHeight: '100px' }}
+            style={{ maxHeight: "100px" }}
             navbarScroll
           >
+
 
             <Nav.Link><NavLink to="/corporateTraineeHome" className="navlink">My Courses</NavLink></Nav.Link>
             <Nav.Link><NavLink to="/cTraineeAllCourses" className="navlink">All Courses</NavLink></Nav.Link>
 
-<<<<<<< HEAD
-
-            <NavDropdown title="Options" id="navbarScrollingDropdown">
-              <NavDropdown.Item href="#action3">Action</NavDropdown.Item>
-              <NavDropdown.Item href="#action4">
-                action
-              </NavDropdown.Item>
-              <NavDropdown.Divider />
-              <NavDropdown.Item href="/cTraineeProblems">
-               Requests and problems
-              </NavDropdown.Item>
-            </NavDropdown>
-
-            <NavDropdown title={country} id="navbarScrollingDropdown" onSelect = {toggleCurrency}>
-            {countries.map((country) => (
-                <NavDropdown.Item eventKey={country.country}>{country.country}</NavDropdown.Item>
-              ))}
-            </NavDropdown>
-=======
             
->>>>>>> main
 
             {/*
             <Nav.Link href="#" disabled>
@@ -138,11 +116,15 @@ const CTraineeNavbar = ({updateCourses}) => {
               <NavDropdown.Item onClick={() => {
                   navigate(`/cTraineeProfile`);
                 }}>My Profile</NavDropdown.Item>
-              <NavDropdown.Item href="#action4">
+              <NavDropdown.Item onClick={() => {
+                  navigate(`/cTraineeChangePassword`);
+                }}>
                 Change Password
               </NavDropdown.Item>
-              <NavDropdown.Item href="#action4">
-                Reports & Problems
+              <NavDropdown.Item onClick={() => {
+                  navigate(`/cTraineeProblems`);
+                }}>
+                Requests & Problems
               </NavDropdown.Item>
               <NavDropdown.Divider />
               <NavDropdown.Item href="#action5">
@@ -167,13 +149,9 @@ const CTraineeNavbar = ({updateCourses}) => {
             <Button variant="outline-success">Search</Button>
           </Form>
   */}
-
         </Navbar.Collapse>
     </Navbar>
+  );
+};
 
-    
-
-    );
-  }
-  
-  export default CTraineeNavbar;
+export default CTraineeNavbar;
