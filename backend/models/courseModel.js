@@ -104,8 +104,16 @@ const courseSchema = new Schema(
         traineeId: String,
         content: String
       },
-    ]
+    ],
 
+    published: {
+      type: Boolean,
+      default: true
+    },
+    open:{
+      type: Boolean,
+      default: false
+    }
   },
   { timestamps: true }
 );

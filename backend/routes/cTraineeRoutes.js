@@ -8,7 +8,8 @@ const {
     updateCTrainee,
     getRegisteredCourses,
     getGrade,
-    getCTraineeInfo
+    getCTraineeInfo,
+    getCourse
 } = require('../controllers/cTraineeController');
 
 const router = express.Router();
@@ -42,5 +43,7 @@ router.get('/registeredcourses',requireAuth,getRegisteredCourses);
 
 //get grade for an exercise
 router.get('/getgrade',requireAuth, getGrade)
+
+router.get('/getcourseinfo', requireAuth, getCourse);
 
 module.exports = router;

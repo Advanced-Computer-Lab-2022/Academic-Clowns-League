@@ -35,6 +35,56 @@ const getAllCourses = async (req, res) => {
   res.status(200).json(courses);
 };
 
+getInstUnpub = async(req, res) => {
+  if(await Instructor.findById(req.user._id)){
+    const courses = await Course.aggregate([
+      {
+        $lookup: {
+          from: "instructors",
+          localField: "instructor",
+          foreignField: "_id",
+          as: "instructorData",
+        },
+      },
+      {
+        $unwind: "$instructorData",
+      },
+      {
+        $match: { $and: [{"instructorData.name": req.user.name }, {published: false}] },
+      },
+    ]);
+    res.status(200).json(courses)
+  }
+  else{
+    res.status(400).json({ error: "Access Restriced" })
+  }
+}
+
+getInstPub = async(req, res) => {
+  if(await Instructor.findById(req.user._id)){
+    const courses = await Course.aggregate([
+      {
+        $lookup: {
+          from: "instructors",
+          localField: "instructor",
+          foreignField: "_id",
+          as: "instructorData",
+        },
+      },
+      {
+        $unwind: "$instructorData",
+      },
+      {
+        $match: { $and: [{"instructorData.name": req.user.name }, {published: true}] },
+      },
+    ]);
+    res.status(200).json(courses)
+  }
+  else{
+    res.status(400).json({ error: "Access Restriced" })
+  }
+}
+
 //get instructor courses
 const getInstCourses = async (req, res) => {
 if(await Instructor.findById(req.user._id)){
@@ -61,8 +111,14 @@ if(await Instructor.findById(req.user._id)){
 };
 
 //get a single course
-const getCourse = (req, res) => {
-  res.json({ mssg: "GET a single course" });
+const getCourse = async (req, res) => {
+  if(await Instructor.findById(req.user._id)){
+    const course = await Course.findOne({_id: req.query.id})
+    res.status(200).json(course)
+  }
+  else{
+    res.status(400).json({ error: "Access Restriced" })
+  }
 };
 
 //delete a course
@@ -138,11 +194,8 @@ const rateCourse = async (req, res) => {
 //Review course
 //update a course
 const updateCourse = async (req, res) => {
-  if(await Instructor.findById(req.user._id)){ const id = req.query.id;
-
-  if (!mongoose.Types.ObjectId.isValid(id)) {
-    return res.status(404).json({ error: "No such Course" });
-  }
+  if(await Instructor.findById(req.user._id)){
+    const id = req.query.id;
 
   const course = await Course.findOneAndUpdate(
     { _id: id },
@@ -151,9 +204,8 @@ const updateCourse = async (req, res) => {
     }
   );
 
-  if (!course) {
-    return res.status(400).json({ error: "No such Course" });
-  }}
+  res.status(200).json(course)
+  }
   else{
     res.status(400).json({ error: "Access Restriced" })
   }
@@ -207,6 +259,7 @@ const createCourse = async (req, res) => {
       discountApp = true;
     } else {
       discount = 0;
+      discountValidUntil = currentDate
     }
     const course = await Course.create({
       title,
@@ -221,11 +274,6 @@ const createCourse = async (req, res) => {
       overallRating: "0",
       discountApplied: discountApp,
     });
-    //Course.create() is async that's why we put async around the handler fn, so u can use await right here
-    //now we're storing the response of Course.create() (which is the doc created along with its is) in course
-    //inside create, u pass thru an object representing the doc u wanna create
-
-    //status 200 to say everything is okay, and send back an obj which is the course created
     res.status(200).json(course);
   } catch (error) {
     res.status(400).json({ error: error.message });
@@ -1160,13 +1208,33 @@ const getPopularCourses = async (req, res) => {
       $unwind: "$instructorData",
     },
     {
-      $sort: { "numOfEnrolledTrainees":-1},
+      $sort: { numOfEnrolledTrainees : -1},
     },
-    { $limit : 3}
   ]);
 
   res.status(200).json(courses);
 };
+
+const getCourseLength = async (req, res) => {
+  const courses = await Course.aggregate([
+    {
+      $lookup: {
+        from: "instructors",
+        localField: "instructor",
+        foreignField: "_id",
+        as: "instructorData",
+      },
+    },
+    {
+      $unwind: "$instructorData",
+    },
+    {
+      $sort: { hours : -1},
+    },
+  ]);
+
+  res.status(200).json(courses);
+}
 
 const adminAddDiscount = async (req, res) => {
   if(await Admin.findById(req.user._id)){const id = req.query.id;
@@ -1328,7 +1396,12 @@ const getMyCourseReview = async (req, res) => {
       res.status(200).json(response);
     } catch (error) {
       res.status(400).json({ error: error.message });
-  }
+    }
+    }}
+const publishCourse = async(req, res) => {
+  if(await Instructor.findById(req.user._id)){
+    const course = await Course.findOneAndUpdate({_id: req.query.id}, {published: true, open: true})
+    res.status(200).json(course)
   }
   else{
     res.status(400).json({ error: "Access Restriced" })
@@ -1393,6 +1466,50 @@ const getMyProgress = async (req, res) => {
 };
 
 
+const closeCourse = async(req, res) => {
+  if(await Instructor.findById(req.user._id)){
+    const course = await Course.findOneAndUpdate({_id: req.query.id}, {open: false})
+    res.status(200).json(course)
+  }
+  else{
+    res.status(400).json({ error: "Access Restriced" })
+  }
+}
+
+const getCourseInfo = async(req, res) => {
+  if(await Instructor.findById(req.user._id)){
+    const instructorID = mongoose.Types.ObjectId(req.user._id)
+    const courseID = mongoose.Types.ObjectId(req.query.id);
+    const course = await Course.aggregate([
+      {
+        $lookup: {
+          from: "instructors",
+          localField: "instructor",
+          foreignField: "_id",
+          as: "instructorData",
+        },
+      },
+      {
+        $unwind: "$instructorData",
+      },
+      {
+        $match: { _id: courseID},
+      },
+    ]);
+
+    if((course[0].instructor).toString() == (instructorID).toString()){
+      course[0].mine = true
+    }
+    else{
+      course[0].mine = false
+    }
+    //console.log(course)
+    res.status(200).json(course[0])
+  }
+  else{
+    res.status(400).json({ error: "Access Restriced" })
+  }
+}
 
 module.exports = {
   getAllCourses,
@@ -1423,5 +1540,11 @@ module.exports = {
   deleteMyCourseReview,
   addToProgress,
   getMyProgress,
-  getMyCourseReview
+  getMyCourseReview,
+  getCourseLength,
+  getInstPub,
+  getInstUnpub,
+  publishCourse,
+  closeCourse,
+  getCourseInfo
 };

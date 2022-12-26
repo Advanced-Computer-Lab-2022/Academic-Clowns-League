@@ -2,12 +2,22 @@ import { useEffect, useState } from "react"
 import PaymentNavbar from "../components/paymentNavbar";
 import { useNavigate } from "react-router-dom"
 import Button from 'react-bootstrap/Button';
+import { MDBBtn, MDBModal,
+    MDBModalDialog,
+    MDBModalContent,
+    MDBModalHeader,
+    MDBModalTitle,
+    MDBModalBody,
+    MDBModalFooter,} from 'mdb-react-ui-kit';
 
 const PaymentCompletion = () => {
-    const [error, setError] = useState("Course Successfully Purchased!");
+    //const [error, setError] = useState("Course Successfully Purchased!");
     const navigate = useNavigate();
+    const [basicModal, setBasicModal] = useState(false);
     const params = new URLSearchParams(window.location.search);
     const id = params.get("id");
+
+    const toggleShow = () => setBasicModal(!basicModal);
 
     useEffect(() => {
         const updateCourses = async () => {
@@ -19,8 +29,8 @@ const PaymentCompletion = () => {
               });
             const json = response.json();
             console.log(json)
-            if (!response.ok) {
-                setError(json.error);
+            if (response.status == 200) {
+                toggleShow()
             }
         }
         updateCourses();
@@ -29,8 +39,21 @@ const PaymentCompletion = () => {
     return(
         <>
         <PaymentNavbar />
-        <h1 className="purchase">{error}</h1>
-        <Button variant="outline-danger" onClick={() => {navigate('/individualTraineeHome')}} className="purchase-button">Return to Homepage</Button>
+        <MDBModal show={basicModal} setShow={setBasicModal} tabIndex='-1' id="successful-payment">
+        <MDBModalDialog size='sm'>
+          <MDBModalContent>
+            <MDBModalHeader>
+              <MDBModalTitle>Operation Successful!</MDBModalTitle>
+              <MDBBtn className='btn-close' color='none' onClick={toggleShow}></MDBBtn>
+            </MDBModalHeader>
+            <MDBModalBody>Course Successfully Purchased!</MDBModalBody>
+
+            <MDBModalFooter>
+              <MDBBtn color="danger" onClick={() => navigate("/individualTraineeHome")}>Back to Homepage</MDBBtn>
+            </MDBModalFooter>
+          </MDBModalContent>
+        </MDBModalDialog>
+      </MDBModal>
         </>
     )
 }

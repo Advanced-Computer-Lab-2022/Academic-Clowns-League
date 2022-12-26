@@ -3,6 +3,13 @@ import Subtitle from "../components/subtitle";
 import ITraineeNavbar from "../components/iTraineeNavbar";
 import Exercise from "../components/excercise";
 import YouTube from 'react-youtube';
+import { MDBBtn, MDBModal,
+  MDBModalDialog,
+  MDBModalContent,
+  MDBModalHeader,
+  MDBModalTitle,
+  MDBModalBody,
+  MDBModalFooter,} from 'mdb-react-ui-kit';
 
 import RateCourse from "../components/rateCourse";
 import RateInstructor from "../components/rateInstructor";
@@ -17,6 +24,8 @@ import Sidebar from "react-sidebar";
 import Form from 'react-bootstrap/Form';
 import Modal from 'react-bootstrap/Modal';
 import Offcanvas from 'react-bootstrap/Offcanvas';
+import { useNavigate } from "react-router-dom";
+
 
 import { BsFillTrashFill, BsFillPencilFill } from "react-icons/bs";
 
@@ -79,7 +88,7 @@ const ITraineeCourse = () => {
   const params = new URLSearchParams(window.location.search);
   const id = params.get("id");
 
-  const [course, setCourse] = useState(null);
+  const [course, setCourse] = useState('');
   const [grade, setGrade] = useState("");
   const [message, setMessage] = useState("");
   const [submitted, setSubmitted] = useState(false);
@@ -123,6 +132,11 @@ const ITraineeCourse = () => {
       console.log("USEEFFECT");
     });
   }, []);
+  const [answersText, setAnswersText] = useState("");
+  const [basicModal, setBasicModal] = useState(false);
+  const navigate = useNavigate();
+
+  const toggleShow = () => setBasicModal(!basicModal);
 
   //values needed for Excercises
   const StudentAnswers = [];
@@ -173,6 +187,34 @@ const ITraineeCourse = () => {
             " Should be: " +
             CorrectAnswers[i]
           );
+        ResultDisplay +=
+          "The following answer is wrong: " +
+          StudentAnswers[i] +
+          " Should be: " +
+          CorrectAnswers[i];
+      }
+      setAnswersText(ResultDisplay);
+    }
+    ResultDisplay = (Result / FullMark) * 100;
+    setGrade(ResultDisplay);
+    console.log(ResultDisplay);
+  };
+  }
+  /*useEffect(() => {
+    const fetchCourse = async () => {
+      const response = await fetch("/api/courses/openMyCourse/?id=" + id);
+
+      const json = await response.json();
+      if (response.status == 200) {
+        setCourse(json);
+
+        //console.log(course.exercises);
+
+        if (course) {
+          for (let i = 0; i < course.exercises.length; i++) {
+            CorrectAnswers.push(course.exercises[i].answer);
+          }
+          console.log(CorrectAnswers);
         }
       }
       ResultDisplay = (Result / FullMark) * 100;
@@ -187,7 +229,7 @@ const ITraineeCourse = () => {
 
     }
 
-  };
+  });*/
 
 
   const handleDownloadCertificate = async (event) => {
@@ -424,6 +466,15 @@ const ITraineeCourse = () => {
   }
 
 
+
+  const requestRefund = async() => {
+    const response = await fetch("/api/request/createRefundRequest/?id=" + id);
+    const json = await response.json();
+
+    if(response.status == 200){
+      navigate("/individualTraineeHome")
+    }
+}
 
   return (
     <div className="">
@@ -760,9 +811,30 @@ const ITraineeCourse = () => {
               </Modal.Footer>
             </Modal>
 
+            <MDBBtn className='me-1' color='danger' onClick={toggleShow}> 
+              Request Refund
+            </MDBBtn>
           </Col>
         </Row>
       )}
+      <MDBModal show={basicModal} setShow={setBasicModal} tabIndex='-1'>
+        <MDBModalDialog size='sm'>
+          <MDBModalContent>
+            <MDBModalHeader>
+              <MDBModalTitle>Requesting a Refund</MDBModalTitle>
+              <MDBBtn className='btn-close' color='none' onClick={toggleShow}></MDBBtn>
+            </MDBModalHeader>
+            <MDBModalBody>Are you sure you would like to request a refund for the following course: {course.title}?</MDBModalBody>
+
+            <MDBModalFooter>
+              <MDBBtn color='secondary' onClick={toggleShow}>
+                Cancel
+              </MDBBtn>
+              <MDBBtn color="danger" onClick={requestRefund}>Yes, I'm sure</MDBBtn>
+            </MDBModalFooter>
+          </MDBModalContent>
+        </MDBModalDialog>
+      </MDBModal>
     </div>
   );
 };

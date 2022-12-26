@@ -103,7 +103,7 @@ const loginUser = async (req, res) => {
 };
 const requireAuth = (req, res, next) => {
     const token = req.cookies.jwtoken
-    console.log(token);
+    //console.log(token);
       
     // check json web token exists & is verified
     if (token) {
@@ -112,7 +112,7 @@ const requireAuth = (req, res, next) => {
           isLoggedIn:false,
           message: "Failed to Authenticate"}) 
           req.user = decodedToken.payload;
-          console.log("User ", decodedToken)
+          //console.log("User ", decodedToken)
           next()
       })
     } else {

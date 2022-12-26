@@ -197,7 +197,7 @@ const getInstructor = async (req, res) => {
   // }
 
   // const instructor = await Instructor.findById(id)
-  const instructor = await Instructor.findById({ _id: req.user._id });
+  const instructor = await Instructor.findOne({ _id: req.user._id });
 
   //if (!instructor) {
   // return res.status(404).json({error: 'No such instructor'})

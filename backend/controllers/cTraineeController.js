@@ -168,6 +168,46 @@ const getCTraineeInfo = async(req, res) => {
     email: ctrainee.email,
   };
   res.status(200).json(result);
+}
+}
+const getCourse = async(req, res) => {
+  if(await cTrainee.findById(req.user._id)){
+    const ctraineeID = req.user._id
+    const ctraineeCourses = await cTrainee.findOne({_id: ctraineeID}).select("courses")
+    const courseID = mongoose.Types.ObjectId(req.query.id);
+    const course = await Course.aggregate([
+      {
+        $lookup: {
+          from: "instructors",
+          localField: "instructor",
+          foreignField: "_id",
+          as: "instructorData",
+        },
+      },
+      {
+        $unwind: "$instructorData",
+      },
+      {
+        $match: { _id: courseID},
+      },
+    ]);
+
+    let flag = false;
+
+    for(let i = 0; i < ctraineeCourses.courses.length; i++){
+      if(courseID == ctraineeCourses.courses[i].toString()){
+        flag = true
+        break;
+      }
+    }
+    if(flag == true){
+      course[0].register = true
+    }
+    else{
+      course[0].register = false
+    }
+
+    res.status(200).json(course[0])
   }
   else{
     res.status(400).json({ error: "Access Restriced" })
@@ -186,5 +226,6 @@ module.exports = {
   updateCTrainee,
   getRegisteredCourses,
   getGrade,
-  getCTraineeInfo
+  getCTraineeInfo,
+  getCourse
 };
