@@ -44,6 +44,7 @@ const InstructorSchema = new Schema(
     },
     rating: {
       type: Number,
+      default: 0
     },
     wallet:{
       type: Number,

@@ -2,11 +2,11 @@ const iTrainee = require("../models/iTraineeModel");
 const mongoose = require("mongoose");
 // create new iTrainee
 const Course = require("../models/courseModel");
-const { json } = require("body-parser");
 const stripe = require("stripe")('sk_test_51MEY6KIUMr1PgLAYVRrB9eX8QBJmBt69FVExk91mUKPVjKRoVs0ahpOom28rFevJoSxq9zrZrZUIsD4OorI0nu4E00SfpJVKqt');
 const User = require("../models/userModel");
 const Admin = require("../models/adminModel");
 const Instructor = require("../models/instructorModel");
+const Request = require("../models/requestModel");
 
 // create new iTrainee ->  signing up of guest to become iTrainee
 
@@ -74,8 +74,14 @@ const deleteITrainee = (req, res) => {
 };
 
 //GET a single individual trainee
-const getITrainee = (req, res) => {
-  res.json({ mssg: "GET a single individual trainee" });
+const getITrainee = async (req, res) => {
+  if(await iTrainee.findById({_id: req.user._id})){
+    const itrainee = await iTrainee.findOne({_id: req.user._id})
+    res.status(200).json(itrainee)
+  }
+  else{
+    res.status(400).json({ error: "Access Restriced" })
+  }
 };
 
 //GET all individual trainees
@@ -173,13 +179,14 @@ const payForCourse = async(req, res) => {
 
  const registerForCourse = async (req, res) => {
   if(await iTrainee.findById(req.user._id)){ //console.log(req.query.id)
+    const course = await Course.findOne({_id: req.query.id})
     const itraineeCourses = (
       await iTrainee
         .findById({ _id: req.user._id })
         .select("courses")
       ).courses;
     itraineeCourses.push(req.query.id);
-
+    await Course.findOneAndUpdate({_id: req.query.id}, {numOfEnrolledTrainees: course.numOfEnrolledTrainees + 1})
     const response = await iTrainee.findOneAndUpdate({_id: req.user._id}, {courses: itraineeCourses});
     res.status(200).json(response)}
     else{
@@ -189,21 +196,73 @@ const payForCourse = async(req, res) => {
 };
 
 const applyRefund = async(req, res) => {
-  if(await Admin.findById(req.user._id)){const money = req.body.money;
-  const itrainee = await iTrainee.findOne({_id: req.user._id});
+  if(await Admin.findById(req.user._id)){
+  const request = await Request.findOne({_id: req.query.id})
+  const itrainee = await iTrainee.findOne({_id: request.iTraineeId});
+  const course = await Course.findOne({_id: request.courseId});
+  let refund = 0;
 
-  const newWallet = parseInt(itrainee.wallet) + parseInt(money);
+  if(course.discountApplied == true){
+    refund = (Math.round((course.price * (100-course.discount)/100) * 0.80))
+  }
+  else{
+    refund = (Math.round(course.price * 0.80))
+  }
 
+  const newWallet = parseInt(itrainee.wallet) + refund;
 
-
-  const response = await iTrainee.findOneAndUpdate({_id: req.user._id}, {wallet: newWallet});
-
+  const response = await iTrainee.findOneAndUpdate({_id: request.iTraineeId}, {wallet: newWallet});
+  await Request.findOneAndUpdate({_id: req.query.id}, {requestType: "null"})
   res.status(200).json(response);
   }
   else{
     res.status(400).json({ error: "Access Restriced" })
   }
   
+}
+
+const getCourse = async(req, res) => {
+  if(await iTrainee.findById(req.user._id)){
+    const itraineeID = req.user._id
+    const itraineeCourses = await iTrainee.findOne({_id: itraineeID}).select("courses")
+    const courseID = mongoose.Types.ObjectId(req.query.id);
+    const course = await Course.aggregate([
+      {
+        $lookup: {
+          from: "instructors",
+          localField: "instructor",
+          foreignField: "_id",
+          as: "instructorData",
+        },
+      },
+      {
+        $unwind: "$instructorData",
+      },
+      {
+        $match: { _id: courseID},
+      },
+    ]);
+
+    let flag = false;
+
+    for(let i = 0; i < itraineeCourses.courses.length; i++){
+      if(courseID == itraineeCourses.courses[i].toString()){
+        flag = true
+        break;
+      }
+    }
+    if(flag == true){
+      course[0].register = true
+    }
+    else{
+      course[0].register = false
+    }
+
+    res.status(200).json(course[0])
+  }
+  else{
+    res.status(400).json({ error: "Access Restriced" })
+  }
 }
 
 module.exports = {
@@ -216,5 +275,6 @@ module.exports = {
   getGrade,
   payForCourse,
   registerForCourse,
-  applyRefund
+  applyRefund,
+  getCourse,
 };

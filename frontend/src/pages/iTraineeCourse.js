@@ -2,6 +2,13 @@ import { useEffect, useState } from "react";
 import Subtitle from "../components/subtitle";
 import ITraineeNavbar from "../components/iTraineeNavbar";
 import Exercise from "../components/excercise";
+import { MDBBtn, MDBModal,
+  MDBModalDialog,
+  MDBModalContent,
+  MDBModalHeader,
+  MDBModalTitle,
+  MDBModalBody,
+  MDBModalFooter,} from 'mdb-react-ui-kit';
 
 import RateCourse from "../components/rateCourse";
 import RateInstructor from "../components/rateInstructor";
@@ -9,6 +16,7 @@ import RateInstructor from "../components/rateInstructor";
 import Ratio from "react-bootstrap/Ratio";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
+import { useNavigate } from "react-router-dom";
 
 const ITraineeCourse = () => {
   //const { id } = useParams();
@@ -17,9 +25,13 @@ const ITraineeCourse = () => {
   const params = new URLSearchParams(window.location.search);
   const id = params.get("id");
 
-  const [course, setCourse] = useState(null);
+  const [course, setCourse] = useState('');
   const [grade, setGrade] = useState("");
   const [answersText, setAnswersText] = useState("");
+  const [basicModal, setBasicModal] = useState(false);
+  const navigate = useNavigate();
+
+  const toggleShow = () => setBasicModal(!basicModal);
 
   //values needed for Excercises
   const StudentAnswers = [];
@@ -74,7 +86,7 @@ const ITraineeCourse = () => {
       const response = await fetch("/api/courses/openMyCourse/?id=" + id);
 
       const json = await response.json();
-      if (response.ok) {
+      if (response.status == 200) {
         setCourse(json);
 
         //console.log(course.exercises);
@@ -89,6 +101,15 @@ const ITraineeCourse = () => {
     };
     fetchCourse();
   }, []);
+
+  const requestRefund = async() => {
+    const response = await fetch("/api/request/createRefundRequest/?id=" + id);
+    const json = await response.json();
+
+    if(response.status == 200){
+      navigate("/individualTraineeHome")
+    }
+}
 
   return (
     <div className="">
@@ -194,9 +215,30 @@ const ITraineeCourse = () => {
               {" "}
               <strong> Total Hours: </strong> {course.hours} Hours
             </p>
+            <MDBBtn className='me-1' color='danger' onClick={toggleShow}> 
+              Request Refund
+            </MDBBtn>
           </Col>
         </Row>
       )}
+      <MDBModal show={basicModal} setShow={setBasicModal} tabIndex='-1'>
+        <MDBModalDialog size='sm'>
+          <MDBModalContent>
+            <MDBModalHeader>
+              <MDBModalTitle>Requesting a Refund</MDBModalTitle>
+              <MDBBtn className='btn-close' color='none' onClick={toggleShow}></MDBBtn>
+            </MDBModalHeader>
+            <MDBModalBody>Are you sure you would like to request a refund for the following course: {course.title}?</MDBModalBody>
+
+            <MDBModalFooter>
+              <MDBBtn color='secondary' onClick={toggleShow}>
+                Cancel
+              </MDBBtn>
+              <MDBBtn color="danger" onClick={requestRefund}>Yes, I'm sure</MDBBtn>
+            </MDBModalFooter>
+          </MDBModalContent>
+        </MDBModalDialog>
+      </MDBModal>
     </div>
   );
 };

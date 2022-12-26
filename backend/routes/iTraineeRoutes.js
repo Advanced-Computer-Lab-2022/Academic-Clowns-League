@@ -11,7 +11,8 @@ const {
   getGrade,
   payForCourse,
   registerForCourse,
-  applyRefund
+  applyRefund,
+  getCourse,
 } = require("../controllers/iTraineeController");
 
 const router = express.Router();
@@ -19,7 +20,7 @@ const router = express.Router();
 router.get("/", getAllITrainee);
 
 //GET AN INDIVIDUAL TRAINEE
-//router.get("/:id", getITrainee);
+router.get("/getitrainee", requireAuth, getITrainee);
 
 //POST AN INDIVIDUAL TRAINEE
 router.post("/", createITrainee);
@@ -42,6 +43,8 @@ router.post('/create-payment-intent', requireAuth, payForCourse);
 //add course to courses array
 router.patch('/registercourse',requireAuth, registerForCourse);
 
-router.patch('/applyrefund',requireAuth, applyRefund)
+router.get('/applyrefund',requireAuth, applyRefund)
+
+router.get('/getcourseinfo', requireAuth, getCourse)
 
 module.exports = router;
