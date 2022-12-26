@@ -46,7 +46,7 @@ const Login = () => {
             else if(json.role == "Instructor"){
                 navigate("/instructorHome")
             }
-            else{
+            else if(json.role == "Admin"){
                 navigate("/adminAddUsers")
             }
         }

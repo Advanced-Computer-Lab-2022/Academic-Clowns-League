@@ -28,10 +28,31 @@ const {
   adminAddDiscount,
   reviewCourse,
   editMyCourseReview,
-  deleteMyCourseReview
+  deleteMyCourseReview,
+  addToProgress,
+  getMyProgress,
+  getMyCourseReview,
+  getCourseLength,
+  getInstPub,
+  getInstUnpub,
+  publishCourse,
+  closeCourse,
+  getCourseInfo
 } = require("../controllers/courseController");
 
 const router = express.Router();
+
+
+
+//get my course review
+router.get("/getMyCourseReview",requireAuth, getMyCourseReview);
+
+//get my progress
+router.get("/getMyProgress",requireAuth, getMyProgress);
+
+//add to progress
+router.get("/addToProgress",requireAuth, addToProgress);
+
 
 //delete my course review
 router.patch("/deleteMyCourseReview",requireAuth,deleteMyCourseReview);
@@ -99,9 +120,23 @@ router.get("/printNotePDF", requireAuth,printNotePDF);
 
 router.get("/printCertificatePDF",requireAuth,printCertificatePDF);
 
-router.get("/sendCertificateMail", sendCertificateMail);
+router.get("/sendCertificateMail", requireAuth, sendCertificateMail);
 //Get most popular courses
 router.get("/getPopularCourses",getPopularCourses); //guest can access it
+
+router.get("/getCourseLength",getCourseLength);
+
+router.get('/getInstPub', requireAuth, getInstPub);
+
+router.get('/getInstUnpub', requireAuth, getInstUnpub);
+
+router.patch('/publishCourse', requireAuth, publishCourse);
+
+router.patch('/closeCourse', requireAuth, closeCourse);
+
+router.get('/getCourse', requireAuth, getCourse);
+
+router.get('/getCourseInfo', requireAuth, getCourseInfo);
 
 //after creating all our routes , export the router with the routes attached to it
 module.exports = router;

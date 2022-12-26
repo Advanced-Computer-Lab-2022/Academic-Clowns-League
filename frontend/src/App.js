@@ -21,6 +21,7 @@ import ITraineeFilterAllCourses from "./pages/iTraineeFilterAllCourses";
 import ITraineeCourse from "./pages/iTraineeCourse";
 import ITraineeProblems from "./pages/iTraineeProblems";
 import ITraineeReportProblem from "./pages/iTraineeReportProblem";
+import ITraineeProfile from "./pages/iTraineeProfile";
 
 import CorporateTraineeHome from "./pages/corporateTraineeHome";
 import CTraineeAllCourses from "./pages/cTraineeAllCourses";
@@ -29,6 +30,7 @@ import CTraineeCourse from "./pages/cTraineeCourse";
 import CTraineeProblems from "./pages/cTraineeProblems";
 import CTraineeReportProblem from "./pages/cTraineeReportProblem";
 
+import CTraineeProfile from "./pages/cTraineeProfile";
 
 import GuestHome from "./pages/guestHome";
 import GuestFilterAllCourses from "./pages/guestFilterAllCourses";
@@ -105,6 +107,19 @@ function App() {
                 path="/iTraineeAllCourses"
                 element={<ITraineeAllCourses />}
               />
+
+<Route
+                path="/iTraineeProfile"
+                element={<ITraineeProfile />}
+              />
+
+
+<Route
+                path="/cTraineeProfile"
+                element={<CTraineeProfile />}
+              />
+
+
               <Route
                 path="/iTraineeFilterAllCourses"
                 element={<ITraineeFilterAllCourses />}
