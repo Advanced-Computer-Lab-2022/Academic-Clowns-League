@@ -29,6 +29,9 @@ const {
   reviewCourse,
   editMyCourseReview,
   deleteMyCourseReview,
+  addToProgress,
+  getMyProgress,
+  getMyCourseReview,
   getCourseLength,
   getInstPub,
   getInstUnpub,
@@ -38,6 +41,18 @@ const {
 } = require("../controllers/courseController");
 
 const router = express.Router();
+
+
+
+//get my course review
+router.get("/getMyCourseReview",requireAuth, getMyCourseReview);
+
+//get my progress
+router.get("/getMyProgress",requireAuth, getMyProgress);
+
+//add to progress
+router.get("/addToProgress",requireAuth, addToProgress);
+
 
 //delete my course review
 router.patch("/deleteMyCourseReview",requireAuth,deleteMyCourseReview);
@@ -105,7 +120,7 @@ router.get("/printNotePDF", requireAuth,printNotePDF);
 
 router.get("/printCertificatePDF",requireAuth,printCertificatePDF);
 
-router.get("/sendCertificateMail", sendCertificateMail);
+router.get("/sendCertificateMail", requireAuth, sendCertificateMail);
 //Get most popular courses
 router.get("/getPopularCourses",getPopularCourses); //guest can access it
 

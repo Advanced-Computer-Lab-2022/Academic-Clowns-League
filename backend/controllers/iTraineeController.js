@@ -221,6 +221,17 @@ const applyRefund = async(req, res) => {
   
 }
 
+
+const getITraineeInfo = async(req, res) => {
+  if(await iTrainee.findById(req.user._id)){
+  const itrainee = await iTrainee.findOne({_id: req.user._id});
+  const result  ={
+    name: itrainee.firstname +" "+ itrainee.lastname,
+    username: itrainee.username,
+    email: itrainee.email,
+  };
+  res.status(200).json(result);
+}}
 const getCourse = async(req, res) => {
   if(await iTrainee.findById(req.user._id)){
     const itraineeID = req.user._id
@@ -265,6 +276,7 @@ const getCourse = async(req, res) => {
   }
 }
 
+
 module.exports = {
   createITrainee,
   getAllITrainee,
@@ -276,5 +288,6 @@ module.exports = {
   payForCourse,
   registerForCourse,
   applyRefund,
+  getITraineeInfo,
   getCourse,
 };

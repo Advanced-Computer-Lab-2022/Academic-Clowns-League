@@ -10,12 +10,17 @@ const {
   resetPassword,
   reviewInstructor,
   editMyInstructorReview,
-  deleteMyInstructorReview
+  deleteMyInstructorReview,
+  getMyInstReview
 } = require("../controllers/InstructorController");
 
 const router = express.Router();
 
 
+
+
+//get my instructor review
+router.get("/getMyInstReview",requireAuth, getMyInstReview);
 
 router.patch("/reviewInstructor",requireAuth,reviewInstructor);
 router.patch("/editMyInstructorReview",requireAuth,editMyInstructorReview);

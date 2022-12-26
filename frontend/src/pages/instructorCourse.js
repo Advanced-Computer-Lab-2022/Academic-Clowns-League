@@ -10,6 +10,8 @@ import RateInstructor from "../components/rateInstructor";
 import Ratio from "react-bootstrap/Ratio";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
+import Button from 'react-bootstrap/Button';
+import Modal from 'react-bootstrap/Modal';
 
 const InstructorCourse = () => {
   //const { id } = useParams();
@@ -199,12 +201,21 @@ const InstructorCourse = () => {
         {" "}
         Add Promotion{" "}
       </button>
-      <button
-        class="button button3"
-        onClick={() => navigate(`/courseRatingsAndReviews?id=${id}`)}
-      >
-        view ratings and reviews
-      </button>
+
+
+      <Button variant="danger" size="lg"
+      onClick={() => navigate(`/courseRatingsAndReviews?id=${id}`)}>
+        View ratings and reviews
+      </Button>
+
+
+
+
+
+
+
+
+
     </div>
   );
 };

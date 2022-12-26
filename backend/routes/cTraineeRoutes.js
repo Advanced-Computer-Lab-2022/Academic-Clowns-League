@@ -8,10 +8,20 @@ const {
     updateCTrainee,
     getRegisteredCourses,
     getGrade,
+    getCTraineeInfo,
     getCourse
 } = require('../controllers/cTraineeController');
 
 const router = express.Router();
+
+
+
+
+
+
+router.get("/getCTraineeInfo",requireAuth, getCTraineeInfo);
+
+
 
 //GET all corporate trainees
 router.get('/',requireAuth,getAllCTrainee);

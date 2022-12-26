@@ -1,3 +1,6 @@
+import React from 'react';
+import { useNavigate } from "react-router-dom";
+import Container from 'react-bootstrap/Container';
 import { useContext, useState, useEffect } from 'react';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
@@ -13,10 +16,12 @@ import { GoSearch } from 'react-icons/go'
 import { MDBBtn, MDBIcon, MDBInput, MDBInputGroup } from 'mdb-react-ui-kit';
 const countries = require('../country-json-master/src/country-by-currency-code.json')
 
+
 const ITraineeNavbar = ({updateCourses}) => {
   const {toggleCurrency, rate, currency} = useContext(CurrencyContext)
   const [searchTerm, setSearchTerm] = useState("");
   const [iTrainee, setITrainee] = useState("")
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchITrainee = async () => {
@@ -73,7 +78,6 @@ const ITraineeNavbar = ({updateCourses}) => {
 
             <Nav.Link><NavLink to="/individualTraineeHome" className="navlink">My Courses</NavLink></Nav.Link>
             <Nav.Link><NavLink to="/iTraineeAllCourses" className="navlink">All Courses</NavLink></Nav.Link>
-
             
 
             {/*
@@ -114,7 +118,9 @@ const ITraineeNavbar = ({updateCourses}) => {
       </div>
 
             <NavDropdown title={<CgProfile size={25}/>} id="navbarScrollingDropdown" className='navlink-profile' align="end">
-              <NavDropdown.Item href="#action3">My Profile</NavDropdown.Item>
+              <NavDropdown.Item onClick={() => {
+                  navigate(`/iTraineeProfile`);
+                }}>My Profile</NavDropdown.Item>
               <NavDropdown.Item href="#action4">
                 Change Password
               </NavDropdown.Item>
@@ -166,9 +172,6 @@ const ITraineeNavbar = ({updateCourses}) => {
 
         </Navbar.Collapse>
     </Navbar>
-
-    
-
     );
   }
   

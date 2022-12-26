@@ -6,13 +6,17 @@ import { CgProfile } from 'react-icons/cg';
 import { NavLink} from 'react-router-dom';
 import { BiWorld } from 'react-icons/bi';
 import { CurrencyContext } from '../contexts/CurrencyContext';
+import { useNavigate } from "react-router-dom";
 import { GoSearch } from 'react-icons/go'
 import { MDBBtn, MDBIcon, MDBInput, MDBInputGroup } from 'mdb-react-ui-kit';
+
 const countries = require('../country-json-master/src/country-by-currency-code.json')
+
 
 const CTraineeNavbar = ({updateCourses}) => {
   const {toggleCurrency} = useContext(CurrencyContext)
   const [searchTerm, setSearchTerm] = useState("");
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault(); //to prevent the default action which is refreshing the page
@@ -111,7 +115,9 @@ const CTraineeNavbar = ({updateCourses}) => {
       </div>
 
           <NavDropdown title={<CgProfile size={25}/>} id="navbarScrollingDropdown" className='navlink-profile' align="end">
-              <NavDropdown.Item href="#action3">My Profile</NavDropdown.Item>
+              <NavDropdown.Item onClick={() => {
+                  navigate(`/cTraineeProfile`);
+                }}>My Profile</NavDropdown.Item>
               <NavDropdown.Item href="#action4">
                 Change Password
               </NavDropdown.Item>

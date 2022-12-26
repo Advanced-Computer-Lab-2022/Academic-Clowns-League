@@ -159,6 +159,17 @@ const getGrade = async (req, res) => {
   res.status(200).json(grade);
 };
 
+const getCTraineeInfo = async(req, res) => {
+  if(await cTrainee.findById(req.user._id)){
+  const ctrainee = await cTrainee.findOne({_id: req.user._id});
+  const result  ={
+    name: ctrainee.firstname +" "+ ctrainee.lastname,
+    username: ctrainee.username,
+    email: ctrainee.email,
+  };
+  res.status(200).json(result);
+}
+}
 const getCourse = async(req, res) => {
   if(await cTrainee.findById(req.user._id)){
     const ctraineeID = req.user._id
@@ -203,6 +214,10 @@ const getCourse = async(req, res) => {
   }
 }
 
+
+
+
+
 module.exports = {
   createCTrainee,
   getAllCTrainee,
@@ -211,5 +226,6 @@ module.exports = {
   updateCTrainee,
   getRegisteredCourses,
   getGrade,
+  getCTraineeInfo,
   getCourse
 };
