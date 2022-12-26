@@ -47,6 +47,7 @@ import ViewAndEditInfo from "./pages/viewAndEditInfo";
 import ForgotPassword from "./pages/forgotPassword";
 import ITraineeChangePassword from "./pages/iTraineeChangePassword";
 import CTraineeChangePassword from "./pages/cTraineeChangePassword";
+
 //BrowserRouter wraps all things involved with routes, Routes wraps the routes, Route is a single route
 function App() {
   return (

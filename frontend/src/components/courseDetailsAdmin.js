@@ -1,6 +1,7 @@
 import { useState } from "react";
 import SubtitleMap from "./subtitleMap";
 import InputGroup from "react-bootstrap/InputGroup";
+import { MDBCheckbox } from "mdb-react-ui-kit";
 
 const CourseDetailsAdmin = ({ course }) => {
   const [isActive, setIsActive] = useState(false);
@@ -14,11 +15,6 @@ const CourseDetailsAdmin = ({ course }) => {
 
   return (
     <div className="course-details">
-      <InputGroup className="mb-3">
-        <InputGroup.Checkbox aria-label="Checkbox for following text input" />
-        <Form.Control aria-label="Text input with checkbox" />
-      </InputGroup>
-
       <h4>{course.title}</h4>
 
       <p>
@@ -54,6 +50,14 @@ const CourseDetailsAdmin = ({ course }) => {
               {course.exercises.length}
             </li>
           </ol>
+        </p>
+        <p>
+          <strong>Discount: </strong>
+          {course.discount}
+        </p>
+        <p>
+          <strong>Discount valid Until: </strong>
+          {course.discountValidUntil}
         </p>
       </div>
       <button
