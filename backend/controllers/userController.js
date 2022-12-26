@@ -6,6 +6,7 @@ const iTrainee = require("../models/iTraineeModel");
 const cTrainee = require("../models/cTraineeModel");
 const Instructor = require("../models/instructorModel");
 const Admin = require("../models/adminModel");
+const { findByIdAndUpdate } = require("../models/userModel");
 require('dotenv').config()
 
 // create new User
@@ -31,7 +32,8 @@ const createUser = async (req, res) => {
       const dbUser = new User({
         username: user.username.toLowerCase(),
         password : user.password,
-        role: "iTrainee"
+        role: "iTrainee",
+        contract: user.contract
     })
     dbUser.save()
     res.status(200).json(iUser)
@@ -42,7 +44,24 @@ const createUser = async (req, res) => {
     }
     }   
 };
+const updateContract = async (req,res) =>{
+  console.log(req.user._id)
+  try {
+    const updatedResult = await User.findOneAndUpdate(
+      { username: req.user.username },
+      {
+        contract:true,
+      },
+    );
+    console.log(updatedResult);
+  } catch (error) {
+    console.log(error);
+  }
 
+console.log("success")
+  res.json({message:"Contract Status updated"});
+
+}
 const loginUser = async (req, res) => {
 
     const userLoggingIn = req.body;
@@ -84,7 +103,8 @@ const loginUser = async (req, res) => {
                          return res.json({
                            message:"successful",
                            payload : payload,
-                           role: role
+                           role: role,
+                           contract: dbUser.contract
                            
                          })
                          
@@ -103,7 +123,7 @@ const loginUser = async (req, res) => {
 };
 const requireAuth = (req, res, next) => {
     const token = req.cookies.jwtoken
-    console.log(token);
+    
       
     // check json web token exists & is verified
     if (token) {
@@ -112,7 +132,7 @@ const requireAuth = (req, res, next) => {
           isLoggedIn:false,
           message: "Failed to Authenticate"}) 
           req.user = decodedToken.payload;
-          console.log("User ", decodedToken)
+          
           next()
       })
     } else {
@@ -123,6 +143,7 @@ const requireAuth = (req, res, next) => {
 
 const logOut  = async (req, res) => {
    res.cookie('jwtoken', "", { httpOnly: false, maxAge: -1 })
+   
    return res.json({
     message: "Token Deleted"
    })
@@ -133,5 +154,6 @@ module.exports = {
   loginUser,
   requireAuth,
   logOut,
+  updateContract,
   
 };

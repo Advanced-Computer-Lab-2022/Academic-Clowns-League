@@ -5,10 +5,16 @@ import Navbar from 'react-bootstrap/Navbar';
 import NavDropdown from 'react-bootstrap/NavDropdown';
 import { NavLink } from 'react-router-dom';
 import { CurrencyContext } from '../contexts/CurrencyContext';
+import { Navigate, useNavigate } from 'react-router-dom';
+import Button from 'react-bootstrap/Button';
 const countries = require('../country-json-master/src/country-by-currency-code.json')
 
-const ITraineeNavbar = () => {
+const ITraineeNavbar = () => {const navigate = useNavigate();
   const {toggleCurrency, country} = useContext(CurrencyContext)
+  const handleClose = async () => {
+    const response = await fetch ("api/users/logout");
+  navigate("/");
+  }
   
     return (
 
@@ -56,6 +62,10 @@ const ITraineeNavbar = () => {
                 <NavDropdown.Item eventKey={country.country}>{country.country}</NavDropdown.Item>
               ))}
             </NavDropdown>
+            <Button variant="primary" onClick={handleClose}>
+            Log Out
+          </Button>
+          
 
             {/*
             <Nav.Link href="#" disabled>

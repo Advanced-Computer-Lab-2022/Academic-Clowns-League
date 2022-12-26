@@ -60,7 +60,7 @@ const GuestNavbar = () => {
             <MDBBtn className='signup' style={{
           backgroundColor: "#607D8B",
           borderColor: "#78909C"
-        }}> Sign Up </MDBBtn>
+        }} onClick={() => navigate(`/signup`)}> Sign Up </MDBBtn>
 
             {/*
             <Nav.Link href="#" disabled>

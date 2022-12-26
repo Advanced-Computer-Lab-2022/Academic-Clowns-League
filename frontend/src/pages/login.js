@@ -4,12 +4,65 @@ import Button from 'react-bootstrap/Button';
 import { useState } from 'react';
 import { Navigate, useNavigate } from 'react-router-dom';
 import GuestNavbar from '../components/guestNavbar';
+import Modal from 'react-bootstrap/Modal'
 
 const Login = () => {
     const [username, setUsername] = useState("")
     const [password, setPassword] = useState("")
     const [error, setError] = useState(null)
     const navigate = useNavigate();
+    const [show, setShow] = useState(false);
+    var json;
+    const handleClose = async () => {
+
+      
+        
+
+        
+
+        const response = await fetch ("api/users/contract",{
+            method:'POST',
+           
+        });
+
+        const login = {
+            username, 
+            password
+        }
+
+        const response2 = await fetch ("api/users/login",{
+            method: 'POST',
+            body:JSON.stringify(login),
+            headers: {
+                'Content-Type':'application/json'
+            }
+        })
+
+        const json = await response2.json()
+        console.log(json)
+        
+
+        if(json.role == "iTrainee"){
+            navigate("/individualTraineeHome")
+        }
+        else if(json.role == "cTrainee"){
+            navigate("/corporateTraineeHome")
+        }
+        else if(json.role == "Instructor"){
+            navigate("/instructorHome")
+        }
+        else if(json.role == "Admin"){
+            navigate("/adminHome")
+        }
+
+        
+
+        
+
+
+    }
+    const handleShow = (role) => {setShow(true);}
+    
 
     const handleSubmit = async(e) => {
         e.preventDefault()
@@ -27,17 +80,20 @@ const Login = () => {
             }
         })
 
-        const json = await response.json()
+         json = await response.json()
         console.log(json)
 
         if (!response.ok) {
             setError(json.error);
+            console.log(json.error);
         }
         if (response.ok){
-            setUsername("");
-            setPassword("");
-            setError(null);
-            if(json.role == "iTrainee"){
+            
+            if(json.contract == false){
+                handleShow(json.role)
+
+            }
+            else{ if(json.role == "iTrainee"){
                 navigate("/individualTraineeHome")
             }
             else if(json.role == "cTrainee"){
@@ -46,9 +102,10 @@ const Login = () => {
             else if(json.role == "Instructor"){
                 navigate("/instructorHome")
             }
-            else{
+            else if(json.role == "Admin"){
                 navigate("/adminHome")
-            }
+            }}
+           
         }
     }
     return(
@@ -66,6 +123,25 @@ const Login = () => {
             </FloatingLabel>
             {error && <div className="error">{error}</div>}
             <Button variant="success" onClick={handleSubmit}>Login</Button>
+
+
+
+            <Modal show={show} onHide={handleClose}>
+        <Modal.Header closeButton>
+          <Modal.Title>Please read the following contract carefully:</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>This is a contract to signify that the company will own the rights
+            to the posted videos and materials of this registered course and will take a share of 20%
+            on each video per registered trainee if you choose to proceed.</Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleClose}>
+            Close
+          </Button>
+          <Button variant="primary" onClick={handleClose}>
+            Save Changes
+          </Button>
+        </Modal.Footer>
+      </Modal>
         </div>
     )
 }

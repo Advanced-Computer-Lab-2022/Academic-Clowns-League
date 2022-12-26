@@ -46,6 +46,7 @@ import AddExercise from "./pages/addExercise";
 import CheckoutPage from "./pages/checkoutPage";
 import PaymentCompletion from "./pages/paymentCompletion";
 import Login from "./pages/login";
+import Signup from "./pages/signup";
 
 //BrowserRouter wraps all things involved with routes, Routes wraps the routes, Route is a single route
 function App() {
@@ -137,6 +138,7 @@ function App() {
               <Route path="/checkoutPage" element={<CheckoutPage />} />
               <Route path="/paymentCompletion" element={<PaymentCompletion />} />
               <Route path="/login" element={<Login />} />
+              <Route path="/signup" element={<Signup />} />
             </Routes>
           </div>
         </CurrencyContextProvider>
