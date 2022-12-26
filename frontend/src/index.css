@@ -598,6 +598,11 @@ header a {
   margin-top: 1%
 }
 
+#navbarScrollingDown{
+  height: 50px;
+  overflow: auto;
+}
+
 .money{
   right: 4%;
   color:rgb(208, 208, 208);

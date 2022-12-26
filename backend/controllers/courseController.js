@@ -143,9 +143,10 @@ const deleteCourse = async (req, res) => {
 
 //Rate a course
 const rateCourse = async (req, res) => {
-  if(await iTrainee.findById(req.user._id) || await cTrainee.findById(req.user._id)){  const id = req.query.id;
+  if(await iTrainee.findById(req.user._id) || await cTrainee.findById(req.user._id)){ 
+  const id = req.query.id;
   const Rating = req.query.rating;
-  const user = req.query.user;
+  const user = req.user._id
   const course = await Course.findById({ _id: id });
   let ratingsTemp = [Object];
   ratingsTemp = course.ratings;

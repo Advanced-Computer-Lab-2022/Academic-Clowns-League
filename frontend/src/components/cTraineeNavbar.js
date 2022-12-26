@@ -75,7 +75,27 @@ const CTraineeNavbar = ({updateCourses}) => {
             <Nav.Link><NavLink to="/corporateTraineeHome" className="navlink">My Courses</NavLink></Nav.Link>
             <Nav.Link><NavLink to="/cTraineeAllCourses" className="navlink">All Courses</NavLink></Nav.Link>
 
+<<<<<<< HEAD
+
+            <NavDropdown title="Options" id="navbarScrollingDropdown">
+              <NavDropdown.Item href="#action3">Action</NavDropdown.Item>
+              <NavDropdown.Item href="#action4">
+                action
+              </NavDropdown.Item>
+              <NavDropdown.Divider />
+              <NavDropdown.Item href="/cTraineeProblems">
+               Requests and problems
+              </NavDropdown.Item>
+            </NavDropdown>
+
+            <NavDropdown title={country} id="navbarScrollingDropdown" onSelect = {toggleCurrency}>
+            {countries.map((country) => (
+                <NavDropdown.Item eventKey={country.country}>{country.country}</NavDropdown.Item>
+              ))}
+            </NavDropdown>
+=======
             
+>>>>>>> main
 
             {/*
             <Nav.Link href="#" disabled>

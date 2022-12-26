@@ -6,7 +6,7 @@
   "dependencies": {
     "@fortawesome/fontawesome-free": "^6.2.1",
     "@react-icons/all-files": "^4.1.0",
-    "@stripe/react-stripe-js": "^1.16.1",
+    "@stripe/react-stripe-js": "github:stripe/stripe-js",
     "@stripe/stripe-js": "^1.46.0",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",

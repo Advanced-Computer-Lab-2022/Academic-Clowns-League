@@ -10,6 +10,9 @@ import RateInstructor from "../components/rateInstructor";
 import Ratio from "react-bootstrap/Ratio";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
+import Button from 'react-bootstrap/Button';
+import Accordion from 'react-bootstrap/Accordion';
+import { useNavigate } from "react-router-dom";
 import Accordion from 'react-bootstrap/Accordion';
 import Button from 'react-bootstrap/Button';
 import ProgressBar from 'react-bootstrap/ProgressBar';
@@ -78,6 +81,7 @@ const CTraineeCourse = () => {
 
   const params = new URLSearchParams(window.location.search);
   const id = params.get("id");
+  const navigate = useNavigate();
 
   const [course, setCourse] = useState(null);
   const [grade, setGrade] = useState("");
@@ -705,6 +709,27 @@ const CTraineeCourse = () => {
                 onMouseLeave={() => setDeleteInstReviewIconColor('')} onClick={handleShowDeleteInstReview} style={{ color: deleteInstReviewIconColor }} />
               <BsFillPencilFill onMouseEnter={() => setEditInstReviewIconColor('red')}
                 onMouseLeave={() => setEditInstReviewIconColor('')} onClick={handleShowEditInstReview} style={{ color: editInstReviewIconColor }} />
+            </p>
+            <p>
+              {" "}
+              <Button variant="danger" onClick={() => navigate(`/cTraineeReportProblem?id=${id}`)}>Report problem</Button>
+            </p>
+            <p>
+              {" "}
+              <Accordion>
+<Accordion.Item eventKey="0"  >
+  <Accordion.Header>Rate course</Accordion.Header>
+  <Accordion.Body>
+  <RateCourse course={course} myId="637a356c54c79d632507dc8a" />
+  </Accordion.Body>
+</Accordion.Item>
+<Accordion.Item eventKey="1">
+  <Accordion.Header>Rate instructor</Accordion.Header>
+  <Accordion.Body>
+  <RateInstructor course={course} myId="637a356c54c79d632507dc8a" />
+  </Accordion.Body>
+</Accordion.Item>
+</Accordion>
             </p>
 
             <Modal show={showAddInstReview} onHide={handleCloseAddInstReview}>

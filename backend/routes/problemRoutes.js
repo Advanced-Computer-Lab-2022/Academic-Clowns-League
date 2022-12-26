@@ -3,7 +3,9 @@ const express = require("express");
 const {
     reportProblem,
     getMyProblems,
-    getAllProblems,
+    getAllProblemsR,
+    getAllProblemsUR,
+    getAllProblemsP,
     problemStatus,
     problemFollowUp,
          } = require("../controllers/problemController");
@@ -17,8 +19,14 @@ const { requireAuth } = require("../controllers/userController");
   //get all problems of a certain reporter
   router.get("/myProblems",requireAuth,getMyProblems);
   
-  //get all problems
-  router.get("/allProblems",requireAuth,getAllProblems);
+  //get all  resolved problems
+  router.get("/allProblemsR",requireAuth,getAllProblemsR);
+
+  //get all  unresolved problems
+  router.get("/allProblemsUR",requireAuth,getAllProblemsUR);
+
+  //get all pending problems
+  router.get("/allProblemsP",requireAuth,getAllProblemsP);
 
   //update the status of a problem
   router.patch("/problemStatus",requireAuth,problemStatus);

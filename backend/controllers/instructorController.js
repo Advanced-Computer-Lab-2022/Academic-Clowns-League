@@ -49,7 +49,7 @@ const rateInstructor = async (req, res) => {
 
   if(await iTrainee.findById(req.user._id) || await cTrainee.findById(req.user._id)){  const id = req.query.id;
   const Rating = req.query.rating;
-  const user = req.query.user;
+  const user = req.user._id;
   const instructor = await Instructor.findById({ _id: id });
   let ratingsTemp = [Object];
   ratingsTemp = instructor.ratings;
