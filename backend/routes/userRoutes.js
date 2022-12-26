@@ -3,7 +3,8 @@ const{
     createUser,
     loginUser,
     logOut,
-    requireAuth
+    requireAuth,
+    updateContract,
 } = require('../controllers/userController')
 
 const router = express.Router()
@@ -16,6 +17,7 @@ const router = express.Router()
 router.post('/', createUser);
 router.post('/login', loginUser);
 router.get('/logout',requireAuth,logOut);
+router.post('/contract',requireAuth,updateContract)
 
 
 //after creating all our routes , export the router with the routes attached to it

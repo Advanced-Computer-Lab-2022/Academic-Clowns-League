@@ -119,6 +119,23 @@ const GuestNavbar = ({updateCourses}) => {
               ))}
             </NavDropdown>
 
+            
+
+            <MDBBtn className='login' style={{
+          backgroundColor: "#607D8B",
+          borderColor: "#78909C"
+        }} onClick={() => navigate(`/login`)}> Login </MDBBtn>
+            <MDBBtn className='signup' style={{
+          backgroundColor: "#607D8B",
+          borderColor: "#78909C"
+        }} onClick={() => navigate(`/signup`)}> Sign Up </MDBBtn>
+
+            {/*
+            <Nav.Link href="#" disabled>
+              Link
+            </Nav.Link>
+    */}
+
 
 
           {/*

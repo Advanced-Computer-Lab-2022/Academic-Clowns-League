@@ -17,6 +17,11 @@ const UserSchema = new Schema({
         enum: ["cTrainee", "iTrainee","Instructor","Admin"],
         default: "iTrainee",
       },
+      contract :{
+        type: Boolean,
+        default:false
+
+      }
    
 }, {timestamps: true})
 
