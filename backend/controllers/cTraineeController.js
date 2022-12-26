@@ -6,28 +6,28 @@ const bcrypt = require("bcrypt");
 const { json } = require("body-parser");
 const User = require("../models/userModel");
 const Admin = require("../models/adminModel");
+const nodemailer = require("nodemailer");
 
 //POST a corporate trainee
 const createCTrainee = async (req, res) => {
-  if(await Admin.findById(req.user._id)){
+  if (await Admin.findById(req.user._id)) {
     const {
-    firstname,
-    lastname,
-    username,
-    password,
-    email,
-    country,
-    courses,
-    grades,
-  } = req.body;
+      firstname,
+      lastname,
+      username,
+      password,
+      email,
+      country,
+      courses,
+      grades,
+    } = req.body;
 
-  const takenUsername = await User.findOne({username: username})
-    if (takenUsername){
-      res.json({message:"Username is taken"})
-    }
-    else{
+    const takenUsername = await User.findOne({ username: username });
+    if (takenUsername) {
+      res.json({ message: "Username is taken" });
+    } else {
       try {
-        const encryptedPassword = await bcrypt.hash(password,10)
+        const encryptedPassword = await bcrypt.hash(password, 10);
         const ctrainee = await cTrainee.create({
           firstname,
           lastname,
@@ -38,48 +38,49 @@ const createCTrainee = async (req, res) => {
           courses,
           grades,
         });
-        const dbUser =  new User({
+        const dbUser = new User({
           username: username,
-          password : encryptedPassword,
-          role: "cTrainee"
-      });
+          password: encryptedPassword,
+          email: email,
+          role: "cTrainee",
+        });
         dbUser.save();
         res.status(200).json(ctrainee);
       } catch (error) {
-        res.status(400).json({ message: "Signup Failed", error: error.message });
+        res
+          .status(400)
+          .json({ message: "Signup Failed", error: error.message });
       }
     }
+  } else {
+    res.status(400).json({ error: "Access Restriced" });
   }
-  else{
-    res.status(400).json({ error: "Access Restriced" })
-  } 
 };
 
 //UPDATE a corporate trainee
 const updateCTrainee = async (req, res) => {
-  if(await Admin.findById(req.user._id)){
+  if (await Admin.findById(req.user._id)) {
     const id = req.query.id;
 
-  if (!mongoose.Types.ObjectId.isValid(id)) {
-    return res.status(404).json({ error: "No such Corporate Trainee" });
-  }
-
-  const ctrainee = await cTrainee.findOneAndUpdate(
-    { _id: id },
-    {
-      ...req.body,
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      return res.status(404).json({ error: "No such Corporate Trainee" });
     }
-  );
 
-  if (!ctrainee) {
-    return res.status(400).json({ error: "No such Corporate Tainee" });
-  }
+    const ctrainee = await cTrainee.findOneAndUpdate(
+      { _id: id },
+      {
+        ...req.body,
+      }
+    );
 
-  res.status(200).json(ctrainee);
+    if (!ctrainee) {
+      return res.status(400).json({ error: "No such Corporate Tainee" });
+    }
+
+    res.status(200).json(ctrainee);
+  } else {
+    res.status(400).json({ error: "Access Restriced" });
   }
-  else{
-    res.status(400).json({ error: "Access Restriced" })
-  } 
 };
 
 //DELETE a corporate trainee
@@ -97,14 +98,11 @@ const getAllCTrainee = (req, res) => {
   res.json({ mssg: "GET all corporate trainees" });
 };
 
-
 const getRegisteredCourses = async (req, res) => {
   //get course id's from courses array of ctrainee
-  if(await cTrainee.findById(req.user._id)){
+  if (await cTrainee.findById(req.user._id)) {
     const ctraineeCourses = (
-      await cTrainee
-        .findById({ _id: req.user._id })
-        .select("courses")
+      await cTrainee.findById({ _id: req.user._id }).select("courses")
     ).courses;
     let courses = [];
     for (i = 0; i < ctraineeCourses.length; i++) {
@@ -121,15 +119,14 @@ const getRegisteredCourses = async (req, res) => {
           $unwind: "$instructorData",
         },
         {
-          $match: { _id : ctraineeCourses[i] },
-        }
-      ])
-      courses.push(course[0])
+          $match: { _id: ctraineeCourses[i] },
+        },
+      ]);
+      courses.push(course[0]);
     }
     res.status(200).json(courses);
-  }
-  else{
-    res.status(400).json({ error: "Access Restriced" })
+  } else {
+    res.status(400).json({ error: "Access Restriced" });
   }
 };
 
@@ -140,9 +137,7 @@ const getGrade = async (req, res) => {
     exercise, //637a197cbc66688b3924a868
   } = req.body;
   const ctraineeGrades = (
-    await cTrainee
-      .findById({ _id: req.user._id })
-      .select("grades")
+    await cTrainee.findById({ _id: req.user._id }).select("grades")
   ).grades;
   let grade = 0;
   for (i = 0; i < ctraineeGrades.length; i++) {
@@ -159,6 +154,51 @@ const getGrade = async (req, res) => {
   res.status(200).json(grade);
 };
 
+const cTraineeUpdatePassword = async (req, res) => {
+  if (await cTrainee.findById(req.user._id)) {
+    console.log("HI");
+    const id = req.user._id;
+    console.log(id);
+    console.log(req.body.password);
+    console.log(req.body.newPassword);
+    console.log(req.body.confirmPassword);
+
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      return res.status(404).json({ error: "No such Corporate Trainee" });
+    }
+
+    //const instructor = await Instructor.findOne({ _id: id });
+    const encryptedPassword = await bcrypt.hash(req.body.newPassword, 10);
+    if (req.body.newPassword == req.body.confirmPassword) {
+      if (bcrypt.compareSync(req.body.password, req.user.password)) {
+        console.log("im here");
+        const ctrainee = await cTrainee.findOneAndUpdate(
+          { _id: id },
+          {
+            password: encryptedPassword,
+          }
+        );
+
+        await User.findOneAndUpdate(
+          { username: req.user.username },
+          {
+            password: encryptedPassword,
+          }
+        );
+        res.status(200).json(ctrainee);
+      }
+    } else {
+      res.status(400).json({ error: "cant do it" });
+    }
+
+    //if (!instructor) {
+    //return res.status(400).json({ error: "No such Instructor" });
+    //}
+  } else {
+    res.status(400).json({ error: "Access Restriced" });
+  }
+};
+
 module.exports = {
   createCTrainee,
   getAllCTrainee,
@@ -167,4 +207,5 @@ module.exports = {
   updateCTrainee,
   getRegisteredCourses,
   getGrade,
+  cTraineeUpdatePassword,
 };

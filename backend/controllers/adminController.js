@@ -5,30 +5,34 @@ const bcrypt = require("bcrypt");
 // create new Admin
 
 const createAdmin = async (req, res) => {
-  if(await Admin.findById(req.user._id)){
-    const { username, password } = req.body;
-    const takenUsername = await User.findOne({username: username})
-    if (takenUsername){
-      res.json({message:"Username is taken"})
-    }
-    else{
+  if (await Admin.findById(req.user._id)) {
+    //const { username, password } = req.body;
+    const username = req.body.username;
+    const password = req.body.password;
+    const takenUsername = await User.findOne({ username: username });
+    if (takenUsername) {
+      res.json({ message: "Username is taken" });
+    } else {
       try {
-        const encryptedPassword = await bcrypt.hash(password,10)
-        const admin = await Admin.create({ username: username, password: encryptedPassword });
-        const dbUser =  new User({
+        const encryptedPassword = await bcrypt.hash(password, 10);
+        const admin = await Admin.create({
           username: username,
-          password : encryptedPassword,
-          role: "Admin"
-      });
-      dbUser.save();
-      res.status(200).json(admin);
+          password: encryptedPassword,
+        });
+        const dbUser = new User({
+          username: username,
+          password: encryptedPassword,
+
+          role: "Admin",
+        });
+        dbUser.save();
+        res.status(200).json(admin);
       } catch (error) {
-        res.json({message:"Signup Failed", error: error.message})
+        res.json({ message: "Signup Failed", error: error.message });
       }
     }
-  }
-  else{
-    res.status(400).json({ error: "Access Restriced" })
+  } else {
+    res.status(400).json({ error: "Access Restriced" });
   }
 };
 
@@ -49,8 +53,7 @@ const getAdmin = (req, res) => {
 
 //GET all individual Admins
 const getAllAdmins = (req, res) => {
-  res.json({ mssg: "GET all individual Admin",
-username:req.user._id });
+  res.json({ mssg: "GET all individual Admin", username: req.user._id });
 };
 
 module.exports = {

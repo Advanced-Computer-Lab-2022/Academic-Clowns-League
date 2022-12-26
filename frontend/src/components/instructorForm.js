@@ -1,13 +1,20 @@
 import { useState } from "react";
+import {
+  MDBCard,
+  MDBCardHeader,
+  MDBCardBody,
+  MDBCardTitle,
+  MDBCardText,
+  MDBBtn,
+  MDBInput,
+} from "mdb-react-ui-kit";
 
 const InstructorForm = () => {
   const [popup, setPop] = useState(false);
+  const [message, setMessage] = useState(true);
   const handleClickOpen = () => {
-    setPop(!popup);
-  };
-
-  const closePopup = () => {
-    setPop(false);
+    //setPop(!popup);
+    setMessage(false);
   };
 
   const [username, setUsername] = useState("");
@@ -30,7 +37,7 @@ const InstructorForm = () => {
       name,
     };
 
-    const response = await fetch("/api/instructor", {
+    const response = await fetch("/api/instructor/", {
       method: "POST",
       body: JSON.stringify(instructor),
       headers: {
@@ -55,78 +62,79 @@ const InstructorForm = () => {
   };
   return (
     <form className="create" onSubmit={handleSubmit}>
-      <h3>Add Instructor</h3>
+      <MDBCard
+        style={{
+          top: "40px",
+          width: "500px",
+          height: "-200px",
+          transform: "translate(90%, 1%)",
+        }}
+      >
+        <MDBCardHeader>Add Instructor</MDBCardHeader>
+        <MDBCardBody>
+          <MDBCardTitle>Username:</MDBCardTitle>
+          <MDBInput
+            label="Username"
+            type="text"
+            onChange={(e) => setUsername(e.target.value)}
+            value={username}
+          />{" "}
+          <MDBCardTitle>Name:</MDBCardTitle>
+          <MDBInput
+            label="Name"
+            type="text"
+            onChange={(e) => setName(e.target.value)}
+            value={name}
+          />{" "}
+          <MDBCardTitle>Password:</MDBCardTitle>
+          <MDBInput
+            label="Password"
+            type="text"
+            onChange={(e) => setPassword(e.target.value)}
+            value={password}
+          />{" "}
+          <MDBCardTitle>Country:</MDBCardTitle>
+          <MDBInput
+            label="Country"
+            type="text"
+            onChange={(e) => setCountry(e.target.value)}
+            value={country}
+          />{" "}
+          <MDBCardTitle>Email:</MDBCardTitle>
+          <MDBInput
+            label="Email"
+            type="text"
+            onChange={(e) => setEmail(e.target.value)}
+            value={email}
+          />{" "}
+          <MDBCardTitle>Biography:</MDBCardTitle>
+          <MDBInput
+            label="Bio"
+            type="text"
+            onChange={(e) => setMiniBio(e.target.value)}
+            value={miniBio}
+          />{" "}
+          <button
+            style={{ allign: "center", top: "-15px" }}
+            className="button4"
+            onClick={handleClickOpen}
+          >
+            Add Instructor
+          </button>
+        </MDBCardBody>
+      </MDBCard>
 
-      <li>
-        <label>Username:</label>
-        <input
-          type="text"
-          onChange={(e) => setUsername(e.target.value)}
-          value={username}
-        />
-      </li>
+      <p style={{ align: "center", transform: "translate(115%, 230%)" }}>
+        <message
+          style={{
+            display: message ? "none" : "inline-block",
+            top: "70px",
+          }}
+        >
+          New Instructor is added successfully
+        </message>
+      </p>
 
-      <li>
-        <label>Name:</label>
-        <input
-          type="text"
-          onChange={(e) => setName(e.target.value)}
-          value={name}
-        />
-      </li>
-
-      <li>
-        <label>Password:</label>
-        <input
-          type="text"
-          onChange={(e) => setPassword(e.target.value)}
-          value={password}
-        />
-      </li>
-
-      <li>
-        <label>Country:</label>
-        <input
-          type="text"
-          onChange={(e) => setCountry(e.target.value)}
-          value={country}
-        />
-      </li>
-
-      <li>
-        <label>Email:</label>
-        <input
-          type="text"
-          onChange={(e) => setEmail(e.target.value)}
-          value={email}
-        />
-      </li>
-
-      <li>
-        <label>MiniBio:</label>
-        <input
-          type="text"
-          onChange={(e) => setMiniBio(e.target.value)}
-          value={miniBio}
-        />
-      </li>
-      <button onClick={handleClickOpen}>Add new Instructor</button>
-      <div>
-        {popup ? (
-          <div className="main">
-            <div className="popup">
-              <div className="popup-header">
-                <h1 onClick={closePopup}>X</h1>
-              </div>
-              <div>
-                <p className="message">A new Instructor is added</p>
-              </div>
-            </div>
-          </div>
-        ) : (
-          ""
-        )}
-      </div>
       {error && <div className="error">{error}</div>}
     </form>
   );

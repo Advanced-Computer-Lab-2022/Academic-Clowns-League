@@ -10,7 +10,7 @@ const countries = require("../country-json-master/src/country-by-currency-code.j
 
 const InstructorNavbar = () => {
   const { toggleCurrency, country } = useContext(CurrencyContext);
-  const id = "63715373d953904400b6a4d5";
+  //const id = "63715373d953904400b6a4d5";
   const navigate = useNavigate();
   return (
     <Navbar
@@ -78,16 +78,25 @@ const InstructorNavbar = () => {
               >
                 Edit Email
               </NavDropdown.Item>
+
               <NavDropdown.Item
                 onClick={() => {
-                  navigate(`/changePassword?id=${id}`);
+                  navigate(`/viewAndEditInfo?id`);
+                }}
+              >
+                View And Edit Information
+              </NavDropdown.Item>
+
+              <NavDropdown.Item
+                onClick={() => {
+                  navigate(`/changePassword`);
                 }}
               >
                 Change password
               </NavDropdown.Item>
               <NavDropdown.Item
                 onClick={() => {
-                  navigate(`/resetPassword?id=${id}`);
+                  navigate(`/resetPassword`);
                 }}
               >
                 Forgot my password

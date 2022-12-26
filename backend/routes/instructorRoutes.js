@@ -1,5 +1,5 @@
 const express = require("express");
-const { requireAuth } = require('../controllers/userController');
+const { requireAuth } = require("../controllers/userController");
 const {
   createInstructor,
   getAllInstructor,
@@ -10,34 +10,37 @@ const {
   resetPassword,
   reviewInstructor,
   editMyInstructorReview,
-  deleteMyInstructorReview
+  deleteMyInstructorReview,
+  updatePassword,
 } = require("../controllers/InstructorController");
 
 const router = express.Router();
 
-
-
-router.patch("/reviewInstructor",requireAuth,reviewInstructor);
-router.patch("/editMyInstructorReview",requireAuth,editMyInstructorReview);
-router.patch("/deleteMyInstructorReview",requireAuth,deleteMyInstructorReview);
+router.patch("/reviewInstructor", requireAuth, reviewInstructor);
+router.patch("/editMyInstructorReview", requireAuth, editMyInstructorReview);
+router.patch(
+  "/deleteMyInstructorReview",
+  requireAuth,
+  deleteMyInstructorReview
+);
 
 //GET all  instructor
-router.get("/",requireAuth,getAllInstructor);
+router.get("/", requireAuth, getAllInstructor);
 
 //GET a single  instructor
-router.get("/onlyone",requireAuth,getInstructor);
+router.get("/onlyone", requireAuth, getInstructor);
 
 //POST a new  instructor
-router.post("/",requireAuth,createInstructor);
+router.post("/", requireAuth, createInstructor);
 
 //DELETE a instructor
-router.delete("/:id",requireAuth, deleteInstructor);
+router.delete("/:id", requireAuth, deleteInstructor);
 
 //RATE an instructor
-router.patch("/rate", requireAuth,rateInstructor);
+router.patch("/rate", requireAuth, rateInstructor);
 
-router.patch("/",requireAuth,updateInstructor);
+router.patch("/", requireAuth, updateInstructor);
 
-router.patch("/reset",requireAuth,resetPassword);
+router.patch("/updatePassword", requireAuth, updatePassword);
 
 module.exports = router;

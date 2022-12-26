@@ -1,13 +1,20 @@
 import { useState } from "react";
 
+import {
+  MDBCard,
+  MDBCardHeader,
+  MDBCardBody,
+  MDBCardTitle,
+  MDBCardText,
+  MDBBtn,
+  MDBInput,
+} from "mdb-react-ui-kit";
+
 const CTraineeForm = () => {
   const [popup, setPop] = useState(false);
+  const [message, setMessage] = useState(true);
   const handleClickOpen = () => {
-    setPop(!popup);
-  };
-
-  const closePopup = () => {
-    setPop(false);
+    setMessage(false);
   };
 
   //const [firstname, setFirstname] = useState("");
@@ -38,7 +45,7 @@ const CTraineeForm = () => {
       //courses,
     };
 
-    const response = await fetch("/api/ctrainee", {
+    const response = await fetch("/api/ctrainee/", {
       method: "POST",
       body: JSON.stringify(cTrainee),
       headers: {
@@ -67,50 +74,58 @@ const CTraineeForm = () => {
   };
   return (
     <form className="create" onSubmit={handleSubmit}>
-      <h3>Add Corporate Trainee</h3>
-      <li>
-        <label>Username:</label>
-        <input
-          type="text"
-          onChange={(e) => setUsername(e.target.value)}
-          value={username}
-        />
-      </li>
+      <MDBCard
+        style={{
+          top: "40px",
+          width: "500px",
+          height: "-200px",
+          transform: "translate(90%, 20%)",
+        }}
+      >
+        <MDBCardHeader>Add Corporate Trainee</MDBCardHeader>
+        <MDBCardBody>
+          <MDBCardTitle>Username:</MDBCardTitle>
+          <MDBInput
+            label="Username"
+            type="text"
+            onChange={(e) => setUsername(e.target.value)}
+            value={username}
+          />{" "}
+          <MDBCardTitle>Password:</MDBCardTitle>
+          <MDBInput
+            label="Password"
+            type="text"
+            onChange={(e) => setPassword(e.target.value)}
+            value={password}
+          />{" "}
+          <MDBCardTitle>Email:</MDBCardTitle>
+          <MDBInput
+            label="email"
+            type="text"
+            onChange={(e) => setEmail(e.target.value)}
+            value={email}
+          />{" "}
+          <button
+            style={{ allign: "center", top: "-15px" }}
+            className="button4"
+            onClick={handleClickOpen}
+          >
+            Add corporate Trainee
+          </button>
+        </MDBCardBody>
+      </MDBCard>
 
-      <li>
-        <label>Password:</label>
-        <input
-          type="text"
-          onChange={(e) => setPassword(e.target.value)}
-          value={password}
-        />
-      </li>
+      <p style={{ align: "center", transform: "translate(115%, 570%)" }}>
+        <message
+          style={{
+            display: message ? "none" : "inline-block",
+            top: "70px",
+          }}
+        >
+          New Corporate Trainee is added successfully
+        </message>
+      </p>
 
-      <li>
-        <label>Email:</label>
-        <input
-          type="text"
-          onChange={(e) => setEmail(e.target.value)}
-          value={email}
-        />
-      </li>
-      <button onClick={handleClickOpen}>Add new cTrainee</button>
-      <div>
-        {popup ? (
-          <div className="main">
-            <div className="popup">
-              <div className="popup-header">
-                <h1 onClick={closePopup}>X</h1>
-              </div>
-              <div>
-                <p className="message">A new Corporate Trainee is added</p>
-              </div>
-            </div>
-          </div>
-        ) : (
-          ""
-        )}
-      </div>
       {error && <div className="error">{error}</div>}
     </form>
   );

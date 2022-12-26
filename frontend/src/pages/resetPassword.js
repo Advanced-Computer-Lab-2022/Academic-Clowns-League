@@ -1,16 +1,26 @@
 import InstructorNavbar from "../components/instructorNavbar";
 import { useState, useEffect } from "react";
 import nodemailer from "nodemailer";
+import {
+  MDBCard,
+  MDBCardHeader,
+  MDBCardBody,
+  MDBCardTitle,
+  MDBCardText,
+  MDBBtn,
+  MDBInput,
+} from "mdb-react-ui-kit";
 
 const ResetPassword = () => {
   const params = new URLSearchParams(window.location.search);
-  //const id = params.get("id");
-  const id = "63715373d953904400b6a4d5";
+  const id = params.get("id");
+  //const id = "63715373d953904400b6a4d5";
   //const [password, setPassword] = useState(" ");
-  const [email, setEmail] = useState(" ");
+  const [email, setEmail] = useState("");
   const [error, setError] = useState(null);
   const handleSubmit = async (e) => {
     e.preventDefault();
+    console.log(email);
 
     /*const Password = {
       password,
@@ -22,7 +32,7 @@ const ResetPassword = () => {
 
     //element.innerHTML = data.total;
 
-    const response = await fetch("/api/instructor/reset/?id=" + id, {
+    const response = await fetch("/api/users/reset", {
       method: "PATCH",
       //body: JSON.stringify(Password),
       body: JSON.stringify(Email),
@@ -45,28 +55,46 @@ const ResetPassword = () => {
   };
 
   return (
-    <div>
-      <InstructorNavbar />
+    <>
+      <form
+        style={{
+          width: 1500,
+          height: 780,
+          background: `url('${process.env.PUBLIC_URL}/background2.png')`,
+        }}
+      >
+        <InstructorNavbar />
 
-      <form className="reset">
-        <h3>Email to send reset Link</h3>
-
-        <li>
-          <label>Email:</label>
-          <input
-            type="text"
-            /*onChange={(e) => setPassword(e.target.value)}
-            value={password}*/
-            onChange={(e) => setEmail(e.target.value)}
-            value={email}
-          />
-        </li>
-
-        <button onClick={handleSubmit}>Reset</button>
+        <MDBCard
+          style={{
+            width: "600px",
+            height: "200px",
+            transform: "translate(70%, 130%)",
+          }}
+        >
+          <MDBCardHeader>Reset Password</MDBCardHeader>
+          <MDBCardBody>
+            <MDBInput
+              label="Email"
+              type="text"
+              onChange={(e) => setEmail(e.target.value)}
+              value={email}
+            />{" "}
+            <button
+              type="button"
+              class="btn btn-outline-success"
+              href="#"
+              onClick={handleSubmit}
+              style={{ transform: "translate(210%,100%)" }}
+            >
+              Send Mail
+            </button>
+          </MDBCardBody>
+        </MDBCard>
 
         {error && <div className="error">{error}</div>}
       </form>
-    </div>
+    </>
   );
 };
 

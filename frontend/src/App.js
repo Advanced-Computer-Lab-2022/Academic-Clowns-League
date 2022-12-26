@@ -1,7 +1,6 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 
-
 import InstructorHome from "./pages/instructorHome";
 import InstructorAllCourses from "./pages/instructorAllCourses";
 import InstructorFilterAllCourses from "./pages/instructorFilterAllCourses";
@@ -30,8 +29,6 @@ import AdminCourseAccessRequests from "./pages/adminCourseAccessRequests";
 import AdminRefundRequests from "./pages/adminRefundRequests";
 import AdminPromotions from "./pages/adminPromotions";
 
-
-
 import Testing from "./pages/testing";
 import AddPromotion from "./pages/addPromotion";
 import InstructorViewAndEditBio from "./pages/instructorViewAndEditBio";
@@ -46,7 +43,10 @@ import AddExercise from "./pages/addExercise";
 import CheckoutPage from "./pages/checkoutPage";
 import PaymentCompletion from "./pages/paymentCompletion";
 import Login from "./pages/login";
-
+import ViewAndEditInfo from "./pages/viewAndEditInfo";
+import ForgotPassword from "./pages/forgotPassword";
+import ITraineeChangePassword from "./pages/iTraineeChangePassword";
+import CTraineeChangePassword from "./pages/cTraineeChangePassword";
 //BrowserRouter wraps all things involved with routes, Routes wraps the routes, Route is a single route
 function App() {
   return (
@@ -119,11 +119,15 @@ function App() {
 
               <Route path="/adminAddUsers" element={<AdminAddUsers />} />
               <Route path="/adminProblems" element={<AdminProblems />} />
-              <Route path="/adminCourseAccessRequests" element={<AdminCourseAccessRequests />} />
-              <Route path="/adminRefundRequests" element={<AdminRefundRequests />} />
+              <Route
+                path="/adminCourseAccessRequests"
+                element={<AdminCourseAccessRequests />}
+              />
+              <Route
+                path="/adminRefundRequests"
+                element={<AdminRefundRequests />}
+              />
               <Route path="/adminPromotions" element={<AdminPromotions />} />
-
-
 
               <Route path="/testing" element={<Testing />} />
               <Route path="/addPromotion" element={<AddPromotion />} />
@@ -133,10 +137,25 @@ function App() {
               />
               <Route path="/editEmail" element={<EditEmail />} />
               <Route path="/changePassword" element={<ChangePassword />} />
+
               <Route path="/resetPassword" element={<ResetPassword />} />
               <Route path="/checkoutPage" element={<CheckoutPage />} />
-              <Route path="/paymentCompletion" element={<PaymentCompletion />} />
+
+              <Route
+                path="/paymentCompletion"
+                element={<PaymentCompletion />}
+              />
               <Route path="/login" element={<Login />} />
+              <Route path="/viewAndEditInfo" element={<ViewAndEditInfo />} />
+              <Route
+                path="/iTraineeChangePassword"
+                element={<ITraineeChangePassword />}
+              />
+              <Route
+                path="/cTraineeChangePassword"
+                element={<CTraineeChangePassword />}
+              />
+              <Route path="/forgotPassword" element={<ForgotPassword />} />
             </Routes>
           </div>
         </CurrencyContextProvider>

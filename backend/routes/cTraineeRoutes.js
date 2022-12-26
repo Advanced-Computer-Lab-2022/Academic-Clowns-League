@@ -1,36 +1,40 @@
-const express = require('express');
-const { requireAuth } = require('../controllers/userController');
+const express = require("express");
+const { requireAuth } = require("../controllers/userController");
 const {
-    createCTrainee,
-    getAllCTrainee,
-    //getCTrainee,
-    deleteCTrainee,
-    updateCTrainee,
-    getRegisteredCourses,
-    getGrade
-} = require('../controllers/cTraineeController');
+  createCTrainee,
+  getAllCTrainee,
+  //getCTrainee,
+  deleteCTrainee,
+  updateCTrainee,
+  getRegisteredCourses,
+  getGrade,
+  resetPassword,
+  cTraineeUpdatePassword,
+} = require("../controllers/cTraineeController");
 
 const router = express.Router();
 
 //GET all corporate trainees
-router.get('/',requireAuth,getAllCTrainee);
+router.get("/", requireAuth, getAllCTrainee);
 
 //GET a single corporate trainee
 //router.get('/:id', getCTrainee);
 
 //POST a new corporate trainee
-router.post('/',requireAuth,createCTrainee);
+router.post("/", requireAuth, createCTrainee);
 
 //DELETE a corporate trainee
-router.delete('/:id', deleteCTrainee);
+router.delete("/:id", deleteCTrainee);
 
 //UPDATE a corporate trainee
-router.patch('/',requireAuth, updateCTrainee);
+router.patch("/", requireAuth, updateCTrainee);
 
 //GET registered courses for CTrainee
-router.get('/registeredcourses',requireAuth,getRegisteredCourses);
+router.get("/registeredcourses", requireAuth, getRegisteredCourses);
 
 //get grade for an exercise
-router.get('/getgrade',requireAuth, getGrade)
+router.get("/getgrade", requireAuth, getGrade);
+
+router.patch("/cTraineeUpdatePassword", requireAuth, cTraineeUpdatePassword);
 
 module.exports = router;
