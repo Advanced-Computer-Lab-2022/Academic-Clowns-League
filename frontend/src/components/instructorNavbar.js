@@ -71,6 +71,15 @@ const InstructorNavbar = () => {
               >
                 Edit Biography
               </NavDropdown.Item>
+
+              <NavDropdown.Item
+                onClick={() => {
+                  navigate("/instructorProblems");
+                }}
+              >
+                Requests and problems
+              </NavDropdown.Item>
+
               <NavDropdown.Item
                 onClick={() => {
                   navigate("/editEmail");

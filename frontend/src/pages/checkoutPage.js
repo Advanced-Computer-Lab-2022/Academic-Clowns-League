@@ -1,4 +1,4 @@
-import { loadStripe } from "@stripe/stripe-js";
+/*import { loadStripe } from "@stripe/stripe-js";
 import { Elements } from "@stripe/react-stripe-js";
 import Badge from 'react-bootstrap/Badge';
 import React, { useState, useEffect } from "react";
@@ -50,4 +50,4 @@ const CheckoutPage = () => {
       );   
 }
 
-export default CheckoutPage
+export default CheckoutPage */

@@ -9,6 +9,9 @@ import RateInstructor from "../components/rateInstructor";
 import Ratio from "react-bootstrap/Ratio";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
+import Button from 'react-bootstrap/Button';
+import Accordion from 'react-bootstrap/Accordion';
+import { useNavigate } from "react-router-dom";
 
 const CTraineeCourse = () => {
   //const { id } = useParams();
@@ -16,6 +19,7 @@ const CTraineeCourse = () => {
   //to get the id from  (query, in the URL)
   const params = new URLSearchParams(window.location.search);
   const id = params.get("id");
+  const navigate = useNavigate();
 
   const [course, setCourse] = useState(null);
   const [grade, setGrade] = useState("");
@@ -172,9 +176,6 @@ const CTraineeCourse = () => {
             <h3>{grade}</h3>
             <h3>{answersText}</h3>
 
-            <RateCourse course={course} myId="637a356c54c79d632507dc8a" />
-
-            <RateInstructor course={course} myId="637a356c54c79d632507dc8a" />
           </Col>
 
           <Col sm={3} fixed-top style={{ backgroundColor: "#A9A9A9 " }}>
@@ -193,6 +194,27 @@ const CTraineeCourse = () => {
             <p>
               {" "}
               <strong> Total Hours: </strong> {course.hours} Hours
+            </p>
+            <p>
+              {" "}
+              <Button variant="danger" onClick={() => navigate(`/cTraineeReportProblem?id=${id}`)}>Report problem</Button>
+            </p>
+            <p>
+              {" "}
+              <Accordion>
+<Accordion.Item eventKey="0"  >
+  <Accordion.Header>Rate course</Accordion.Header>
+  <Accordion.Body>
+  <RateCourse course={course} myId="637a356c54c79d632507dc8a" />
+  </Accordion.Body>
+</Accordion.Item>
+<Accordion.Item eventKey="1">
+  <Accordion.Header>Rate instructor</Accordion.Header>
+  <Accordion.Body>
+  <RateInstructor course={course} myId="637a356c54c79d632507dc8a" />
+  </Accordion.Body>
+</Accordion.Item>
+</Accordion>
             </p>
           </Col>
         </Row>

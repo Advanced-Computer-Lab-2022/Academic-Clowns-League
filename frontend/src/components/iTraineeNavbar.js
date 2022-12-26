@@ -46,8 +46,8 @@ const ITraineeNavbar = () => {
                 Another action
               </NavDropdown.Item>
               <NavDropdown.Divider />
-              <NavDropdown.Item href="#action5">
-                Something else here
+              <NavDropdown.Item href="/iTraineeProblems">
+                Requests and problems
               </NavDropdown.Item>
             </NavDropdown>
 

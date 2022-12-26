@@ -44,11 +44,11 @@ const CTraineeNavbar = () => {
             <NavDropdown title="Options" id="navbarScrollingDropdown">
               <NavDropdown.Item href="#action3">Action</NavDropdown.Item>
               <NavDropdown.Item href="#action4">
-                Another action
+                action
               </NavDropdown.Item>
               <NavDropdown.Divider />
-              <NavDropdown.Item href="#action5">
-                Something else here
+              <NavDropdown.Item href="/cTraineeProblems">
+               Requests and problems
               </NavDropdown.Item>
             </NavDropdown>
 

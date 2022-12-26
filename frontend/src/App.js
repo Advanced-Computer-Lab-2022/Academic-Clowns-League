@@ -8,6 +8,10 @@ import InstructorFilterAllCourses from "./pages/instructorFilterAllCourses";
 import InstructorFilterMyCourses from "./pages/instructorFilterMyCourses";
 import InstructorCourse from "./pages/instructorCourse";
 import InstructorRatingsAndReviews from "./pages/instructorRatingsAndReviews";
+import InstructorProblems from "./pages/instructorProblems";
+import InstructorReportProblem from "./pages/instructorReportProblem";
+
+
 
 import CourseRatingsAndReviews from "./pages/courseRatingsAndReviews";
 
@@ -15,11 +19,16 @@ import IndividualTraineeHome from "./pages/individualTraineeHome";
 import ITraineeAllCourses from "./pages/iTraineeAllCourses";
 import ITraineeFilterAllCourses from "./pages/iTraineeFilterAllCourses";
 import ITraineeCourse from "./pages/iTraineeCourse";
+import ITraineeProblems from "./pages/iTraineeProblems";
+import ITraineeReportProblem from "./pages/iTraineeReportProblem";
 
 import CorporateTraineeHome from "./pages/corporateTraineeHome";
 import CTraineeAllCourses from "./pages/cTraineeAllCourses";
 import CTraineeFilterAllCourses from "./pages/cTraineeFilterAllCourses";
 import CTraineeCourse from "./pages/cTraineeCourse";
+import CTraineeProblems from "./pages/cTraineeProblems";
+import CTraineeReportProblem from "./pages/cTraineeReportProblem";
+
 
 import GuestHome from "./pages/guestHome";
 import GuestFilterAllCourses from "./pages/guestFilterAllCourses";
@@ -74,6 +83,15 @@ function App() {
                 element={<InstructorRatingsAndReviews />}
               />
 
+             <Route
+                path="/instructorProblems"
+                element={<InstructorProblems />}
+              />
+                <Route
+                path="/instructorReportProblem"
+                element={<InstructorReportProblem />}
+              />
+
               <Route
                 path="/courseRatingsAndReviews"
                 element={<CourseRatingsAndReviews />}
@@ -91,6 +109,14 @@ function App() {
                 path="/iTraineeFilterAllCourses"
                 element={<ITraineeFilterAllCourses />}
               />
+               <Route
+                path="/iTraineeProblems"
+                element={<ITraineeProblems />}
+              />
+                <Route
+                path="/iTraineeReportProblem"
+                element={<ITraineeReportProblem />}
+              />
               <Route path="/iTraineeCourse" element={<ITraineeCourse />} />
               {/* test by typing   http://localhost:3000/traineeCourse?id=637d0729cee474fa712b4010 in the url */}
 
@@ -107,6 +133,14 @@ function App() {
                 element={<CTraineeFilterAllCourses />}
               />
               <Route path="/cTraineeCourse" element={<CTraineeCourse />} />
+              <Route
+                path="/cTraineeProblems"
+                element={<CTraineeProblems />}
+              />
+                <Route
+                path="/cTraineeReportProblem"
+                element={<CTraineeReportProblem />}
+              />
 
               <Route path="/" element={<GuestHome />} />
               <Route

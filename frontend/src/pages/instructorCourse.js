@@ -10,6 +10,8 @@ import RateInstructor from "../components/rateInstructor";
 import Ratio from "react-bootstrap/Ratio";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
+import Button from 'react-bootstrap/Button';
+
 
 const InstructorCourse = () => {
   //const { id } = useParams();
@@ -17,6 +19,7 @@ const InstructorCourse = () => {
   //to get the id from  (query, in the URL)
   const params = new URLSearchParams(window.location.search);
   const id = params.get("id");
+ 
 
   const [course, setCourse] = useState(null);
   const [grade, setGrade] = useState("");
@@ -190,6 +193,10 @@ const InstructorCourse = () => {
             <p>
               {" "}
               <strong> Total Hours: </strong> {course.hours} Hours
+            </p>
+            <p>
+              {" "}
+              <Button variant="danger" onClick={() => navigate(`/instructorReportProblem?id=${id}`)}>Report problem</Button>
             </p>
           </Col>
         </Row>

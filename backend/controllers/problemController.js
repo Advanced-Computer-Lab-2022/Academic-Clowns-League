@@ -9,12 +9,10 @@ const Admin = require("../models/adminModel");
 
 
 const reportProblem = async (req, res) => {
-    let {
-     type,
-     content,
-     courseId,
-     reporterId,
-    } = req.body;
+  const courseId = req.query.cid;
+  const type = req.query.type;
+  const content = req.query.content;
+  const reporterId = req.user._id;
   
     try {
       const problem = await Problem.create({
@@ -34,8 +32,10 @@ const reportProblem = async (req, res) => {
   
 
   const getMyProblems = async (req, res) => {
-    const id = req.query.id;
-    const problem = await Problem.find( { reporterId: id });
+    //const id = req.query.id;
+   if(await ITrainee.findById(req.user._id)|| CTrainee.findById(req.user._id)||Instructor.findById(req.user._id)){
+    const problem = await Problem.find( { reporterId: req.user._id});
+   // const problem = await Problem.find( { reporterId: id});
    
     for(let i = 0; i < problem.length; i++) {
         let c = problem[i].courseId;
@@ -44,11 +44,75 @@ const reportProblem = async (req, res) => {
         console.log(problem[i]);
     }
     res.status(200).json(problem);
+  }
+ else{
+    console.log("ssssaaaaaaaddddd")
+    console.log(req.user._id)
+    res.status(400).json({ error: "Access Restriced" })
+   
+  }
   
   };
 
-  const  getAllProblems = async (req, res) => {
-    if(await Admin.findById(req.user._id)){const problem = await Problem.find({}).sort({priority:1});
+  const  getAllProblemsR = async (req, res) => {
+    if(await Admin.findById(req.user._id)){
+      const problem = await Problem.find({status:"Resolved"}).sort({priority:1});
+   
+    for(let i = 0; i < problem.length; i++) {
+        let c = problem[i].courseId;
+        let r = problem[i].reporterId;
+        const course = await Course.findById( { _id: c });
+        problem[i].course=course;
+        const I =await Instructor.findById( { _id: r });
+        const IT =await ITrainee.findById( { _id: r });
+        const CT =await CTrainee.findById( { _id: r });
+        if(I){
+            problem[i].reporter=I;
+        }
+        else if(IT){
+            problem[i].reporter=IT;
+        }
+        else if(CT){
+            problem[i].reporter=CT;
+        }
+    }
+
+    res.status(200).json(problem);
+  }
+    
+  };
+
+  const  getAllProblemsUR = async (req, res) => {
+    if(await Admin.findById(req.user._id)){
+      const problem = await Problem.find({status:"Unresolved"}).sort({priority:1});
+   
+    for(let i = 0; i < problem.length; i++) {
+        let c = problem[i].courseId;
+        let r = problem[i].reporterId;
+        const course = await Course.findById( { _id: c });
+        problem[i].course=course;
+        const I =await Instructor.findById( { _id: r });
+        const IT =await ITrainee.findById( { _id: r });
+        const CT =await CTrainee.findById( { _id: r });
+        if(I){
+            problem[i].reporter=I;
+        }
+        else if(IT){
+            problem[i].reporter=IT;
+        }
+        else if(CT){
+            problem[i].reporter=CT;
+        }
+    }
+
+    res.status(200).json(problem);
+  }
+    
+  };
+
+  const  getAllProblemsP = async (req, res) => {
+    if(await Admin.findById(req.user._id)){
+      const problem = await Problem.find({status:"Pending"}).sort({priority:1});
    
     for(let i = 0; i < problem.length; i++) {
         let c = problem[i].courseId;
@@ -89,6 +153,8 @@ const reportProblem = async (req, res) => {
    res.status(200).json(problem);
   
   };
+
+
 
   const problemFollowUp = async (req, res) => {
     
@@ -139,7 +205,9 @@ console.log(c);
   module.exports = {
     reportProblem,
     getMyProblems,
-    getAllProblems,
+    getAllProblemsR,
+    getAllProblemsUR,
+    getAllProblemsP,
     problemStatus,
     problemFollowUp,
   };

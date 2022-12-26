@@ -47,7 +47,7 @@ const Login = () => {
                 navigate("/instructorHome")
             }
             else{
-                navigate("/adminHome")
+                navigate("/adminAddUsers")
             }
         }
     }
