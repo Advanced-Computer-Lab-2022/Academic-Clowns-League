@@ -22,6 +22,8 @@ const CTraineeForm = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
+  const [firstname, setFirstname] = useState("");
+  const [lastname, setLastname] = useState("");
   //const [country, setCountry] = useState("");
   //const [credNumber, setCredNum] = useState("");
   //const [credCCV, setCredCCV] = useState("");
@@ -33,11 +35,12 @@ const CTraineeForm = () => {
     e.preventDefault();
 
     const cTrainee = {
-      //firstname,
-      //lastname,
+      firstname,
+      lastname,
       username,
       password,
       email,
+
       //country,
       //credNumber,
       //credCCVv,
@@ -63,6 +66,8 @@ const CTraineeForm = () => {
       setUsername("");
       setPassword("");
       setEmail("");
+      setFirstname("");
+      setLastname("");
       //setCountry("");
       //setCrednum("");
       //setCredccv("");
@@ -79,11 +84,32 @@ const CTraineeForm = () => {
           top: "40px",
           width: "500px",
           height: "-200px",
-        //  transform: "translate(90%, 20%)",
+          //  transform: "translate(90%, 20%)",
         }}
       >
         <MDBCardHeader>Add Corporate Trainee</MDBCardHeader>
         <MDBCardBody>
+          <MDBCardTitle>Firstname:</MDBCardTitle>
+          <MDBInput
+            label="firstname"
+            type="text"
+            onChange={(e) => setFirstname(e.target.value)}
+            value={firstname}
+          />{" "}
+          <MDBCardTitle>Lastname:</MDBCardTitle>
+          <MDBInput
+            label="lastname"
+            type="text"
+            onChange={(e) => setLastname(e.target.value)}
+            value={lastname}
+          />{" "}
+          <MDBCardTitle>Email:</MDBCardTitle>
+          <MDBInput
+            label="email"
+            type="text"
+            onChange={(e) => setEmail(e.target.value)}
+            value={email}
+          />{" "}
           <MDBCardTitle>Username:</MDBCardTitle>
           <MDBInput
             label="Username"
@@ -97,13 +123,6 @@ const CTraineeForm = () => {
             type="text"
             onChange={(e) => setPassword(e.target.value)}
             value={password}
-          />{" "}
-          <MDBCardTitle>Email:</MDBCardTitle>
-          <MDBInput
-            label="email"
-            type="text"
-            onChange={(e) => setEmail(e.target.value)}
-            value={email}
           />{" "}
           <button
             style={{ allign: "center", top: "-15px" }}
