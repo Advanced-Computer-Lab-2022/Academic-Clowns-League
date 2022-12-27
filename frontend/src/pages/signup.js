@@ -78,18 +78,23 @@ const Signup = () => {
             setUsername("");
             setPassword("");
             setError(null);
+
+
+
             if(json.role == "iTrainee"){
-                navigate("/individualTraineeHome")
+                window.location.href=`/individualTraineeHome`;
             }
             else if(json.role == "cTrainee"){
-                navigate("/corporateTraineeHome")
+                window.location.href=`/corporateTraineeHome`;
             }
             else if(json.role == "Instructor"){
-                navigate("/instructorHome")
+                window.location.href=`/instructorHome`;
             }
             else if(json.role == "Admin"){
-                navigate("/adminAddUsers")
+                window.location.href=`/adminAddUsers`;
             }
+
+
         }
         }
         

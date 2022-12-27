@@ -38,16 +38,16 @@ const Login = () => {
         
 
         if(json.role == "iTrainee"){
-            navigate("/individualTraineeHome")
+            window.location.href=`/individualTraineeHome`;
         }
         else if(json.role == "cTrainee"){
-            navigate("/corporateTraineeHome")
+            window.location.href=`/corporateTraineeHome`;
         }
         else if(json.role == "Instructor"){
-            navigate("/instructorHome")
+            window.location.href=`/instructorHome`;
         }
         else if(json.role == "Admin"){
-            navigate("/adminAddUsers")
+            window.location.href=`/adminAddUsers`;
         }
 
         
@@ -88,18 +88,22 @@ const Login = () => {
                 handleShow(json.role)
 
             }
-            else{ if(json.role == "iTrainee"){
-                navigate("/individualTraineeHome")
-            }
-            else if(json.role == "cTrainee"){
-                navigate("/corporateTraineeHome")
-            }
-            else if(json.role == "Instructor"){
-                navigate("/instructorHome")
-            }
-            else if(json.role == "Admin"){
-                navigate("/adminAddUsers")
-            }
+            else{
+
+
+                if(json.role == "iTrainee"){
+                    window.location.href=`/individualTraineeHome`;
+                }
+                else if(json.role == "cTrainee"){
+                    window.location.href=`/corporateTraineeHome`;
+                }
+                else if(json.role == "Instructor"){
+                    window.location.href=`/instructorHome`;
+                }
+                else if(json.role == "Admin"){
+                    window.location.href=`/adminAddUsers`;
+                }
+
         }
     }
 }
