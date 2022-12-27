@@ -102,6 +102,7 @@ console.log("success")
                     
                          const token = jwt.sign({payload}, 'supersecret', {expiresIn: 604800})
                          res.cookie('jwtoken', token, { httpOnly: false, maxAge: 24*60*60*1000 })
+                         res.cookie('role', role, { httpOnly: false, maxAge: 24*60*60*1000 })
                          return res.json({
                            message:"successful",
                            payload : payload,
@@ -261,7 +262,8 @@ const updatePassword = async (req, res) => {
 };
 
 const logOut  = async (req, res) => {
-   res.cookie('jwtoken', "", { httpOnly: false, maxAge: -1 })
+   res.cookie('jwtoken', "", { httpOnly: false, maxAge: -1 });
+   res.cookie('role', "", { httpOnly: false, maxAge: -1 });
    
    return res.json({
     message: "Token Deleted"

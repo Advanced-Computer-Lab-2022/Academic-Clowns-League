@@ -53,7 +53,12 @@ import ResetPassword from "./pages/resetPassword";
 import Login from "./pages/login";
 import Signup from "./pages/signup";
 import Testing from "./pages/testing";
+
+
+import AccessDenied from "./pages/accessDenied";
 import CurrencyContextProvider from "./contexts/CurrencyContext";
+import Cookies from 'js-cookie';
+
 
 
 
@@ -63,57 +68,22 @@ import CurrencyContextProvider from "./contexts/CurrencyContext";
 
 //BrowserRouter wraps all things involved with routes, Routes wraps the routes, Route is a single route
 function App() {
+  let role = Cookies.get('role');
+  console.log(role);
+
+
+
+
+
+
+
+
   return (
     <div className="App">
       <BrowserRouter>
         <CurrencyContextProvider>
           <div className="pages">
             <Routes>
-
-              <Route path="/instructorHome" element={<InstructorHome />} />
-              <Route path="/instructorAllCourses" element={<InstructorAllCourses />} />
-              <Route path="/instructorFilterAllCourses" element={<InstructorFilterAllCourses />} />
-              <Route path="/instructorFilterMyCourses" element={<InstructorFilterMyCourses />} />
-              <Route path="/instructorCourse" element={<InstructorCourse />} />
-              <Route path="/instructorRatingsAndReviews" element={<InstructorRatingsAndReviews />} />
-              <Route path="/instructorProblems" element={<InstructorProblems />} />
-              <Route path="/instructorReportProblem" element={<InstructorReportProblem />} />
-              <Route path="/courseRatingsAndReviews" element={<CourseRatingsAndReviews />} />
-              <Route path="/viewAndEditInfo" element={<ViewAndEditInfo />} />
-              <Route path="/createCourse" element={<CreateCourse />} />
-              <Route path="/addSubtitle" element={<AddSubtitle />} />
-              <Route path="/addExercise" element={<AddExercise />} />
-              <Route path="/addPromotion" element={<AddPromotion />} />
-              <Route path="/changePassword" element={<ChangePassword />} />
-              <Route path="/instructorViewAndEditBio" element={<InstructorViewAndEditBio />} />
-              <Route path="/editEmail" element={<EditEmail />} />
-
-              <Route path="/individualTraineeHome" element={<IndividualTraineeHome />} />
-              <Route path="/iTraineeAllCourses" element={<ITraineeAllCourses />} />
-              <Route path="/iTraineeFilterAllCourses" element={<ITraineeFilterAllCourses />} />
-              <Route path="/iTraineeCourse" element={<ITraineeCourse />} />
-              <Route path="/iTraineeProblems" element={<ITraineeProblems />} />
-              <Route path="/iTraineeReportProblem" element={<ITraineeReportProblem />} />
-              <Route path="/iTraineeProfile" element={<ITraineeProfile />} />
-              <Route path="/iTraineeChangePassword" element={<ITraineeChangePassword />} />
-              <Route path="/checkoutPage" element={<CheckoutPage />} />
-              <Route path="/paymentCompletion" element={<PaymentCompletion />} />
-
-              <Route path="/corporateTraineeHome" element={<CorporateTraineeHome />} />
-              <Route path="/cTraineeAllCourses" element={<CTraineeAllCourses />} />
-              <Route path="/cTraineeFilterAllCourses" element={<CTraineeFilterAllCourses />} />
-              <Route path="/cTraineeCourse" element={<CTraineeCourse />} />
-              <Route path="/cTraineeProblems" element={<CTraineeProblems />} />
-              <Route path="/cTraineeReportProblem" element={<CTraineeReportProblem />} />
-              <Route path="/cTraineeProfile" element={<CTraineeProfile />} />
-              <Route path="/cTraineeChangePassword" element={<CTraineeChangePassword />} />
-
-              <Route path="/adminAddUsers" element={<AdminAddUsers />} />
-              <Route path="/adminProblems" element={<AdminProblems />} />
-              <Route path="/adminCourseAccessRequests" element={<AdminCourseAccessRequests />} />
-              <Route path="/adminRefundRequests" element={<AdminRefundRequests />} />
-              <Route path="/adminPromotions" element={<AdminPromotions />} />
-
 
               <Route path="/" element={<GuestHome />} />
               <Route path="/guestFilterAllCourses" element={<GuestFilterAllCourses />} />
@@ -122,9 +92,92 @@ function App() {
               <Route path="/login" element={<Login />} />
               <Route path="/signup" element={<Signup />} />
               <Route path="/testing" element={<Testing />} />
-              
-              
-              
+
+              {role === 'Instructor' ?
+                (
+                  <Route>
+                    <Route path="/instructorHome" element={<InstructorHome />} />
+                    <Route path="/instructorAllCourses" element={<InstructorAllCourses />} />
+                    <Route path="/instructorFilterAllCourses" element={<InstructorFilterAllCourses />} />
+                    <Route path="/instructorFilterMyCourses" element={<InstructorFilterMyCourses />} />
+                    <Route path="/instructorCourse" element={<InstructorCourse />} />
+                    <Route path="/instructorRatingsAndReviews" element={<InstructorRatingsAndReviews />} />
+                    <Route path="/instructorProblems" element={<InstructorProblems />} />
+                    <Route path="/instructorReportProblem" element={<InstructorReportProblem />} />
+                    <Route path="/courseRatingsAndReviews" element={<CourseRatingsAndReviews />} />
+                    <Route path="/viewAndEditInfo" element={<ViewAndEditInfo />} />
+                    <Route path="/createCourse" element={<CreateCourse />} />
+                    <Route path="/addSubtitle" element={<AddSubtitle />} />
+                    <Route path="/addExercise" element={<AddExercise />} />
+                    <Route path="/addPromotion" element={<AddPromotion />} />
+                    <Route path="/changePassword" element={<ChangePassword />} />
+                    <Route path="/instructorViewAndEditBio" element={<InstructorViewAndEditBio />} />
+                    <Route path="/editEmail" element={<EditEmail />} />
+                  </Route>
+                )
+                :
+                (<Route path="/login" element={<Login />} />)
+              }
+
+              {role === 'iTrainee' ?
+                (
+                  <Route>
+                    <Route path="/individualTraineeHome" element={<IndividualTraineeHome />} />
+                    <Route path="/iTraineeAllCourses" element={<ITraineeAllCourses />} />
+                    <Route path="/iTraineeFilterAllCourses" element={<ITraineeFilterAllCourses />} />
+                    <Route path="/iTraineeCourse" element={<ITraineeCourse />} />
+                    <Route path="/iTraineeProblems" element={<ITraineeProblems />} />
+                    <Route path="/iTraineeReportProblem" element={<ITraineeReportProblem />} />
+                    <Route path="/iTraineeProfile" element={<ITraineeProfile />} />
+                    <Route path="/iTraineeChangePassword" element={<ITraineeChangePassword />} />
+                    <Route path="/checkoutPage" element={<CheckoutPage />} />
+                    <Route path="/paymentCompletion" element={<PaymentCompletion />} />
+
+                  </Route>
+                )
+                :
+                (<Route path="/login" element={<Login />} />)
+              }
+
+
+              {role === 'cTrainee' ?
+                (
+                  <Route>
+
+                    <Route path="/corporateTraineeHome" element={<CorporateTraineeHome />} />
+                    <Route path="/cTraineeAllCourses" element={<CTraineeAllCourses />} />
+                    <Route path="/cTraineeFilterAllCourses" element={<CTraineeFilterAllCourses />} />
+                    <Route path="/cTraineeCourse" element={<CTraineeCourse />} />
+                    <Route path="/cTraineeProblems" element={<CTraineeProblems />} />
+                    <Route path="/cTraineeReportProblem" element={<CTraineeReportProblem />} />
+                    <Route path="/cTraineeProfile" element={<CTraineeProfile />} />
+                    <Route path="/cTraineeChangePassword" element={<CTraineeChangePassword />} />
+
+                  </Route>
+                )
+                :
+                (<Route path="/login" element={<Login />} />)
+              }
+
+
+              {role === 'Admin' ?
+                (
+                  <Route>
+                    <Route path="/adminAddUsers" element={<AdminAddUsers />} />
+                    <Route path="/adminProblems" element={<AdminProblems />} />
+                    <Route path="/adminCourseAccessRequests" element={<AdminCourseAccessRequests />} />
+                    <Route path="/adminRefundRequests" element={<AdminRefundRequests />} />
+                    <Route path="/adminPromotions" element={<AdminPromotions />} />
+
+                  </Route>
+                )
+                :
+                (<Route path="/login" element={<Login />} />)
+              }
+
+              <Route path="*" element={<AccessDenied/>} />
+
+
             </Routes>
           </div>
         </CurrencyContextProvider>
