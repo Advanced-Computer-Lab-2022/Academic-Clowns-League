@@ -1,15 +1,9 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import Subtitle from "../components/subtitle";
 import ITraineeNavbar from "../components/iTraineeNavbar";
 import Exercise from "../components/excercise";
 import YouTube from 'react-youtube';
-import { MDBBtn, MDBModal,
-  MDBModalDialog,
-  MDBModalContent,
-  MDBModalHeader,
-  MDBModalTitle,
-  MDBModalBody,
-  MDBModalFooter,} from 'mdb-react-ui-kit';
 
 import RateCourse from "../components/rateCourse";
 import RateInstructor from "../components/rateInstructor";
@@ -18,15 +12,20 @@ import Ratio from "react-bootstrap/Ratio";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Accordion from 'react-bootstrap/Accordion';
-
 import Button from 'react-bootstrap/Button';
-import { useNavigate } from "react-router-dom";
 import ProgressBar from 'react-bootstrap/ProgressBar';
 import Sidebar from "react-sidebar";
 import Form from 'react-bootstrap/Form';
 import Modal from 'react-bootstrap/Modal';
 import Offcanvas from 'react-bootstrap/Offcanvas';
 
+import { MDBBtn, MDBModal,
+  MDBModalDialog,
+  MDBModalContent,
+  MDBModalHeader,
+  MDBModalTitle,
+  MDBModalBody,
+  MDBModalFooter,} from 'mdb-react-ui-kit';
 
 import { BsFillTrashFill, BsFillPencilFill } from "react-icons/bs";
 
@@ -88,9 +87,8 @@ const ITraineeCourse = () => {
 
   const params = new URLSearchParams(window.location.search);
   const id = params.get("id");
-  const navigate = useNavigate();
 
-  const [course, setCourse] = useState('');
+  const [course, setCourse] = useState(null);
   const [grade, setGrade] = useState("");
   const [message, setMessage] = useState("");
   const [submitted, setSubmitted] = useState(false);
@@ -117,6 +115,11 @@ const ITraineeCourse = () => {
   const [deleteInstReviewIconColor, setDeleteInstReviewIconColor] = useState('');
   const [editInstReviewIconColor, setEditInstReviewIconColor] = useState('');
 
+  const [answersText, setAnswersText] = useState("");
+  const [basicModal, setBasicModal] = useState(false);
+  const navigate = useNavigate();
+
+  
 
   useEffect(() => {
     Promise.all([
@@ -134,8 +137,8 @@ const ITraineeCourse = () => {
       console.log("USEEFFECT");
     });
   }, []);
-  const [answersText, setAnswersText] = useState("");
-  const [basicModal, setBasicModal] = useState(false);
+
+
 
   const toggleShow = () => setBasicModal(!basicModal);
 
@@ -151,6 +154,15 @@ const ITraineeCourse = () => {
       autoplay: 0,
     },
   };
+
+  const requestRefund = async() => {
+    const response = await fetch("/api/request/createRefundRequest/?id=" + id);
+    const json = await response.json();
+
+    if(response.status == 200){
+      navigate("/individualTraineeHome")
+    }
+}
 
   //Handles Change in RadioButton values
   const handleChange = (event) => {
@@ -188,34 +200,6 @@ const ITraineeCourse = () => {
             " Should be: " +
             CorrectAnswers[i]
           );
-        ResultDisplay +=
-          "The following answer is wrong: " +
-          StudentAnswers[i] +
-          " Should be: " +
-          CorrectAnswers[i];
-      }
-      setAnswersText(ResultDisplay);
-    }
-    ResultDisplay = (Result / FullMark) * 100;
-    setGrade(ResultDisplay);
-    console.log(ResultDisplay);
-  };
-  }
-  /*useEffect(() => {
-    const fetchCourse = async () => {
-      const response = await fetch("/api/courses/openMyCourse/?id=" + id);
-
-      const json = await response.json();
-      if (response.status == 200) {
-        setCourse(json);
-
-        //console.log(course.exercises);
-
-        if (course) {
-          for (let i = 0; i < course.exercises.length; i++) {
-            CorrectAnswers.push(course.exercises[i].answer);
-          }
-          console.log(CorrectAnswers);
         }
       }
       ResultDisplay = (Result / FullMark) * 100;
@@ -230,7 +214,7 @@ const ITraineeCourse = () => {
 
     }
 
-  });*/
+  };
 
 
   const handleDownloadCertificate = async (event) => {
@@ -468,15 +452,6 @@ const ITraineeCourse = () => {
 
 
 
-  const requestRefund = async() => {
-    const response = await fetch("/api/request/createRefundRequest/?id=" + id);
-    const json = await response.json();
-
-    if(response.status == 200){
-      navigate("/individualTraineeHome")
-    }
-}
-
   return (
     <div className="">
       <ITraineeNavbar />
@@ -625,8 +600,6 @@ const ITraineeCourse = () => {
               <p style={{ color: 'red' }}> {message}</p>
             </form>
 
-
-
           </Col>
 
           <Col sm={3} fixed-top style={{ backgroundColor: "#A9A9A9 " }}>
@@ -756,27 +729,6 @@ const ITraineeCourse = () => {
               <BsFillPencilFill onMouseEnter={() => setEditInstReviewIconColor('red')}
                 onMouseLeave={() => setEditInstReviewIconColor('')} onClick={handleShowEditInstReview} style={{ color: editInstReviewIconColor }} />
             </p>
-            <p>
-              {" "}
-              <Button variant="danger" onClick={() => navigate(`/iTraineeReportProblem?id=${id}`)}>Report problem</Button>
-            </p>
-            <p>
-              {" "}
-              <Accordion>
-<Accordion.Item eventKey="0"  >
-  <Accordion.Header>Rate course</Accordion.Header>
-  <Accordion.Body>
-  <RateCourse course={course} myId="637a356c54c79d632507dc8a" />
-  </Accordion.Body>
-</Accordion.Item>
-<Accordion.Item eventKey="1">
-  <Accordion.Header>Rate instructor</Accordion.Header>
-  <Accordion.Body>
-  <RateInstructor course={course} myId="637a356c54c79d632507dc8a" />
-  </Accordion.Body>
-</Accordion.Item>
-</Accordion>
-            </p>
 
             <Modal show={showAddInstReview} onHide={handleCloseAddInstReview}>
               <Modal.Header closeButton>
@@ -831,13 +783,37 @@ const ITraineeCourse = () => {
               </Modal.Footer>
             </Modal>
 
-            <MDBBtn className='me-1' color='danger' onClick={toggleShow}> 
+
+
+
+            <p>
+              {" "}
+              <Button variant="danger" onClick={() => navigate(`/iTraineeReportProblem?id=${id}`)}>Report problem</Button>
+            </p>
+            <p>
+              {" "}
+              <Accordion>
+<Accordion.Item eventKey="0"  >
+  <Accordion.Header>Rate course</Accordion.Header>
+  <Accordion.Body>
+  <RateCourse course={course} myId="637a356c54c79d632507dc8a" />
+  </Accordion.Body>
+</Accordion.Item>
+<Accordion.Item eventKey="1">
+  <Accordion.Header>Rate instructor</Accordion.Header>
+  <Accordion.Body>
+  <RateInstructor course={course} myId="637a356c54c79d632507dc8a" />
+  </Accordion.Body>
+</Accordion.Item>
+</Accordion>
+            </p>
+
+            <MDBBtn hidden={myProgress.data >= 50 ? true : false}  className='me-1' color='danger' onClick={toggleShow}> 
               Request Refund
             </MDBBtn>
-          </Col>
-        </Row>
-      )}
-      <MDBModal show={basicModal} setShow={setBasicModal} tabIndex='-1'>
+
+
+            <MDBModal show={basicModal} setShow={setBasicModal} tabIndex='-1'>
         <MDBModalDialog size='sm'>
           <MDBModalContent>
             <MDBModalHeader>
@@ -855,6 +831,13 @@ const ITraineeCourse = () => {
           </MDBModalContent>
         </MDBModalDialog>
       </MDBModal>
+
+
+
+
+          </Col>
+        </Row>
+      )}
     </div>
   );
 };
