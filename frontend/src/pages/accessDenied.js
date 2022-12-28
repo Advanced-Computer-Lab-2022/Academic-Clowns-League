@@ -28,7 +28,7 @@ const AccessDenied = () => {
                     alt="Access Restricted" className="my-5" style={{ width: '150px' }} fluid />
 
 
-    <h1>Access Restricted</h1>
+    <h1>Access Denied</h1>
 
 
 

@@ -1,4 +1,5 @@
 import InstructorNavbar from "../components/instructorNavbar";
+import CTraineeNavbar from "../components/cTraineeNavbar";
 import { useState } from "react";
 import { Routes, Route, useNavigate } from "react-router-dom";
 
@@ -57,7 +58,7 @@ const CTraineeChangePassword = () => {
 
   return (
     <div>
-      <InstructorNavbar />
+      <CTraineeNavbar />
 
       <form
         className="changePassword"

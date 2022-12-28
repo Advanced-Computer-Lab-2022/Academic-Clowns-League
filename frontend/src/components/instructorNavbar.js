@@ -8,7 +8,7 @@ import { NavLink } from "react-router-dom";
 import { CurrencyContext } from "../contexts/CurrencyContext";
 import { CgProfile } from 'react-icons/cg';
 import { MdOutlineCreate } from 'react-icons/md';
-import {GiMoneyStack} from 'react-icons/gi';
+import { GiMoneyStack } from 'react-icons/gi';
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
 import Popover from 'react-bootstrap/Popover';
 import { BiWorld } from 'react-icons/bi';
@@ -16,15 +16,15 @@ import { GoSearch } from 'react-icons/go'
 import { MDBBtn, MDBIcon, MDBInput, MDBInputGroup } from 'mdb-react-ui-kit';
 const countries = require("../country-json-master/src/country-by-currency-code.json");
 
-const InstructorNavbar = ({updateCourses}) => {
+const InstructorNavbar = ({ updateCourses }) => {
   const { toggleCurrency, rate, currency } = useContext(CurrencyContext);
   const [instructor, setInstructor] = useState("")
   const [searchTerm, setSearchTerm] = useState("");
-  const [instructorMoney, setInstructorMoney] =  useState("")
+  const [instructorMoney, setInstructorMoney] = useState("")
 
   const handleClose = async () => {
-    const response = await fetch ("api/users/logout");
-  navigate("/");
+    const response = await fetch("api/users/logout");
+    navigate("/");
   }
 
   useEffect(() => {
@@ -61,11 +61,11 @@ const InstructorNavbar = ({updateCourses}) => {
     );
     const json = await response.json();
     updateCourses(json)
-    }
+  }
 
-    const handleClick = async () => {
-      window.location.reload(true);
-    };
+  const handleClick = async () => {
+    window.location.reload(true);
+  };
 
   return (
     <Navbar
@@ -109,105 +109,100 @@ const InstructorNavbar = ({updateCourses}) => {
             </Nav.Link>
     */}
           </Nav>
-      <div className='search-navbar'>
-        
-      <form className="create-instructor" onSubmit={handleSubmit}>
+          <div className='search-navbar'>
 
-      <MDBInputGroup className="search">
-      <MDBInput label='Search' onChange={(e) => setSearchTerm(e.target.value)} style={{
-          backgroundColor: "#E0E0E0",
-          borderColor: "#E0E0E0",
-          color: "black"}}/>
-      <MDBBtn rounded rippleColor='dark' style={{
-          backgroundColor: "#E0E0E0",
-          borderColor: "#E0E0E0",
-          color: "black"
-        }}>
-      <GoSearch />
-      </MDBBtn>
-      </MDBInputGroup>
-      </form>
-      <div className="clear-search-instructor-nav">
-      <MDBBtn rounded style={{
-          backgroundColor: "#E0E0E0",
-          borderColor: "#E0E0E0",
-          color: "black",
-          height: 36,
-        }} onClick={handleClick}>
-        Clear
-      </MDBBtn>
-      </div>
-      </div>
+            <form className="create-instructor" onSubmit={handleSubmit}>
 
-          <NavDropdown title={<CgProfile size={25}/>} id="navbarScrollingDropdown" className='navlink-profile-instructor' align="end">
-          <NavDropdown.Item
-                onClick={() => navigate("/instructorRatingsAndReviews")}
-              >
-                View my Ratings and Reviews
-              </NavDropdown.Item>
+              <MDBInputGroup className="search">
+                <MDBInput label='Search' onChange={(e) => setSearchTerm(e.target.value)} style={{
+                  backgroundColor: "#E0E0E0",
+                  borderColor: "#E0E0E0",
+                  color: "black"
+                }} />
+                <MDBBtn rounded rippleColor='dark' style={{
+                  backgroundColor: "#E0E0E0",
+                  borderColor: "#E0E0E0",
+                  color: "black"
+                }}>
+                  <GoSearch />
+                </MDBBtn>
+              </MDBInputGroup>
+            </form>
+            <div className="clear-search-instructor-nav">
+              <MDBBtn rounded style={{
+                backgroundColor: "#E0E0E0",
+                borderColor: "#E0E0E0",
+                color: "black",
+                height: 36,
+              }} onClick={handleClick}>
+                Clear
+              </MDBBtn>
+            </div>
+          </div>
 
-              <NavDropdown.Item
-                onClick={() => {
-                  navigate("/instructorProblems");
-                }}
-              >
-                Requests and Problems
-              </NavDropdown.Item>
+          <NavDropdown title={<CgProfile size={25} />} id="navbarScrollingDropdown" className='navlink-profile-instructor' align="end">
+            <NavDropdown.Item
+              onClick={() => navigate("/instructorRatingsAndReviews")}
+            >
+              View my Ratings and Reviews
+            </NavDropdown.Item>
 
-              <NavDropdown.Item
-                onClick={() => {
-                  navigate(`/viewAndEditInfo?id`);
-                }}
-              >
-                View And Edit Information
-              </NavDropdown.Item>
+            <NavDropdown.Item
+              onClick={() => {
+                navigate("/instructorProblems");
+              }}
+            >
+              Requests and Problems
+            </NavDropdown.Item>
 
-              <NavDropdown.Item
-                onClick={() => {
-                  navigate(`/changePassword?id=${instructor._id}`);
-                }}
-              >
-                Change password
-              </NavDropdown.Item>
-              <NavDropdown.Item
-                onClick={() => {
-                  navigate(`/resetPassword?id=${instructor._id}`);
-                }}
-              >
-                Forgot my password
-              </NavDropdown.Item>
-              <NavDropdown.Divider />
-              <NavDropdown.Item onClick={handleClose}>
-                Logout
-              </NavDropdown.Item>
-            </NavDropdown>
+            <NavDropdown.Item
+              onClick={() => {
+                navigate(`/viewAndEditInfo?id`);
+              }}
+            >
+              View And Edit Information
+            </NavDropdown.Item>
 
-            <NavDropdown title={<BiWorld size={25}/>} id="navbarScrollingDropdown" onSelect = {toggleCurrency} className='navlink-world' align="end">
-            {countries.map((country) => (
-                <NavDropdown.Item eventKey={country.country}>{country.country}</NavDropdown.Item>
-              ))}
-            </NavDropdown>
-
-              <button className="money-button" onClick={() => navigate("/createCourse")}><MdOutlineCreate size={25} className="money"/></button>
-
-            <OverlayTrigger
-          trigger="click"
-          key="bottom"
-          placement="bottom"
-          overlay={
-            <Popover id={`popover-positioned-bottom`}>
-              <Popover.Header as="h3">{`${instructor.name}'s Wallet`}</Popover.Header>
-              <Popover.Body>
-                <div>
-                <h6>Money Owed: </h6> <p>{instructorMoney*rate} {currency}</p>
-                </div>
-              </Popover.Body>
-            </Popover>
-          }
-        >
-          <button className="money-button"><GiMoneyStack size={25} className="money"/></button>
-        </OverlayTrigger>
+            <NavDropdown.Item
+              onClick={() => {
+                navigate(`/changePassword?id=${instructor._id}`);
+              }}
+            >
+              Change password
+            </NavDropdown.Item>
             
+            <NavDropdown.Divider />
+            <NavDropdown.Item onClick={handleClose}>
+              Logout
+            </NavDropdown.Item>
+          </NavDropdown>
+
+          <NavDropdown title={<BiWorld size={25} />} id="navbarScrollingDropdown" onSelect={toggleCurrency} className='navlink-world' align="end">
+            {countries.map((country) => (
+              <NavDropdown.Item eventKey={country.country}>{country.country}</NavDropdown.Item>
+            ))}
+          </NavDropdown>
+
+          <button className="money-button" onClick={() => navigate("/createCourse")}><MdOutlineCreate size={25} className="money" /></button>
+
+          <OverlayTrigger
+            trigger="click"
+            key="bottom"
+            placement="bottom"
+            overlay={
+              <Popover id={`popover-positioned-bottom`}>
+                <Popover.Header as="h3">{`${instructor.name}'s Wallet`}</Popover.Header>
+                <Popover.Body>
+                  <div>
+                    <h6>Money Owed: </h6> <p>{instructorMoney * rate} {currency}</p>
+                  </div>
+                </Popover.Body>
+              </Popover>
+            }
+          >
+            <button className="money-button"><GiMoneyStack size={25} className="money" /></button>
+          </OverlayTrigger>
+
 
           {/*
           <Form className="d-flex">
