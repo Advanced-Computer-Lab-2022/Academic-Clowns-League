@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import Modal from 'react-bootstrap/Modal';
+import Stack from '@mui/material/Stack';
 
 const ReportProblem = ({cid}) => {
     const [other, setOther] = useState("none");
@@ -92,13 +93,13 @@ const ReportProblem = ({cid}) => {
     return (
         <div className="">
 
-  <Form  style={{ width:600,position: "absolute", top:100, left:50}}>
+  <Form >
     <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
     <p style={{color:"firebrick", display:checkT}} >
         please specify type
       </p>
     <Form.Select aria-label="Default select example" onChange={onChangeValue}>
-    <option>Please select type of inconvencience</option>
+    <option>Please select type of inconvenience</option>
     <option value="Technical">Technical</option>
     <option value="Financial">Financial</option>
     <option value="Other">Other</option>
@@ -124,7 +125,11 @@ const ReportProblem = ({cid}) => {
     </Form.Group>
 
     <Form.Group className="mb-3" controlId="exampleForm.ControlTextarea1">
+
+    <Stack direction="column" justifyContent="center" alignItems="center" spacing={2}>
     <Button variant="danger" onClick={report}>Report</Button>
+    </Stack>
+    
     </Form.Group>
   </Form>
 

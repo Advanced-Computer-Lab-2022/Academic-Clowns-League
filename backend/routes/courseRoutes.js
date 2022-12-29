@@ -21,6 +21,7 @@ const {
   openMyCourse,
   moneyOwed,
   addNotes,
+  getMyNotes,
   printNotePDF,
   printCertificatePDF,
   sendCertificateMail,
@@ -112,9 +113,11 @@ router.get("/openMyCourse",requireAuth, openMyCourse);
 //moved this to the end so that "add course subtitle" doesn't map to it
 //UPDATE a single course
 router.patch("/",requireAuth,updateCourse);
-
 router.get("/moneyOwed",requireAuth,moneyOwed);
 router.patch("/addNotes",requireAuth,addNotes);
+router.get("/getMyNotes",requireAuth,getMyNotes);
+
+
 
 router.get("/printNotePDF", requireAuth,printNotePDF);
 

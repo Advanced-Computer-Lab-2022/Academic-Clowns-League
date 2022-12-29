@@ -895,6 +895,7 @@ const filterInstPriceSub = async (req, res) => {
   }
 };
 
+
 const viewCorrectAnswer = async (req, res) => {
   if(await iTrainee.findById(req.user._id) || await cTrainee.findById(req.user._id)){const {
     course, //637a197cbc66688b3924a864
@@ -973,7 +974,6 @@ const addCoursePreview = async (req, res) => {
 const addNotes = async (req, res) => {
   if(await iTrainee.findById(req.user._id) || await cTrainee.findById(req.user._id)){
     const id = req.query.id;
-  //const id = "6384b23ffa8e271ab3db7d0e";
   console.log(id);
   const traineeID = req.user._id;
   const notes = await req.body.note;
@@ -994,7 +994,14 @@ const addNotes = async (req, res) => {
       note: notes,
     };
 
+    for (var i =0;i<iTraineeNotes.length;i++){
+      if (iTraineeNotes[i].iTraineeID == traineeID){
+        const removed = iTraineeNotes.splice(i,1); //splice returns the removed element not the list after the removal
+        break;
+      }
+    }
     iTraineeNotes.push(note);
+
     const course = await Course.findByIdAndUpdate(
       { _id: id },
       { iTraineeNotes: iTraineeNotes },
@@ -1010,7 +1017,14 @@ const addNotes = async (req, res) => {
       note: notes,
     };
 
+    for (var i =0;i<cTraineeNotes.length;i++){
+      if (cTraineeNotes[i].cTraineeID == traineeID){
+        const removed = cTraineeNotes.splice(i,1); //splice returns the removed element not the list after the removal
+        break;
+      }
+    }
     cTraineeNotes.push(note);
+
     const course = await Course.findByIdAndUpdate(
       { _id: id },
       { cTraineeNotes: cTraineeNotes },
@@ -1022,6 +1036,44 @@ const addNotes = async (req, res) => {
   else{
     res.status(400).json({ error: "Access Restriced" })
   }
+};
+
+const getMyNotes = async (req, res) => {
+  const id = req.query.id;
+  const traineeID = req.user._id;
+
+  const cTraineeNotes = (
+    await Course.findById({ _id: id }).select("cTraineeNotes")
+  ).cTraineeNotes;
+
+  const iTraineeNotes = (
+    await Course.findById({ _id: id }).select("iTraineeNotes")
+  ).iTraineeNotes; //-----> getting the Arrays
+
+  let note = "";
+
+  const trainee = await iTrainee.findById({ _id: traineeID });
+  if (trainee != null) {
+    for (var i =0;i<iTraineeNotes.length;i++){
+      if (iTraineeNotes[i].iTraineeID == traineeID){
+        note = iTraineeNotes[i].note;
+        break;
+      }
+    }
+    res.status(200).json({data: note});
+  }
+
+  const find = await cTrainee.findById({ _id: traineeID });
+  if (find != null) {
+    for (var i =0;i<cTraineeNotes.length;i++){
+      if (cTraineeNotes[i].cTraineeID == traineeID){
+        note = cTraineeNotes[i].note;
+        break;
+      }
+    }
+    res.status(200).json({data: note});
+  }
+
 };
 
 const printNotePDF = async (req, res, next) => {
@@ -1530,6 +1582,7 @@ module.exports = {
   openMyCourse,
   moneyOwed,
   addNotes,
+  getMyNotes,
   printNotePDF,
   printCertificatePDF,
   sendCertificateMail,
