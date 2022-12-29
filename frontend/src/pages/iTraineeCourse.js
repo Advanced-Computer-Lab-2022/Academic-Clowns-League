@@ -1,26 +1,23 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import Subtitle from "../components/subtitle";
 import ITraineeNavbar from "../components/iTraineeNavbar";
-import Exercise from "../components/excercise";
 import YouTube from 'react-youtube';
 
 import RateCourse from "../components/rateCourse";
 import RateInstructor from "../components/rateInstructor";
+import ReportProblem from "../components/reportProblem";
 
 import Ratio from "react-bootstrap/Ratio";
 import Row from "react-bootstrap/Row";
-import Col from "react-bootstrap/Col";
-import Accordion from 'react-bootstrap/Accordion';
 import Button from 'react-bootstrap/Button';
 import ProgressBar from 'react-bootstrap/ProgressBar';
-import Sidebar from "react-sidebar";
 import Form from 'react-bootstrap/Form';
 import Modal from 'react-bootstrap/Modal';
 import Offcanvas from 'react-bootstrap/Offcanvas';
 import Rating from '@mui/material/Rating';
-import Badge from 'react-bootstrap/Badge';
+import Stack from '@mui/material/Stack';
 import ListGroup from 'react-bootstrap/ListGroup';
+import Card from 'react-bootstrap/Card';
 
 import {
   MDBBtn, MDBModal,
@@ -35,11 +32,8 @@ import {
 
 
 import {
-  MDBCard,
   MDBCardTitle,
   MDBCardText,
-  MDBCardBody,
-  MDBCardImage,
   MDBRow,
   MDBCol,
   MDBCardSubTitle
@@ -56,8 +50,7 @@ import {
   MDBTabsPane
 } from 'mdb-react-ui-kit';
 
-import { BsFillTrashFill, BsFillPencilFill,BsFillPlayCircleFill,BsPencil,BsNewspaper,BsFillPersonCheckFill,BsStar } from "react-icons/bs";
-
+import { BsFillTrashFill, BsFillExclamationCircleFill, BsCheckAll, BsFillFileEarmarkCheckFill, BsDownload, BsPencilSquare, BsFillPencilFill, BsFillPlayCircleFill, BsPencil, BsNewspaper, BsFillPersonCheckFill, BsStar, BsChatLeftDots, BsCheck2Circle } from "react-icons/bs";
 
 
 
@@ -89,30 +82,6 @@ const options = [
   }
 ];
 
-function OffCanvasExample({ name, ...props }) {
-  const [show, setShow] = useState(false);
-
-  const handleClose = () => setShow(false);
-  const toggleShow = () => setShow((s) => !s);
-
-  return (
-    <>
-      <Button variant="primary" placement='end' onClick={toggleShow} className="me-2">
-        {name}
-      </Button>
-      <Offcanvas show={show} onHide={handleClose} {...props}>
-        <Offcanvas.Header closeButton>
-          <Offcanvas.Title>Offcanvas</Offcanvas.Title>
-        </Offcanvas.Header>
-        <Offcanvas.Body>
-          Some text as placeholder. In real life you can have the elements you
-          have chosen. Like, text, images, lists, etc.
-        </Offcanvas.Body>
-      </Offcanvas>
-    </>
-  );
-}
-
 
 const ITraineeCourse = () => {
 
@@ -125,8 +94,7 @@ const ITraineeCourse = () => {
   const [submitted, setSubmitted] = useState(false);
   const [studentAnswersState, setStudentAnswersState] = useState([]);
   const [myProgress, setMyProgress] = useState(null);
-  const [note, setNote] = useState('');
-  const [noteMessage, setNoteMessage] = useState('');
+
   const [videoURL, setVideoURL] = useState('');
 
   const [myCourseReview, setMyCourseReview] = useState(null);
@@ -147,9 +115,12 @@ const ITraineeCourse = () => {
   const [deleteInstReviewIconColor, setDeleteInstReviewIconColor] = useState('');
   const [editInstReviewIconColor, setEditInstReviewIconColor] = useState('');
 
-  const [answersText, setAnswersText] = useState("");
   const [basicModal, setBasicModal] = useState(false);
-  
+
+  const [note, setNote] = useState('');
+  const [noteMessage, setNoteMessage] = useState('');
+  let noteTemp = "";
+
   const navigate = useNavigate();
 
   const [basicActive, setBasicActive] = useState('tab1');
@@ -158,36 +129,32 @@ const ITraineeCourse = () => {
     if (value === basicActive) {
       return;
     }
-
     setBasicActive(value);
   };
-
-
-
 
   useEffect(() => {
     Promise.all([
       fetch("/api/courses/openMyCourse/?id=" + id),
       fetch("/api/courses/getMyProgress/?courseId=" + id),
       fetch("/api/courses/getMyCourseReview?id=" + id),
-      fetch("/api/instructor/getMyInstReview?id=" + id)
-    ]).then(([resCourse, resMyProgress, resMyCourseReview, resMyInstReview]) =>
-      Promise.all([resCourse.json(), resMyProgress.json(), resMyCourseReview.json(), resMyInstReview.json()])
-    ).then(([dataCourse, dataMyProgress, dataMyCourseReview, dataMyInstReview]) => {
+      fetch("/api/instructor/getMyInstReview?id=" + id),
+      fetch("/api/courses/getMyNotes?id=" + id)
+    ]).then(([resCourse, resMyProgress, resMyCourseReview, resMyInstReview, resMyNotes]) =>
+      Promise.all([resCourse.json(), resMyProgress.json(), resMyCourseReview.json(), resMyInstReview.json(), resMyNotes.json()])
+    ).then(([dataCourse, dataMyProgress, dataMyCourseReview, dataMyInstReview, dataMyNotes]) => {
       setCourse(dataCourse);
       setMyProgress(dataMyProgress);
       setMyCourseReview(dataMyCourseReview);
       setMyInstReview(dataMyInstReview);
       setVideoURL(dataCourse.previewURL);
-      console.log("USEEFFECT");
+      setNote(dataMyNotes.data);
+      noteTemp = dataMyNotes.data;
     });
   }, []);
 
 
-
   const toggleShow = () => setBasicModal(!basicModal);
 
-  //values needed for Excercises
   const StudentAnswers = [];
   var CorrectAnswers = [];
   var ResultDisplay = "";
@@ -208,6 +175,7 @@ const ITraineeCourse = () => {
       navigate("/individualTraineeHome")
     }
   }
+
   //Handles Change in RadioButton values
   const handleChange = (event) => {
     StudentAnswers[event.target.name] = event.target.value;
@@ -221,7 +189,7 @@ const ITraineeCourse = () => {
       CorrectAnswers.push(course.exercises[i].answer);
     }
 
-    if (CorrectAnswers.length != StudentAnswers.length) {
+    if ((CorrectAnswers.length != StudentAnswers.length) || (StudentAnswers.includes(undefined))) {
       setMessage("Please answer all questions before submitting.");
     }
     else {
@@ -288,7 +256,7 @@ const ITraineeCourse = () => {
   };
   const handleAddNotes = async (event) => {
     event.preventDefault();
-    const noteJson = { note };
+    const noteJson = { note: noteTemp };
 
     const response = await fetch("/api/courses/addNotes/?id=" + id, {
       method: "PATCH",
@@ -301,8 +269,8 @@ const ITraineeCourse = () => {
     if (response.ok) {
       console.log("Notes Added", json);
     }
-    setNote("");
-    setNoteMessage("Note added successfully.");
+    setNote(noteTemp);
+    setNoteMessage("Notes updated successfully.");
   };
   const markAsCompleted = async (component) => {
     const oldProgress = myProgress.data;
@@ -477,6 +445,37 @@ const ITraineeCourse = () => {
     }
   }
 
+  const [show, setShow] = useState(false);
+
+  const handleClose = () => setShow(false);
+  const toggleShow2 = () => { setShow((s) => !s) };
+  function OffCanvasExample({ name, ...props }) {
+    return (
+      <>
+        <Button variant="danger" placement='end' onClick={toggleShow2} className="me-2">
+          <BsPencilSquare /> &nbsp; Take notes
+        </Button>
+        <Offcanvas show={show} onHide={handleClose} {...props}>
+          <Offcanvas.Header closeButton>
+            <Offcanvas.Title><BsPencilSquare /> &nbsp; Take notes</Offcanvas.Title>
+          </Offcanvas.Header>
+          <Offcanvas.Body>
+            <Form>
+              <Form.Group className="mb-3" controlId="formBasicNotes">
+                <Form.Control defaultValue={note} onChange={event => { noteTemp = event.target.value; console.log(noteTemp); }} as="textarea" rows={10} placeholder="Start taking notes..." />
+              </Form.Group>
+              <Stack style={{ paddingTop: '30px' }} direction="column" justifyContent="center" alignItems="center" spacing={1} >
+                <MDBBtn className='mx-2' color='danger' onClick={handleAddNotes}>
+                  <BsFillFileEarmarkCheckFill /> Save
+                </MDBBtn>
+                <p style={{ color: 'green' }}> {noteMessage}</p>
+              </Stack>
+            </Form>
+          </Offcanvas.Body>
+        </Offcanvas>
+      </>
+    );
+  }
 
 
   return (
@@ -485,109 +484,80 @@ const ITraineeCourse = () => {
       {course && (
         <div>
           <MDBRow className='g-0'>
-            {/* Video */}
+
+            {/* Video and tabs */}
             <MDBCol md='9'>
               <div style={{ width: '100%', height: "auto", position: "center" }} >
                 <Ratio autoplay aspectRatio={"21x9"} opts={opts}>
-                <YouTube videoId={getId(videoURL)} opts={opts}/>
+                  <YouTube videoId={getId(videoURL)} opts={opts} />
                 </Ratio>
               </div>
 
               <MDBTabs className='mb-3'>
-        <MDBTabsItem>
-          <MDBTabsLink onClick={() => handleBasicClick('tab1')} active={basicActive === 'tab1'}>
-            <BsNewspaper/> <strong> {" "} Overview  </strong>
-          </MDBTabsLink>
-        </MDBTabsItem>
-        <MDBTabsItem>
-          <MDBTabsLink onClick={() => handleBasicClick('tab2')} active={basicActive === 'tab2'}>
-          
+                <MDBTabsItem>
+                  <MDBTabsLink onClick={() => handleBasicClick('tab1')} active={basicActive === 'tab1'}>
+                    <BsNewspaper /> &nbsp; Overview
+                  </MDBTabsLink>
+                </MDBTabsItem>
+                <MDBTabsItem>
+                  <MDBTabsLink onClick={() => handleBasicClick('tab2')} active={basicActive === 'tab2'}>
+                    <BsCheck2Circle /> &nbsp; Exercises
+                  </MDBTabsLink>
+                </MDBTabsItem>
+                <MDBTabsItem>
+                  <MDBTabsLink onClick={() => handleBasicClick('tab3')} active={basicActive === 'tab3'}>
+                    <BsStar /> &nbsp; Rate and Review Course
+                  </MDBTabsLink>
+                </MDBTabsItem>
+                <MDBTabsItem>
+                  <MDBTabsLink onClick={() => handleBasicClick('tab4')} active={basicActive === 'tab4'}>
+                    <BsFillPersonCheckFill />   &nbsp;  Rate and Review Instructor
+                  </MDBTabsLink>
+                </MDBTabsItem>
+                <MDBTabsItem>
+                  <MDBTabsLink onClick={() => handleBasicClick('tab5')} active={basicActive === 'tab5'}>
+                    <BsChatLeftDots /> &nbsp; Report a Problem
+                  </MDBTabsLink>
+                </MDBTabsItem>
+              </MDBTabs>
 
-            
+              <MDBTabsContent style={{ paddingBottom: '30px' }}>
+                {/* Overview */}
+                <MDBTabsPane style={{ paddingLeft: '10px' }} show={basicActive === 'tab1'}>
+                  <MDBCardTitle class="fs-1"> {course.title}</MDBCardTitle>
+                  <MDBCardSubTitle class="fs-3">  <em> taught by </em>{course.instructorData.name}</MDBCardSubTitle>
+                  <MDBCardText>
+                    < p style={{ display: 'flex', flexDirection: 'row' }}>
+                      <p> <strong> Course Rating: {"  "}   </strong><em> {course.overallRating}</em> </p>
+                      <Rating name="courserating" defaultValue={course.overallRating} precision={0.5} readOnly />
+                    </p>
+                    <em> <strong> Subject: </strong></em> {course.subject}
+                    <br />
+                    <em> <strong> Summary: </strong></em> {course.summary}
+                    <br />
+                    <br />
+                    <MDBRow className='g-0'>
+                      <MDBCol md='2' style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', }}>
+                        <strong> My Progress: </strong>
+                      </MDBCol>
+                      <MDBCol md='10'>
+                        <ProgressBar style={{ color: '#dc3545', marginTop: '5px' }} animated now={myProgress.data} label={`${(myProgress.data).toString().slice(0, 5)}%`} />
+                      </MDBCol>
+                    </MDBRow>
+                  </MDBCardText>
+                  <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', }} >
+                    <MDBBtn hidden={myProgress.data == 100 ? false : true} className='mx-2' color='danger' onClick={handleDownloadCertificate}>
+                      Download My Certificate
+                    </MDBBtn>
+                  </div>
+                </MDBTabsPane>
 
-             <BsPencil/> <strong> {" "} Exercises  </strong>
-             
-          
-          </MDBTabsLink>
-        </MDBTabsItem>
-        <MDBTabsItem>
-          <MDBTabsLink onClick={() => handleBasicClick('tab3')} active={basicActive === 'tab3'}>
-
-
-          < p style={{ display: 'flex', flexDirection: 'row' }}>
-          <BsStar/><p> {" "}</p>  Rate and Review Course
-          </p>
-          
-          </MDBTabsLink>
-        </MDBTabsItem>
-        <MDBTabsItem>
-          <MDBTabsLink onClick={() => handleBasicClick('tab4')} active={basicActive === 'tab4'}>
-          < p style={{ display: 'flex', flexDirection: 'row' }}>
-          <BsFillPersonCheckFill/>     Rate and Review Instructor
-          </p>
-          
-          </MDBTabsLink>
-        </MDBTabsItem>
-      </MDBTabs>
-
-      <MDBTabsContent>
-
-        {/* Overview */}
-        <MDBTabsPane show={basicActive === 'tab1'}>
-        <MDBCard>
-              <MDBRow className='g-0'>
-                <MDBCol md='7' style={{ padding: '7px' }}>
-                  <MDBCardBody>
-                    <MDBCardTitle class="fs-1"> {course.title}</MDBCardTitle>
-                    <MDBCardSubTitle class="fs-3">  <em> taught by </em>{course.instructorData.name}</MDBCardSubTitle>
-                    <MDBCardText>
-                      < p style={{ display: 'flex', flexDirection: 'row' }}>
-                        <p> <strong> Course Rating: {"  "}   </strong><em> {course.overallRating}</em> </p>
-                        <Rating name="courserating" defaultValue={course.overallRating} precision={0.5} readOnly />
-                      </p>
-                      <em> <strong> Subject: </strong></em> {course.subject}
-                      <br />
-                      <em> <strong> Summary: </strong></em> {course.summary}
-                      <br />
-                      <em> <strong> Duration:  </strong></em> {course.hours} Hours
-                      <br />
-                      <br />
-                      <MDBRow className='g-0'>
-                        <MDBCol md='2' style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', }}>
-                          <strong> My Progress: </strong>
-                        </MDBCol>
-                        <MDBCol md='10'>
-                          <ProgressBar style={{ color: '#dc3545', marginTop: '5px' }} animated now={myProgress.data} label={`${(myProgress.data).toString().slice(0, 5)}%`} />
-                        </MDBCol>
-                      </MDBRow>
-                    </MDBCardText>
-                    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', }} >
-                      <MDBBtn className='mx-2' color='danger' onClick={handleDownloadNotes}>
-                        Download My Notes
-                      </MDBBtn>
-                      <MDBBtn hidden={myProgress.data == 100 ? false : true} className='mx-2' color='danger' onClick={handleDownloadCertificate}>
-                        Download My Certificate
-                      </MDBBtn>
-                    </div>
-                  </MDBCardBody>
-                </MDBCol>
-              </MDBRow>
-            </MDBCard>
-        </MDBTabsPane>
-
-
-
-        {/* Exercises */}
-        <MDBTabsPane show={basicActive === 'tab2'}>
-        <Accordion>
-              <Accordion.Item eventKey="0">
-                <Accordion.Header><b>Exercises</b></Accordion.Header>
-                <Accordion.Body>
-                  <form>
+                {/* Exercises */}
+                <MDBTabsPane show={basicActive === 'tab2'}>
+                  <ListGroup as="ol" numbered>
                     {course && course.exercises && course.exercises.map((exercise, index) => (
-                      <div>
-                        <h2>{exercise.question}</h2>
-                        <div>
+                      <ListGroup.Item as="li" style={{ fontSize: '22px' }}> <strong>{exercise.question}</strong>
+                        <div >
                           <div style={{ display: 'flex', flexDirection: 'row' }}>
                             <input
                               type="radio"
@@ -632,157 +602,108 @@ const ITraineeCourse = () => {
                             >{exercise.options[3]}</div>
                           </div>
                         </div>
-                      </div>
+                      </ListGroup.Item>
                     ))}
-                    <input type="button" value="Submit" onClick={handleSubmit} />
-                    <p style={{ fontSize: '40px' }}>{grade}</p>
+                  </ListGroup>
+                  <Stack style={{ paddingTop: '30px' }} direction="column" justifyContent="center" alignItems="center" spacing={1} >
+                    <MDBBtn className='mx-2' color='danger' onClick={handleSubmit}>
+                      <BsCheckAll /> Submit
+                    </MDBBtn>
+                    <p style={{ fontSize: '50px' }}>{grade}</p>
                     <p style={{ color: 'red' }}> {message}</p>
-                  </form>
-                </Accordion.Body>
-              </Accordion.Item>
-            </Accordion>
-        </MDBTabsPane>
+                  </Stack>
+                </MDBTabsPane>
 
+                {/* Rate and review course*/}
+                <MDBTabsPane show={basicActive === 'tab3'}>
+                  <Stack direction="column" justifyContent="center" alignItems="center" spacing={2}>
 
-        {/* Rating and Reviewing*/}
-        <MDBTabsPane show={basicActive === 'tab3'}><Accordion style={{ display: 'flex', flexDirection: 'row' }}>
-                    <MDBCol>
-                      <Accordion.Item eventKey="0"  >
-                        <Accordion.Header >  Rate and Review Course  </Accordion.Header>
-                        <Accordion.Body>
-                          <RateCourse course={course} myId="637a356c54c79d632507dc8a" />
-                          <div className="d-grid gap-2">
-                            <Button variant="danger" size="lg"
-                              hidden={myCourseReview.text == "" ? false : true}
-                              onClick={handleShowAddCourseReview}>
-                              Review Course
-                            </Button>
-                          </div>
+                    <RateCourse course={course} myId="637a356c54c79d632507dc8a" />
 
-                          <p
-                            hidden={myCourseReview.text == "" ? true : false}> You reviewed that course: "{myCourseReview.text}"
-                            <BsFillTrashFill onMouseEnter={() => setDeleteCourseReviewIconColor('red')}
-                              onMouseLeave={() => setDeleteCourseReviewIconColor('')} onClick={handleShowDeleteCourseReview} style={{ color: deleteCourseReviewIconColor }} />
-                            <BsFillPencilFill onMouseEnter={() => setEditCourseReviewIconColor('red')}
-                              onMouseLeave={() => setEditCourseReviewIconColor('')} onClick={handleShowEditCourseReview} style={{ color: editCourseReviewIconColor }} />
-                          </p>
-                        </Accordion.Body>
-                      </Accordion.Item>
-                    </MDBCol>
-                    <MDBCol>
-                      <Accordion.Item eventKey="1">
-                        <Accordion.Header variant="danger" >Rate and Review Instructor</Accordion.Header>
-                        <Accordion.Body>
-                          <RateInstructor course={course} myId="637a356c54c79d632507dc8a" />
-                          <div className="d-grid gap-2">
-                            <Button variant="danger" size="lg"
-                              hidden={myInstReview.text == "" ? false : true}
-                              onClick={handleShowAddInstReview}>
-                              Review Instructor
-                            </Button>
-                          </div>
+                    <MDBBtn className='mx-2' color='danger' hidden={myCourseReview.text == "" ? false : true} onClick={handleShowAddCourseReview}>
+                      <BsPencil /> &nbsp; Review Course
+                    </MDBBtn>
 
-                          <p hidden={myInstReview.text == "" ? true : false}> You reviewed this instructor: "{myInstReview.text}"
+                    <Card hidden={myCourseReview.text == "" ? true : false} style={{ fontSize: '20px' }}>
+                      <Card.Body>
+                        You previously reviewed this course: <em>"{myCourseReview.text}"</em>
+                        &nbsp; &nbsp;
+                        <BsFillTrashFill onMouseEnter={() => setDeleteCourseReviewIconColor('red')} onMouseLeave={() => setDeleteCourseReviewIconColor('')} onClick={handleShowDeleteCourseReview} style={{ color: deleteCourseReviewIconColor }} />
+                        &nbsp; &nbsp;
+                        <BsFillPencilFill onMouseEnter={() => setEditCourseReviewIconColor('red')} onMouseLeave={() => setEditCourseReviewIconColor('')} onClick={handleShowEditCourseReview} style={{ color: editCourseReviewIconColor }} />
+                      </Card.Body>
+                    </Card>
 
-                            <BsFillTrashFill onMouseEnter={() => setDeleteInstReviewIconColor('red')}
-                              onMouseLeave={() => setDeleteInstReviewIconColor('')} onClick={handleShowDeleteInstReview} style={{ color: deleteInstReviewIconColor }} />
-                            <BsFillPencilFill onMouseEnter={() => setEditInstReviewIconColor('red')}
-                              onMouseLeave={() => setEditInstReviewIconColor('')} onClick={handleShowEditInstReview} style={{ color: editInstReviewIconColor }} />
-                          </p>
-                        </Accordion.Body>
-                      </Accordion.Item>
-                    </MDBCol>
+                  </Stack>
+                </MDBTabsPane>
 
+                {/* Rate and review instructor*/}
+                <MDBTabsPane show={basicActive === 'tab4'}>
+                  <Stack direction="column" justifyContent="center" alignItems="center" spacing={2}>
 
+                    <RateInstructor course={course} myId="637a356c54c79d632507dc8a" />
 
+                    <MDBBtn className='mx-2' color='danger' hidden={myInstReview.text == "" ? false : true} onClick={handleShowAddInstReview}>
+                      <BsPencil /> &nbsp; Review Instructor
+                    </MDBBtn>
 
+                    <Card hidden={myInstReview.text == "" ? true : false} style={{ fontSize: '20px' }}>
+                      <Card.Body>
+                        You previously reviewed this Instructor: <em>"{myInstReview.text}"</em>
+                        &nbsp; &nbsp;
+                        <BsFillTrashFill onMouseEnter={() => setDeleteInstReviewIconColor('red')} onMouseLeave={() => setDeleteInstReviewIconColor('')} onClick={handleShowDeleteInstReview} style={{ color: deleteInstReviewIconColor }} />
+                        &nbsp; &nbsp;
+                        <BsFillPencilFill onMouseEnter={() => setEditInstReviewIconColor('red')} onMouseLeave={() => setEditInstReviewIconColor('')} onClick={handleShowEditInstReview} style={{ color: editInstReviewIconColor }} />
+                      </Card.Body>
+                    </Card>
 
+                  </Stack>
+                </MDBTabsPane>
 
-                  </Accordion>
-        </MDBTabsPane>
+                {/* Report and refund*/}
+                <MDBTabsPane show={basicActive === 'tab5'}>
+                  <p style={{ padding: '20px' }}>
+                    <ReportProblem key={id} cid={id} />
+                  </p>
 
-
-        <MDBTabsPane show={basicActive === 'tab4'}>
-        
-
-
-        </MDBTabsPane>
-      </MDBTabsContent>
+                  <Stack direction="column" justifyContent="center" alignItems="center">
+                    <MDBBtn hidden={myProgress.data >= 50 ? true : false} className='me-1' color='danger' onClick={toggleShow}>
+                      <BsFillExclamationCircleFill /> Request Refund
+                    </MDBBtn>
+                  </Stack>
+                </MDBTabsPane>
+              </MDBTabsContent>
             </MDBCol>
-
-
 
             {/* Subtitles column */}
             <MDBCol md='3'>
 
+              {/* Subtitles */}
               <ListGroup as="ol" numbered>
-
-
-              {course.subtitles &&
-              course.subtitles.map((subtitle) => (
-
-
-                <ListGroup.Item action as="li" className="d-flex justify-content-between align-items-start"
-                onClick={() => {markAsCompleted(subtitle._id); setVideoURL(subtitle.videoLink); }}>
-                  <div className="ms-2 me-auto">
-                    <div className="fw-bold"> <BsFillPlayCircleFill/> {subtitle.title}</div>
-                    {subtitle.shortDescription}
-                  </div>
-              </ListGroup.Item>
-
-
-
-
-
-
-              ))}
-
-
-
-
-
-                
-                
-
-
-
+                {course.subtitles &&
+                  course.subtitles.map((subtitle) => (
+                    <ListGroup.Item action as="li" className="d-flex justify-content-between align-items-start"
+                      onClick={() => { markAsCompleted(subtitle._id); setVideoURL(subtitle.videoLink); }}>
+                      <div className="ms-2 me-auto">
+                        <div className="fw-bold"> <BsFillPlayCircleFill /> {subtitle.title}</div>
+                        {subtitle.shortDescription}
+                      </div>
+                    </ListGroup.Item>
+                  ))}
               </ListGroup>
 
-
+              {/* Take and Download Notes */}
+              <Stack style={{ paddingTop: '30px' }} direction="column" justifyContent="center" alignItems="center" spacing={3} >
+                {options.map((props) => (
+                  <OffCanvasExample {...props} />
+                ))}
+                <MDBBtn className='mx-2' color='danger' onClick={handleDownloadNotes}>
+                  <BsDownload /> &nbsp; Download Notes
+                </MDBBtn>
+              </Stack>
             </MDBCol>
           </MDBRow>
           <Row>
-
-{/* OLD STUFFFFFF */}
-
-            <Form>
-              <Form.Group className="mb-3" controlId="formBasicNotes">
-                <Form.Label>Take Some Notes</Form.Label>
-                <Form.Control value={note} onChange={event => setNote(event.target.value)} as="textarea" rows={3} placeholder="Start taking notes..." />
-              </Form.Group>
-
-              <Button variant="primary" type="submit" onClick={handleAddNotes}>
-                Submit
-              </Button>
-              <p style={{ color: 'green' }}> {noteMessage}</p>
-            </Form>
-
-
-
-
-
-            <p>
-              {" "}
-              <Button variant="danger" onClick={() => navigate(`/iTraineeReportProblem?id=${id}`)}>Report problem</Button>
-            </p>
-
-
-
-            <MDBBtn hidden={myProgress.data >= 50 ? true : false} className='me-1' color='danger' onClick={toggleShow}>
-              Request Refund
-            </MDBBtn>
-
-
 
             {/*Modals*/}
             <div>
@@ -800,7 +721,7 @@ const ITraineeCourse = () => {
                   <Button variant="secondary" onClick={handleCloseAddCourseReview}>
                     Close
                   </Button>
-                  <Button variant="primary" onClick={handleSaveAddCourseReview}>
+                  <Button variant="danger" onClick={handleSaveAddCourseReview}>
                     Save
                   </Button>
                 </Modal.Footer>
@@ -818,7 +739,7 @@ const ITraineeCourse = () => {
                   <Button variant="secondary" onClick={handleCloseEditCourseReview}>
                     Close
                   </Button>
-                  <Button variant="primary" onClick={handleSaveEditCourseReview}>
+                  <Button variant="danger" onClick={handleSaveEditCourseReview}>
                     Save
                   </Button>
                 </Modal.Footer>
@@ -856,7 +777,7 @@ const ITraineeCourse = () => {
                   <Button variant="secondary" onClick={handleCloseAddInstReview}>
                     Close
                   </Button>
-                  <Button variant="primary" onClick={handleSaveAddInstReview}>
+                  <Button variant="danger" onClick={handleSaveAddInstReview}>
                     Save
                   </Button>
                 </Modal.Footer>
@@ -874,7 +795,7 @@ const ITraineeCourse = () => {
                   <Button variant="secondary" onClick={handleCloseEditInstReview}>
                     Close
                   </Button>
-                  <Button variant="primary" onClick={handleSaveEditInstReview}>
+                  <Button variant="danger" onClick={handleSaveEditInstReview}>
                     Save
                   </Button>
                 </Modal.Footer>

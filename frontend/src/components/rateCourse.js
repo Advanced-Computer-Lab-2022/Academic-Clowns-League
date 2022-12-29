@@ -1,5 +1,6 @@
 import React, { useMemo, useState } from "react";
 import Button from 'react-bootstrap/Button';
+import Stack from '@mui/material/Stack';
 
 const RateCourse = ({ course, myId }) => {
   const [Rating, setRating] = useState(0);
@@ -46,6 +47,7 @@ const RateCourse = ({ course, myId }) => {
 
   return (
     <div className="">
+      <Stack direction="row" justifyContent="center" alignItems="center" spacing={3}>
         <div class="star-rating" onChange={onChangeValue}>
           <input type="radio" id="5-stars" name="rating" value="5" />
           <label for="5-stars" class="star">
@@ -71,6 +73,7 @@ const RateCourse = ({ course, myId }) => {
         <p>
     <Button variant="danger" onClick={rate} >rate</Button>
     </p>
+    </Stack>
     <p style={{color:"firebrick", display:success}} >
         Please choose a rating
       </p>
