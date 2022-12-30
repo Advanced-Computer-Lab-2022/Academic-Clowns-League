@@ -46,6 +46,22 @@ header a {
   right: 25%;
 }
 
+.mb-3{
+  position:relative;
+  width:600px;
+  margin: 0 auto;
+}
+.mb-4{
+  
+  width:200px;
+  margin: 0 auto;
+}
+.mb-2{ position: relative;
+  width:200px;
+  margin: 0 auto;
+ 
+}
+
 .popup-contract {
   height: 200px;
   width: 90%;

@@ -160,16 +160,18 @@ const Login = () => {
                 className="mb-3"
             >
             <Form.Control type="username" placeholder="name@example.com" value={username} onChange={(e) => setUsername(e.target.value)}/>
-            </FloatingLabel>
-            <FloatingLabel controlId="floatingPassword" label="Password">
+            </FloatingLabel >
+            <FloatingLabel controlId="floatingPassword" label="Password"  className="mb-3">
             <Form.Control type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)}/>
             </FloatingLabel>
             {error && <div className="error">{error}</div>}
-            <div>
-            <Link to="/resetPassword">Forgot Password ?</Link>
-            </div>
+           
+                <div className="mb-4">
+            <Link to="/resetPassword" className="mb-3">Forgot Password ?</Link>
+            
             <p>{incorrectPasswordError}</p>
-            <Button variant="success" onClick={handleSubmit}>Login</Button>
+            
+            <Button variant="success" onClick={handleSubmit} className="mb-2">Login</Button></div>
 
 
 

@@ -25,7 +25,7 @@ const Signup = () => {
     const handleSubmit = async(e) => {
         e.preventDefault()
 
-        handleShow();
+        handleClose();
 
         const signup = {
             username, 
@@ -78,9 +78,7 @@ const Signup = () => {
         }
         if (response.status == 200){
            
-            setUsername("");
-            setPassword("");
-            setError(null);
+           
 
 
 
@@ -105,10 +103,11 @@ const Signup = () => {
     return(
         <div>
             <GuestNavbar/>
+            
             <FloatingLabel controlId="floatingInput" label="Username" className="mb-3">
             <Form.Control type="username" placeholder="name@example.com" value={username} onChange={(e) => setUsername(e.target.value)} required/>
             </FloatingLabel>
-            <FloatingLabel controlId="floatingPassword" label="Password">
+            <FloatingLabel controlId="floatingPassword" label="Password" className="mb-3" >
             <Form.Control required feedback="You must agree before submitting."
           feedbackType="invalid" type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)}/>
             </FloatingLabel>
@@ -126,8 +125,9 @@ const Signup = () => {
             </FloatingLabel>
             {error && <div className="error">{error}</div>}
             <p>{signUpError}</p>
-            <Button variant="success" onClick={handleShow}>Signup</Button>
-        
+            <div className="mb-4">
+            <Button variant="success" onClick={handleShow} className="mb-2">Signup</Button>
+            </div>
     
             
 
