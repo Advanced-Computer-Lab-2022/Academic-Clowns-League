@@ -47,7 +47,7 @@ const Login = () => {
             window.location.href=`/instructorHome`;
         }
         else if(json.role == "Admin"){
-            window.location.href=`/adminAddUsers`;
+            window.location.href=`/adminProblems`;
         }
 
         
@@ -101,7 +101,7 @@ const Login = () => {
                     window.location.href=`/instructorHome`;
                 }
                 else if(json.role == "Admin"){
-                    window.location.href=`/adminAddUsers`;
+                    window.location.href=`/adminProblems`;
                 }
 
         }
