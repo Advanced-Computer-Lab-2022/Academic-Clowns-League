@@ -12,16 +12,20 @@ import { GiMoneyStack } from 'react-icons/gi';
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
 import Popover from 'react-bootstrap/Popover';
 import { BiWorld } from 'react-icons/bi';
-import { GoSearch } from 'react-icons/go'
-import { MDBBtn, MDBIcon, MDBInput, MDBInputGroup } from 'mdb-react-ui-kit';
 import Button from 'react-bootstrap/Button';
 const countries = require("../country-json-master/src/country-by-currency-code.json");
 
-const InstructorNavbar = ({ updateCourses }) => {
+const HomeInstNav = () => {
   const { toggleCurrency, rate, currency } = useContext(CurrencyContext);
   const [instructor, setInstructor] = useState("")
-  const [searchTerm, setSearchTerm] = useState("");
   const [instructorMoney, setInstructorMoney] = useState("")
+  const [optSmModal, setOptSmModal] = useState(false);
+
+  const toggleShow = () => setOptSmModal(!optSmModal);
+
+  const close = () => {
+    toggleShow()
+  }
 
   const handleClose = async () => {
     const response = await fetch("api/users/logout");
@@ -48,25 +52,6 @@ const InstructorNavbar = ({ updateCourses }) => {
   }, []);
 
   const navigate = useNavigate();
-
-  const handleSubmit = async (e) => {
-    e.preventDefault(); //to prevent the default action which is refreshing the page
-
-    //DON'T CALL THE CONST BELOW searchTerm PLEASE
-    const searchTerm2 = { searchTerm }; //a dummy obj i'll use in backend
-    //const response = await fetch('/api/courses/63598f85fb000a4726c4e5d8')
-    const response = await fetch(
-      `/api/courses/searchAllCourses?${new URLSearchParams(
-        searchTerm2
-      ).toString()}`
-    );
-    const json = await response.json();
-    updateCourses(json)
-  }
-
-  const handleClick = async () => {
-    window.location.reload(true);
-  };
 
   return (
     <Navbar
@@ -110,37 +95,6 @@ const InstructorNavbar = ({ updateCourses }) => {
             </Nav.Link>
     */}
           </Nav>
-          <div className='search-navbar'>
-
-            <form className="create-instructor" onSubmit={handleSubmit}>
-
-              <MDBInputGroup className="search">
-              <input placeholder='  Search' onChange={(e) => setSearchTerm(e.target.value)} style={{
-                backgroundColor: "#E0E0E0",
-                borderColor:"#E0E0E0",
-                borderRadius: 4,
-                boxShadow: "none",
-                outline:0}}/>
-                <MDBBtn rounded rippleColor='dark' style={{
-                  backgroundColor: "#E0E0E0",
-                  borderColor: "#E0E0E0",
-                  color: "black"
-                }}>
-                  <GoSearch />
-                </MDBBtn>
-              </MDBInputGroup>
-            </form>
-            <div className="clear-search-instructor-nav">
-              <MDBBtn rounded style={{
-                backgroundColor: "#E0E0E0",
-                borderColor: "#E0E0E0",
-                color: "black",
-                height: 36,
-              }} onClick={handleClick}>
-                Clear
-              </MDBBtn>
-            </div>
-          </div>
 
           <NavDropdown title={<CgProfile size={25} />} id="navbarScrollingDropdown" className='navlink-profile-instructor' align="end">
             <NavDropdown.Item
@@ -206,6 +160,8 @@ const InstructorNavbar = ({ updateCourses }) => {
             <button className="money-button"><GiMoneyStack size={25} className="money" /></button>
           </OverlayTrigger>
 
+          
+
 
           {/*
           <Form className="d-flex">
@@ -224,4 +180,4 @@ const InstructorNavbar = ({ updateCourses }) => {
   );
 };
 
-export default InstructorNavbar;
+export default HomeInstNav;

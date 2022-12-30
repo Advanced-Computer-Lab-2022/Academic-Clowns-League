@@ -24,7 +24,7 @@ const createCTrainee = async (req, res) => {
 
     const takenUsername = await User.findOne({ username: username });
     if (takenUsername) {
-      res.json({ message: "Username is taken" });
+      res.status(400).json({ message: "Username is taken" });
     } else {
       try {
         const encryptedPassword = await bcrypt.hash(password, 10);
@@ -49,7 +49,7 @@ const createCTrainee = async (req, res) => {
       } catch (error) {
         res
           .status(400)
-          .json({ message: "Signup Failed", error: error.message });
+          .json({error: error.message });
       }
     }
   } else {

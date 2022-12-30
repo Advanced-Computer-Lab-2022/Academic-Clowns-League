@@ -37,7 +37,7 @@ const CourseDetailsCTrainee = ({ course }) => {
   }, []);
 
   return (
-    <div className="course-details">
+    <div className="course-details" style={{width: 810}}>
       <div className="course-video">
       <iframe width="100" height="100" src={myCourse.previewURL} frameBorder="0" allowFullScreen></iframe>
       </div>
@@ -52,15 +52,15 @@ const CourseDetailsCTrainee = ({ course }) => {
         <strong>Rating: </strong>
         {myCourse.overallRating}
       </p>
+      <p>
+          <strong>Subject: </strong>
+          {myCourse.subject}
+        </p>
       <div
         style={{
           display: isActive ? "block" : "none",
         }}
       >
-        <p>
-          <strong>Subject: </strong>
-          {myCourse.subject}
-        </p>
         <p>
           <strong>Instructor: </strong>
           {course.instructorData.name}
@@ -78,13 +78,15 @@ const CourseDetailsCTrainee = ({ course }) => {
         </ol>
         </p>
       </div>
+      <div className="mydetails-buttons">
       <MDBBtn rounded
         style={{
           backgroundColor: isActive ? "#E0E0E0" : "",
           color: isActive ? "black" : "",
           height: 35,
           textAlign: "center",
-          borderColor: isActive ? "black" : "#B71C1C"
+          borderColor: isActive ? "black" : "#B71C1C",
+          marginLeft: 65,
         }}
         onClick={handleClick}
         color="danger"
@@ -97,6 +99,7 @@ const CourseDetailsCTrainee = ({ course }) => {
           textAlign: "center",
           marginLeft: 10,
           borderColor: "#B71C1C",
+          marginLeft: 15
         }}
         onClick={(e) => {
           if(myCourse.register == true){
@@ -110,6 +113,7 @@ const CourseDetailsCTrainee = ({ course }) => {
       >
         {button}
       </MDBBtn>
+      </div>
       </div>
     </div>
   );

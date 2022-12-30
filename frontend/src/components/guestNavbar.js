@@ -74,10 +74,12 @@ const GuestNavbar = ({updateCourses}) => {
       <form className="create" onSubmit={handleSubmit}>
 
       <MDBInputGroup className="search">
-      <MDBInput label='Search' onChange={(e) => setSearchTerm(e.target.value)} style={{
-          backgroundColor: "#E0E0E0",
-          borderColor: "#E0E0E0",
-          color: "black"}}/>
+      <input placeholder='  Search' onChange={(e) => setSearchTerm(e.target.value)} style={{
+        backgroundColor: "#E0E0E0",
+        borderColor:"#E0E0E0",
+        borderRadius: 6,
+        boxShadow: "none",
+        outline:0}}/>
       <MDBBtn rounded rippleColor='dark' style={{
           backgroundColor: "#E0E0E0",
           borderColor: "#E0E0E0",

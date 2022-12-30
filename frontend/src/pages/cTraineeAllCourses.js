@@ -124,17 +124,6 @@ const CTraineeAllCourses = () => {
       </MDBBtn>
     </div>
     <div className="guest-home">
-    <div className="courses-element">
-      <div>
-      <h4 className="popular">All Courses</h4>
-      <div>
-        {courses &&
-          courses.map((course) => (
-            <CourseDetailsCTrainee course={course} key={course._id} />
-          ))}
-      </div>
-      </div>
-      </div>
     <div className="checkboxes">
         <form className="filter" onSubmit={handleSubmitFilter}>
           <h4>Filter by: </h4>
@@ -208,6 +197,18 @@ const CTraineeAllCourses = () => {
         Clear Filter
       </MDBBtn>
         </form>
+      </div>
+      <span className="divider"></span>
+      <div className="courses-element">
+      <div>
+      <h4 className="popular">All Courses</h4>
+      <div>
+        {courses &&
+          courses.map((course) => (
+            <CourseDetailsCTrainee course={course} key={course._id} />
+          ))}
+      </div>
+      </div>
       </div>
       </div>
     </div>

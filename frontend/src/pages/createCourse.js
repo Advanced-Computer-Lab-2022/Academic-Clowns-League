@@ -1,6 +1,6 @@
 import FloatingLabel from 'react-bootstrap/FloatingLabel';
 import Form from 'react-bootstrap/Form';
-import InstructorNavbar from "../components/instructorNavbar";
+import HomeInstNav from "../components/homeInstNav";
 import Button from 'react-bootstrap/Button';
 import { useContext, useState} from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -9,7 +9,6 @@ import { CurrencyContext } from '../contexts/CurrencyContext';
 const CreateCourse = () => {
     const { rate } = useContext(CurrencyContext)
     const [title,setTitle] = useState('')
-    const [hours,setHours] = useState('')
     const [subject,setSubject] = useState('')
     const [price,setPrice] = useState('')
     const [discount,setDiscount] = useState('0')
@@ -19,16 +18,26 @@ const CreateCourse = () => {
     const [error, setError] = useState(null);
 
     const navigate = useNavigate();
+    const onChangeValue = (e) => {
+      if(e.target.value=="Computer Science"){
+      setSubject("Computer Science")
+    }
+    else if(e.target.value=="Digital Media"){
+      setSubject("Digital Media")
+    }
+    else{
+      setSubject("Lab Programming")
+    }
+  }
 
     const handleSubmit = async (e) => {
         e.preventDefault()
-        if(title == '' || hours == '' || subject == '' || price == '' || summary == '' || previewURL == ''){
+        if(title == '' || subject == '' || price == '' || summary == '' || previewURL == ''){
           setError('Please fill in all the fields')
         }
         else{
           const course = {
             title,
-            hours,
             subject,
             price: Math.round(price/rate),
             discount,
@@ -53,7 +62,6 @@ const CreateCourse = () => {
                 //setCourse(json)
                 navigate(`/addSubtitle?id=${json._id}`)
                 setTitle('')
-                setHours('')
                 setSubject('')
                 setPrice('')
                 setDiscount('')
@@ -68,10 +76,10 @@ const CreateCourse = () => {
 
     return(
         <>
-        <InstructorNavbar />
+        <HomeInstNav />
         <div className="create-course">
         <h3>Enter Course Details</h3>
-        <div style={{color: "black", fontSize: "small"}}>- fields followed by * are required</div>
+        <div style={{color: "black", fontSize: "small"}}><i>- fields followed by * are required</i></div>
         <br></br>
              <FloatingLabel
                 controlId="floatingInput"
@@ -80,20 +88,19 @@ const CreateCourse = () => {
         <Form.Control type="text" placeholder="Title *" value={title} onChange={(e) => setTitle(e.target.value)} style={{width: 600}}/>
       </FloatingLabel><br></br>
 
-      <FloatingLabel controlId="floatingSubject" label="Subject *">
-        <Form.Control type="text" placeholder="Subject *" value={subject} onChange = {(e) => setSubject(e.target.value)}/>
-      </FloatingLabel><br></br>
-
-      <FloatingLabel controlId="floatingHours" label="Hours *">
-        <Form.Control type="text" placeholder="Hours *" value={hours} onChange = {(e) => setHours(e.target.value)}/>
-      </FloatingLabel><br></br>
+        <Form.Select onChange={onChangeValue}>
+          <option>Please select a subject *</option>
+          <option value="Computer Science">Computer Science</option>
+          <option value="Digital Media">Digital Media</option>
+          <option value="Lab Programming">Lab Programming</option>
+        </Form.Select><br></br>
 
       <FloatingLabel controlId="floatingPrice" label="Price *">
         <Form.Control type="text" placeholder="Price *" value={price} onChange = {(e) => setPrice(e.target.value)}/>
       </FloatingLabel><br></br>
 
       <FloatingLabel controlId="floatingDiscount" label="Discount">
-        <Form.Control type="text" placeholder="Discount" value={discount} onChange = {(e) => setDiscount(e.target.value)}/>
+        <Form.Control type="text" placeholder="Discount" value="" onChange = {(e) => setDiscount(e.target.value)}/>
       </FloatingLabel><br></br>
 
       <FloatingLabel controlId="floatingDiscountVU" label="Discount Valid Until">

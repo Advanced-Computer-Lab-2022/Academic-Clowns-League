@@ -1,6 +1,6 @@
 import FloatingLabel from 'react-bootstrap/FloatingLabel';
 import Form from 'react-bootstrap/Form';
-import InstructorNavbar from "../components/instructorNavbar";
+import HomeInstNav from "../components/homeInstNav";
 import Button from 'react-bootstrap/Button';
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom';
@@ -29,12 +29,12 @@ const AddExercise = () => {
     const [message, setMessage] = useState(null);
     const [counter, setCounter] = useState(1);
     const [courseData, setCourse] = useState('');
-    let phrase = ""
+    const [phrase, setPhrase] = useState('');
 
     const toggleShow = () => setBasicModal(!basicModal);
 
     const handleOpen = () => {
-      phrase = "Published"
+      setPhrase("Published")
       toggleShow()
     }
 
@@ -64,7 +64,7 @@ const AddExercise = () => {
       setError(json.error);
       }
     if (response.status == 200){
-      phrase = "Saved"
+      setPhrase("Saved")
       toggleShow()
     }
     }
@@ -73,6 +73,9 @@ const AddExercise = () => {
         e.preventDefault()
         if(question == '' || option1 == '' || option2 == '' || option3 == '' || option4 == '' || answer == ''){
           setError('Please fill in all the fields')
+        }
+        else if(answer != option1 && answer != option2 && answer != option3 && answer != option4){
+          setError('Answer must be the same as one of the options')
         }
         else{
           const exercise = {
@@ -113,10 +116,10 @@ const AddExercise = () => {
 
     return(
         <>
-        <InstructorNavbar />
+        <HomeInstNav />
         <div className='create-course'>
         <h3>Enter Exercise Details</h3>
-        <div style={{color: "black", fontSize: "small"}}>- fields followed by * are required</div>
+        <div style={{color: "black", fontSize: "small"}}><i>- fields followed by * are required</i></div>
         <br></br>
              <FloatingLabel
                 controlId="floatingInput"
@@ -149,8 +152,8 @@ const AddExercise = () => {
 
       <Button variant="danger" onClick={handleSubmit}>Add</Button>{' '}
       {message}
-      <Button variant="danger" onClick={handleSave}>Save</Button>{' '}
-      <Button variant="danger" onClick={handleOpen} style={{display: courseData.published ? "block" : "none"}}>Save & Publish</Button>{' '}
+      <Button variant="danger" onClick={handleSave} style={{marginLeft: 7}}>Save</Button>{' '}
+      <Button variant="danger" onClick={handleOpen} style={{display: courseData.published ? "inline" : "none", marginLeft: 7}}>Save & Publish</Button>{' '}
       <MDBModal show={basicModal} setShow={setBasicModal} tabIndex='-1'>
         <MDBModalDialog size='sm'>
           <MDBModalContent>
@@ -158,7 +161,7 @@ const AddExercise = () => {
               <MDBModalTitle>Operation Successful!</MDBModalTitle>
             </MDBModalHeader>
             <MDBModalBody>Course {phrase} Successfully!
-            <MDBBtn onClick={() => navigate("/instructorHome")}>Back to Homepage</MDBBtn>
+            <MDBBtn onClick={() => navigate("/instructorHome")} color="danger" style={{marginTop: 10, marginLeft: 40}}>Back to Homepage</MDBBtn>
             </MDBModalBody>
           </MDBModalContent>
         </MDBModalDialog>

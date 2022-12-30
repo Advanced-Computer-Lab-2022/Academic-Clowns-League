@@ -11,7 +11,7 @@ const createAdmin = async (req, res) => {
     const password = req.body.password;
     const takenUsername = await User.findOne({ username: username });
     if (takenUsername) {
-      res.json({ message: "Username is taken" });
+      res.status(400).json({ message: "Username is taken" });
     } else {
       try {
         const encryptedPassword = await bcrypt.hash(password, 10);
@@ -27,7 +27,7 @@ const createAdmin = async (req, res) => {
         dbUser.save();
         res.status(200).json(admin);
       } catch (error) {
-        res.json({ message: "Signup Failed", error: error.message });
+        res.status(400).json({error: error.message });
       }
     }
   } else {

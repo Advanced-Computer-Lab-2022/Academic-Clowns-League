@@ -191,6 +191,7 @@ const payForCourse = async (req, res) => {
       { _id: req.user._id },
       { courses: itraineeCourses }
     );
+    await Course.findOneAndUpdate({_id: req.query.id}, {numOfEnrolledTrainees: course.numOfEnrolledTrainees + 1})
     res.status(200).json(response);
   } else {
     res.status(400).json({ error: "Access Restriced" });
@@ -201,7 +202,9 @@ const applyRefund = async(req, res) => {
   if(await Admin.findById(req.user._id)){
   const request = await Request.findOne({_id: req.query.id})
   const itrainee = await iTrainee.findOne({_id: request.iTraineeId});
+  const courseID = mongoose.Types.ObjectId(request.courseId);
   const course = await Course.findOne({_id: request.courseId});
+  const instructor = await Instructor.findOne({_id: course.instructor})
   let refund = 0;
 
   if(course.discountApplied == true){
@@ -212,10 +215,26 @@ const applyRefund = async(req, res) => {
   }
 
   const newWallet = parseInt(itrainee.wallet) + refund;
+  const newWalletInst = parseInt(instructor.wallet) - refund;
 
-  const response = await iTrainee.findOneAndUpdate({_id: request.iTraineeId}, {wallet: newWallet});
-  await Request.findOneAndUpdate({_id: req.query.id}, {requestType: "null"})
+  let coursesArray = []
+
+    for(let i = 0; i < itrainee.courses.length; i++){
+      const itraineeCourse = mongoose.Types.ObjectId(itrainee.courses[i]);
+      if(itraineeCourse.toString() != courseID.toString()){
+        coursesArray.push(itrainee.courses[i])
+      }
+    }
+
+  const response = await iTrainee.findOneAndUpdate({_id: request.iTraineeId}, {wallet: newWallet, courses: coursesArray});
+  await Course.findOneAndUpdate({_id: request.courseId}, {numOfEnrolledTrainees: course.numOfEnrolledTrainees - 1})
+  await Instructor.findOneAndUpdate({_id: course.instructor}, {wallet: newWalletInst})
+  await Request.deleteOne({_id: req.query.id})
+
   res.status(200).json(response);
+  }
+  else {
+    res.status(400).json({ error: "Access Restriced" });
   }
 };
 
@@ -251,6 +270,9 @@ const iTraineeUpdatePassword = async (req, res) => {
           }
         );
         res.status(200).json(itrainee);
+      }
+      else{
+        res.status(400).json({ error: "cant do it" });
       }
     } else {
       res.status(400).json({ error: "cant do it" });
@@ -319,6 +341,37 @@ const getCourse = async(req, res) => {
   }
 }
 
+const payUsingWallet = async (req, res) => {
+  if(await iTrainee.findById(req.user._id)){
+    const itrainee = await iTrainee.findOne({_id: req.user._id})
+    const course = await Course.findOne({_id: req.query.id})
+    let money = 0;
+
+    if(course.discountApplied == true){
+      money = Math.round((course.price * (100-course.discount)/100))
+    }
+    else{
+      money = course.price
+    }
+
+    const newWallet = parseInt(itrainee.wallet) - money
+
+    await iTrainee.findOneAndUpdate({_id: req.user._id}, {wallet: newWallet})
+    itraineeCourses = itrainee.courses
+    itraineeCourses.push(req.query.id);
+
+    const response = await iTrainee.findOneAndUpdate(
+      { _id: req.user._id },
+      { courses: itraineeCourses }
+    );
+    await Course.findOneAndUpdate({_id: req.query.id}, {numOfEnrolledTrainees: course.numOfEnrolledTrainees + 1})
+    res.status(200).json(response)
+  }
+  else{
+    res.status(400).json({ error: "Access Restriced" })
+  }
+}
+
 
 module.exports = {
   createITrainee,
@@ -334,4 +387,5 @@ module.exports = {
   iTraineeUpdatePassword,
   getITraineeInfo,
   getCourse,
+  payUsingWallet
 };

@@ -53,6 +53,7 @@ import ResetPassword from "./pages/resetPassword";
 import Login from "./pages/login";
 import Signup from "./pages/signup";
 import Testing from "./pages/testing";
+import WalletHistory from "./pages/walletHistory";
 
 
 import AccessDenied from "./pages/accessDenied";
@@ -113,6 +114,7 @@ function App() {
                     <Route path="/changePassword" element={<ChangePassword />} />
                     <Route path="/instructorViewAndEditBio" element={<InstructorViewAndEditBio />} />
                     <Route path="/editEmail" element={<EditEmail />} />
+                    <Route path="/walletHistory" element={<WalletHistory />} />
                   </Route>
                 )
                 :
