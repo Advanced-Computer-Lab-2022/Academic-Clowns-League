@@ -64,8 +64,6 @@ const CourseRatingsAndReviews = () => {
             <Col sm={9}>
               <Tab.Content>
                 <Tab.Pane eventKey="first">
-
-
                   <MDBTypography tag="h6" style={{ margin: '2px', fontSize: 30 }}> Overall Course Rating: {course && course.overallRating}</MDBTypography>
 
                   {course &&

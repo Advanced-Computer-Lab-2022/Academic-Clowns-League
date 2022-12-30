@@ -15,6 +15,7 @@ const Signup = () => {
     const [lastname, setLastname] = useState("")
     const [email, setEmail] = useState("")
     const [gender, setGender] = useState("")
+    const [signUpError, setSignUpError] = useState("")
     const [show, setShow] = useState(false);
     const contract = true;
 
@@ -55,7 +56,9 @@ const Signup = () => {
         console.log(json2);
 
         if (signUpresponse.status == 400) {
-            setError("Signup Error "+json2.error);
+            if(json2.error!=undefined){setError("Signup Error "+json2.error);}
+            else{setSignUpError("Username appears to be taken :(")}
+
         }
         
         if (signUpresponse.status == 200){
@@ -103,10 +106,11 @@ const Signup = () => {
         <div>
             <GuestNavbar/>
             <FloatingLabel controlId="floatingInput" label="Username" className="mb-3">
-            <Form.Control type="username" placeholder="name@example.com" value={username} onChange={(e) => setUsername(e.target.value)}/>
+            <Form.Control type="username" placeholder="name@example.com" value={username} onChange={(e) => setUsername(e.target.value)} required/>
             </FloatingLabel>
             <FloatingLabel controlId="floatingPassword" label="Password">
-            <Form.Control type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)}/>
+            <Form.Control required feedback="You must agree before submitting."
+          feedbackType="invalid" type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)}/>
             </FloatingLabel>
             <FloatingLabel controlId="floatingInput" label="Firstname" className="mb-3">
             <Form.Control type="firstname" placeholder="name@example.com" value={firstname} onChange={(e) => setFirstname(e.target.value)}/>
@@ -121,6 +125,7 @@ const Signup = () => {
             <Form.Control type="gender" placeholder="name@example.com" value={gender} onChange={(e) => setGender(e.target.value)}/>
             </FloatingLabel>
             {error && <div className="error">{error}</div>}
+            <p>{signUpError}</p>
             <Button variant="success" onClick={handleShow}>Signup</Button>
         
     
