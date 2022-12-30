@@ -7,16 +7,16 @@ import Accordion from 'react-bootstrap/Accordion';
 
 const AdminProblems = () => {
 
-  const [allProblemsUR, setAllProblemsUR] = useState(null);
+  const [allProblemsUS, setAllProblemsUS] = useState(null);
   const [allProblemsR, setAllProblemsR] = useState(null);
   const [allProblemsP, setAllProblemsP] = useState(null);
 
   useEffect(() => {
-      const fetchAllProblemsUR = async () => {
-        const response = await fetch("/api/problem/allProblemsUR");
+      const fetchAllProblemsUS = async () => {
+        const response = await fetch("/api/problem/allProblemsUS");
         const json = await response.json();
         if (response.ok) {
-          setAllProblemsUR(json);
+          setAllProblemsUS(json);
         }
       };
 
@@ -35,7 +35,7 @@ const AdminProblems = () => {
           setAllProblemsP(json);
         }
       };
-      fetchAllProblemsUR();
+      fetchAllProblemsUS();
       fetchAllProblemsR();
       fetchAllProblemsP();
     }, []);
@@ -50,10 +50,10 @@ const AdminProblems = () => {
 
 <Accordion style={{width:800, position:"relative", left:300}}>
 <Accordion.Item eventKey="0"  >
-  <Accordion.Header>Unresolved problems</Accordion.Header>
+  <Accordion.Header>Unseen problems</Accordion.Header>
   <Accordion.Body>
-  {allProblemsUR &&
-              allProblemsUR.map((problem) => (
+  {allProblemsUS &&
+              allProblemsUS.map((problem) => (
                 <AllProblems course={problem.course.title} status={problem.status} content={problem.content} followUp={problem.followUp}
                 key={problem._id} id={problem._id} rid={problem.reporterId} email={problem.reporter.email} cid={problem.courseId}  type={problem.type}/>
                  ))}
