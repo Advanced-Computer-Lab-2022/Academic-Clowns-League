@@ -1,7 +1,7 @@
 import GuestNavNoSearch from "../components/guestNavNoSearch";
 import { useState, useEffect } from "react";
 import nodemailer from "nodemailer";
-import Button from 'react-bootstrap/Button';
+import Button from "react-bootstrap/Button";
 import {
   MDBCard,
   MDBCardHeader,
@@ -19,6 +19,7 @@ const ResetPassword = () => {
   //const [password, setPassword] = useState(" ");
   const [email, setEmail] = useState("");
   const [error, setError] = useState(null);
+  const [message, setMessage] = useState("");
   const handleSubmit = async (e) => {
     e.preventDefault();
     console.log(email);
@@ -44,13 +45,15 @@ const ResetPassword = () => {
     //const response = await fetch("/api/instructor/reset/?id=" + id);
     const json = await response.json();
 
-    if (!response.ok) {
+    if (response.status == 400) {
       setError(json.error);
+      setMessage("Please enter a valid email");
     }
-    if (response.ok) {
+    if (response.status == 200) {
       //setPassword("");
       setEmail("");
       setError(null);
+      setMessage("Mail is sent successfully");
       console.log("Password Updated", json);
     }
   };
@@ -63,7 +66,7 @@ const ResetPassword = () => {
         <img
           width="50%"
           height="60%"
-          style={{ marginLeft: "100px", transform: "translate(80%, 15%)",}}
+          style={{ marginLeft: "100px", transform: "translate(80%, 15%)" }}
           src="/students.jpg"
         ></img>
 
@@ -95,6 +98,10 @@ const ResetPassword = () => {
             </Button>
           </MDBCardBody>
         </MDBCard>
+        <p style={{ color: "red", transform: "translate(17%, -600%)" }}>
+          {" "}
+          {message}
+        </p>
 
         {error && <div className="error">{error}</div>}
       </form>
