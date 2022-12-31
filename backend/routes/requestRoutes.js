@@ -6,7 +6,6 @@ const {
   createRefundRequest,
   getRefundRequests,
   checkCourse,
-  checkCourseAccess
 } = require("../controllers/requestController");
 const { requireAuth } = require("../controllers/userController");
 
@@ -23,9 +22,5 @@ router.get("/createRefundRequest", requireAuth, createRefundRequest);
 router.get("/getRefundRequests", requireAuth, getRefundRequests);
 
 router.get('/checkCourse', requireAuth, checkCourse);
-
-router.get('/checkCourseAccess', requireAuth, checkCourseAccess);
-
-
 
 module.exports = router;
