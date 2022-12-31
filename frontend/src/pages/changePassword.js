@@ -23,7 +23,7 @@ const ChangePassword = () => {
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState(null);
-  const [message, setMessage] = useState(true);
+  const [message, setMessage] = useState("");
   const navigate = useNavigate();
 
   //const [showResults, setShowResults] = React.useState(false);
@@ -63,7 +63,7 @@ const ChangePassword = () => {
       const json = await response.json();
       if (response.status == 400) {
         setError(json.error);
-        setMessage("current password is incorrect");
+        setMessage("Current password is incorrect");
       }
       if (response.status == 200) {
         setPassword("");
@@ -76,9 +76,9 @@ const ChangePassword = () => {
         console.log("Password Updated", json);
       }
     } else if (password == "" || newPassword == "" || confirmPassword == "") {
-      setMessage("please type in all required fields");
+      setMessage("Please type in all required fields");
     } else if (newPassword != confirmPassword) {
-      setMessage("confirmation password doesn't match the new password");
+      setMessage("Confirmation password doesn't match the new password");
     }
   };
 
@@ -104,7 +104,7 @@ const ChangePassword = () => {
         <MDBCardBody>
           <MDBCardText>Current Password</MDBCardText>
           <MDBInput
-            label="current Password"
+            label="Current Password"
             type="password"
             onChange={(e) => setPassword(e.target.value)}
             value={password}
@@ -120,35 +120,33 @@ const ChangePassword = () => {
           <br></br>
           <MDBCardText>Confirm new password</MDBCardText>
           <MDBInput
-            label="confirm Password"
+            label="Confirm Password"
             type="password"
             onChange={(e) => setConfirmPassword(e.target.value)}
             value={confirmPassword}
           />{" "}
-          <Button
-            type="button"
-            class="btn btn-outline-success"
-            href="#"
-            variant="danger"
-            onClick={handleSubmit}
-            style={{ transform: "translate(55%,90%)" }}
-          >
-            Change Password
-          </Button>
-        </MDBCardBody>
-      </MDBCard>
-      <p
+          <p
         style={{
           color: "red",
-          transform: "translate(65%, -1700%)",
+          transform: "translate(16%, 45%)",
           width: "500px",
         }}
       >
         {" "}
         {message}
       </p>
-
-      {error && <div className="error">{error}</div>}
+          <Button
+            type="button"
+            class="btn btn-outline-success"
+            href="#"
+            variant="danger"
+            onClick={handleSubmit}
+            style={{ transform: "translate(55%,5%)" }}
+          >
+            Change Password
+          </Button>
+        </MDBCardBody>
+      </MDBCard>
     </div>
   );
 };

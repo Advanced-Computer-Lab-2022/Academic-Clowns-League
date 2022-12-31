@@ -9,9 +9,10 @@ const AllProblems = ({id, content, followUp, status, course, email, type}) => {
     const [b2, setB2] = useState("none");
     const [b3, setB3] = useState("none");
     const [show, setShow] = useState(false);
+    const [buttonName, setButtonName] = useState("")
     let showTab="none"
     let buttonState="";
-    let buttonName="";
+    //let buttonName="";
     let unres="none";
     let unresButton = "Resolved";
 
@@ -20,12 +21,12 @@ const AllProblems = ({id, content, followUp, status, course, email, type}) => {
     }
     else if(status=="Unseen"){
         buttonState="";
+        //buttonName = "Pending"
         unres="";
-        buttonName="Pending"
     }
     else{
+      //buttonName="Resolved"
         buttonState="";
-        buttonName="Resolved"
     }
     if(followUp!=""){
         showTab="";
@@ -53,11 +54,11 @@ const AllProblems = ({id, content, followUp, status, course, email, type}) => {
                     const response = await fetch(
                         "/api/problem/problemStatus/?id=" +
                     id +
-                    "&status=" +
-                    buttonName ,
+                    "&status=Pending",
                       { method: "PATCH" }
                     );
                     if(response.status==200) {
+                      setButtonName("pending")
                       handleShow();
                   }
                   };
@@ -66,11 +67,11 @@ const AllProblems = ({id, content, followUp, status, course, email, type}) => {
                     const response = await fetch(
                         "/api/problem/problemStatus/?id=" +
                     id +
-                    "&status=" +
-                    unresButton ,
+                    "&status=Resolved",
                       { method: "PATCH" }
                     );
-                    if(response.status==200) {
+                    if(response.status == 200) {
+                      setButtonName("resolved")
                       handleShow();
                   }
                   };
@@ -108,8 +109,8 @@ const AllProblems = ({id, content, followUp, status, course, email, type}) => {
         {content}
         </Card.Text>
         <div style={{display:"flex"}}>
-        <Button variant="danger" style={{display:buttonState}} onClick={changeStatus}>mark as {buttonName}</Button>
-        <Button variant="danger" style={{display:unres, marginLeft:20}} onClick={unresStatus}>mark as Resolved</Button>
+        <Button variant="danger" style={{display:buttonState}} onClick={changeStatus}>Mark as Pending</Button>
+        <Button variant="danger" style={{display:unres, marginLeft:20}} onClick={unresStatus}>Mark as Resolved</Button>
         </div>
       </Card.Body>
      
@@ -146,7 +147,7 @@ const AllProblems = ({id, content, followUp, status, course, email, type}) => {
         keyboard={false}
       >
         <Modal.Body>
-        marked to {buttonName} successfully.
+        Marked to {buttonName} successfully.
         </Modal.Body>
         <Modal.Footer>
           <Button variant="danger" onClick={close}>

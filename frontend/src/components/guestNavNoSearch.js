@@ -68,11 +68,12 @@ const GuestNavNoSearch = () => {
 
         <Dropdown
                     id={'Dropdown'}
+                    onSelect={toggleCurrency}
                 >
                  <Dropdown.Toggle style={{ textAlign: "right", paddingBottom: 5, backgroundColor:"#C00418", borderColor:"#C00418", boxShadow: "none", color:"#D0D0D0"}} className="navlink-world">
                  {<BiWorld size={25}/>}
                  </Dropdown.Toggle>
-                <Dropdown.Menu style={{overflowY: 'scroll', maxHeight: 300}} align="end">
+                <Dropdown.Menu style={{overflowY: 'scroll', maxHeight: 300}} align="end" >
                 {countries.map((country) => (
                 <Dropdown.Item eventKey={country.country}>{country.country}</Dropdown.Item>
               ))}

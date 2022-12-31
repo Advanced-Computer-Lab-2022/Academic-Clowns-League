@@ -820,7 +820,7 @@ const filterInstPriceSub = async (req, res) => {
                 price: { $gte: prices[5][0], $lt: prices[5][1] },
               },
             ],
-            "instructorData.name": "Mariam Hossam",
+            "instructorData.name": req.user.name,
           },
         },
       ]);
@@ -860,7 +860,7 @@ const filterInstPriceSub = async (req, res) => {
                 price: { $gte: prices[5][0], $lt: prices[5][1] },
               },
             ],
-            "instructorData.name": "Mariam Hossam",
+            "instructorData.name": req.user.name,
           },
         },
       ]);
@@ -880,7 +880,7 @@ const filterInstPriceSub = async (req, res) => {
         },
         {
           $match: {
-            "instructorData.name": "Mariam Hossam",
+            "instructorData.name": req.user.name,
             subject: { $in: [subjects[0], subjects[1], subjects[2]] },
           },
         },
@@ -900,7 +900,7 @@ const filterInstPriceSub = async (req, res) => {
           $unwind: "$instructorData",
         },
         {
-          $match: { "instructorData.name": "Mariam Hossam" },
+          $match: { "instructorData.name": req.user.name },
         },
       ]);
       res.status(200).json(courses);
@@ -1303,6 +1303,9 @@ const getPopularCourses = async (req, res) => {
     {
       $sort: { numOfEnrolledTrainees: -1 },
     },
+    {
+      $match: { $and: [ {published: true}, {open: true} ]}
+    }
   ]);
 
   res.status(200).json(courses);
@@ -1324,6 +1327,9 @@ const getCourseLength = async (req, res) => {
     {
       $sort: { hours: -1 },
     },
+    {
+      $match: { $and: [ {published: true}, {open: true} ]}
+    }
   ]);
 
   res.status(200).json(courses);

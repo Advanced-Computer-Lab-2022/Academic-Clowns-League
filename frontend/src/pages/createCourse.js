@@ -87,20 +87,23 @@ const CreateCourse = () => {
               >
         <Form.Control type="text" placeholder="Title *" value={title} onChange={(e) => setTitle(e.target.value)} style={{width: 600}}/>
       </FloatingLabel><br></br>
-
+      <FloatingLabel
+                controlId="floatingInput"
+                label="Subject *"
+              >
         <Form.Select onChange={onChangeValue}>
-          <option>Please select a subject *</option>
           <option value="Computer Science">Computer Science</option>
           <option value="Digital Media">Digital Media</option>
           <option value="Lab Programming">Lab Programming</option>
-        </Form.Select><br></br>
+        </Form.Select>
+        </FloatingLabel><br></br>
 
       <FloatingLabel controlId="floatingPrice" label="Price *">
         <Form.Control type="text" placeholder="Price *" value={price} onChange = {(e) => setPrice(e.target.value)}/>
       </FloatingLabel><br></br>
 
-      <FloatingLabel controlId="floatingDiscount" label="Discount">
-        <Form.Control type="text" placeholder="Discount" value={discount} onChange = {(e) => setDiscount(e.target.value)}/>
+      <FloatingLabel controlId="floatingDiscount" label="Discount (%)">
+        <Form.Control type="text" placeholder="Discount (%)" value={discount} onChange = {(e) => setDiscount(e.target.value)}/>
       </FloatingLabel><br></br>
 
       <FloatingLabel controlId="floatingDiscountVU" label="Discount Valid Until">

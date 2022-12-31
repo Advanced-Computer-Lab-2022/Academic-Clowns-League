@@ -13,13 +13,12 @@ import { MDBBtn, MDBModal,
 const PaymentCompletion = () => {
     //const [error, setError] = useState("Course Successfully Purchased!");
     const navigate = useNavigate();
-    const [basicModal, setBasicModal] = useState(false);
+    const [basicModal, setBasicModal] = useState(true);
     const params = new URLSearchParams(window.location.search);
     const id = params.get("id");
 
     const toggleShow = () => setBasicModal(!basicModal);
 
-    useEffect(() => {
         const updateCourses = async () => {
             const response = await fetch(`/api/itrainee/registercourse/?id=${id}`, {
                 method: 'PATCH',
@@ -30,11 +29,9 @@ const PaymentCompletion = () => {
             const json = response.json();
             console.log(json)
             if (response.status == 200) {
-                toggleShow()
+                navigate("/individualTraineeHome")
             }
         }
-        updateCourses();
-    }, [])
 
     return(
         <>
@@ -49,7 +46,7 @@ const PaymentCompletion = () => {
             <MDBModalBody>Course Successfully Purchased!</MDBModalBody>
 
             <MDBModalFooter>
-              <MDBBtn color="danger" onClick={() => navigate("/individualTraineeHome")}>Back to Homepage</MDBBtn>
+              <MDBBtn color="danger" onClick={updateCourses} style={{marginRight: 55}}>Back to Homepage</MDBBtn>
             </MDBModalFooter>
           </MDBModalContent>
         </MDBModalDialog>
