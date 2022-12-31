@@ -136,9 +136,9 @@ https://www.youtube.com/playlist?list=PLZlA0Gpn_vH_ma_XO-GLSpL9L06ii4mAp
 
 ## Screenshots
 
-![App Screenshot](https://i.paste.pics/86467d6f8cc426196ba102982114c1f0.png)
-![App Screenshot](https://i.paste.pics/7270464c8d67fac8eb9e09d27d824657.png)
-![App Screenshot](https://i.paste.pics/6360bcbeb027a10f2652a9957e96bb74.png)
+![App Screenshot](https://i.paste.pics/9afab6a1276e89de41aac94caeb6364f.png)
+![App Screenshot](https://i.paste.pics/e575c9847e9ed92fc8c40506c975a895.png)
+![App Screenshot](https://i.paste.pics/3cc3a144a0d8d7612c8e3255041702b9.png)
 
 ## Contributing
 
