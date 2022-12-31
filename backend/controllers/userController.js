@@ -71,7 +71,7 @@ console.log("success")
       await User.findOne({username:userLoggingIn.username}).then(dbUser => {
         if(!dbUser){
             console.log("Incorrect Username")
-            return res.json({
+            return res.status(400).json({
                 message:"Invalid Username or Password"
             })
         }
