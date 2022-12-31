@@ -20,6 +20,7 @@ import Moment from "react-moment";
 const AdminPromotions = () => {
   const [courses, setCourses] = useState([]); //null
   const [selectAll, setSelectAll] = useState(false);
+  const [selectAll2, setSelectAll2] = useState([]);
   const [isChecked, setIsChecked] = useState(false);
   const [discount, setDiscount] = useState("");
   const [discountValidUntil, setDiscountValidUntil] = useState("");
@@ -35,11 +36,12 @@ const AdminPromotions = () => {
 
   useEffect(() => {
     const fetchCourses = async () => {
-      const response = await fetch("/api/courses");
+      const response = await fetch("/api/courses/");
       const json = await response.json();
 
       if (response.ok) {
         setCourses(json);
+        // setDateMessage("Discount added successfully");
       }
     };
 
@@ -50,16 +52,19 @@ const AdminPromotions = () => {
     if (selectAll == false) {
       //courses.map((course, index) => states);
 
-      const response = await fetch("/api/courses");
+      const response = await fetch("/api/courses/");
       const temp = await response.json();
 
       for (let i = 0; i < temp.length; i++) {
         states[i] = temp[i]._id;
-      }
 
+        selectAll2[i] = true;
+      }
+      console.log(selectAll2);
       console.log(temp);
       console.log(states);
       setSelectAll(true);
+
       //setOpen(true);
     } else if (selectAll == true) {
       //this.setState({ temp: [] }); // class component
@@ -67,21 +72,37 @@ const AdminPromotions = () => {
       // setTemp([]);
       for (let j = 0; j < states.length; j++) {
         states[j] = null;
+
+        selectAll2[j] = false;
       }
       // console.log(temp);
       console.log(states);
-
+      console.log(selectAll2);
       setSelectAll(false);
+      window.location.href = "/adminPromotions";
+      //setSelectAll2(false);
       //setIsChecked(false);
     }
   };
 
+  /*const handleClick = (event) => {
+    states[event.target.name] == event.target.value;
+    states[event.target.name] = null;
+
+    states[event.target.name] = event.target.value;
+    setSelectAll2(true);
+    console.log(states);
+  };*/
+
   const handleClick = (event) => {
     if (states[event.target.name] == event.target.value) {
       states[event.target.name] = null;
-    } else {
+      selectAll2[event.target.name] = false;
+    } else if (states[event.target.name] == null) {
       states[event.target.name] = event.target.value;
+      selectAll2[event.target.name] = true;
       console.log(states);
+      console.log(selectAll2);
     }
   };
 
@@ -104,16 +125,18 @@ const AdminPromotions = () => {
         },
       });
       const json = await response.json();
-      if (!response.ok) {
+      if (response.status == 400) {
         setError(json.error);
       }
-      if (response.ok) {
+      if (response.status == 200) {
         setDiscount("");
         setDiscountValidUntil("");
         setSelectAll(false);
+        setSelectAll2(false);
+        setDateMessage("Discount is added successfully");
         setError(null);
 
-        console.log("Discount is Added", json);
+        // console.log("Discount is Added", json);
       }
     }
 
@@ -129,6 +152,7 @@ const AdminPromotions = () => {
       var date = Moment(discountValidUntil, "DD-MM-YYYY", true);
       setDateMessage("Please enter a valid date format");
     }*/
+    window.location.href = "/adminPromotions";
   };
 
   return (
@@ -170,7 +194,7 @@ const AdminPromotions = () => {
                 <MDBCheckbox
                   name={index}
                   value={course._id}
-                  checked={selectAll}
+                  checked={selectAll2[index]}
                   onChange={handleClick}
                   style={{ transform: "translate(-20%,-580%)" }}
                 />{" "}

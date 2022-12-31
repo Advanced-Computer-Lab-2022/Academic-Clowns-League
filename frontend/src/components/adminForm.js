@@ -42,7 +42,7 @@ const AdminForm = () => {
       const json = await response.json();
 
       if (response.status == 400) {
-        setError(json.error);
+        //setError(json.error);
         setAdminmessage("invalid username");
       }
       if (response.status == 200) {
@@ -74,7 +74,7 @@ const AdminForm = () => {
           top: "70px",
           width: "500px",
           height: "-200px",
-          right: 160
+          right: 160,
           // transform: "translate(90%, 20%)",
         }}
       >
