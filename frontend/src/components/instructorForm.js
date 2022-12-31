@@ -95,6 +95,7 @@ const InstructorForm = () => {
           top: "40px",
           width: "500px",
           height: "-200px",
+          right: 160
           // transform: "translate(90%, 1%)",
         }}
       >
@@ -142,13 +143,14 @@ const InstructorForm = () => {
             onChange={(e) => setMiniBio(e.target.value)}
             value={miniBio}
           />{" "}
-          <button
+          <MDBBtn
             style={{ align: "center", top: "-15px" }}
             className="button4"
             onClick={handleSubmit}
+            color="danger"
           >
             Add Instructor
-          </button>
+          </MDBBtn>
         </MDBCardBody>
       </MDBCard>
 

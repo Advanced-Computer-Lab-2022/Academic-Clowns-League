@@ -1,6 +1,7 @@
-import InstructorNavbar from "../components/instructorNavbar";
+import GuestNavNoSearch from "../components/guestNavNoSearch";
 import { useState, useEffect } from "react";
 import nodemailer from "nodemailer";
+import Button from 'react-bootstrap/Button';
 import {
   MDBCard,
   MDBCardHeader,
@@ -57,12 +58,12 @@ const ResetPassword = () => {
   return (
     <>
       <form>
-        <InstructorNavbar />
+        <GuestNavNoSearch />
 
         <img
           width="50%"
           height="60%"
-          style={{ marginLeft: "100px", transform: "translate(80%, 30%)" }}
+          style={{ marginLeft: "100px", transform: "translate(80%, 15%)",}}
           src="/students.jpg"
         ></img>
 
@@ -70,7 +71,8 @@ const ResetPassword = () => {
           style={{
             width: "400px",
             height: "200px",
-            transform: "translate(50%, -70%)",
+            transform: "translate(50%, -93%)",
+            right: 50,
           }}
         >
           <MDBCardHeader>Reset Password</MDBCardHeader>
@@ -81,16 +83,16 @@ const ResetPassword = () => {
               onChange={(e) => setEmail(e.target.value)}
               value={email}
             />{" "}
-            <button
+            <Button
               type="button"
               class="btn btn-outline-success"
               href="#"
-              color="danger"
+              variant="danger"
               onClick={handleSubmit}
               style={{ transform: "translate(120%,100%)" }}
             >
               Send Mail
-            </button>
+            </Button>
           </MDBCardBody>
         </MDBCard>
 

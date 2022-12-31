@@ -9,20 +9,6 @@ const CourseDetailsAdmin = ({ course }) => {
   const { currency, rate } = useContext(CurrencyContext);
   const navigate = useNavigate();
   const [myCourse, setMyCourse] = useState([]);
-  //const [exercises, setExercises] = useState("")
-  //const [instructorName, setInstructorName] = useState("")
-
-  /*useEffect(() => {
-    const fetchCourse = async () => {
-      const response = await fetch(`api/courses/getAllCourses`);
-      const json = await response.json();
-      console.log(json);
-      if (response.status == 200) {
-        setMyCourse(json);
-      }
-    };
-    fetchCourse();
-  }, []);*/
 
   let price = Math.round(course.price * rate);
   let message = `Price after ${course.discount}% discount is applied -- original price = ${price} ${currency}`;
@@ -66,6 +52,10 @@ const CourseDetailsAdmin = ({ course }) => {
           <strong>Rating: </strong>
           {course.overallRating}
         </p>
+        <p>
+            <strong>Subject: </strong>
+            {course.subject}
+          </p>
         <div
           style={{
             display: isActive ? "block" : "none",
@@ -76,11 +66,6 @@ const CourseDetailsAdmin = ({ course }) => {
             {Math.round((price * (100 - course.discount)) / 100)} {currency}{" "}
             <br></br>
             {message}
-          </p>
-
-          <p>
-            <strong>Subject: </strong>
-            {course.subject}
           </p>
           <p>
             <strong>Instructor: </strong>
@@ -109,6 +94,7 @@ const CourseDetailsAdmin = ({ course }) => {
               height: 35,
               textAlign: "center",
               borderColor: isActive ? "black" : "#B71C1C",
+              marginLeft: 500
             }}
             onClick={handleClick}
             color="danger"

@@ -1,7 +1,8 @@
 
-import ITraineeNavbar from "../components/iTraineeNavbar";
+import MyCoursesITraineeNav from "../components/myCoursesITraineeNav";
 import { useState } from "react";
 import { Routes, Route, useNavigate } from "react-router-dom";
+import Button from 'react-bootstrap/Button';
 import {
   MDBCard,
   MDBCardHeader,
@@ -79,7 +80,7 @@ const ITraineeChangePassword = () => {
   return (
     <div>
       <form>
-      <ITraineeNavbar />
+      <MyCoursesITraineeNav />
 
         <img
           width="50%"
@@ -93,6 +94,7 @@ const ITraineeChangePassword = () => {
             width: "400px",
             height: "430px",
             transform: "translate(50%, -80%)",
+            right: 50
           }}
         >
           <MDBCardHeader>Change Password</MDBCardHeader>
@@ -113,23 +115,23 @@ const ITraineeChangePassword = () => {
               value={newPassword}
             />{" "}
             <br></br>
-            <MDBCardText>Confirm new password</MDBCardText>
+            <MDBCardText>Confirm New Password</MDBCardText>
             <MDBInput
               label="confirm Password"
               type="password"
               onChange={(e) => setConfirmPassword(e.target.value)}
               value={confirmPassword}
             />{" "}
-            <button
+            <Button
               type="button"
               class="btn btn-outline-success"
               href="#"
-              color="danger"
+              variant="danger"
               onClick={handleSubmit}
               style={{ transform: "translate(55%,90%)" }}
             >
               Change Password
-            </button>
+            </Button>
           </MDBCardBody>
           <p
             style={{

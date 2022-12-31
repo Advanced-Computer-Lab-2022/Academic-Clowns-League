@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import ITraineeNavbar from "../components/iTraineeNavbar";
+import MyCoursesITraineeNav from "../components/myCoursesITraineeNav";
 import MyProblem from "../components/myProblem";
 import Table from 'react-bootstrap/Table';
 
@@ -20,7 +20,7 @@ const ITraineeProblems = () => {
       {
         return (
           <div className="">
-            <ITraineeNavbar />
+            <MyCoursesITraineeNav />
         
             {myProblems &&
               myProblems.map((problem) => (

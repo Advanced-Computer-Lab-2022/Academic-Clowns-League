@@ -269,7 +269,6 @@ const createCourse = async (req, res) => {
     
       const course = await Course.create({
         title,
-        hours,
         subject,
         price,
         discount,

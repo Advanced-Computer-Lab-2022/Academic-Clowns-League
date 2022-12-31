@@ -131,7 +131,7 @@ const CTraineeNavbar = ({updateCourses}) => {
               <NavDropdown.Item onClick={() => {
                   navigate(`/cTraineeProblems`);
                 }}>
-                Requests & Problems
+                Reports & Problems
               </NavDropdown.Item>
               <NavDropdown.Divider />
               <NavDropdown.Item onClick={handleClose}>

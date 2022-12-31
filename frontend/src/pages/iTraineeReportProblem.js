@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import ITraineeNavbar from "../components/iTraineeNavbar";
+import MyCoursesITraineeNav from "../components/myCoursesITraineeNav";
 import ReportProblem from "../components/reportProblem";
 
 
@@ -14,7 +14,7 @@ const ITraineeReportProblem = () => {
       {
         return (
           <div className="">
-            <ITraineeNavbar />
+            <MyCoursesITraineeNav />
             <ReportProblem  key={id} cid={id}/>
             
     

@@ -48,7 +48,7 @@ const AdminProblems = () => {
       <AdminNavbar/>
       
 
-<Accordion style={{width:800, position:"relative", left:300}}>
+<Accordion style={{width:800, position:"relative", left:195}}>
 <Accordion.Item eventKey="0"  >
   <Accordion.Header>Unseen problems</Accordion.Header>
   <Accordion.Body>

@@ -1,4 +1,4 @@
-import InstructorNavbar from "../components/instructorNavbar";
+import HomeInstNav from "../components/homeInstNav";
 import { useState } from "react";
 
 const InstructorViewAndEditBio = () => {
@@ -36,7 +36,7 @@ const InstructorViewAndEditBio = () => {
 
   return (
     <div>
-      <InstructorNavbar />
+      <HomeInstNav />
 
       <form className="update" onSubmit={handleSubmit}>
         <h3>Update Biography</h3>

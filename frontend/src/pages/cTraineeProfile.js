@@ -1,4 +1,4 @@
-import CTraineeNavbar from "../components/cTraineeNavbar";
+import MyCoursesCTraineeNav from "../components/myCoursesCTraineeNav";
 
 
 import { useEffect, useState } from "react";
@@ -40,7 +40,7 @@ const CTraineeProfile = () => {
 
 
     <div>
-      <CTraineeNavbar/>
+      <MyCoursesCTraineeNav/>
 
 
     
