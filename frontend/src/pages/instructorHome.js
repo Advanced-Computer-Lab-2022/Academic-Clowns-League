@@ -1,5 +1,5 @@
 import { useEffect, useState, useContext } from "react";
-import InstructorNavbar from "../components/instructorNavbar";
+import HomeInstNav from "../components/homeInstNav";
 import Button from 'react-bootstrap/Button';
 import { MDBInputGroup, MDBInput, MDBBtn } from 'mdb-react-ui-kit';
 import {
@@ -23,6 +23,9 @@ const InstructorHome = () => {
   const [unpublishedCourses, setUnpublishedCourses] = useState(null);
   const [publishedCourses, setPublishedCourses] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
+  const [messageUnpub, setMessageUnpub] = useState("")
+  const [messagePub, setMessagePub] = useState("")
+  const [message, setMessage] = useState("")
 
   const { rate, currency } = useContext(CurrencyContext)
   const [subjects, setSubject] = useState({
@@ -100,7 +103,10 @@ const InstructorHome = () => {
 
       if (response.status == 200) {
         setCourses(json);
-      }
+        if(json.length == 0){
+          setMessage("No courses to show")
+        }
+    }
     };
 
     const fetchPubCourses = async () => {
@@ -109,7 +115,9 @@ const InstructorHome = () => {
 
       if (response.status == 200) {
         setPublishedCourses(json);
-        console.log(publishedCourses)
+        if(json.length == 0){
+          setMessagePub("No courses to show")
+        }
       }
     };
 
@@ -119,6 +127,9 @@ const InstructorHome = () => {
 
       if (response.status == 200) {
         setUnpublishedCourses(json);
+        if(json.length == 0){
+          setMessageUnpub("No courses to show")
+        }
       }
     };
     fetchPubCourses();
@@ -128,16 +139,16 @@ const InstructorHome = () => {
 
   return (
     <div>
-      <InstructorNavbar />
+      <HomeInstNav />
       <MDBTabs justify className='mb-3'>
         <MDBTabsItem>
           <MDBTabsLink onClick={() => handleJustifyClick('tab1')} active={justifyActive === 'tab1'}>
-            Unpublished Courses
+            Published Courses
           </MDBTabsLink>
         </MDBTabsItem>
         <MDBTabsItem>
           <MDBTabsLink onClick={() => handleJustifyClick('tab2')} active={justifyActive === 'tab2'}>
-            Published Courses
+            Unpublished Courses
           </MDBTabsLink>
         </MDBTabsItem>
         <MDBTabsItem>
@@ -149,28 +160,34 @@ const InstructorHome = () => {
 
       <MDBTabsContent>
         <MDBTabsPane show={justifyActive === 'tab1'}>
-          <div className="courses-element-instructor">
-          {unpublishedCourses &&
-            unpublishedCourses.map((course) => (
+        <div className="courses-element-instructor">
+        <h4 style={{marginLeft: 30}}><i>{messagePub}</i></h4>
+          {publishedCourses &&
+            publishedCourses.map((course) => (
             <MyCourseDetailsInstructor key={course._id} course={course} />
           ))}
         </div>
       </MDBTabsPane>
         <MDBTabsPane show={justifyActive === 'tab2'}>
         <div className="courses-element-instructor">
-          {publishedCourses &&
-            publishedCourses.map((course) => (
+          <h4 style={{marginLeft: 30}}><i>{messageUnpub}</i></h4>
+          {unpublishedCourses &&
+            unpublishedCourses.map((course) => (
             <MyCourseDetailsInstructor key={course._id} course={course} />
           ))}
         </div>
         </MDBTabsPane>
         <MDBTabsPane show={justifyActive === 'tab3'}>
-      <div className="home-search">
+      <div className="home-search" style={{marginLeft: 760}}>
       <div className="create-search">
       <form onSubmit={handleSubmit}>
 
       <MDBInputGroup className="search-instructor">
-      <MDBInput label='Search' onChange={(e) => setSearchTerm(e.target.value)}/>
+      <input placeholder=' Search' onChange={(e) => setSearchTerm(e.target.value)} style={{
+                borderColor:"#E0E0E0",
+                borderRadius: 4,
+                boxShadow: "none",
+                outline:0}}/>
       <MDBBtn rounded rippleColor='dark' style={{
           borderColor: "#B71C1C"
         }} color="danger">
@@ -188,20 +205,10 @@ const InstructorHome = () => {
       </div>
     </div>
     <div className="guest-home">
-    <div className="courses-element-instructor-search">
-      <div>
-      <div>
-        {courses &&
-          courses.map((course) => (
-            <AllCourseDetailsInstructor course={course} key={course._id} />
-          ))}
-      </div>
-      </div>
-      </div>
     <div className="checkboxes">
         <form className="filter" onSubmit={handleFilter}>
           <h4>Filter by: </h4>
-          <h5>Price </h5><p>- filtering is done according to original price</p>
+          <h5>Price </h5><p style={{fontSize: 12}}><i>- filtering is done according to original price</i></p>
           <input
             type="checkbox"
             id="price"
@@ -306,6 +313,16 @@ const InstructorHome = () => {
         Clear Filter
       </MDBBtn>
         </form>
+      </div>
+      <span className="divider"></span>
+      <div className="courses-element" style={{marginTop: 10}}>
+      <div>
+      <h4 style={{marginLeft: 30}}><i>{message}</i></h4>
+        {courses &&
+          courses.map((course) => (
+            <AllCourseDetailsInstructor course={course} key={course._id} />
+          ))}
+      </div>
       </div>
       </div>
         </MDBTabsPane>

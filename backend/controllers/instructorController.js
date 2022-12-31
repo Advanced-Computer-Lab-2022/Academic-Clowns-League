@@ -36,7 +36,7 @@ const createInstructor = async (req, res) => {
       } catch (error) {
         res
           .status(400)
-          .json({ message: "Signup Failed", error: error.message });
+          .json({error: error.message });
       }
     }
   } else {

@@ -41,6 +41,10 @@ const CourseDetails = ({ course }) => {
         <strong>Rating: </strong>
         {course.overallRating}
       </p>
+      <p>
+          <strong>Subject: </strong>
+          {course.subject}
+        </p>
       <div
         style={{
           display: isActive ? "block" : "none",
@@ -50,10 +54,6 @@ const CourseDetails = ({ course }) => {
           <strong>Price: </strong>
           {Math.round(price*(100-course.discount)/100)} {currency} <br></br>
           {message}
-        </p>
-        <p>
-          <strong>Subject: </strong>
-          {course.subject}
         </p>
         <p>
           <strong>Instructor: </strong>
@@ -72,17 +72,7 @@ const CourseDetails = ({ course }) => {
         </ol>
         </p>
       </div>
-      <MDBBtn rounded
-        style={{
-          backgroundColor: isActive ? "#E0E0E0" : "",
-          color: isActive ? "black" : "",
-          height: 35,
-          textAlign: "center",
-          borderColor: isActive ? "black" : "#B71C1C"
-        }}
-        onClick={handleClick} color="danger">
-        View Details
-      </MDBBtn>
+      <div className="details-buttons">
       <MDBBtn rounded
         style={{
           backgroundColor: isActive ? "#E0E0E0" : "",
@@ -90,11 +80,22 @@ const CourseDetails = ({ course }) => {
           height: 35,
           textAlign: "center",
           borderColor: isActive ? "black" : "#B71C1C",
-          marginLeft: 10,
+          marginLeft: 25
+        }}
+        onClick={handleClick} color="danger">
+        View Details
+      </MDBBtn>
+      <MDBBtn rounded
+        style={{
+          height: 35,
+          textAlign: "center",
+          borderColor: "#B71C1C",
+          marginLeft: 15
         }}
         onClick={() => navigate('/login')} color="danger">
         Register for Course
       </MDBBtn>
+      </div>
       </div>
     </div>
   );

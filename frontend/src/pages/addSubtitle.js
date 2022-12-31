@@ -1,6 +1,6 @@
 import FloatingLabel from 'react-bootstrap/FloatingLabel';
 import Form from 'react-bootstrap/Form';
-import InstructorNavbar from "../components/instructorNavbar";
+import HomeInstNav from "../components/homeInstNav";
 import Button from 'react-bootstrap/Button';
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom';
@@ -84,10 +84,10 @@ const AddSubtitle = () => {
 
     return(
         <>
-        <InstructorNavbar />
+        <HomeInstNav />
         <div className='create-course'>
         <h3>Enter Subtitle Details</h3>
-        <div style={{color: "black", fontSize: "small"}}>- fields followed by * are required</div>
+        <div style={{color: "black", fontSize: "small"}}><i>- fields followed by * are required</i></div>
         <br></br>
              <FloatingLabel
                 controlId="floatingInput"
@@ -110,11 +110,10 @@ const AddSubtitle = () => {
       </FloatingLabel><br></br>
 
       {error && <div className="error" style={{color: "red", fontSize: "small"}}>{error}</div>}
-
       <Button variant="danger" onClick={handleSubmit}>Add</Button>{' '}
       {message}
-      <Button variant="danger" onClick={toggleShow} style={{display: courseData.published ? "none" : "block"}}>Save</Button>{' '}
-      <Button variant="danger" onClick={() => navigate(`/addExercise?id=${id}`)} style={{display: courseData.published ? "block" : "none"}}>Next</Button>{' '}
+      <Button variant="danger" onClick={toggleShow} style={{display: courseData.published ? "none" : "inline", marginLeft: 15, }}>Save</Button>
+      <Button variant="danger" onClick={() => navigate(`/addExercise?id=${id}`)} style={{display: courseData.published ? "inline" : "none", marginLeft: 10}}>Next</Button>
       <MDBModal show={basicModal} setShow={setBasicModal} tabIndex='-1'>
         <MDBModalDialog size='sm'>
           <MDBModalContent>
@@ -122,7 +121,7 @@ const AddSubtitle = () => {
               <MDBModalTitle>Operation Successful!</MDBModalTitle>
             </MDBModalHeader>
             <MDBModalBody>Course Saved Successfully!
-            <MDBBtn onClick={() => navigate("/instructorHome")}>Back to Homepage</MDBBtn>
+            <MDBBtn onClick={() => navigate("/instructorHome")}  color="danger">Back to Homepage</MDBBtn>
             </MDBModalBody>
           </MDBModalContent>
         </MDBModalDialog>

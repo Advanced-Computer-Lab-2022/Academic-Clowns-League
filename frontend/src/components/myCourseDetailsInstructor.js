@@ -42,15 +42,30 @@ const MyCourseDetailsInstructor = ({ course }) => {
     setIsActive((current) => !current);
   };
 
+  const refresh = async () => {
+    window.location.reload(true);
+  };
+
+  const onChangeValue = (e) => {
+    if(e.target.value=="Computer Science"){
+    setSubject("Computer Science")
+  }
+  else if(e.target.value=="Digital Media"){
+    setSubject("Digital Media")
+  }
+  else{
+    setSubject("Lab Programming")
+  }
+}
+
   const handleSubmit = async (e) => {
     e.preventDefault()
-    if(title == '' || hours == '' || subject == '' || price == '' || summary == '' || previewURL == ''){
+    if(title == '' || subject == '' || price == '' || summary == '' || previewURL == ''){
       setError('Please fill in all the fields')
     }
     else{
       const newCourse = {
         title,
-        hours,
         subject,
         price,
         discount,
@@ -72,7 +87,6 @@ const MyCourseDetailsInstructor = ({ course }) => {
           toggleShow()
           toggleShow1()
           setTitle('')
-          setHours('')
           setSubject('')
           setPrice('')
           setDiscount('')
@@ -101,7 +115,6 @@ const MyCourseDetailsInstructor = ({ course }) => {
   }
   if(response.status == 200){
       setTitle('')
-      setHours('')
       setSubject('')
       setPrice('')
       setDiscount('')
@@ -164,6 +177,10 @@ const MyCourseDetailsInstructor = ({ course }) => {
         <strong>Rating: </strong>
         {course.overallRating}
       </p>
+      <p>
+          <strong>Subject: </strong>
+          {course.subject}
+        </p>
       <div
         style={{
           display: isActive ? "block" : "none",
@@ -174,10 +191,6 @@ const MyCourseDetailsInstructor = ({ course }) => {
           {Math.round((price * (100 - course.discount)) / 100)} {currency}{" "}
           <br></br>
           {message}
-        </p>
-        <p>
-          <strong>Subject: </strong>
-          {course.subject}
         </p>
         <p>
           <strong>Instructor: </strong>
@@ -204,7 +217,8 @@ const MyCourseDetailsInstructor = ({ course }) => {
           color: isActive ? "black" : "",
           height: 35,
           textAlign: "center",
-          borderColor: isActive ? "black" : "#B71C1C"
+          borderColor: isActive ? "black" : "#B71C1C",
+          width: 90
         }}
         onClick={handleClick} color="danger">
         View Details
@@ -214,7 +228,8 @@ const MyCourseDetailsInstructor = ({ course }) => {
           height: 35,
           textAlign: "center",
           marginLeft: 10,
-          borderColor: "#B71C1C"
+          borderColor: "#B71C1C",
+          width: 90
         }}
         onClick={() => navigate(`/instructorCourse?id=${course._id}`)} color="danger">
         Go to Course
@@ -225,7 +240,8 @@ const MyCourseDetailsInstructor = ({ course }) => {
           textAlign: "center",
           marginLeft: 10,
           borderColor: "#B71C1C",
-          display: isPublished ? "none" : "block"
+          display: isPublished ? "none" : "block",
+          width: 90
         }}
         onClick={toggleShow} color="danger">
         Edit Course
@@ -238,7 +254,7 @@ const MyCourseDetailsInstructor = ({ course }) => {
               <MDBBtn className='btn-close' color='none' onClick={toggleShow}></MDBBtn>
             </MDBModalHeader>
             <MDBModalBody>
-            <div style={{color: "black", fontSize: "small"}}>- fields followed by * are required</div>
+            <div style={{color: "black", fontSize: "small"}}><i>- fields followed by * are required</i></div>
             <br></br>
              <FloatingLabel
                 controlId="floatingInput"
@@ -247,13 +263,12 @@ const MyCourseDetailsInstructor = ({ course }) => {
         <Form.Control type="text" placeholder="Title *" value={title} onChange={(e) => setTitle(e.target.value)}/>
       </FloatingLabel><br></br>
 
-      <FloatingLabel controlId="floatingSubject" label="Subject *">
-        <Form.Control type="text" placeholder="Subject *" value={subject} onChange = {(e) => setSubject(e.target.value)}/>
-      </FloatingLabel><br></br>
-
-      <FloatingLabel controlId="floatingHours" label="Hours *">
-        <Form.Control type="text" placeholder="Hours *" value={hours} onChange = {(e) => setHours(e.target.value)}/>
-      </FloatingLabel><br></br>
+      <Form.Select onChange={onChangeValue}>
+          <option>Please select a subject *</option>
+          <option value="Computer Science">Computer Science</option>
+          <option value="Digital Media">Digital Media</option>
+          <option value="Lab Programming">Lab Programming</option>
+        </Form.Select><br></br>
 
       <FloatingLabel controlId="floatingPrice" label="Price *">
         <Form.Control type="text" placeholder="Price *" value={price} onChange = {(e) => setPrice(e.target.value)}/>
@@ -277,12 +292,12 @@ const MyCourseDetailsInstructor = ({ course }) => {
 
       {error && <div className="error" style={{color: "red", fontSize: "small"}}>{error}</div>}
 
-            </MDBModalBody>
-            <MDBModalFooter>
+              <div>
               <MDBBtn onClick={() => navigate(`/addExercise?id=${course._id}`)} color="danger">Add Exercises</MDBBtn>
-              <MDBBtn onClick={() => navigate(`/addSubtitle?id=${course._id}`)} color="danger">Add Subtitles</MDBBtn>
-              <MDBBtn onClick={handleSubmit} type="button" color="danger">Save changes</MDBBtn>
-            </MDBModalFooter>
+              <MDBBtn onClick={() => navigate(`/addSubtitle?id=${course._id}`)} color="danger" style={{marginLeft: 26}}>Add Subtitles</MDBBtn>
+              <MDBBtn onClick={handleSubmit} type="button" color="danger" style={{marginLeft: 26}}>Save changes</MDBBtn>
+              </div>
+            </MDBModalBody>
           </MDBModalContent>
         </MDBModalDialog>
       </MDBModal>
@@ -290,8 +305,8 @@ const MyCourseDetailsInstructor = ({ course }) => {
         <MDBModalDialog size='sm'>
           <MDBModalContent>
             <MDBModalHeader>
-              <MDBModalTitle>Operation Successful!</MDBModalTitle>
-              <MDBBtn className='btn-close' color='none' onClick={toggleShow1}></MDBBtn>
+              <MDBModalTitle>Operation Successful</MDBModalTitle>
+              <MDBBtn className='btn-close' color='none' onClick={refresh}></MDBBtn>
             </MDBModalHeader>
             <MDBModalBody>Course Edited Successfully!</MDBModalBody>
           </MDBModalContent>
@@ -303,7 +318,8 @@ const MyCourseDetailsInstructor = ({ course }) => {
           textAlign: "center",
           marginLeft: 10,
           borderColor: "#B71C1C",
-          display: isPublished ? "none" : "block"
+          display: isPublished ? "none" : "block",
+          width: 90
         }}
         onClick={(e) => {
           handleDelete(e);
@@ -317,7 +333,8 @@ const MyCourseDetailsInstructor = ({ course }) => {
           textAlign: "center",
           marginLeft: 10,
           borderColor: "#B71C1C",
-          display: isPublished ? "none" : "block"
+          display: isPublished ? "none" : "block",
+          width: 90
         }}
         onClick={(e) => {
           handlePublish(e);
@@ -332,13 +349,14 @@ const MyCourseDetailsInstructor = ({ course }) => {
           marginLeft: 10,
           borderColor: "#B71C1C",
           display: isPublished ? "block" : "none",
+          width: 90
         }}
         onClick={(e) => {
           handleClose(e);
           window.location.reload(true);
         }}
         disabled={!isOpen} color="danger">
-        Close Course
+        Close
       </MDBBtn>
       </div>
       </div>

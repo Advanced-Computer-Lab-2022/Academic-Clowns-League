@@ -98,7 +98,7 @@ header a {
   flex: 1;
   background: #fff;
   border-radius: 4px;
-  width: 500px;
+  width: 785px;
   margin: 20px 20px 20px 2%;
   padding: 20px;
   position: relative;
@@ -139,7 +139,7 @@ header a {
   flex: 1;
   background: #fff;
   border-radius: 4px;
-  width:max-content;
+  width:640px;
   margin: 20px 20px 20px 2%;
   padding: 20px;
   position: relative;
@@ -172,7 +172,8 @@ header a {
 
 .instructor-buttons{
   display: flex;
-  flex: 1
+  flex: 1;
+  margin-top: 2%
 }
 
 .course-details h4 {
@@ -401,8 +402,16 @@ header a {
 }
 
 .checkboxes {
-  margin-left: 15%;
-  margin-top: 3.5%;
+  margin-left: 3%;
+  margin-top: 2%;
+}
+
+.divider {
+  position: relative;
+  left: 4.5%;
+  margin-top: 2.5%;
+  margin-bottom: 2%;
+  border-left: 1px solid rgb(151, 150, 150);
 }
 
 .filter {
@@ -584,11 +593,13 @@ header a {
 
 .guest-home {
   display: flex;
+  flex: 1
 }
 
 .courses-element {
   margin-top: 3%;
-  margin-left: 2%;
+  position: relative;
+  left: 6%
 }
 .search-navbar{
   display: flex;
@@ -616,6 +627,7 @@ header a {
 
 .popular {
   margin-left: 2%;
+  width: 500px
 }
 
 .clear-search {
@@ -625,13 +637,13 @@ header a {
 }
 
 .sort-popular{
-  left: 3%;
+  left: 61%;
   margin-top: 1.9%;
   height: 35px
 }
 
 .sort-length{
-  left: 4%;
+  left: 62%;
   margin-top: 1.9%;
   height: 35px
 }
@@ -661,7 +673,7 @@ header a {
 }
 
 .courses-element-instructor{
-  margin-top: 7%;
+  margin-top: 3%;
   left: 2%
 }
 
@@ -701,4 +713,18 @@ header a {
 .create-course{
   left: 25%;
   top: 15%
+}
+
+.details-buttons{
+  left: 275px;
+  position: relative
+}
+
+.mydetails-buttons{
+  left: 275px;
+  position: relative
+}
+.mycourses-element{
+  margin-top: 2%;
+  margin-left: 2%
 }

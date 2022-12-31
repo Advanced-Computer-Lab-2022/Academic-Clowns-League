@@ -17,9 +17,8 @@ import { MDBBtn, MDBIcon, MDBInput, MDBInputGroup } from 'mdb-react-ui-kit';
 const countries = require('../country-json-master/src/country-by-currency-code.json')
 
 
-const ITraineeNavbar = ({updateCourses}) => {
+const MyCoursesITraineeNav = () => {
   const {toggleCurrency, rate, currency} = useContext(CurrencyContext)
-  const [searchTerm, setSearchTerm] = useState("");
   const [iTrainee, setITrainee] = useState("")
   const navigate = useNavigate();
 
@@ -38,25 +37,6 @@ const ITraineeNavbar = ({updateCourses}) => {
     };
     fetchITrainee();
   }, []);
-
-  const handleSubmit = async (e) => {
-    e.preventDefault(); //to prevent the default action which is refreshing the page
-
-    //DON'T CALL THE CONST BELOW searchTerm PLEASE
-    const searchTerm2 = { searchTerm }; //a dummy obj i'll use in backend
-    //const response = await fetch('/api/courses/63598f85fb000a4726c4e5d8')
-    const response = await fetch(
-      `/api/courses/searchAllCourses?${new URLSearchParams(
-        searchTerm2
-      ).toString()}`
-    );
-    const json = await response.json();
-    updateCourses(json)
-    }
-
-    const handleClick = async () => {
-      window.location.reload(true);
-    };
 
     return (
       <Navbar sticky="top"  variant="dark" expand="lg" style={{backgroundColor: '#C00418'}}>
@@ -89,38 +69,6 @@ const ITraineeNavbar = ({updateCourses}) => {
             </Nav.Link>
     */}
           </Nav>
-
-          <div className='search-navbar'>
-        
-      <form className="create-instructor" onSubmit={handleSubmit}>
-
-      <MDBInputGroup className="search">
-      <input placeholder='  Search' onChange={(e) => setSearchTerm(e.target.value)} style={{
-          backgroundColor: "#E0E0E0",
-          borderColor:"#E0E0E0",
-          borderRadius: 4,
-          boxShadow: "none",
-          outline:0}}/>
-      <MDBBtn rounded rippleColor='dark' style={{
-          backgroundColor: "#E0E0E0",
-          borderColor: "#E0E0E0",
-          color: "black"
-        }}>
-      <GoSearch />
-      </MDBBtn>
-      </MDBInputGroup>
-      </form>
-      <div className="clear-search-instructor-nav">
-      <MDBBtn rounded style={{
-          backgroundColor: "#E0E0E0",
-          borderColor: "#E0E0E0",
-          color: "black",
-          height: 36,
-        }} onClick={handleClick}>
-        Clear
-      </MDBBtn>
-      </div>
-      </div>
 
             <NavDropdown title={<CgProfile size={25}/>} id="navbarScrollingDropdown" className='navlink-profile' align="end">
               <NavDropdown.Item onClick={() => {
@@ -183,4 +131,4 @@ const ITraineeNavbar = ({updateCourses}) => {
     );
   }
   
-  export default ITraineeNavbar;
+  export default MyCoursesITraineeNav;

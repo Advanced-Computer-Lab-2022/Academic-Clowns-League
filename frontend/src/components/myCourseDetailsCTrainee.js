@@ -30,15 +30,15 @@ const MyCourseDetailsCTrainee = ({ course }) => {
         <strong>Rating: </strong>
         {course.overallRating}
       </p>
+      <p>
+          <strong>Subject: </strong>
+          {course.subject}
+        </p>
       <div
         style={{
           display: isActive ? "block" : "none",
         }}
       >
-        <p>
-          <strong>Subject: </strong>
-          {course.subject}
-        </p>
         <p>
           <strong>Instructor: </strong>
           {course.instructorData.name}
@@ -57,12 +57,14 @@ const MyCourseDetailsCTrainee = ({ course }) => {
           </ol>
         </p>
       </div>
+      <div className="mydetails-buttons">
       <MDBBtn rounded
         style={{
           backgroundColor: isActive ? "#607D8B" : "",
           color: isActive ? "white" : "",
           height: 35,
           textAlign: "center",
+          marginLeft: 65,
         }}
         onClick={handleClick}
         color="danger"
@@ -75,11 +77,12 @@ const MyCourseDetailsCTrainee = ({ course }) => {
           color: isActive ? "white" : "",
           height: 35,
           textAlign: "center",
-          marginLeft: 10,
+          marginLeft: 15,
         }}
         onClick={() => navigate(`/cTraineeCourse?id=${course._id}`)} color="danger">
         Go to Course
       </MDBBtn>
+      </div>
       </div>
     </div>
   );

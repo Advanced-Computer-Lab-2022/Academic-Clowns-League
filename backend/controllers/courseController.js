@@ -30,6 +30,9 @@ const getAllCourses = async (req, res) => {
     {
       $unwind: "$instructorData",
     },
+    {
+      $match: { $and: [ {published: true}, {open: true} ]}
+    }
   ]);
   res.status(200).json(courses);
 };
@@ -240,7 +243,6 @@ const addCourseExercise = async (req, res) => {
 const createCourse = async (req, res) => {
   if(await Instructor.findById(req.user._id)){ let {
     title,
-    hours,
     subject,
     price,
     discount,
@@ -263,7 +265,6 @@ const createCourse = async (req, res) => {
     }
     const course = await Course.create({
       title,
-      hours,
       subject,
       price,
       discount,
@@ -400,6 +401,7 @@ const filterSubRatePrice = async (req, res) => {
               price: { $gte: prices[5][0], $lt: prices[5][1] },
             },
           ],
+          $and: [{published: true}, {open: true}]
         },
       },
     ]);
@@ -464,6 +466,7 @@ const filterSubRatePrice = async (req, res) => {
               price: { $gte: prices[5][0], $lt: prices[5][1] },
             },
           ],
+          $and: [{published: true}, {open: true}]
         },
       },
     ]);
@@ -504,6 +507,7 @@ const filterSubRatePrice = async (req, res) => {
               price: { $gte: prices[5][0], $lt: prices[5][1] },
             },
           ],
+          $and: [{published: true}, {open: true}]
         },
       },
     ]);
@@ -535,6 +539,7 @@ const filterSubRatePrice = async (req, res) => {
               overallRating: { $gte: ratings[2][0], $lte: ratings[2][1] },
             },
           ],
+          $and: [{published: true}, {open: true}]
         },
       },
     ]);
@@ -553,7 +558,7 @@ const filterSubRatePrice = async (req, res) => {
         $unwind: "$instructorData",
       },
       {
-        $match: { subject: { $in: [subjects[0], subjects[1], subjects[2]] } },
+        $match: { subject: { $in: [subjects[0], subjects[1], subjects[2]] }, $and: [{published: true}, {open: true}] },
       },
     ]);
     res.status(200).json(courses);
@@ -592,6 +597,7 @@ const filterSubRatePrice = async (req, res) => {
               price: { $gte: prices[5][0], $lt: prices[5][1] },
             },
           ],
+          $and: [{published: true}, {open: true}]
         },
       },
     ]);
@@ -622,6 +628,7 @@ const filterSubRatePrice = async (req, res) => {
               overallRating: { $gte: ratings[2][0], $lte: ratings[2][1] },
             },
           ],
+          $and: [{published: true}, {open: true}]
         },
       },
     ]);
@@ -639,6 +646,9 @@ const filterSubRatePrice = async (req, res) => {
       {
         $unwind: "$instructorData",
       },
+      {
+        $match: {$and: [{published: true}, {open: true}]}
+      }
     ]);
     res.status(200).json(courses);
   }
@@ -668,6 +678,7 @@ const searchAllCourses = async (req, res) => {
           { title: { $regex: re } },
           { subject: { $regex: re } },
         ],
+        $and: [{published: true}, {open: true}]
       },
     },
   ]);
@@ -934,8 +945,9 @@ const addCourseSub = async (req, res) => {
   } = req.body;
   const videoId = getId(videoLink);
   const embeddedLink = "//www.youtube.com/embed/" + videoId;
-  const courseSubs = (await Course.findById({ _id: id }).select("subtitles"))
-    .subtitles;
+  const courseSubs = (await Course.findById({ _id: id }).select("subtitles")).subtitles;
+  const oldCourse = await Course.findOne({ _id: id })
+  const courseHours = parseInt(oldCourse.hours) + parseInt(totalHours)
   subtitle = {
     title: title,
     videoLink: embeddedLink,
@@ -945,8 +957,7 @@ const addCourseSub = async (req, res) => {
   courseSubs.push(subtitle);
   const course = await Course.findByIdAndUpdate(
     { _id: id },
-    { subtitles: courseSubs },
-    { new: true }
+    { subtitles: courseSubs, hours: courseHours }
   );
   res.status(200).json(course);
 }
@@ -1187,7 +1198,7 @@ const openMyCourse = async (req, res) => {
 
 const moneyOwed = async (req, res) => {
   if(await Instructor.findById(req.user._id)){
-    const courses = await Course.find({instructor: req.user._id});
+  const courses = await Course.find({instructor: req.user._id});
   let money = 0;
 
   for(let i = 0; i < courses.length; i++){

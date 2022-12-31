@@ -39,18 +39,6 @@ const createRefundRequest = async(req, res) =>{
     const courseID = mongoose.Types.ObjectId(req.query.id);
     const course = await Course.findOne({_id: courseID})
     const itrainee = await iTrainee.findOne({_id: req.user._id})
-    let coursesArray = []
-
-    for(let i = 0; i < itrainee.courses.length; i++){
-      const itraineeCourse = mongoose.Types.ObjectId(itrainee.courses[i]);
-      if(itraineeCourse.toString() != courseID.toString()){
-        coursesArray.push(itrainee.courses[i])
-      }
-    }
-
-    await Course.findOneAndUpdate({_id: req.query.id}, {numOfEnrolledTrainees: course.numOfEnrolledTrainees - 1})
-    await iTrainee.findOneAndUpdate({_id: req.user._id}, {courses: coursesArray})
-
 
     const request = await Request.create({courseId: courseID, 
       courseTitle: course.title, 
@@ -126,10 +114,51 @@ const getPendingRequests = async (req, res) => {
    
   };
 
+  const checkCourse = async(req, res) => {
+    if(await iTrainee.findById(req.user._id)){
+      try{
+        const request = await Request.findOne({iTraineeId: req.user._id, courseId: req.query.id})
+        const courseID = mongoose.Types.ObjectId(req.query.id);
+        const course = await Course.aggregate([
+        {
+          $lookup: {
+            from: "instructors",
+            localField: "instructor",
+            foreignField: "_id",
+            as: "instructorData",
+          },
+        },
+        {
+          $unwind: "$instructorData",
+        },
+        {
+          $match: { _id: courseID},
+        },
+      ]);
+
+      if(request == null){
+        course[0].refund = false
+      }
+      else{
+        course[0].refund = true
+      }
+
+      res.status(200).json(course[0])
+      }
+      catch(error){
+        res.status(400).json({error: error.message})
+      }
+    }
+    else{
+      res.status(400).json({ error: "Access Restriced" })
+    }
+  }
+
 module.exports = {
   requestAccess,
   getPendingRequests,
   grantAccess,
   createRefundRequest,
-  getRefundRequests
+  getRefundRequests,
+  checkCourse
 };
