@@ -20,6 +20,7 @@ const createCTrainee = async (req, res) => {
       country,
       courses,
       grades,
+      corporate,
     } = req.body;
 
     const takenUsername = await User.findOne({ username: username });
@@ -37,6 +38,7 @@ const createCTrainee = async (req, res) => {
           country,
           courses,
           grades,
+          corporate,
         });
         const dbUser = new User({
           username: username,
@@ -186,6 +188,8 @@ const cTraineeUpdatePassword = async (req, res) => {
           }
         );
         res.status(200).json(ctrainee);
+      } else {
+        res.status(400).json({ error: "cant do it" });
       }
     } else {
       res.status(400).json({ error: "cant do it" });
@@ -198,21 +202,23 @@ const cTraineeUpdatePassword = async (req, res) => {
     res.status(400).json({ error: "Access Restriced" });
   }
 };
-const getCTraineeInfo = async(req, res) => {
-  if(await cTrainee.findById(req.user._id)){
-  const ctrainee = await cTrainee.findOne({_id: req.user._id});
-  const result  ={
-    name: ctrainee.firstname +" "+ ctrainee.lastname,
-    username: ctrainee.username,
-    email: ctrainee.email,
-  };
-  res.status(200).json(result);
-}
-}
-const getCourse = async(req, res) => {
-  if(await cTrainee.findById(req.user._id)){
-    const ctraineeID = req.user._id
-    const ctraineeCourses = await cTrainee.findOne({_id: ctraineeID}).select("courses")
+const getCTraineeInfo = async (req, res) => {
+  if (await cTrainee.findById(req.user._id)) {
+    const ctrainee = await cTrainee.findOne({ _id: req.user._id });
+    const result = {
+      name: ctrainee.firstname + " " + ctrainee.lastname,
+      username: ctrainee.username,
+      email: ctrainee.email,
+    };
+    res.status(200).json(result);
+  }
+};
+const getCourse = async (req, res) => {
+  if (await cTrainee.findById(req.user._id)) {
+    const ctraineeID = req.user._id;
+    const ctraineeCourses = await cTrainee
+      .findOne({ _id: ctraineeID })
+      .select("courses");
     const courseID = mongoose.Types.ObjectId(req.query.id);
     const course = await Course.aggregate([
       {
@@ -227,35 +233,29 @@ const getCourse = async(req, res) => {
         $unwind: "$instructorData",
       },
       {
-        $match: { _id: courseID},
+        $match: { _id: courseID },
       },
     ]);
 
     let flag = false;
 
-    for(let i = 0; i < ctraineeCourses.courses.length; i++){
-      if(courseID == ctraineeCourses.courses[i].toString()){
-        flag = true
+    for (let i = 0; i < ctraineeCourses.courses.length; i++) {
+      if (courseID == ctraineeCourses.courses[i].toString()) {
+        flag = true;
         break;
       }
     }
-    if(flag == true){
-      course[0].register = true
+    if (flag == true) {
+      course[0].register = true;
+    } else {
+      course[0].register = false;
     }
-    else{
-      course[0].register = false
-    }
 
-    res.status(200).json(course[0])
+    res.status(200).json(course[0]);
+  } else {
+    res.status(400).json({ error: "Access Restriced" });
   }
-  else{
-    res.status(400).json({ error: "Access Restriced" })
-  }
-}
-
-
-
-
+};
 
 module.exports = {
   createCTrainee,
@@ -267,5 +267,5 @@ module.exports = {
   getGrade,
   cTraineeUpdatePassword,
   getCTraineeInfo,
-  getCourse
+  getCourse,
 };

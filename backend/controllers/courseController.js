@@ -37,8 +37,8 @@ const getAllCourses = async (req, res) => {
   res.status(200).json(courses);
 };
 
-getInstUnpub = async(req, res) => {
-  if(await Instructor.findById(req.user._id)){
+getInstUnpub = async (req, res) => {
+  if (await Instructor.findById(req.user._id)) {
     const courses = await Course.aggregate([
       {
         $lookup: {
@@ -52,18 +52,22 @@ getInstUnpub = async(req, res) => {
         $unwind: "$instructorData",
       },
       {
-        $match: { $and: [{"instructorData.name": req.user.name }, {published: false}] },
+        $match: {
+          $and: [
+            { "instructorData.name": req.user.name },
+            { published: false },
+          ],
+        },
       },
     ]);
-    res.status(200).json(courses)
+    res.status(200).json(courses);
+  } else {
+    res.status(400).json({ error: "Access Restriced" });
   }
-  else{
-    res.status(400).json({ error: "Access Restriced" })
-  }
-}
+};
 
-getInstPub = async(req, res) => {
-  if(await Instructor.findById(req.user._id)){
+getInstPub = async (req, res) => {
+  if (await Instructor.findById(req.user._id)) {
     const courses = await Course.aggregate([
       {
         $lookup: {
@@ -77,166 +81,165 @@ getInstPub = async(req, res) => {
         $unwind: "$instructorData",
       },
       {
-        $match: { $and: [{"instructorData.name": req.user.name }, {published: true}] },
+        $match: {
+          $and: [{ "instructorData.name": req.user.name }, { published: true }],
+        },
       },
     ]);
-    res.status(200).json(courses)
+    res.status(200).json(courses);
+  } else {
+    res.status(400).json({ error: "Access Restriced" });
   }
-  else{
-    res.status(400).json({ error: "Access Restriced" })
-  }
-}
+};
 
 //get instructor courses
 const getInstCourses = async (req, res) => {
-if(await Instructor.findById(req.user._id)){
-  const courses = await Course.aggregate([
-    {
-      $lookup: {
-        from: "instructors",
-        localField: "instructor",
-        foreignField: "_id",
-        as: "instructorData",
+  if (await Instructor.findById(req.user._id)) {
+    const courses = await Course.aggregate([
+      {
+        $lookup: {
+          from: "instructors",
+          localField: "instructor",
+          foreignField: "_id",
+          as: "instructorData",
+        },
       },
-    },
-    {
-      $unwind: "$instructorData",
-    },
-    {
-      $match: { "instructorData.name": req.user.name},
-    },
-  ]);
-  res.status(200).json(courses);}
-  else{
-    res.status(400).json({ error: "Access Restriced" })
+      {
+        $unwind: "$instructorData",
+      },
+      {
+        $match: { "instructorData.name": req.user.name },
+      },
+    ]);
+    res.status(200).json(courses);
+  } else {
+    res.status(400).json({ error: "Access Restriced" });
   }
 };
 
 //get a single course
 const getCourse = async (req, res) => {
-  if(await Instructor.findById(req.user._id)){
-    const course = await Course.findOne({_id: req.query.id})
-    res.status(200).json(course)
-  }
-  else{
-    res.status(400).json({ error: "Access Restriced" })
+  if (await Instructor.findById(req.user._id)) {
+    const course = await Course.findOne({ _id: req.query.id });
+    res.status(200).json(course);
+  } else {
+    res.status(400).json({ error: "Access Restriced" });
   }
 };
 
 //delete a course
 const deleteCourse = async (req, res) => {
-  if(await Instructor.findById(req.user._id)){
-  const id = req.query.id;
+  if (await Instructor.findById(req.user._id)) {
+    const id = req.query.id;
 
-  if (!mongoose.Types.ObjectId.isValid(id)) {
-    return res.status(404).json({ error: "No such Course" });
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      return res.status(404).json({ error: "No such Course" });
+    }
+
+    const course = await Course.findOneAndDelete({ _id: id });
+
+    if (!course) {
+      return res.status(400).json({ error: "No such Course" });
+    }
+  } else {
+    res.status(400).json({ error: "Access Restriced" });
   }
-
-  const course = await Course.findOneAndDelete({ _id: id });
-
-  if (!course) {
-    return res.status(400).json({ error: "No such Course" });
-  }}
-  else{
-    res.status(400).json({ error: "Access Restriced" })
-  }
-  
 };
 
 //Rate a course
 const rateCourse = async (req, res) => {
-  if(await iTrainee.findById(req.user._id) || await cTrainee.findById(req.user._id)){ 
-  const id = req.query.id;
-  const Rating = req.query.rating;
-  const user = req.user._id
-  const course = await Course.findById({ _id: id });
-  let ratingsTemp = [Object];
-  ratingsTemp = course.ratings;
-  let found = false;
-  ratingsTemp.forEach(Function);
+  if (
+    (await iTrainee.findById(req.user._id)) ||
+    (await cTrainee.findById(req.user._id))
+  ) {
+    const id = req.query.id;
+    const Rating = req.query.rating;
+    const user = req.user._id;
+    const course = await Course.findById({ _id: id });
+    let ratingsTemp = [Object];
+    ratingsTemp = course.ratings;
+    let found = false;
+    ratingsTemp.forEach(Function);
 
-  function Function(value) {
-    if (value.userId == user) {
-      found = true;
+    function Function(value) {
+      if (value.userId == user) {
+        found = true;
+      }
     }
-  }
-  if (!found) {
-    console.log(ratingsTemp);
-    ratingsTemp.push({ rating: Rating, userId: user });
-    console.log(ratingsTemp);
-    let len = ratingsTemp.length;
-    console.log(len);
-    let ratingsSum = 0;
-    ratingsTemp.forEach(myFunction);
+    if (!found) {
+      console.log(ratingsTemp);
+      ratingsTemp.push({ rating: Rating, userId: user });
+      console.log(ratingsTemp);
+      let len = ratingsTemp.length;
+      console.log(len);
+      let ratingsSum = 0;
+      ratingsTemp.forEach(myFunction);
 
-    function myFunction(value) {
-      ratingsSum += value.rating;
+      function myFunction(value) {
+        ratingsSum += value.rating;
+      }
+      console.log(ratingsSum);
+
+      const overallR = ratingsSum / len;
+      console.log(overallR);
+
+      const updatedcourse = await Course.findOneAndUpdate(
+        { _id: id },
+        { ratings: ratingsTemp, overallRating: overallR },
+        { new: true }
+      );
+      res.status(200).json(updatedcourse);
+    } else {
+      return res
+        .status(404)
+        .json({ error: "you have already rated this course" });
     }
-    console.log(ratingsSum);
-
-    const overallR = ratingsSum / len;
-    console.log(overallR);
-
-    const updatedcourse = await Course.findOneAndUpdate(
-      { _id: id },
-      { ratings: ratingsTemp, overallRating: overallR },
-      { new: true }
-    );
-    res.status(200).json(updatedcourse);
   } else {
-    return res
-      .status(404)
-      .json({ error: "you have already rated this course" });
-  }}
-  else{
-    res.status(400).json({ error: "Access Restriced" })
+    res.status(400).json({ error: "Access Restriced" });
   }
-
 };
 
 //Review course
 //update a course
 const updateCourse = async (req, res) => {
-  if(await Instructor.findById(req.user._id)){
+  if (await Instructor.findById(req.user._id)) {
     const id = req.query.id;
 
-  const course = await Course.findOneAndUpdate(
-    { _id: id },
-    {
-      ...req.body,
-    }
-  );
+    const course = await Course.findOneAndUpdate(
+      { _id: id },
+      {
+        ...req.body,
+      }
+    );
 
-  res.status(200).json(course)
+    res.status(200).json(course);
+  } else {
+    res.status(400).json({ error: "Access Restriced" });
   }
-  else{
-    res.status(400).json({ error: "Access Restriced" })
-  }
- 
 };
 //add course exercise
 const addCourseExercise = async (req, res) => {
-  if(await Instructor.findById(req.user._id)){  const id = req.query.id; //637a197cbc66688b3924a864
-  const { question, option1, option2, option3, option4, answer } = req.body;
-  const courseEx = (await Course.findById({ _id: id }).select("exercises"))
-    .exercises;
-  const index = courseEx.length;
-  exercise = {
-    question: question,
-    options: [option1, option2, option3, option4],
-    answer: answer,
-    index: index
-  };
-  courseEx.push(exercise);
-  const course = await Course.findByIdAndUpdate(
-    { _id: id },
-    { exercises: courseEx }
-  );
-  res.status(200).json(course);}
-  else{
-    res.status(400).json({ error: "Access Restriced" })
+  if (await Instructor.findById(req.user._id)) {
+    const id = req.query.id; //637a197cbc66688b3924a864
+    const { question, option1, option2, option3, option4, answer } = req.body;
+    const courseEx = (await Course.findById({ _id: id }).select("exercises"))
+      .exercises;
+    const index = courseEx.length;
+    exercise = {
+      question: question,
+      options: [option1, option2, option3, option4],
+      answer: answer,
+      index: index,
+    };
+    courseEx.push(exercise);
+    const course = await Course.findByIdAndUpdate(
+      { _id: id },
+      { exercises: courseEx }
+    );
+    res.status(200).json(course);
+  } else {
+    res.status(400).json({ error: "Access Restriced" });
   }
-
 };
 
 //create new course
@@ -263,24 +266,26 @@ const createCourse = async (req, res) => {
       discount = 0;
       discountValidUntil = currentDate
     }
-    const course = await Course.create({
-      title,
-      subject,
-      price,
-      discount,
-      discountValidUntil,
-      instructor: req.user._id,
-      summary,
-      previewURL: embeddedLink,
-      overallRating: "0",
-      discountApplied: discountApp,
-    });
-    res.status(200).json(course);
-  } catch (error) {
-    res.status(400).json({ error: error.message });
-  }}
-  else{
-    res.status(400).json({ error: "Access Restriced" })
+    
+      const course = await Course.create({
+        title,
+        hours,
+        subject,
+        price,
+        discount,
+        discountValidUntil,
+        instructor: req.user._id,
+        summary,
+        previewURL: embeddedLink,
+        overallRating: "0",
+        discountApplied: discountApp,
+      });
+      res.status(200).json(course);
+    } catch (error) {
+      res.status(400).json({ error: error.message });
+    }
+  } else {
+    res.status(400).json({ error: "Access Restriced" });
   }
 };
 
@@ -687,250 +692,255 @@ const searchAllCourses = async (req, res) => {
 
 const searchInstrCourses = async (req, res) => {
   //console.log(req.user)
-  if(await Instructor.findById(req.user._id)){
+  if (await Instructor.findById(req.user._id)) {
     const THEsearchterm = req.query.searchTerm;
-  console.log(req.user.name)
-  var re = new RegExp(THEsearchterm, "i");
-  //console.log(THEsearchterm)
-  //const courses = await Course.find({instructor:{"$regex": re  }})
+    console.log(req.user.name);
+    var re = new RegExp(THEsearchterm, "i");
+    //console.log(THEsearchterm)
+    //const courses = await Course.find({instructor:{"$regex": re  }})
 
-  const courses = await Course.aggregate([
-    {
-      $lookup: {
-        from: "instructors",
-        localField: "instructor",
-        foreignField: "_id",
-        as: "instructorData",
+    const courses = await Course.aggregate([
+      {
+        $lookup: {
+          from: "instructors",
+          localField: "instructor",
+          foreignField: "_id",
+          as: "instructorData",
+        },
       },
-    },
-    {
-      $unwind: "$instructorData",
-    },
-    {
-      $match: {
-        "instructorData.name": req.user.name,
-        $or: [{ title: { $regex: re } }, { subject: { $regex: re } }],
+      {
+        $unwind: "$instructorData",
       },
-    },
-  ]);
-  res.status(200).json(courses);
-  }
-  else{
-    res.status(400).json({ error: "Access Restriced" })
+      {
+        $match: {
+          "instructorData.name": req.user.name,
+          $or: [{ title: { $regex: re } }, { subject: { $regex: re } }],
+        },
+      },
+    ]);
+    res.status(200).json(courses);
+  } else {
+    res.status(400).json({ error: "Access Restriced" });
   }
 };
 
 //filter based on price for INSTRUCTOR
 const filterInstPriceSub = async (req, res) => {
-  if(await Instructor.findById(req.user._id)){ const subjects = [];
-  const prices = [];
-  let subCount = 0;
-  let priceCount = 0;
-  if (req.query.computer == "true") {
-    subjects[0] = "Computer Science";
-    subCount++;
-  } else {
-    subjects[0] = "";
-  }
-  if (req.query.digital == "true") {
-    subjects[1] = "Digital Media";
-    subCount++;
-  } else {
-    subjects[1] = "";
-  }
-  if (req.query.lab == "true") {
-    subjects[2] = "Lab Programming";
-    subCount++;
-  } else {
-    subjects[2] = "";
-  }
-  if (req.query.free == "true") {
-    prices[0] = [0, 0];
-    priceCount++;
-  } else {
-    prices[0] = [];
-  }
-  if (req.query.sixth == "true") {
-    prices[1] = [60, 70];
-    priceCount++;
-  } else {
-    prices[1] = [];
-  }
-  if (req.query.seventh == "true") {
-    prices[2] = [70, 80];
-    priceCount++;
-  } else {
-    prices[2] = [];
-  }
-  if (req.query.eighth == "true") {
-    prices[3] = [80, 90];
-    priceCount++;
-  } else {
-    prices[3] = [];
-  }
-  if (req.query.ninth == "true") {
-    prices[4] = [90, 100];
-    priceCount++;
-  } else {
-    prices[4] = [];
-  }
-  if (req.query.tenth == "true") {
-    prices[5] = [100, 1000000000];
-    priceCount++;
-  } else {
-    prices[5] = [];
-  }
-  if (subCount > 0 && priceCount > 0) {
-    const courses = await Course.aggregate([
-      {
-        $lookup: {
-          from: "instructors",
-          localField: "instructor",
-          foreignField: "_id",
-          as: "instructorData",
+  if (await Instructor.findById(req.user._id)) {
+    const subjects = [];
+    const prices = [];
+    let subCount = 0;
+    let priceCount = 0;
+    if (req.query.computer == "true") {
+      subjects[0] = "Computer Science";
+      subCount++;
+    } else {
+      subjects[0] = "";
+    }
+    if (req.query.digital == "true") {
+      subjects[1] = "Digital Media";
+      subCount++;
+    } else {
+      subjects[1] = "";
+    }
+    if (req.query.lab == "true") {
+      subjects[2] = "Lab Programming";
+      subCount++;
+    } else {
+      subjects[2] = "";
+    }
+    if (req.query.free == "true") {
+      prices[0] = [0, 0];
+      priceCount++;
+    } else {
+      prices[0] = [];
+    }
+    if (req.query.sixth == "true") {
+      prices[1] = [60, 70];
+      priceCount++;
+    } else {
+      prices[1] = [];
+    }
+    if (req.query.seventh == "true") {
+      prices[2] = [70, 80];
+      priceCount++;
+    } else {
+      prices[2] = [];
+    }
+    if (req.query.eighth == "true") {
+      prices[3] = [80, 90];
+      priceCount++;
+    } else {
+      prices[3] = [];
+    }
+    if (req.query.ninth == "true") {
+      prices[4] = [90, 100];
+      priceCount++;
+    } else {
+      prices[4] = [];
+    }
+    if (req.query.tenth == "true") {
+      prices[5] = [100, 1000000000];
+      priceCount++;
+    } else {
+      prices[5] = [];
+    }
+    if (subCount > 0 && priceCount > 0) {
+      const courses = await Course.aggregate([
+        {
+          $lookup: {
+            from: "instructors",
+            localField: "instructor",
+            foreignField: "_id",
+            as: "instructorData",
+          },
         },
-      },
-      {
-        $unwind: "$instructorData",
-      },
-      {
-        $match: {
-          subject: { $in: [subjects[0], subjects[1], subjects[2]] },
-          $or: [
-            {
-              price: { $gte: prices[0][0], $lte: prices[0][1] },
-            },
-            {
-              price: { $gte: prices[1][0], $lt: prices[1][1] },
-            },
-            {
-              price: { $gte: prices[2][0], $lt: prices[2][1] },
-            },
-            {
-              price: { $gte: prices[3][0], $lt: prices[3][1] },
-            },
-            {
-              price: { $gte: prices[4][0], $lt: prices[4][1] },
-            },
-            {
-              price: { $gte: prices[5][0], $lt: prices[5][1] },
-            },
-          ],
-          "instructorData.name": "Mariam Hossam",
+        {
+          $unwind: "$instructorData",
         },
-      },
-    ]);
-    res.status(200).json(courses);
-  } else if (subCount == 0 && priceCount > 0) {
-    const courses = await Course.aggregate([
-      {
-        $lookup: {
-          from: "instructors",
-          localField: "instructor",
-          foreignField: "_id",
-          as: "instructorData",
+        {
+          $match: {
+            subject: { $in: [subjects[0], subjects[1], subjects[2]] },
+            $or: [
+              {
+                price: { $gte: prices[0][0], $lte: prices[0][1] },
+              },
+              {
+                price: { $gte: prices[1][0], $lt: prices[1][1] },
+              },
+              {
+                price: { $gte: prices[2][0], $lt: prices[2][1] },
+              },
+              {
+                price: { $gte: prices[3][0], $lt: prices[3][1] },
+              },
+              {
+                price: { $gte: prices[4][0], $lt: prices[4][1] },
+              },
+              {
+                price: { $gte: prices[5][0], $lt: prices[5][1] },
+              },
+            ],
+            "instructorData.name": "Mariam Hossam",
+          },
         },
-      },
-      {
-        $unwind: "$instructorData",
-      },
-      {
-        $match: {
-          $or: [
-            {
-              price: { $gte: prices[0][0], $lte: prices[0][1] },
-            },
-            {
-              price: { $gte: prices[1][0], $lt: prices[1][1] },
-            },
-            {
-              price: { $gte: prices[2][0], $lt: prices[2][1] },
-            },
-            {
-              price: { $gte: prices[3][0], $lt: prices[3][1] },
-            },
-            {
-              price: { $gte: prices[4][0], $lt: prices[4][1] },
-            },
-            {
-              price: { $gte: prices[5][0], $lt: prices[5][1] },
-            },
-          ],
-          "instructorData.name": "Mariam Hossam",
+      ]);
+      res.status(200).json(courses);
+    } else if (subCount == 0 && priceCount > 0) {
+      const courses = await Course.aggregate([
+        {
+          $lookup: {
+            from: "instructors",
+            localField: "instructor",
+            foreignField: "_id",
+            as: "instructorData",
+          },
         },
-      },
-    ]);
-    res.status(200).json(courses);
-  } else if (subCount > 0 && priceCount == 0) {
-    const courses = await Course.aggregate([
-      {
-        $lookup: {
-          from: "instructors",
-          localField: "instructor",
-          foreignField: "_id",
-          as: "instructorData",
+        {
+          $unwind: "$instructorData",
         },
-      },
-      {
-        $unwind: "$instructorData",
-      },
-      {
-        $match: {
-          "instructorData.name": "Mariam Hossam",
-          subject: { $in: [subjects[0], subjects[1], subjects[2]] },
+        {
+          $match: {
+            $or: [
+              {
+                price: { $gte: prices[0][0], $lte: prices[0][1] },
+              },
+              {
+                price: { $gte: prices[1][0], $lt: prices[1][1] },
+              },
+              {
+                price: { $gte: prices[2][0], $lt: prices[2][1] },
+              },
+              {
+                price: { $gte: prices[3][0], $lt: prices[3][1] },
+              },
+              {
+                price: { $gte: prices[4][0], $lt: prices[4][1] },
+              },
+              {
+                price: { $gte: prices[5][0], $lt: prices[5][1] },
+              },
+            ],
+            "instructorData.name": "Mariam Hossam",
+          },
         },
-      },
-    ]);
-    res.status(200).json(courses);
+      ]);
+      res.status(200).json(courses);
+    } else if (subCount > 0 && priceCount == 0) {
+      const courses = await Course.aggregate([
+        {
+          $lookup: {
+            from: "instructors",
+            localField: "instructor",
+            foreignField: "_id",
+            as: "instructorData",
+          },
+        },
+        {
+          $unwind: "$instructorData",
+        },
+        {
+          $match: {
+            "instructorData.name": "Mariam Hossam",
+            subject: { $in: [subjects[0], subjects[1], subjects[2]] },
+          },
+        },
+      ]);
+      res.status(200).json(courses);
+    } else {
+      const courses = await Course.aggregate([
+        {
+          $lookup: {
+            from: "instructors",
+            localField: "instructor",
+            foreignField: "_id",
+            as: "instructorData",
+          },
+        },
+        {
+          $unwind: "$instructorData",
+        },
+        {
+          $match: { "instructorData.name": "Mariam Hossam" },
+        },
+      ]);
+      res.status(200).json(courses);
+    }
   } else {
-    const courses = await Course.aggregate([
-      {
-        $lookup: {
-          from: "instructors",
-          localField: "instructor",
-          foreignField: "_id",
-          as: "instructorData",
-        },
-      },
-      {
-        $unwind: "$instructorData",
-      },
-      {
-        $match: { "instructorData.name": "Mariam Hossam" },
-      },
-    ]);
-    res.status(200).json(courses);
-  }}
-  else{
-    res.status(400).json({ error: "Access Restriced" })
+    res.status(400).json({ error: "Access Restriced" });
   }
 };
 
 
 const viewCorrectAnswer = async (req, res) => {
-  if(await iTrainee.findById(req.user._id) || await cTrainee.findById(req.user._id)){const {
-    course, //637a197cbc66688b3924a864
-    exercise, //637a197cbc66688b3924a867
-    answer,
-  } = req.body;
+  if (
+    (await iTrainee.findById(req.user._id)) ||
+    (await cTrainee.findById(req.user._id))
+  ) {
+    const {
+      course, //637a197cbc66688b3924a864
+      exercise, //637a197cbc66688b3924a867
+      answer,
+    } = req.body;
 
-  const exercises = (await Course.findById({ _id: course }).select("exercises"))
-    .exercises;
-  let reply = "";
+    const exercises = (
+      await Course.findById({ _id: course }).select("exercises")
+    ).exercises;
+    let reply = "";
 
-  for (i = 0; i < exercises.length; i++) {
-    if (exercises[i]._id == exercise) {
-      if (exercises[i].answer == answer) {
-        reply = "Your answer is correct";
-      } else {
-        reply = "The correct answer is: " + exercises[i].answer;
+    for (i = 0; i < exercises.length; i++) {
+      if (exercises[i]._id == exercise) {
+        if (exercises[i].answer == answer) {
+          reply = "Your answer is correct";
+        } else {
+          reply = "The correct answer is: " + exercises[i].answer;
+        }
       }
+      break;
     }
-    break;
-  }
-  res.status(200).json(reply);}
-  else{
-    res.status(400).json({ error: "Access Restriced" })
+    res.status(200).json(reply);
+  } else {
+    res.status(400).json({ error: "Access Restriced" });
   }
 };
 
@@ -967,43 +977,48 @@ else{
 
 };
 const addCoursePreview = async (req, res) => {
-  if(await Instructor.findById(req.user._id)){  const id = req.query.id;
-  const { videoPreviewURL } = req.body;
-  const videoId = getId(videoPreviewURL);
-  const embeddedLink = "//www.youtube.com/embed/" + videoId;
-  const course = await Course.findByIdAndUpdate(
-    { _id: id },
-    { previewURL: embeddedLink },
-    { new: true }
-  );
-  res.status(200).json(course);}
-  else{
-    res.status(400).json({ error: "Access Restriced" })
+  if (await Instructor.findById(req.user._id)) {
+    const id = req.query.id;
+    const { videoPreviewURL } = req.body;
+    const videoId = getId(videoPreviewURL);
+    const embeddedLink = "//www.youtube.com/embed/" + videoId;
+    const course = await Course.findByIdAndUpdate(
+      { _id: id },
+      { previewURL: embeddedLink },
+      { new: true }
+    );
+    res.status(200).json(course);
+  } else {
+    res.status(400).json({ error: "Access Restriced" });
   }
-}
+};
 
 const addNotes = async (req, res) => {
-  if(await iTrainee.findById(req.user._id) || await cTrainee.findById(req.user._id)){
+  if (
+    (await iTrainee.findById(req.user._id)) ||
+    (await cTrainee.findById(req.user._id))
+  ) {
     const id = req.query.id;
-  console.log(id);
-  const traineeID = req.user._id;
-  const notes = await req.body.note;
-  console.log(notes);
+    //const id = "6384b23ffa8e271ab3db7d0e";
+    console.log(id);
+    const traineeID = req.user._id;
+    const notes = await req.body.note;
+    console.log(notes);
 
-  const cTraineeNotes = (
-    await Course.findById({ _id: id }).select("cTraineeNotes")
-  ).cTraineeNotes;
+    const cTraineeNotes = (
+      await Course.findById({ _id: id }).select("cTraineeNotes")
+    ).cTraineeNotes;
 
-  const iTraineeNotes = (
-    await Course.findById({ _id: id }).select("iTraineeNotes")
-  ).iTraineeNotes; //-----> getting the Arrays
+    const iTraineeNotes = (
+      await Course.findById({ _id: id }).select("iTraineeNotes")
+    ).iTraineeNotes; //-----> getting the Arrays
 
-  const trainee = await iTrainee.findById({ _id: traineeID });
-  if (trainee != null) {
-    note = {
-      iTraineeID: traineeID,
-      note: notes,
-    };
+    const trainee = await iTrainee.findById({ _id: traineeID });
+    if (trainee != null) {
+      note = {
+        iTraineeID: traineeID,
+        note: notes,
+      };
 
     for (var i =0;i<iTraineeNotes.length;i++){
       if (iTraineeNotes[i].iTraineeID == traineeID){
@@ -1021,12 +1036,12 @@ const addNotes = async (req, res) => {
     res.status(200).json(course);
   }
 
-  const find = await cTrainee.findById({ _id: traineeID });
-  if (find != null) {
-    note = {
-      cTraineeID: traineeID,
-      note: notes,
-    };
+    const find = await cTrainee.findById({ _id: traineeID });
+    if (find != null) {
+      note = {
+        cTraineeID: traineeID,
+        note: notes,
+      };
 
     for (var i =0;i<cTraineeNotes.length;i++){
       if (cTraineeNotes[i].cTraineeID == traineeID){
@@ -1088,47 +1103,53 @@ const getMyNotes = async (req, res) => {
 };
 
 const printNotePDF = async (req, res, next) => {
-  if(await iTrainee.findById(req.user._id) || await cTrainee.findById(req.user._id)){
+  if (
+    (await iTrainee.findById(req.user._id)) ||
+    (await cTrainee.findById(req.user._id))
+  ) {
     const id = req.query.id;
-  const traineeID = req.user._id;
-  let notes = "";
-  const iTraineeNotes = (await Course.findById({ _id: id }).select("iTraineeNotes")).iTraineeNotes;
+    const traineeID = req.user._id;
+    let notes = "";
+    const iTraineeNotes = (
+      await Course.findById({ _id: id }).select("iTraineeNotes")
+    ).iTraineeNotes;
 
-  const cTraineeNotes = (await Course.findById({ _id: id }).select("cTraineeNotes")).cTraineeNotes;
+    const cTraineeNotes = (
+      await Course.findById({ _id: id }).select("cTraineeNotes")
+    ).cTraineeNotes;
 
-  console.log(cTraineeNotes);
+    console.log(cTraineeNotes);
 
-  const trainee = await iTrainee.findById({ _id: traineeID });
-  if (trainee != null) {
-    for (i = 0; i < iTraineeNotes.length; i++) {
-      if (iTraineeNotes[i].iTraineeID == traineeID) {
-        notes = notes.concat("\n").concat(iTraineeNotes[i].note);
+    const trainee = await iTrainee.findById({ _id: traineeID });
+    if (trainee != null) {
+      for (i = 0; i < iTraineeNotes.length; i++) {
+        if (iTraineeNotes[i].iTraineeID == traineeID) {
+          notes = notes.concat("\n").concat(iTraineeNotes[i].note);
+        }
       }
     }
-  }
 
-  const find = await cTrainee.findById({ _id: traineeID });
-  if (find != null) {
-    for (i = 0; i < cTraineeNotes.length; i++) {
-      if (cTraineeNotes[i].cTraineeID == traineeID) {
-        notes = notes.concat("\n").concat(cTraineeNotes[i].note);
+    const find = await cTrainee.findById({ _id: traineeID });
+    if (find != null) {
+      for (i = 0; i < cTraineeNotes.length; i++) {
+        if (cTraineeNotes[i].cTraineeID == traineeID) {
+          notes = notes.concat("\n").concat(cTraineeNotes[i].note);
+        }
       }
     }
-  }
 
-  const stream = res.writeHead(200, {
-    "Content-Type": "application/pdf",
-    "Content-Disposition": "attachement;filename=Notes.pdf",
-  });
+    const stream = res.writeHead(200, {
+      "Content-Type": "application/pdf",
+      "Content-Disposition": "attachement;filename=Notes.pdf",
+    });
 
-  buildNotePDF(
-    (chunk) => stream.write(chunk),
-    () => stream.end(),
-    notes
-  );
-  }
-  else{
-    res.status(400).json({ error: "Access Restriced" })
+    buildNotePDF(
+      (chunk) => stream.write(chunk),
+      () => stream.end(),
+      notes
+    );
+  } else {
+    res.status(400).json({ error: "Access Restriced" });
   }
 };
 
@@ -1141,19 +1162,21 @@ function buildNotePDF(dataCallback, endCallback, notes) {
 }
 
 const printCertificatePDF = async (req, res) => {
-  if(await iTrainee.findById(req.user._id) || await cTrainee.findById(req.user._id)){
+  if (
+    (await iTrainee.findById(req.user._id)) ||
+    (await cTrainee.findById(req.user._id))
+  ) {
     const stream = res.writeHead(200, {
       "Content-Type": "application/pdf",
       "Content-Disposition": "attachement;filename=Cetificate.pdf",
     });
-  
+
     buildCertificatePDF(
       (chunk) => stream.write(chunk),
       () => stream.end()
     );
-  }
-  else{
-    res.status(400).json({ error: "Access Restriced" })
+  } else {
+    res.status(400).json({ error: "Access Restriced" });
   }
 };
 
@@ -1170,30 +1193,33 @@ function buildCertificatePDF(dataCallback, endCallback) {
 }
 
 const openMyCourse = async (req, res) => {
-  if(await Instructor.findById(req.user._id) || await iTrainee.findById(req.user._id) || await cTrainee.findById(req.user._id) )
-  {  const id = req.query.id;
-  const newId = mongoose.Types.ObjectId(id);
-  const courses = await Course.aggregate([
-    {
-      $lookup: {
-        from: "instructors",
-        localField: "instructor",
-        foreignField: "_id",
-        as: "instructorData",
+  if (
+    (await Instructor.findById(req.user._id)) ||
+    (await iTrainee.findById(req.user._id)) ||
+    (await cTrainee.findById(req.user._id))
+  ) {
+    const id = req.query.id;
+    const newId = mongoose.Types.ObjectId(id);
+    const courses = await Course.aggregate([
+      {
+        $lookup: {
+          from: "instructors",
+          localField: "instructor",
+          foreignField: "_id",
+          as: "instructorData",
+        },
       },
-    },
-    {
-      $unwind: "$instructorData",
-    },
-    {
-      $match: { _id: newId },
-    },
-  ]);
-  res.status(200).json(courses[0]);}
-  else{
-    res.status(400).json({ error: "Access Restriced" })
+      {
+        $unwind: "$instructorData",
+      },
+      {
+        $match: { _id: newId },
+      },
+    ]);
+    res.status(200).json(courses[0]);
+  } else {
+    res.status(400).json({ error: "Access Restriced" });
   }
-
 };
 
 const moneyOwed = async (req, res) => {
@@ -1201,24 +1227,28 @@ const moneyOwed = async (req, res) => {
   const courses = await Course.find({instructor: req.user._id});
   let money = 0;
 
-  for(let i = 0; i < courses.length; i++){
-    if(courses[i].discountApplied == true){
-      money += (Math.round((courses[i].price * (100-courses[i].discount)/100) * 0.80)) * courses[i].numOfEnrolledTrainees //assuming website takes 20%
+    for (let i = 0; i < courses.length; i++) {
+      if (courses[i].discountApplied == true) {
+        money +=
+          Math.round(
+            ((courses[i].price * (100 - courses[i].discount)) / 100) * 0.8
+          ) * courses[i].numOfEnrolledTrainees; //assuming website takes 20%
+      } else {
+        money +=
+          Math.round(courses[i].price * 0.8) * courses[i].numOfEnrolledTrainees;
+      }
     }
-    else{
-      money += (Math.round(courses[i].price * 0.80)) * courses[i].numOfEnrolledTrainees
-    }
-  }
 
-  const instructor = await Instructor.findOneAndUpdate({_id: req.user._id}, {wallet: money})
+    const instructor = await Instructor.findOneAndUpdate(
+      { _id: req.user._id },
+      { wallet: money }
+    );
 
-  res.status(200).json(instructor);
+    res.status(200).json(instructor);
+  } else {
+    res.status(400).json({ error: "Access Restriced" });
   }
-  else{
-    res.status(400).json({ error: "Access Restriced" })
-  }
-}
-
+};
 
 const sendCertificateMail = async (req, res) => {
   // const id = req.query.id;
@@ -1257,7 +1287,7 @@ const sendCertificateMail = async (req, res) => {
   });
 };
 
-  //res.status(200).json(Course);
+//res.status(200).json(Course);
 const getPopularCourses = async (req, res) => {
   const courses = await Course.aggregate([
     {
@@ -1272,7 +1302,7 @@ const getPopularCourses = async (req, res) => {
       $unwind: "$instructorData",
     },
     {
-      $sort: { numOfEnrolledTrainees : -1},
+      $sort: { numOfEnrolledTrainees: -1 },
     },
   ]);
 
@@ -1293,75 +1323,86 @@ const getCourseLength = async (req, res) => {
       $unwind: "$instructorData",
     },
     {
-      $sort: { hours : -1},
+      $sort: { hours: -1 },
     },
   ]);
 
   res.status(200).json(courses);
-}
+};
 
 const adminAddDiscount = async (req, res) => {
-  if(await Admin.findById(req.user._id)){const id = req.query.id;
-  let {
-    courseDiscount,
-    courseDiscountValidUntil,
-  } = req.body;
-  try {
-    let currentDate = new Date().toJSON().slice(0, 10);
+  if (await Admin.findById(req.user._id)) {
+    const id = req.body.id;
+    let { courseDiscount, courseDiscountValidUntil } = req.body;
+    try {
+      let currentDate = new Date().toJSON().slice(0, 10);
 
-    if (courseDiscount !=null && (courseDiscount != 0) && courseDiscountValidUntil != null && courseDiscountValidUntil >= currentDate) {
-      const course = await Course.findByIdAndUpdate(
-        { _id: id },
-        { discount: courseDiscount, discountValidUntil:courseDiscountValidUntil ,discountApplied: true },
-        { new: true }
-      );
-      res.status(200).json(course);
-
-    } else {
-      res.status(400).json({ error: "Please enter a discount between 1-100 and a valid future expiry date." });
+      if (
+        courseDiscount != null &&
+        courseDiscount != 0 &&
+        courseDiscountValidUntil != null &&
+        courseDiscountValidUntil >= currentDate
+      ) {
+        const course = await Course.findByIdAndUpdate(
+          { _id: id },
+          {
+            discount: courseDiscount,
+            discountValidUntil: courseDiscountValidUntil,
+            discountApplied: true,
+          },
+          { new: true }
+        );
+        res.status(200).json(course);
+      } else {
+        res.status(400).json({
+          error:
+            "Please enter a discount between 1-100 and a valid future expiry date.",
+        });
+      }
+    } catch (error) {
+      res.status(400).json({ error: error.message });
     }
-  } catch (error) {
-    res.status(400).json({ error: error.message });
-  }}
-  else{
-    res.status(400).json({ error: "Access Restriced" })
+  } else {
+    res.status(400).json({ error: "Access Restriced" });
   }
-  
 };
 
 const reviewCourse = async (req, res) => {
-  if(await iTrainee.findById(req.user._id) || await cTrainee.findById(req.user._id)){
+  if (
+    (await iTrainee.findById(req.user._id)) ||
+    (await cTrainee.findById(req.user._id))
+  ) {
     try {
       const traineeId = req.user._id; //replace by id of the loggedin person
-  
+
       const id = req.query.id;
       const reviewContent = req.body.content;
       let theTrainee;
-        theTrainee = await cTrainee.findOne({ _id: traineeId });
-        if (theTrainee ==null){
-          theTrainee = await iTrainee.findOne({ _id: traineeId });
-        }
-        if (theTrainee ==null){
-          res.status(400).json({ error: "Invalid Trainee Id" });
-        }
-      const traineeName = theTrainee.firstname +" "+theTrainee.lastname;
-      review = 
-      {
+      theTrainee = await cTrainee.findOne({ _id: traineeId });
+      if (theTrainee == null) {
+        theTrainee = await iTrainee.findOne({ _id: traineeId });
+      }
+      if (theTrainee == null) {
+        res.status(400).json({ error: "Invalid Trainee Id" });
+      }
+      const traineeName = theTrainee.firstname + " " + theTrainee.lastname;
+      review = {
         content: reviewContent,
         traineeId: traineeId,
-        traineeName: traineeName
-      }
-  
-      const courseReviews = (await Course.findById({ _id: id }).select("reviews")).reviews;
-  
-      for (var i =0;i<courseReviews.length;i++){
-        if (courseReviews[i].traineeId == traineeId){
+        traineeName: traineeName,
+      };
+
+      const courseReviews = (
+        await Course.findById({ _id: id }).select("reviews")
+      ).reviews;
+
+      for (var i = 0; i < courseReviews.length; i++) {
+        if (courseReviews[i].traineeId == traineeId) {
           res.status(400).json({ error: "You already reviewed that course!" });
           return;
         }
       }
-  
-      
+
       courseReviews.push(review);
       const course = await Course.findByIdAndUpdate(
         { _id: id },
@@ -1371,26 +1412,30 @@ const reviewCourse = async (req, res) => {
       res.status(200).json(course);
     } catch (error) {
       res.status(400).json({ error: error.message });
-  }
-  }
-  else{
-    res.status(400).json({ error: "Access Restriced" })
+    }
+  } else {
+    res.status(400).json({ error: "Access Restriced" });
   }
 };
 
 const editMyCourseReview = async (req, res) => {
-  if(await iTrainee.findById(req.user._id) || await cTrainee.findById(req.user._id)){
+  if (
+    (await iTrainee.findById(req.user._id)) ||
+    (await cTrainee.findById(req.user._id))
+  ) {
     try {
       const traineeId = req.user._id; //replace by id of the loggedin person
-  
+
       const id = req.query.id;
       const reviewContent = req.body.content;
-  
-      const courseReviews = (await Course.findById({ _id: id }).select("reviews")).reviews;
-  
-      for (var i =0;i<courseReviews.length;i++){
-        if (courseReviews[i].traineeId == traineeId){
-          courseReviews[i].content=reviewContent;
+
+      const courseReviews = (
+        await Course.findById({ _id: id }).select("reviews")
+      ).reviews;
+
+      for (var i = 0; i < courseReviews.length; i++) {
+        if (courseReviews[i].traineeId == traineeId) {
+          courseReviews[i].content = reviewContent;
         }
       }
       const course = await Course.findByIdAndUpdate(
@@ -1401,29 +1446,31 @@ const editMyCourseReview = async (req, res) => {
       res.status(200).json(course);
     } catch (error) {
       res.status(400).json({ error: error.message });
-  }
-  }
-  else{
-    res.status(400).json({ error: "Access Restriced" })
+    }
+  } else {
+    res.status(400).json({ error: "Access Restriced" });
   }
 };
 
 const deleteMyCourseReview = async (req, res) => {
-  if(await iTrainee.findById(req.user._id) || await cTrainee.findById(req.user._id)){
+  if (
+    (await iTrainee.findById(req.user._id)) ||
+    (await cTrainee.findById(req.user._id))
+  ) {
     try {
       const traineeId = req.user._id; //replace by id of the loggedin person
       const id = req.query.id;
-  
-      var courseReviews = (await Course.findById({ _id: id }).select("reviews")).reviews;
-  
-  
-      for (var i =0;i<courseReviews.length;i++){
-        if (courseReviews[i].traineeId == traineeId){
-          const removed = courseReviews.splice(i,1); //splice returns the removed element not the list after the removal
+
+      var courseReviews = (await Course.findById({ _id: id }).select("reviews"))
+        .reviews;
+
+      for (var i = 0; i < courseReviews.length; i++) {
+        if (courseReviews[i].traineeId == traineeId) {
+          const removed = courseReviews.splice(i, 1); //splice returns the removed element not the list after the removal
           break;
         }
       }
-  
+
       const course = await Course.findByIdAndUpdate(
         { _id: id },
         { reviews: courseReviews },
@@ -1432,117 +1479,128 @@ const deleteMyCourseReview = async (req, res) => {
       res.status(200).json(course);
     } catch (error) {
       res.status(400).json({ error: error.message });
-  }
-  }
-  else{
-    res.status(400).json({ error: "Access Restriced" })
+    }
+  } else {
+    res.status(400).json({ error: "Access Restriced" });
   }
 };
 
 const getMyCourseReview = async (req, res) => {
-  if(await iTrainee.findById(req.user._id) || await cTrainee.findById(req.user._id)){
+  if (
+    (await iTrainee.findById(req.user._id)) ||
+    (await cTrainee.findById(req.user._id))
+  ) {
     try {
       const traineeId = req.user._id;
       const id = req.query.id;
-  
-      var courseReviews = (await Course.findById({ _id: id }).select("reviews")).reviews;
+
+      var courseReviews = (await Course.findById({ _id: id }).select("reviews"))
+        .reviews;
       let myReview = "";
-  
-      for (var i =0;i<courseReviews.length;i++){
-        if (courseReviews[i].traineeId == traineeId){
+
+      for (var i = 0; i < courseReviews.length; i++) {
+        if (courseReviews[i].traineeId == traineeId) {
           myReview = courseReviews[i].content;
           break;
         }
       }
       response = {
-          text: myReview
-      } //either the content of the review or an empty string
+        text: myReview,
+      }; //either the content of the review or an empty string
       res.status(200).json(response);
     } catch (error) {
       res.status(400).json({ error: error.message });
     }
-    }}
-const publishCourse = async(req, res) => {
-  if(await Instructor.findById(req.user._id)){
-    const course = await Course.findOneAndUpdate({_id: req.query.id}, {published: true, open: true})
-    res.status(200).json(course)
-  }
-  else{
-    res.status(400).json({ error: "Access Restriced" })
   }
 };
-
+const publishCourse = async (req, res) => {
+  if (await Instructor.findById(req.user._id)) {
+    const course = await Course.findOneAndUpdate(
+      { _id: req.query.id },
+      { published: true, open: true }
+    );
+    res.status(200).json(course);
+  } else {
+    res.status(400).json({ error: "Access Restriced" });
+  }
+};
 
 const addToProgress = async (req, res) => {
   const courseId = req.query.courseId;
   const component = req.query.component;
-  
+
   const loggedInTraineeID = req.user._id;
-  let traineesProgress = (await Course.findById({ _id: courseId }).select("traineesProgress")).traineesProgress;
+  let traineesProgress = (
+    await Course.findById({ _id: courseId }).select("traineesProgress")
+  ).traineesProgress;
 
   let found = false;
 
-  for (var i =0;i<traineesProgress.length;i++){
-    if ( traineesProgress[i].traineeId == (loggedInTraineeID) && traineesProgress[i].content==component ){
+  for (var i = 0; i < traineesProgress.length; i++) {
+    if (
+      traineesProgress[i].traineeId == loggedInTraineeID &&
+      traineesProgress[i].content == component
+    ) {
       found = true;
       break;
     }
   }
-  if (found){
-    let course =await Course.findById({ _id: courseId });
+  if (found) {
+    let course = await Course.findById({ _id: courseId });
+    res.status(200).json(course);
+  } else {
+    progress = {
+      traineeId: loggedInTraineeID,
+      content: component,
+    };
+
+    traineesProgress.push(progress);
+
+    const course = await Course.findByIdAndUpdate(
+      { _id: courseId },
+      { traineesProgress: traineesProgress },
+      { new: true }
+    );
     res.status(200).json(course);
   }
-  else{
-    progress =
-    {
-      traineeId: loggedInTraineeID,
-      content: component
-    };
-  
-    traineesProgress.push(progress);
-  
-        const course = await Course.findByIdAndUpdate(
-          { _id: courseId },
-          { traineesProgress: traineesProgress },
-          { new: true }
-        );
-        res.status(200).json(course);
-  }
 };
-
 
 const getMyProgress = async (req, res) => {
   const courseId = req.query.courseId;
 
   let myProgress = 0;
-  
-  let subtitles = (await Course.findById({ _id: courseId }).select("subtitles")).subtitles;
-  const totalItems = (subtitles.length + 1);
 
-  let traineesProgress = (await Course.findById({ _id: courseId }).select("traineesProgress")).traineesProgress;
+  let subtitles = (await Course.findById({ _id: courseId }).select("subtitles"))
+    .subtitles;
+  const totalItems = subtitles.length + 1;
 
-  for (var i =0;i<traineesProgress.length;i++){
-    if ( traineesProgress[i].traineeId == req.user._id){
+  let traineesProgress = (
+    await Course.findById({ _id: courseId }).select("traineesProgress")
+  ).traineesProgress;
+
+  for (var i = 0; i < traineesProgress.length; i++) {
+    if (traineesProgress[i].traineeId == req.user._id) {
       myProgress++;
     }
   }
-  res.status(200).json({data:(myProgress/totalItems) * 100} );
+  res.status(200).json({ data: (myProgress / totalItems) * 100 });
 };
 
-
-const closeCourse = async(req, res) => {
-  if(await Instructor.findById(req.user._id)){
-    const course = await Course.findOneAndUpdate({_id: req.query.id}, {open: false})
-    res.status(200).json(course)
+const closeCourse = async (req, res) => {
+  if (await Instructor.findById(req.user._id)) {
+    const course = await Course.findOneAndUpdate(
+      { _id: req.query.id },
+      { open: false }
+    );
+    res.status(200).json(course);
+  } else {
+    res.status(400).json({ error: "Access Restriced" });
   }
-  else{
-    res.status(400).json({ error: "Access Restriced" })
-  }
-}
+};
 
-const getCourseInfo = async(req, res) => {
-  if(await Instructor.findById(req.user._id)){
-    const instructorID = mongoose.Types.ObjectId(req.user._id)
+const getCourseInfo = async (req, res) => {
+  if (await Instructor.findById(req.user._id)) {
+    const instructorID = mongoose.Types.ObjectId(req.user._id);
     const courseID = mongoose.Types.ObjectId(req.query.id);
     const course = await Course.aggregate([
       {
@@ -1557,23 +1615,21 @@ const getCourseInfo = async(req, res) => {
         $unwind: "$instructorData",
       },
       {
-        $match: { _id: courseID},
+        $match: { _id: courseID },
       },
     ]);
 
-    if((course[0].instructor).toString() == (instructorID).toString()){
-      course[0].mine = true
-    }
-    else{
-      course[0].mine = false
+    if (course[0].instructor.toString() == instructorID.toString()) {
+      course[0].mine = true;
+    } else {
+      course[0].mine = false;
     }
     //console.log(course)
-    res.status(200).json(course[0])
+    res.status(200).json(course[0]);
+  } else {
+    res.status(400).json({ error: "Access Restriced" });
   }
-  else{
-    res.status(400).json({ error: "Access Restriced" })
-  }
-}
+};
 
 module.exports = {
   getAllCourses,
@@ -1611,5 +1667,5 @@ module.exports = {
   getInstUnpub,
   publishCourse,
   closeCourse,
-  getCourseInfo
+  getCourseInfo,
 };

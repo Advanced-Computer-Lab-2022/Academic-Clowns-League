@@ -2,6 +2,15 @@ import InstructorNavbar from "../components/instructorNavbar";
 import CTraineeNavbar from "../components/cTraineeNavbar";
 import { useState } from "react";
 import { Routes, Route, useNavigate } from "react-router-dom";
+import {
+  MDBCard,
+  MDBCardHeader,
+  MDBCardBody,
+  MDBCardTitle,
+  MDBCardText,
+  MDBBtn,
+  MDBInput,
+} from "mdb-react-ui-kit";
 
 const CTraineeChangePassword = () => {
   const params = new URLSearchParams(window.location.search);
@@ -11,6 +20,7 @@ const CTraineeChangePassword = () => {
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState(null);
+  const [message, setMessage] = useState("");
   const navigate = useNavigate();
 
   //const [showResults, setShowResults] = React.useState(false);
@@ -29,30 +39,41 @@ const CTraineeChangePassword = () => {
     const NewPassword = {
       newPassword,
     };*/
+    if (
+      password != "" &&
+      newPassword != "" &&
+      confirmPassword != "" &&
+      newPassword == confirmPassword
+    ) {
+      const response = await fetch("/api/ctrainee/cTraineeUpdatePassword", {
+        method: "PATCH",
+        body: JSON.stringify({
+          password: password,
+          newPassword: newPassword,
+          confirmPassword: confirmPassword,
+        }),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
 
-    const response = await fetch("/api/ctrainee/cTraineeUpdatePassword", {
-      method: "PATCH",
-      body: JSON.stringify({
-        password: password,
-        newPassword: newPassword,
-        confirmPassword: confirmPassword,
-      }),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
-
-    const json = await response.json();
-    if (!response.ok) {
-      setError(json.error);
-    }
-    if (response.ok) {
-      setPassword("");
-      setNewPassword("");
-      setConfirmPassword("");
-      setError(null);
-      window.location.href = "/login";
-      console.log("Password Updated", json);
+      const json = await response.json();
+      if (response.status == 400) {
+        setError(json.error);
+        setMessage("current password is incorrect");
+      }
+      if (response.ok) {
+        setPassword("");
+        setNewPassword("");
+        setConfirmPassword("");
+        setError(null);
+        window.location.href = "/login";
+        console.log("Password Updated", json);
+      }
+    } else if (password == "" || newPassword == "" || confirmPassword == "") {
+      setMessage("please type in all required fields");
+    } else if (newPassword != confirmPassword) {
+      setMessage("confirmation password doesn't match the new password");
     }
   };
 
@@ -60,64 +81,67 @@ const CTraineeChangePassword = () => {
     <div>
       <CTraineeNavbar />
 
-      <form
-        className="changePassword"
-        style={{ left: "50%", top: "30%", transform: "translate(-50%, -50%)" }}
-        onSubmit={handleSubmit}
+      <img
+        width="50%"
+        height="60%"
+        style={{ marginLeft: "100px", transform: "translate(80%, 20%)" }}
+        src="/changepass.jpg"
+      ></img>
+
+      <MDBCard
+        style={{
+          width: "400px",
+          height: "430px",
+          transform: "translate(50%, -80%)",
+        }}
       >
-        <h3
-          style={{
-            fontSize: 20,
-            margin: 20,
-            left: "50%",
-            top: "30%",
-            transform: "translate(-5%, -50%)",
-            alignContent: "center",
-          }}
-        >
-          Change password{" "}
-        </h3>
-
-        <div className="mb-3">
-          <p>
-            <label>Password:</label>
-            <line> </line>
-            <input
-              type="password"
-              onChange={(e) => setPassword(e.target.value)}
-              value={password}
-            />
-          </p>
-        </div>
-
-        <div className="mb-3">
-          <p>
-            <label>New Password:</label>
-            <line> </line>
-            <input
-              type="password"
-              onChange={(e) => setNewPassword(e.target.value)}
-              value={newPassword}
-            />
-          </p>
-        </div>
-
-        <div className="mb-3">
-          <p>
-            <label>Confirm Password:</label>
-            <line> </line>
-            <input
-              type="password"
-              onChange={(e) => setConfirmPassword(e.target.value)}
-              value={confirmPassword}
-            />
-          </p>
-        </div>
-
-        <button className="button4">Change Password</button>
-
-        {error && <div className="error">{error}</div>}
-      </form>
+        <MDBCardHeader>Change Password</MDBCardHeader>
+        <MDBCardBody>
+          <MDBCardText>Current Password</MDBCardText>
+          <MDBInput
+            label="current Password"
+            type="text"
+            onChange={(e) => setPassword(e.target.value)}
+            value={password}
+          />{" "}
+          <br></br>
+          <MDBCardText>New Password</MDBCardText>
+          <MDBInput
+            label="New Password"
+            type="text"
+            onChange={(e) => setNewPassword(e.target.value)}
+            value={newPassword}
+          />{" "}
+          <br></br>
+          <MDBCardText>Confirm new password</MDBCardText>
+          <MDBInput
+            label="confirm Password"
+            type="text"
+            onChange={(e) => setConfirmPassword(e.target.value)}
+            value={confirmPassword}
+          />{" "}
+          <button
+            type="button"
+            class="btn btn-outline-success"
+            href="#"
+            color="danger"
+            onClick={handleSubmit}
+            style={{ transform: "translate(55%,90%)" }}
+          >
+            Change Password
+          </button>
+        </MDBCardBody>
+      </MDBCard>
+      <p
+        style={{
+          color: "red",
+          transform: "translate(20%, 200%)",
+          width: "500px",
+        }}
+      >
+        {" "}
+        {message}
+      </p>
     </div>
   );
 };

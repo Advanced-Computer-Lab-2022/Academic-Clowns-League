@@ -11,10 +11,10 @@ import {
 
 const AdminForm = () => {
   const [popup, setPop] = useState(false);
-  const [message, setMessage] = useState(true);
+  const [message, setMessage] = useState(false);
   const handleClickOpen = () => {
     // setPop(!popup);
-    setMessage(false);
+    // setMessage(false);
   };
 
   /*const closePopup = () => {
@@ -24,30 +24,46 @@ const AdminForm = () => {
   const [password, setPassword] = useState("");
   //const [email, setEmail] = useState("");
   const [error, setError] = useState(null);
+  const [adminmessage, setAdminmessage] = useState(false);
+  const [usernamemessage, setUsernamemessage] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+    //setMessage(true);
     const admin = { username, password };
+    if (password != "") {
+      const response = await fetch("/api/admin/", {
+        method: "POST",
+        body: JSON.stringify(admin),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      const json = await response.json();
 
-    const response = await fetch("/api/admin/", {
-      method: "POST",
-      body: JSON.stringify(admin),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
-    const json = await response.json();
-
-    if (!response.ok) {
-      setError(json.error);
+      if (response.status == 400) {
+        setError(json.error);
+        setAdminmessage("invalid username");
+      }
+      if (response.status == 200) {
+        setUsername("");
+        setPassword("");
+        setMessage(true);
+        //setEmail("");
+        setAdminmessage("New Admin is added successfully");
+        setError(null);
+        console.log("New Admin is Added", json);
+      }
+    } else {
+      setAdminmessage("Please enter a password");
     }
-    if (response.ok) {
-      setUsername("");
-      setPassword("");
-      //setEmail("");
-      setError(null);
-      console.log("New Admin is Added", json);
+
+    if (username == "") {
+      setAdminmessage("please enter a username");
+    }
+
+    if (username == "" && password == "") {
+      setAdminmessage("please enter username and password");
     }
   };
 
@@ -58,7 +74,7 @@ const AdminForm = () => {
           top: "70px",
           width: "500px",
           height: "-200px",
-         // transform: "translate(90%, 20%)",
+          // transform: "translate(90%, 20%)",
         }}
       >
         <MDBCardHeader>Add Admin</MDBCardHeader>
@@ -73,7 +89,7 @@ const AdminForm = () => {
           <MDBCardTitle>Password:</MDBCardTitle>
           <MDBInput
             label="Password"
-            type="text"
+            type="password"
             onChange={(e) => setPassword(e.target.value)}
             value={password}
           />{" "}
@@ -85,17 +101,11 @@ const AdminForm = () => {
             Add Admin
           </button>
         </MDBCardBody>
+        <p style={{ color: "red", transform: "translate(33%, 160%)" }}>
+          {" "}
+          {adminmessage}
+        </p>
       </MDBCard>
-      <p style={{ align: "center", transform: "translate(115%, 570%)" }}>
-        <message
-          style={{
-            display: message ? "none" : "inline-block",
-            top: "70px",
-          }}
-        >
-          New Admin is added successfully
-        </message>
-      </p>
 
       {error && <div className="error">{error}</div>}
     </form>

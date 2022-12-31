@@ -22,54 +22,75 @@ const CTraineeForm = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
-  //const [country, setCountry] = useState("");
-  //const [credNumber, setCredNum] = useState("");
-  //const [credCCV, setCredCCV] = useState("");
-  //const [credExpDate, setCredExpDate] = useState("");
-  //const [courses, setCourses] = useState("");
+  const [firstname, setFirstname] = useState("");
+  const [lastname, setLastname] = useState("");
+  const [traineemessage, setTraineemessage] = useState("");
+  const [corporate, setCorporate] = useState("");
+
   const [error, setError] = useState(null);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     const cTrainee = {
-      //firstname,
-      //lastname,
+      firstname,
+      lastname,
       username,
       password,
       email,
-      //country,
-      //credNumber,
-      //credCCVv,
-      //credExpDate,
-      //courses,
+      corporate,
     };
+    if (
+      firstname != "" &&
+      lastname != "" &&
+      username != "" &&
+      password != "" &&
+      email != "" &&
+      corporate != ""
+    ) {
+      const response = await fetch("/api/ctrainee/", {
+        method: "POST",
+        body: JSON.stringify(cTrainee),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      const json = await response.json();
 
-    const response = await fetch("/api/ctrainee/", {
-      method: "POST",
-      body: JSON.stringify(cTrainee),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
-    const json = await response.json();
-
-    if (!response.ok) {
-      setError(json.error);
-    }
-    if (response.ok) {
-      //setFirstname("");
-      //setLastname("");
-      setUsername("");
-      setPassword("");
-      setEmail("");
-      //setCountry("");
-      //setCrednum("");
-      //setCredccv("");
-      //setCredexpdate("");
-      //setCourses("");
-      setError(null);
-      console.log("new corporate trainee is added", json);
+      if (response.status == 400) {
+        setError(json.error);
+        setTraineemessage("invalid username");
+      }
+      if (response.status == 200) {
+        //setFirstname("");
+        //setLastname("");
+        setUsername("");
+        setPassword("");
+        setEmail("");
+        setFirstname("");
+        setLastname("");
+        setCorporate("");
+        setError(null);
+        console.log("new corporate trainee is added", json);
+      }
+    } else {
+      if (username == "") setTraineemessage("Please enter a valid username");
+      if (password == "") setTraineemessage("Please type in a password");
+      if (email == "") setTraineemessage("Please type in an email");
+      if (firstname == "") setTraineemessage("Please type in a firstname");
+      if (lastname == "") setTraineemessage("Please type in a lastname");
+      if (corporate == "") setTraineemessage("Please type in a lastname");
+      if (
+        username == "" &&
+        password == "" &&
+        email == "" &&
+        firstname == "" &&
+        lastname == "" &&
+        corporate == ""
+      )
+        setTraineemessage("Please fill in all the required fields");
+      if (firstname == "" || lastname == "" || email == "" || corporate == "")
+        setTraineemessage("Please fill in all the required fields");
     }
   };
   return (
@@ -79,11 +100,32 @@ const CTraineeForm = () => {
           top: "40px",
           width: "500px",
           height: "-200px",
-        //  transform: "translate(90%, 20%)",
+          //  transform: "translate(90%, 20%)",
         }}
       >
         <MDBCardHeader>Add Corporate Trainee</MDBCardHeader>
         <MDBCardBody>
+          <MDBCardTitle>Firstname:</MDBCardTitle>
+          <MDBInput
+            label="firstname"
+            type="text"
+            onChange={(e) => setFirstname(e.target.value)}
+            value={firstname}
+          />{" "}
+          <MDBCardTitle>Lastname:</MDBCardTitle>
+          <MDBInput
+            label="lastname"
+            type="text"
+            onChange={(e) => setLastname(e.target.value)}
+            value={lastname}
+          />{" "}
+          <MDBCardTitle>Email:</MDBCardTitle>
+          <MDBInput
+            label="email"
+            type="text"
+            onChange={(e) => setEmail(e.target.value)}
+            value={email}
+          />{" "}
           <MDBCardTitle>Username:</MDBCardTitle>
           <MDBInput
             label="Username"
@@ -94,16 +136,16 @@ const CTraineeForm = () => {
           <MDBCardTitle>Password:</MDBCardTitle>
           <MDBInput
             label="Password"
-            type="text"
+            type="password"
             onChange={(e) => setPassword(e.target.value)}
             value={password}
           />{" "}
-          <MDBCardTitle>Email:</MDBCardTitle>
+          <MDBCardTitle>Corporate:</MDBCardTitle>
           <MDBInput
-            label="email"
+            label="Corporate"
             type="text"
-            onChange={(e) => setEmail(e.target.value)}
-            value={email}
+            onChange={(e) => setCorporate(e.target.value)}
+            value={corporate}
           />{" "}
           <button
             style={{ allign: "center", top: "-15px" }}
@@ -114,16 +156,9 @@ const CTraineeForm = () => {
           </button>
         </MDBCardBody>
       </MDBCard>
-
-      <p style={{ align: "center", transform: "translate(115%, 570%)" }}>
-        <message
-          style={{
-            display: message ? "none" : "inline-block",
-            top: "70px",
-          }}
-        >
-          New Corporate Trainee is added successfully
-        </message>
+      <p style={{ color: "red", transform: "translate(33%, 160%)" }}>
+        {" "}
+        {traineemessage}
       </p>
 
       {error && <div className="error">{error}</div>}

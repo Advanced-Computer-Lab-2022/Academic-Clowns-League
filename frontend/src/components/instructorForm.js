@@ -12,6 +12,7 @@ import {
 const InstructorForm = () => {
   const [popup, setPop] = useState(false);
   const [message, setMessage] = useState(true);
+  const [instructormessage, setInstructormessage] = useState("");
   const handleClickOpen = () => {
     //setPop(!popup);
     setMessage(false);
@@ -36,28 +37,55 @@ const InstructorForm = () => {
       miniBio,
       name,
     };
+    if (
+      username != "" &&
+      password != "" &&
+      country != "" &&
+      email != "" &&
+      miniBio != "" &&
+      name != ""
+    ) {
+      const response = await fetch("/api/instructor/", {
+        method: "POST",
+        body: JSON.stringify(instructor),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      const json = await response.json();
 
-    const response = await fetch("/api/instructor/", {
-      method: "POST",
-      body: JSON.stringify(instructor),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
-    const json = await response.json();
-
-    if (!response.ok) {
-      setError(json.error);
-    }
-    if (response.ok) {
-      setUsername("");
-      setPassword("");
-      setCountry("");
-      setEmail("");
-      setMiniBio("");
-      setName("");
-      setError(null);
-      console.log("new Instructor added", json);
+      if (response.status == 400) {
+        setError(json.error);
+        setInstructormessage("invalid username");
+      }
+      if (response.status == 200) {
+        setUsername("");
+        setPassword("");
+        setCountry("");
+        setEmail("");
+        setMiniBio("");
+        setName("");
+        setError(null);
+        console.log("new Instructor added", json);
+      }
+    } else {
+      if (username == "") setInstructormessage("Please enter a username");
+      if (password == "") setInstructormessage("Please enter a password");
+      if (country == "") setInstructormessage("Please enter a country");
+      if (email == "") setInstructormessage("Please enter an email");
+      if (miniBio == "") setInstructormessage("Please enter a Biography");
+      if (name == "") setInstructormessage("Please enter a name");
+      if (
+        username == "" &&
+        password == "" &&
+        country == "" &&
+        email == "" &&
+        miniBio == "" &&
+        name == ""
+      )
+        setInstructormessage("Please fill in all required fields");
+      if (country == "" || email == "" || miniBio == "" || name == "")
+        setInstructormessage("Please fill in all required fields");
     }
   };
   return (
@@ -67,7 +95,7 @@ const InstructorForm = () => {
           top: "40px",
           width: "500px",
           height: "-200px",
-         // transform: "translate(90%, 1%)",
+          // transform: "translate(90%, 1%)",
         }}
       >
         <MDBCardHeader>Add Instructor</MDBCardHeader>
@@ -89,7 +117,7 @@ const InstructorForm = () => {
           <MDBCardTitle>Password:</MDBCardTitle>
           <MDBInput
             label="Password"
-            type="text"
+            type="password"
             onChange={(e) => setPassword(e.target.value)}
             value={password}
           />{" "}
@@ -124,15 +152,9 @@ const InstructorForm = () => {
         </MDBCardBody>
       </MDBCard>
 
-      <p style={{ align: "center", transform: "translate(115%, 230%)" }}>
-        <message
-          style={{
-            display: message ? "none" : "inline-block",
-            top: "70px",
-          }}
-        >
-          New Instructor is added successfully
-        </message>
+      <p style={{ color: "red", transform: "translate(33%, 160%)" }}>
+        {" "}
+        {instructormessage}
       </p>
 
       {error && <div className="error">{error}</div>}

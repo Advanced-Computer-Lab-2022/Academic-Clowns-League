@@ -75,49 +75,49 @@ const AdminAddUsers = () => {
 
   return (
     <div>
-      <AdminNavbar/>
-    <form>
-      <MDBTabs pills className="mb-3">
-        <MDBTabsItem>
-          <MDBTabsLink
-            onClick={() => handleBasicClick("admin")}
-            active={basicActive === "admin"}
-          >
-            Admin
-          </MDBTabsLink>
-        </MDBTabsItem>
-        <MDBTabsItem>
-          <MDBTabsLink
-            onClick={() => handleBasicClick("instructor")}
-            active={basicActive === "instructor"}
-          >
-            Instructor
-          </MDBTabsLink>
-        </MDBTabsItem>
-        <MDBTabsItem>
-          <MDBTabsLink
-            onClick={() => handleBasicClick("ctrainee")}
-            active={basicActive === "ctrainee"}
-          >
-            Corporate Trainee
-          </MDBTabsLink>
-        </MDBTabsItem>
-      </MDBTabs>
+      <AdminNavbar />
+      <form>
+        <MDBTabs pills className="mb-3">
+          <MDBTabsItem>
+            <MDBTabsLink
+              onClick={() => handleBasicClick("admin")}
+              active={basicActive === "admin"}
+            >
+              Admin
+            </MDBTabsLink>
+          </MDBTabsItem>
+          <MDBTabsItem>
+            <MDBTabsLink
+              onClick={() => handleBasicClick("instructor")}
+              active={basicActive === "instructor"}
+            >
+              Instructor
+            </MDBTabsLink>
+          </MDBTabsItem>
+          <MDBTabsItem>
+            <MDBTabsLink
+              onClick={() => handleBasicClick("ctrainee")}
+              active={basicActive === "ctrainee"}
+            >
+              Corporate Trainee
+            </MDBTabsLink>
+          </MDBTabsItem>
+        </MDBTabs>
 
-      <MDBTabsContent>
-        <MDBTabsPane show={basicActive === "admin"}>
-          {" "}
-          <AdminForm />
-        </MDBTabsPane>
-        <MDBTabsPane show={basicActive === "instructor"}>
-          <InstructorForm />
-        </MDBTabsPane>
-        <MDBTabsPane show={basicActive === "ctrainee"}>
-          {" "}
-          <CTraineeForm />
-        </MDBTabsPane>
-      </MDBTabsContent>
-    </form>
+        <MDBTabsContent>
+          <MDBTabsPane show={basicActive === "admin"}>
+            {" "}
+            <AdminForm />
+          </MDBTabsPane>
+          <MDBTabsPane show={basicActive === "instructor"}>
+            <InstructorForm />
+          </MDBTabsPane>
+          <MDBTabsPane show={basicActive === "ctrainee"}>
+            {" "}
+            <CTraineeForm />
+          </MDBTabsPane>
+        </MDBTabsContent>
+      </form>
     </div>
   );
 };

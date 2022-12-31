@@ -5,7 +5,9 @@ const bcrypt = require("bcrypt");
 const Course = require("../models/courseModel");
 const { json } = require("body-parser");
 const nodemailer = require("nodemailer");
-const stripe = require("stripe")('sk_test_51MEY6KIUMr1PgLAYVRrB9eX8QBJmBt69FVExk91mUKPVjKRoVs0ahpOom28rFevJoSxq9zrZrZUIsD4OorI0nu4E00SfpJVKqt');
+const stripe = require("stripe")(
+  "sk_test_51MEY6KIUMr1PgLAYVRrB9eX8QBJmBt69FVExk91mUKPVjKRoVs0ahpOom28rFevJoSxq9zrZrZUIsD4OorI0nu4E00SfpJVKqt"
+);
 const User = require("../models/userModel");
 const Admin = require("../models/adminModel");
 const Instructor = require("../models/instructorModel");
@@ -79,12 +81,11 @@ const deleteITrainee = (req, res) => {
 
 //GET a single individual trainee
 const getITrainee = async (req, res) => {
-  if(await iTrainee.findById({_id: req.user._id})){
-    const itrainee = await iTrainee.findOne({_id: req.user._id})
-    res.status(200).json(itrainee)
-  }
-  else{
-    res.status(400).json({ error: "Access Restriced" })
+  if (await iTrainee.findById({ _id: req.user._id })) {
+    const itrainee = await iTrainee.findOne({ _id: req.user._id });
+    res.status(200).json(itrainee);
+  } else {
+    res.status(400).json({ error: "Access Restriced" });
   }
 };
 
@@ -179,9 +180,10 @@ const payForCourse = async (req, res) => {
   }
 };
 
- const registerForCourse = async (req, res) => {
-  if(await iTrainee.findById(req.user._id)){ //console.log(req.query.id)
-    const course = await Course.findOne({_id: req.query.id})
+const registerForCourse = async (req, res) => {
+  if (await iTrainee.findById(req.user._id)) {
+    //console.log(req.query.id)
+    const course = await Course.findOne({ _id: req.query.id });
     const itraineeCourses = (
       await iTrainee.findById({ _id: req.user._id }).select("courses")
     ).courses;
@@ -207,12 +209,13 @@ const applyRefund = async(req, res) => {
   const instructor = await Instructor.findOne({_id: course.instructor})
   let refund = 0;
 
-  if(course.discountApplied == true){
-    refund = (Math.round((course.price * (100-course.discount)/100) * 0.80))
-  }
-  else{
-    refund = (Math.round(course.price * 0.80))
-  }
+    if (course.discountApplied == true) {
+      refund = Math.round(
+        ((course.price * (100 - course.discount)) / 100) * 0.8
+      );
+    } else {
+      refund = Math.round(course.price * 0.8);
+    }
 
   const newWallet = parseInt(itrainee.wallet) + refund;
   const newWalletInst = parseInt(instructor.wallet) - refund;
@@ -270,8 +273,7 @@ const iTraineeUpdatePassword = async (req, res) => {
           }
         );
         res.status(200).json(itrainee);
-      }
-      else{
+      } else {
         res.status(400).json({ error: "cant do it" });
       }
     } else {
@@ -286,21 +288,23 @@ const iTraineeUpdatePassword = async (req, res) => {
   }
 };
 
-
-const getITraineeInfo = async(req, res) => {
-  if(await iTrainee.findById(req.user._id)){
-  const itrainee = await iTrainee.findOne({_id: req.user._id});
-  const result  ={
-    name: itrainee.firstname +" "+ itrainee.lastname,
-    username: itrainee.username,
-    email: itrainee.email,
-  };
-  res.status(200).json(result);
-}}
-const getCourse = async(req, res) => {
-  if(await iTrainee.findById(req.user._id)){
-    const itraineeID = req.user._id
-    const itraineeCourses = await iTrainee.findOne({_id: itraineeID}).select("courses")
+const getITraineeInfo = async (req, res) => {
+  if (await iTrainee.findById(req.user._id)) {
+    const itrainee = await iTrainee.findOne({ _id: req.user._id });
+    const result = {
+      name: itrainee.firstname + " " + itrainee.lastname,
+      username: itrainee.username,
+      email: itrainee.email,
+    };
+    res.status(200).json(result);
+  }
+};
+const getCourse = async (req, res) => {
+  if (await iTrainee.findById(req.user._id)) {
+    const itraineeID = req.user._id;
+    const itraineeCourses = await iTrainee
+      .findOne({ _id: itraineeID })
+      .select("courses");
     const courseID = mongoose.Types.ObjectId(req.query.id);
     const course = await Course.aggregate([
       {
@@ -315,29 +319,27 @@ const getCourse = async(req, res) => {
         $unwind: "$instructorData",
       },
       {
-        $match: { _id: courseID},
+        $match: { _id: courseID },
       },
     ]);
 
     let flag = false;
 
-    for(let i = 0; i < itraineeCourses.courses.length; i++){
-      if(courseID == itraineeCourses.courses[i].toString()){
-        flag = true
+    for (let i = 0; i < itraineeCourses.courses.length; i++) {
+      if (courseID == itraineeCourses.courses[i].toString()) {
+        flag = true;
         break;
       }
     }
-    if(flag == true){
-      course[0].register = true
-    }
-    else{
-      course[0].register = false
+    if (flag == true) {
+      course[0].register = true;
+    } else {
+      course[0].register = false;
     }
 
-    res.status(200).json(course[0])
-  }
-  else{
-    res.status(400).json({ error: "Access Restriced" })
+    res.status(200).json(course[0]);
+  } else {
+    res.status(400).json({ error: "Access Restriced" });
   }
 }
 
