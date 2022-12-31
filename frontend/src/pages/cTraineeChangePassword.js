@@ -1,4 +1,5 @@
 import InstructorNavbar from "../components/instructorNavbar";
+import CTraineeNavbar from "../components/cTraineeNavbar";
 import { useState } from "react";
 import { Routes, Route, useNavigate } from "react-router-dom";
 import {
@@ -78,7 +79,7 @@ const CTraineeChangePassword = () => {
 
   return (
     <div>
-      <InstructorNavbar />
+      <CTraineeNavbar />
 
       <img
         width="50%"

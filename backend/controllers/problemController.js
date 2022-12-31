@@ -34,7 +34,7 @@ const reportProblem = async (req, res) => {
   const getMyProblems = async (req, res) => {
     //const id = req.query.id;
    if(await ITrainee.findById(req.user._id)|| CTrainee.findById(req.user._id)||Instructor.findById(req.user._id)){
-    const problem = await Problem.find( { reporterId: req.user._id});
+    const problem = await Problem.find( { reporterId: req.user._id, status:{$ne:"Resolved"}});
    // const problem = await Problem.find( { reporterId: id});
    
     for(let i = 0; i < problem.length; i++) {
@@ -82,9 +82,9 @@ const reportProblem = async (req, res) => {
     
   };
 
-  const  getAllProblemsUR = async (req, res) => {
+  const  getAllProblemsUS = async (req, res) => {
     if(await Admin.findById(req.user._id)){
-      const problem = await Problem.find({status:"Unresolved"}).sort({priority:1});
+      const problem = await Problem.find({status:"Unseen"}).sort({priority:1});
    
     for(let i = 0; i < problem.length; i++) {
         let c = problem[i].courseId;
@@ -206,7 +206,7 @@ console.log(c);
     reportProblem,
     getMyProblems,
     getAllProblemsR,
-    getAllProblemsUR,
+    getAllProblemsUS,
     getAllProblemsP,
     problemStatus,
     problemFollowUp,

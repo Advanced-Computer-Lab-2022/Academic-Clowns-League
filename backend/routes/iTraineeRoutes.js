@@ -18,6 +18,7 @@ const {
   iTraineeUpdatePassword,
   getITraineeInfo,
   getCourse,
+  payUsingWallet,
 } = require("../controllers/iTraineeController");
 
 const router = express.Router();
@@ -58,5 +59,7 @@ router.patch("/iTraineeUpdatePassword", requireAuth, iTraineeUpdatePassword);
 router.get('/applyrefund',requireAuth, applyRefund)
 
 router.get('/getcourseinfo', requireAuth, getCourse)
+
+router.get('/payusingwallet', requireAuth, payUsingWallet)
 
 module.exports = router;

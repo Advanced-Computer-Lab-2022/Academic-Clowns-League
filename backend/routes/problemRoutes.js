@@ -4,7 +4,7 @@ const {
     reportProblem,
     getMyProblems,
     getAllProblemsR,
-    getAllProblemsUR,
+    getAllProblemsUS,
     getAllProblemsP,
     problemStatus,
     problemFollowUp,
@@ -23,7 +23,7 @@ const { requireAuth } = require("../controllers/userController");
   router.get("/allProblemsR",requireAuth,getAllProblemsR);
 
   //get all  unresolved problems
-  router.get("/allProblemsUR",requireAuth,getAllProblemsUR);
+  router.get("/allProblemsUS",requireAuth,getAllProblemsUS);
 
   //get all pending problems
   router.get("/allProblemsP",requireAuth,getAllProblemsP);

@@ -12,7 +12,7 @@ const courseSchema = new Schema(
     hours: {
       //should it be written manually or automatically the total duration of the videos?
       type: Number,
-      required: true,
+      default: 0
     },
     subject: {
       type: String,
@@ -112,12 +112,12 @@ const courseSchema = new Schema(
     },
     open:{
       type: Boolean,
-      default: false
+      default: true
     },
     overallRating:{
       type: Number,
       default: 0
-    }
+    },
   },
   { timestamps: true }
 );

@@ -50,60 +50,58 @@ const CourseRatingsAndReviews = () => {
 
 
         <Tab.Container id="left-tabs-example" defaultActiveKey="first">
-      <Row>
-        <Col sm={3}>
-          <Nav variant="pills" className="flex-column">
-            <Nav.Item>
-              <Nav.Link eventKey="first">Ratings</Nav.Link>
-            </Nav.Item>
-            <Nav.Item>
-              <Nav.Link eventKey="second">Reviews</Nav.Link>
-            </Nav.Item>
-          </Nav>
-        </Col>
-        <Col sm={9}>
-          <Tab.Content>
-            <Tab.Pane eventKey="first">
+          <Row>
+            <Col sm={3}>
+              <Nav variant="pills" className="flex-column">
+                <Nav.Item>
+                  <Nav.Link eventKey="first">Ratings</Nav.Link>
+                </Nav.Item>
+                <Nav.Item>
+                  <Nav.Link eventKey="second">Reviews</Nav.Link>
+                </Nav.Item>
+              </Nav>
+            </Col>
+            <Col sm={9}>
+              <Tab.Content>
+                <Tab.Pane eventKey="first">
+                  <MDBTypography tag="h6" style={{ margin: '2px', fontSize: 30 }}> Overall Course Rating: {course && course.overallRating}</MDBTypography>
 
-            
-            <MDBTypography tag="h6" style={{margin:'2px',fontSize: 30}}> Overall Course Rating: {course && course.overallRating}</MDBTypography>
+                  {course &&
+                    course.ratings.map((rating) => (
 
-            {course &&
-          course.ratings.map((rating) => (
+                      <div style={{ display: 'flex', flexDirection: 'row' }}>
+                        <MDBTypography tag="h6" style={{ margin: '7px', fontSize: 20 }}>A trainee gave your course the following rating: </MDBTypography>
+                        <MDBCardText style={{ marginLeft: '5px', fontSize: 30 }} > <em>  {rating.rating}</em></MDBCardText>
+                      </div>
 
-              <div style={{display:'flex',flexDirection:'row'}}>
-                <MDBTypography tag="h6" style={{margin:'7px',fontSize: 20}}>A trainee gave your course the following rating: </MDBTypography>
-                <MDBCardText style={{marginLeft:'5px',fontSize: 30}} > <em>  {rating.rating}</em></MDBCardText>
-                </div>
-
-          ))}
+                    ))}
 
 
-            </Tab.Pane>
-            <Tab.Pane eventKey="second">
-
-
-            
+                </Tab.Pane>
+                <Tab.Pane eventKey="second">
 
 
 
-            {course &&
-          course.reviews.map((review) => (
-
-<div style={{display:'flex',flexDirection:'row'}}>
-                <MDBTypography tag="h6" style={{margin:'2px',fontSize: 30}}> "{review.content}"</MDBTypography>
-                <MDBCardText className="text-muted" style={{marginLeft:'5px',fontSize: 30}} > <em>  - {review.traineeName} </em></MDBCardText>
-                </div>
 
 
 
-          ))}
+                  {course &&
+                    course.reviews.map((review) => (
 
-            </Tab.Pane>
-          </Tab.Content>
-        </Col>
-      </Row>
-    </Tab.Container>
+                      <div style={{ display: 'flex', flexDirection: 'row' }}>
+                        <MDBTypography tag="h6" style={{ margin: '2px', fontSize: 30 }}> "{review.content}"</MDBTypography>
+                        <MDBCardText className="text-muted" style={{ marginLeft: '5px', fontSize: 30 }} > <em>  - {review.traineeName} </em></MDBCardText>
+                      </div>
+
+
+
+                    ))}
+
+                </Tab.Pane>
+              </Tab.Content>
+            </Col>
+          </Row>
+        </Tab.Container>
 
 
 

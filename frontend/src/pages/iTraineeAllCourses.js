@@ -135,21 +135,10 @@ const ITraineeAllCourses = () => {
       </MDBBtn>
     </div>
     <div className="guest-home">
-    <div className="courses-element">
-      <div>
-      <h4 className="popular">All Courses</h4>
-      <div>
-        {courses &&
-          courses.map((course) => (
-            <CourseDetailsITrainee course={course} key={course._id} />
-          ))}
-      </div>
-      </div>
-      </div>
     <div className="checkboxes">
         <form className="filter" onSubmit={handleSubmitFilter}>
           <h4>Filter by: </h4>
-          <h5>Price </h5><p>- filtering is done according to original price</p>
+          <h5>Price </h5><p style={{fontSize: 12}}><i>- filtering is done according to original price</i></p>
           <input
             type="checkbox"
             id="price"
@@ -285,6 +274,18 @@ const ITraineeAllCourses = () => {
         Clear Filter
       </MDBBtn>
         </form>
+      </div>
+      <span className="divider"></span>
+      <div className="courses-element">
+      <div>
+      <h4 className="popular">All Courses</h4>
+      <div>
+        {courses &&
+          courses.map((course) => (
+            <CourseDetailsITrainee course={course} key={course._id} />
+          ))}
+      </div>
+      </div>
       </div>
       </div>
     </div>

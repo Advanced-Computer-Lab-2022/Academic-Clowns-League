@@ -13,7 +13,6 @@ const { listeners } = require("process");
 function getId(url) {
   const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
   const match = url.match(regExp);
-
   return match && match[2].length === 11 ? match[2] : null;
 }
 
@@ -31,6 +30,9 @@ const getAllCourses = async (req, res) => {
     {
       $unwind: "$instructorData",
     },
+    {
+      $match: { $and: [ {published: true}, {open: true} ]}
+    }
   ]);
   res.status(200).json(courses);
 };
@@ -242,30 +244,29 @@ const addCourseExercise = async (req, res) => {
 
 //create new course
 const createCourse = async (req, res) => {
-  if (await Instructor.findById(req.user._id)) {
-    let {
-      title,
-      hours,
-      subject,
-      price,
-      discount,
-      discountValidUntil,
-      summary,
-      previewURL,
-    } = req.body;
+  if(await Instructor.findById(req.user._id)){ let {
+    title,
+    subject,
+    price,
+    discount,
+    discountValidUntil,
+    summary,
+    previewURL,
+  } = req.body;
 
-    const videoId = getId(previewURL);
-    const embeddedLink = "//www.youtube.com/embed/" + videoId;
-    let discountApp = false;
+  const videoId = getId(previewURL);
+  const embeddedLink = "//www.youtube.com/embed/" + videoId;
+  let discountApp = false;
 
-    try {
-      let currentDate = new Date().toJSON().slice(0, 10);
-      if (discountValidUntil != null && discountValidUntil >= currentDate) {
-        discountApp = true;
-      } else {
-        discount = 0;
-        discountValidUntil = currentDate;
-      }
+  try {
+    let currentDate = new Date().toJSON().slice(0, 10);
+    if (discountValidUntil != null && discountValidUntil >= currentDate) {
+      discountApp = true;
+    } else {
+      discount = 0;
+      discountValidUntil = currentDate
+    }
+    
       const course = await Course.create({
         title,
         hours,
@@ -405,6 +406,7 @@ const filterSubRatePrice = async (req, res) => {
               price: { $gte: prices[5][0], $lt: prices[5][1] },
             },
           ],
+          $and: [{published: true}, {open: true}]
         },
       },
     ]);
@@ -469,6 +471,7 @@ const filterSubRatePrice = async (req, res) => {
               price: { $gte: prices[5][0], $lt: prices[5][1] },
             },
           ],
+          $and: [{published: true}, {open: true}]
         },
       },
     ]);
@@ -509,6 +512,7 @@ const filterSubRatePrice = async (req, res) => {
               price: { $gte: prices[5][0], $lt: prices[5][1] },
             },
           ],
+          $and: [{published: true}, {open: true}]
         },
       },
     ]);
@@ -540,6 +544,7 @@ const filterSubRatePrice = async (req, res) => {
               overallRating: { $gte: ratings[2][0], $lte: ratings[2][1] },
             },
           ],
+          $and: [{published: true}, {open: true}]
         },
       },
     ]);
@@ -558,7 +563,7 @@ const filterSubRatePrice = async (req, res) => {
         $unwind: "$instructorData",
       },
       {
-        $match: { subject: { $in: [subjects[0], subjects[1], subjects[2]] } },
+        $match: { subject: { $in: [subjects[0], subjects[1], subjects[2]] }, $and: [{published: true}, {open: true}] },
       },
     ]);
     res.status(200).json(courses);
@@ -597,6 +602,7 @@ const filterSubRatePrice = async (req, res) => {
               price: { $gte: prices[5][0], $lt: prices[5][1] },
             },
           ],
+          $and: [{published: true}, {open: true}]
         },
       },
     ]);
@@ -627,6 +633,7 @@ const filterSubRatePrice = async (req, res) => {
               overallRating: { $gte: ratings[2][0], $lte: ratings[2][1] },
             },
           ],
+          $and: [{published: true}, {open: true}]
         },
       },
     ]);
@@ -644,6 +651,9 @@ const filterSubRatePrice = async (req, res) => {
       {
         $unwind: "$instructorData",
       },
+      {
+        $match: {$and: [{published: true}, {open: true}]}
+      }
     ]);
     res.status(200).json(courses);
   }
@@ -673,6 +683,7 @@ const searchAllCourses = async (req, res) => {
           { title: { $regex: re } },
           { subject: { $regex: re } },
         ],
+        $and: [{published: true}, {open: true}]
       },
     },
   ]);
@@ -900,6 +911,7 @@ const filterInstPriceSub = async (req, res) => {
   }
 };
 
+
 const viewCorrectAnswer = async (req, res) => {
   if (
     (await iTrainee.findById(req.user._id)) ||
@@ -933,35 +945,36 @@ const viewCorrectAnswer = async (req, res) => {
 };
 
 const addCourseSub = async (req, res) => {
-  if (await Instructor.findById(req.user._id)) {
-    const id = req.query.id;
-    const {
-      //courseID, //637a197cbc66688b3924a864
-      title,
-      videoLink,
-      shortDescription,
-      totalHours,
-    } = req.body;
-    const videoId = getId(videoLink);
-    const embeddedLink = "//www.youtube.com/embed/" + videoId;
-    const courseSubs = (await Course.findById({ _id: id }).select("subtitles"))
-      .subtitles;
-    subtitle = {
-      title: title,
-      videoLink: embeddedLink,
-      shortDescription: shortDescription,
-      totalHours: totalHours,
-    };
-    courseSubs.push(subtitle);
-    const course = await Course.findByIdAndUpdate(
-      { _id: id },
-      { subtitles: courseSubs },
-      { new: true }
-    );
-    res.status(200).json(course);
-  } else {
-    res.status(400).json({ error: "Access Restriced" });
-  }
+  if(await Instructor.findById(req.user._id)){  const id = req.query.id;
+  const {
+    //courseID, //637a197cbc66688b3924a864
+    title,
+    videoLink,
+    shortDescription,
+    totalHours,
+  } = req.body;
+  const videoId = getId(videoLink);
+  const embeddedLink = "//www.youtube.com/embed/" + videoId;
+  const courseSubs = (await Course.findById({ _id: id }).select("subtitles")).subtitles;
+  const oldCourse = await Course.findOne({ _id: id })
+  const courseHours = parseInt(oldCourse.hours) + parseInt(totalHours)
+  subtitle = {
+    title: title,
+    videoLink: embeddedLink,
+    shortDescription: shortDescription,
+    totalHours: totalHours,
+  };
+  courseSubs.push(subtitle);
+  const course = await Course.findByIdAndUpdate(
+    { _id: id },
+    { subtitles: courseSubs, hours: courseHours }
+  );
+  res.status(200).json(course);
+}
+else{
+  res.status(400).json({ error: "Access Restriced" })
+}
+
 };
 const addCoursePreview = async (req, res) => {
   if (await Instructor.findById(req.user._id)) {
@@ -1007,14 +1020,21 @@ const addNotes = async (req, res) => {
         note: notes,
       };
 
-      iTraineeNotes.push(note);
-      const course = await Course.findByIdAndUpdate(
-        { _id: id },
-        { iTraineeNotes: iTraineeNotes },
-        { new: true }
-      );
-      res.status(200).json(course);
+    for (var i =0;i<iTraineeNotes.length;i++){
+      if (iTraineeNotes[i].iTraineeID == traineeID){
+        const removed = iTraineeNotes.splice(i,1); //splice returns the removed element not the list after the removal
+        break;
+      }
     }
+    iTraineeNotes.push(note);
+
+    const course = await Course.findByIdAndUpdate(
+      { _id: id },
+      { iTraineeNotes: iTraineeNotes },
+      { new: true }
+    );
+    res.status(200).json(course);
+  }
 
     const find = await cTrainee.findById({ _id: traineeID });
     if (find != null) {
@@ -1023,17 +1043,63 @@ const addNotes = async (req, res) => {
         note: notes,
       };
 
-      cTraineeNotes.push(note);
-      const course = await Course.findByIdAndUpdate(
-        { _id: id },
-        { cTraineeNotes: cTraineeNotes },
-        { new: true }
-      );
-      res.status(200).json(course);
+    for (var i =0;i<cTraineeNotes.length;i++){
+      if (cTraineeNotes[i].cTraineeID == traineeID){
+        const removed = cTraineeNotes.splice(i,1); //splice returns the removed element not the list after the removal
+        break;
+      }
     }
-  } else {
-    res.status(400).json({ error: "Access Restriced" });
+    cTraineeNotes.push(note);
+
+    const course = await Course.findByIdAndUpdate(
+      { _id: id },
+      { cTraineeNotes: cTraineeNotes },
+      { new: true }
+    );
+    res.status(200).json(course);
   }
+  }
+  else{
+    res.status(400).json({ error: "Access Restriced" })
+  }
+};
+
+const getMyNotes = async (req, res) => {
+  const id = req.query.id;
+  const traineeID = req.user._id;
+
+  const cTraineeNotes = (
+    await Course.findById({ _id: id }).select("cTraineeNotes")
+  ).cTraineeNotes;
+
+  const iTraineeNotes = (
+    await Course.findById({ _id: id }).select("iTraineeNotes")
+  ).iTraineeNotes; //-----> getting the Arrays
+
+  let note = "";
+
+  const trainee = await iTrainee.findById({ _id: traineeID });
+  if (trainee != null) {
+    for (var i =0;i<iTraineeNotes.length;i++){
+      if (iTraineeNotes[i].iTraineeID == traineeID){
+        note = iTraineeNotes[i].note;
+        break;
+      }
+    }
+    res.status(200).json({data: note});
+  }
+
+  const find = await cTrainee.findById({ _id: traineeID });
+  if (find != null) {
+    for (var i =0;i<cTraineeNotes.length;i++){
+      if (cTraineeNotes[i].cTraineeID == traineeID){
+        note = cTraineeNotes[i].note;
+        break;
+      }
+    }
+    res.status(200).json({data: note});
+  }
+
 };
 
 const printNotePDF = async (req, res, next) => {
@@ -1157,9 +1223,9 @@ const openMyCourse = async (req, res) => {
 };
 
 const moneyOwed = async (req, res) => {
-  if (await Instructor.findById(req.user._id)) {
-    const courses = await Course.find({ instructor: req.user._id });
-    let money = 0;
+  if(await Instructor.findById(req.user._id)){
+  const courses = await Course.find({instructor: req.user._id});
+  let money = 0;
 
     for (let i = 0; i < courses.length; i++) {
       if (courses[i].discountApplied == true) {
@@ -1187,6 +1253,7 @@ const moneyOwed = async (req, res) => {
 const sendCertificateMail = async (req, res) => {
   // const id = req.query.id;
   traineeEmail = req.user.email;
+  const Title = req.query.courseTitle;
   let mailTransporter = nodemailer.createTransport({
     service: "gmail",
     auth: {
@@ -1197,7 +1264,7 @@ const sendCertificateMail = async (req, res) => {
   let details = {
     from: "nourhan.khedr24@gmail.com",
     to: traineeEmail,
-    subject: "CanCham Course Certificate",
+    subject: Title+" Course Certificate",
 
     html: "<h2>Congratulations! You have successfully completed a course on CanCham's Online Learning Platform.</h2>",
     text: "Kindly find your certificate attached.",
@@ -1583,6 +1650,7 @@ module.exports = {
   openMyCourse,
   moneyOwed,
   addNotes,
+  getMyNotes,
   printNotePDF,
   printCertificatePDF,
   sendCertificateMail,

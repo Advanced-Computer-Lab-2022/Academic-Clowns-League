@@ -27,9 +27,7 @@ const createAdmin = async (req, res) => {
         dbUser.save();
         res.status(200).json(admin);
       } catch (error) {
-        res
-          .status(400)
-          .json({ message: "invalid username", error: error.message });
+        res.status(400).json({error: error.message });
       }
     }
   } else {

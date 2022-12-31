@@ -4,7 +4,8 @@ const {
   getPendingRequests,
   grantAccess,
   createRefundRequest,
-  getRefundRequests
+  getRefundRequests,
+  checkCourse
 } = require("../controllers/requestController");
 const { requireAuth } = require("../controllers/userController");
 
@@ -19,6 +20,8 @@ router.get("/grantAccess",requireAuth, grantAccess);
 router.get("/createRefundRequest", requireAuth, createRefundRequest);
 
 router.get("/getRefundRequests", requireAuth, getRefundRequests);
+
+router.get('/checkCourse', requireAuth, checkCourse);
 
 
 

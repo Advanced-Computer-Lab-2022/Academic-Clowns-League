@@ -4,7 +4,7 @@ import Card from 'react-bootstrap/Card';
 import Nav from 'react-bootstrap/Nav';
 import Modal from 'react-bootstrap/Modal';
 
-const AllProblems = ({id, content, followUp, status, course, email, rid, cid, type}) => {
+const AllProblems = ({id, content, followUp, status, course, email, type}) => {
     const [b1, setB1] = useState("");
     const [b2, setB2] = useState("none");
     const [b3, setB3] = useState("none");
@@ -12,11 +12,15 @@ const AllProblems = ({id, content, followUp, status, course, email, rid, cid, ty
     let showTab="none"
     let buttonState="";
     let buttonName="";
+    let unres="none";
+    let unresButton = "Resolved";
+
     if(status=="Resolved"){
         buttonState="none";
     }
-    else if(status=="Unresolved"){
+    else if(status=="Unseen"){
         buttonState="";
+        unres="";
         buttonName="Pending"
     }
     else{
@@ -57,6 +61,19 @@ const AllProblems = ({id, content, followUp, status, course, email, rid, cid, ty
                       handleShow();
                   }
                   };
+
+                  const unresStatus = async () => {
+                    const response = await fetch(
+                        "/api/problem/problemStatus/?id=" +
+                    id +
+                    "&status=" +
+                    unresButton ,
+                      { method: "PATCH" }
+                    );
+                    if(response.status==200) {
+                      handleShow();
+                  }
+                  };
                   
 
                   const close = () => {
@@ -90,7 +107,10 @@ const AllProblems = ({id, content, followUp, status, course, email, rid, cid, ty
         <Card.Text>
         {content}
         </Card.Text>
+        <div style={{display:"flex"}}>
         <Button variant="danger" style={{display:buttonState}} onClick={changeStatus}>mark as {buttonName}</Button>
+        <Button variant="danger" style={{display:unres, marginLeft:20}} onClick={unresStatus}>mark as Resolved</Button>
+        </div>
       </Card.Body>
      
      <Card.Body style={{display:b2}}>
@@ -104,17 +124,10 @@ const AllProblems = ({id, content, followUp, status, course, email, rid, cid, ty
           {course}
         </p>
         <p>
-          <strong> Course's id: </strong>
-          {cid}
-        </p>
-        <p>
           <strong> Reporter's email: </strong>
           {email}
         </p>
-        <p>
-          <strong> Reporter's id: </strong>
-          {rid}
-        </p>
+       
          </Card.Text>
       </Card.Body>
 
@@ -125,6 +138,7 @@ const AllProblems = ({id, content, followUp, status, course, email, rid, cid, ty
       </Card.Body>
 
     </Card>
+    <p> {" "}</p>
     <Modal
         show={show}
         onHide={handleClose}

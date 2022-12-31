@@ -7,6 +7,7 @@ const{
     updateContract,
     resetPassword,
     updatePassword,
+    updatePassword2,
 } = require('../controllers/userController')
 
 const router = express.Router()
@@ -17,6 +18,7 @@ router.post("/login", loginUser);
 router.get("/logout", requireAuth, logOut);
 router.patch("/reset", resetPassword);
 router.patch("/updatePassword", updatePassword);
+router.patch("/updatePassword2",requireAuth,updatePassword2);
 router.post('/contract',requireAuth,updateContract)
 
 

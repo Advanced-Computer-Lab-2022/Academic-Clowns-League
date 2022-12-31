@@ -36,7 +36,7 @@ const createInstructor = async (req, res) => {
       } catch (error) {
         res
           .status(400)
-          .json({ message: "invalid username", error: error.message });
+          .json({error: error.message });
       }
     }
   } else {
@@ -110,7 +110,8 @@ const updateInstructor = async (req, res) => {
       { _id: id },
       {
         ...req.body,
-      }
+      },
+      { new: true }
     );
 
     await User.findOneAndUpdate(
@@ -123,7 +124,6 @@ const updateInstructor = async (req, res) => {
     if (!instructor) {
       return res.status(400).json({ error: "No such Instructor" });
     }
-
     res.status(200).json(instructor);
   } else {
     res.status(400).json({ error: "Access Restriced" });

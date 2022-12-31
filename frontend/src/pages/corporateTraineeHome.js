@@ -2,11 +2,12 @@ import { useEffect, useState } from "react";
 
 // components
 import MyCourseDetailsCTrainee from "../components/myCourseDetailsCTrainee";
-import CTraineeNavbar from "../components/cTraineeNavbar";
+import MyCoursesCTraineeNav from "../components/myCoursesCTraineeNav";
 
 
 const CorporateTraineeHome = () => {
   const [courses, setCourses] = useState(null);
+  const [message, setMessage] = useState("No courses to show")
 
   useEffect(() => {
     const fetchCourses = async () => {
@@ -14,9 +15,12 @@ const CorporateTraineeHome = () => {
       const json = await response.json();
       console.log(json);
 
-      if (response.ok) {
+      if (response.status == 200) {
         setCourses(json);
-      }
+        if(json.length != 0){
+          setMessage("My Courses")
+        }
+    }
     };
     fetchCourses();
   }, []);
@@ -24,10 +28,10 @@ const CorporateTraineeHome = () => {
   return (
     <div>
 
-    <CTraineeNavbar />
+    <MyCoursesCTraineeNav />
     <div className="home">
-    <div className="courses-element">
-    <h4 className="popular">My Courses</h4>
+    <div className="mycourses-element">
+    <h4 className="popular"><i>{message}</i></h4>
       <div className="my-courses">
         {courses &&
           courses.map((course) => (

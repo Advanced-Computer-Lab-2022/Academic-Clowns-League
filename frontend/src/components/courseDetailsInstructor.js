@@ -60,6 +60,10 @@ const CourseDetailsInstructor = ({ course }) => {
         <strong>Rating: </strong>
         {myCourse.overallRating}
       </p>
+      <p>
+          <strong>Subject: </strong>
+          {myCourse.subject}
+        </p>
       <div
         style={{
           display: isActive ? "block" : "none",
@@ -69,11 +73,6 @@ const CourseDetailsInstructor = ({ course }) => {
           <strong>Price: </strong>
           {Math.round(price*(100-myCourse.discount)/100)} {currency} <br></br>
           {message}
-        </p>
-        
-        <p>
-          <strong>Subject: </strong>
-          {myCourse.subject}
         </p>
         <p>
           <strong>Instructor: </strong>
@@ -92,14 +91,15 @@ const CourseDetailsInstructor = ({ course }) => {
         </ol>
         </p>
       </div>
-      <div className="instructor-buttons">
+      <div className="instructor-buttons" style={{marginLeft: 20}}>
       <MDBBtn rounded
         style={{
           backgroundColor: isActive ? "#E0E0E0" : "",
           color: isActive ? "black" : "",
           height: 35,
           textAlign: "center",
-          borderColor: isActive ? "black" : "#B71C1C"
+          borderColor: isActive ? "black" : "#B71C1C",
+          marginLeft: 430
         }}
         onClick={handleClick} color="danger">
         View Details
@@ -110,7 +110,7 @@ const CourseDetailsInstructor = ({ course }) => {
           textAlign: "center",
           marginLeft: 10,
           borderColor: "#B71C1C",
-          display: myCourse.mine ? "block" : "none"
+          display: myCourse.mine ? "block" : "none",
         }}
         onClick={() => navigate(`/instructorCourse?id=${myCourse._id}`)} color="danger">{button}
       </MDBBtn>
