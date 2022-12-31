@@ -132,6 +132,7 @@ header a {
   align-items: relative;
   justify-content: center;
 }
+
 .course-details-instructor {
   /*for courseDetails.js*/
   display: flex;

@@ -18,7 +18,7 @@ const problemSchema = new Schema(
       status: {
         type: String,
         required: true,
-        default: "Unresolved",
+        default: "Unseen",
       },
       courseId: {
         type: String,

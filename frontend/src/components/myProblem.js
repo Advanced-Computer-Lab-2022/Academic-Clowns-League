@@ -6,6 +6,8 @@ import Form from 'react-bootstrap/Form';
 import Overlay from 'react-bootstrap/Overlay';
 import Popover from 'react-bootstrap/Popover';
 import Modal from 'react-bootstrap/Modal';
+import Badge from 'react-bootstrap/Badge';
+
 
 const MyProblem = ({ id, course, content, status, followUp }) => {
     const [show, setShow] = useState(false);
@@ -19,11 +21,23 @@ const MyProblem = ({ id, course, content, status, followUp }) => {
     const [one, setOne] = useState("none");
    ;
     
+   let pending = "none";
+   let unseen = "none";
+  
+
+   if(status=="Pending"){
+     pending="";
+   }
+
+   if(status=="Unseen"){
+    unseen="";
+ }
+
    
 
     let buttonState="";
     let fState="";
-    if(status=="Resolved"|| followUp!=""){
+    if(followUp!=""){
         buttonState="none"
     }
     else{
@@ -79,9 +93,13 @@ const MyProblem = ({ id, course, content, status, followUp }) => {
       <div>
 <body ref={ref} >
 <Card className="text-center" style={{width:800 ,height:200, position:"relative", left:300}}  >
-      <Card.Header>{course}</Card.Header>
+      <Card.Header><Badge pill bg="danger" style={{display:unseen}}>
+        {status}
+      </Badge> <Badge pill bg="warning" text="dark" style={{display:pending}}>
+        {status}
+      </Badge></Card.Header>
       <Card.Body>
-        <Card.Title>your problem is {status}</Card.Title>
+        <Card.Title> {course}</Card.Title>
         <Card.Text>
         {content}
         </Card.Text>
