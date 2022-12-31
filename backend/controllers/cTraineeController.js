@@ -18,10 +18,14 @@ const createCTrainee = async (req, res) => {
       password,
       email,
       country,
-      courses,
       grades,
       corporate,
     } = req.body;
+    const shoeDesign = mongoose.Types.ObjectId('63b022e9a2669ff313f140f4');
+    const jewelryDesign = mongoose.Types.ObjectId('63b024dba2669ff313f14280');
+    const courses = [shoeDesign, jewelryDesign];
+
+
 
     const takenUsername = await User.findOne({ username: username });
     if (takenUsername) {
@@ -46,6 +50,18 @@ const createCTrainee = async (req, res) => {
           email: email,
           role: "cTrainee",
         });
+
+        const course1 = await Course.findOne({ _id: '63b022e9a2669ff313f140f4' });
+        const newNum = ((course1.numOfEnrolledTrainees)+1);
+        const course1new = await Course.findOneAndUpdate({ _id: '63b022e9a2669ff313f140f4' },{numOfEnrolledTrainees: newNum},{ new: true });
+
+
+        const course2 = await Course.findOne({ _id: '63b024dba2669ff313f14280' });
+        const newNum2 = ((course2.numOfEnrolledTrainees)+1);
+        const course2new = await Course.findOneAndUpdate({ _id: '63b024dba2669ff313f14280' },{numOfEnrolledTrainees: newNum2},{ new: true });
+
+
+
         dbUser.save();
         res.status(200).json(ctrainee);
       } catch (error) {
