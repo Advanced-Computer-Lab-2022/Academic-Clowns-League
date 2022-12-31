@@ -24,11 +24,9 @@ const CTraineeForm = () => {
   const [email, setEmail] = useState("");
   const [firstname, setFirstname] = useState("");
   const [lastname, setLastname] = useState("");
-  //const [country, setCountry] = useState("");
-  //const [credNumber, setCredNum] = useState("");
-  //const [credCCV, setCredCCV] = useState("");
-  //const [credExpDate, setCredExpDate] = useState("");
-  //const [courses, setCourses] = useState("");
+  const [traineemessage, setTraineemessage] = useState("");
+  const [corporate, setCorporate] = useState("");
+
   const [error, setError] = useState(null);
 
   const handleSubmit = async (e) => {
@@ -40,41 +38,59 @@ const CTraineeForm = () => {
       username,
       password,
       email,
-
-      //country,
-      //credNumber,
-      //credCCVv,
-      //credExpDate,
-      //courses,
+      corporate,
     };
+    if (
+      firstname != "" &&
+      lastname != "" &&
+      username != "" &&
+      password != "" &&
+      email != "" &&
+      corporate != ""
+    ) {
+      const response = await fetch("/api/ctrainee/", {
+        method: "POST",
+        body: JSON.stringify(cTrainee),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      const json = await response.json();
 
-    const response = await fetch("/api/ctrainee/", {
-      method: "POST",
-      body: JSON.stringify(cTrainee),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
-    const json = await response.json();
-
-    if (!response.ok) {
-      setError(json.error);
-    }
-    if (response.ok) {
-      //setFirstname("");
-      //setLastname("");
-      setUsername("");
-      setPassword("");
-      setEmail("");
-      setFirstname("");
-      setLastname("");
-      //setCountry("");
-      //setCrednum("");
-      //setCredccv("");
-      //setCredexpdate("");
-      //setCourses("");
-      setError(null);
-      console.log("new corporate trainee is added", json);
+      if (response.status == 400) {
+        setError(json.error);
+        setTraineemessage("invalid username");
+      }
+      if (response.status == 200) {
+        //setFirstname("");
+        //setLastname("");
+        setUsername("");
+        setPassword("");
+        setEmail("");
+        setFirstname("");
+        setLastname("");
+        setCorporate("");
+        setError(null);
+        console.log("new corporate trainee is added", json);
+      }
+    } else {
+      if (username == "") setTraineemessage("Please enter a valid username");
+      if (password == "") setTraineemessage("Please type in a password");
+      if (email == "") setTraineemessage("Please type in an email");
+      if (firstname == "") setTraineemessage("Please type in a firstname");
+      if (lastname == "") setTraineemessage("Please type in a lastname");
+      if (corporate == "") setTraineemessage("Please type in a lastname");
+      if (
+        username == "" &&
+        password == "" &&
+        email == "" &&
+        firstname == "" &&
+        lastname == "" &&
+        corporate == ""
+      )
+        setTraineemessage("Please fill in all the required fields");
+      if (firstname == "" || lastname == "" || email == "" || corporate == "")
+        setTraineemessage("Please fill in all the required fields");
     }
   };
   return (
@@ -120,9 +136,16 @@ const CTraineeForm = () => {
           <MDBCardTitle>Password:</MDBCardTitle>
           <MDBInput
             label="Password"
-            type="text"
+            type="password"
             onChange={(e) => setPassword(e.target.value)}
             value={password}
+          />{" "}
+          <MDBCardTitle>Corporate:</MDBCardTitle>
+          <MDBInput
+            label="Corporate"
+            type="text"
+            onChange={(e) => setCorporate(e.target.value)}
+            value={corporate}
           />{" "}
           <button
             style={{ allign: "center", top: "-15px" }}
@@ -133,16 +156,9 @@ const CTraineeForm = () => {
           </button>
         </MDBCardBody>
       </MDBCard>
-
-      <p style={{ align: "center", transform: "translate(115%, 570%)" }}>
-        <message
-          style={{
-            display: message ? "none" : "inline-block",
-            top: "70px",
-          }}
-        >
-          New Corporate Trainee is added successfully
-        </message>
+      <p style={{ color: "red", transform: "translate(33%, 160%)" }}>
+        {" "}
+        {traineemessage}
       </p>
 
       {error && <div className="error">{error}</div>}

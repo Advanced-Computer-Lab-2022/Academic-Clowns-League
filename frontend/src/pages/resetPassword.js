@@ -56,20 +56,21 @@ const ResetPassword = () => {
 
   return (
     <>
-      <form
-        style={{
-          width: 1500,
-          height: 780,
-          background: `url('${process.env.PUBLIC_URL}/background2.png')`,
-        }}
-      >
+      <form>
         <InstructorNavbar />
+
+        <img
+          width="50%"
+          height="60%"
+          style={{ marginLeft: "100px", transform: "translate(80%, 30%)" }}
+          src="/students.jpg"
+        ></img>
 
         <MDBCard
           style={{
-            width: "600px",
+            width: "400px",
             height: "200px",
-            transform: "translate(70%, 130%)",
+            transform: "translate(50%, -70%)",
           }}
         >
           <MDBCardHeader>Reset Password</MDBCardHeader>
@@ -84,8 +85,9 @@ const ResetPassword = () => {
               type="button"
               class="btn btn-outline-success"
               href="#"
+              color="danger"
               onClick={handleSubmit}
-              style={{ transform: "translate(210%,100%)" }}
+              style={{ transform: "translate(120%,100%)" }}
             >
               Send Mail
             </button>

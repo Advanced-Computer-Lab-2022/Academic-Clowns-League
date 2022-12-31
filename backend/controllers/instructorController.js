@@ -36,7 +36,7 @@ const createInstructor = async (req, res) => {
       } catch (error) {
         res
           .status(400)
-          .json({ message: "Signup Failed", error: error.message });
+          .json({ message: "invalid username", error: error.message });
       }
     }
   } else {
@@ -162,9 +162,11 @@ const updatePassword = async (req, res) => {
           }
         );
         res.status(200).json(instructor);
+      } else {
+        res.status(400).json({ error: "" });
       }
     } else {
-      res.status(400).json({ error: "cant do it" });
+      res.status(400).json({ error: "" });
     }
 
     //if (!instructor) {

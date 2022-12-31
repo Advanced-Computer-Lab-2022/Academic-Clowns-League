@@ -45,6 +45,11 @@ const cTraineeSchema = new Schema(
         ],
       },
     ],
+
+    corporate: {
+      type: String,
+      required: true,
+    },
   },
   { timestamps: true }
 );
