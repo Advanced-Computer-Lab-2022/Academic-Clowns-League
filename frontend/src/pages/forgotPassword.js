@@ -1,6 +1,7 @@
 //import InstructorNavbar from "../components/instructorNavbar";
 import { useState } from "react";
 import { Routes, Route, useNavigate } from "react-router-dom";
+import GuestNavNoSearch from "../components/guestNavNoSearch";
 
 const ForgotPassword = () => {
   const params = new URLSearchParams(window.location.search);
@@ -55,6 +56,7 @@ const ForgotPassword = () => {
 
   return (
     <div>
+      <GuestNavNoSearch />
       <form
         className="changePassword"
         style={{ left: "50%", top: "30%", transform: "translate(-50%, -50%)" }}

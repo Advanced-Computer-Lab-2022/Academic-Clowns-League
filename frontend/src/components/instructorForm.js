@@ -94,7 +94,7 @@ const InstructorForm = () => {
         style={{
           top: "40px",
           width: "500px",
-          height: "-200px",
+          height: "-300px",
           right: 160
           // transform: "translate(90%, 1%)",
         }}
@@ -143,8 +143,12 @@ const InstructorForm = () => {
             onChange={(e) => setMiniBio(e.target.value)}
             value={miniBio}
           />{" "}
+          <p style={{ color: "red", transform: "translate(28%, 95%)" }}>
+        {" "}
+        {instructormessage}
+      </p>
           <MDBBtn
-            style={{ align: "center", top: "-15px" }}
+            style={{ align: "center", top: "-25px" }}
             className="button4"
             onClick={handleSubmit}
             color="danger"
@@ -153,13 +157,6 @@ const InstructorForm = () => {
           </MDBBtn>
         </MDBCardBody>
       </MDBCard>
-
-      <p style={{ color: "red", transform: "translate(33%, 160%)" }}>
-        {" "}
-        {instructormessage}
-      </p>
-
-      {error && <div className="error">{error}</div>}
     </form>
   );
 };

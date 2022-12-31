@@ -105,7 +105,7 @@ const MyProblem = ({ id, course, content, status, followUp }) => {
         </Card.Text>
         <Button variant="danger" style={{display:buttonState}} onClick={handleShow}>Follow up</Button>
       </Card.Body>
-      <Card.Footer className="text-muted" style={{display:fState}}> FollowUp: {followUp}</Card.Footer>
+      <Card.Footer className="text-muted" style={{display:fState}}> Follow Up: {followUp}</Card.Footer>
     </Card>
     <p> {" "}</p>
     
@@ -113,9 +113,9 @@ const MyProblem = ({ id, course, content, status, followUp }) => {
     <Offcanvas show={show} placement="top" onHide={handleClose} >
         <Offcanvas.Header closeButton >
           <Offcanvas.Title > </Offcanvas.Title>
-          <Form.Control as="textarea" rows={6} placeholder="Please enter followUp" style={{width:500 ,height:120}} 
+          <Form.Control as="textarea" rows={6} placeholder="Please enter followUp" style={{width:500 ,height:85}} 
           value={fText} onChange={(e) => setFText(e.target.value)} />
-          <Button variant="danger"  style={{position:"absolute", right:550, top:160}} onClick={confirm} >Confirm</Button>
+          <Button variant="danger"  style={{position:"absolute", right:550, top:110}} onClick={confirm} >Confirm</Button>
           <Overlay
         show={show2}
         target={target}
@@ -144,7 +144,7 @@ const MyProblem = ({ id, course, content, status, followUp }) => {
         keyboard={false}
       >
         <Modal.Body>
-      followup registered successfully
+      Followup registered successfully
         </Modal.Body>
         <Modal.Footer>
           <Button variant="danger" onClick={close2}>

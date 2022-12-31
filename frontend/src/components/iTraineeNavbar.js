@@ -145,6 +145,7 @@ const ITraineeNavbar = ({updateCourses}) => {
 
             <Dropdown
                     id={'Dropdown'}
+                    onSelect={toggleCurrency}
                 >
                  <Dropdown.Toggle style={{ textAlign: "right", paddingBottom: 5, backgroundColor:"#C00418", borderColor:"#C00418", boxShadow: "none", color:"#D0D0D0"}} className="navlink-world">
                  {<BiWorld size={25}/>}

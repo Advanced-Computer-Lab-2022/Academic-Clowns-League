@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+ import { useState, useEffect } from "react";
 import { useNavigate} from 'react-router-dom';
 import { MDBBtn } from 'mdb-react-ui-kit';
 import SubtitleMap from "./subtitleMap";
@@ -7,9 +7,14 @@ const CourseDetailsCTrainee = ({ course }) => {
   const [isActive, setIsActive] = useState(false);
   const navigate = useNavigate()
   const [myCourse, setMyCourse] = useState("")
+  let requestMessage = ''
   let button = 'Request Access'
   if(myCourse.register === true){
     button = 'Go to Course'
+  }
+  const request = myCourse.request
+  if(request == true){
+    requestMessage = 'Your request to access this course is pending'
   }
   const handleClick = () => {
     // 👇️ toggle
@@ -19,10 +24,17 @@ const CourseDetailsCTrainee = ({ course }) => {
     // setIsActive(true);
   };
 
+  const refresh = () => {
+    window.location.reload()
+  }
+
   const handleSubmit = async(e) =>{
     e.preventDefault()
     const response = await fetch(`api/request/requestAccess/?id=${course._id}`);
       const json = await response.json();
+      if(response.status == 200){
+refresh()
+      }
   }
 
   useEffect(() => {
@@ -79,6 +91,7 @@ const CourseDetailsCTrainee = ({ course }) => {
         </p>
       </div>
       <div className="mydetails-buttons">
+      <div className="error" style={{color: "red", fontSize: "small", marginBottom: 8, marginLeft: 80}}>{requestMessage}</div>
       <MDBBtn rounded
         style={{
           backgroundColor: isActive ? "#E0E0E0" : "",
@@ -110,6 +123,7 @@ const CourseDetailsCTrainee = ({ course }) => {
           }
         }}
         color="danger"
+        disabled={request}
       >
         {button}
       </MDBBtn>
