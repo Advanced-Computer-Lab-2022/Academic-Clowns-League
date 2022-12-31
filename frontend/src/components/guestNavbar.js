@@ -9,6 +9,7 @@ import { useNavigate } from "react-router-dom";
 import Button from 'react-bootstrap/Button';
 import { BiWorld } from 'react-icons/bi';
 import { GoSearch } from 'react-icons/go'
+import Dropdown from 'react-bootstrap/Dropdown';
 import { MDBBtn, MDBIcon, MDBInput, MDBInputGroup } from 'mdb-react-ui-kit';
 
 
@@ -100,7 +101,7 @@ const GuestNavbar = ({updateCourses}) => {
       </MDBBtn>
       </div>
       </div>
-          <div className='login-buttons-navbar'>
+          <div className='login-buttons-navbar' style={{marginLeft: 12}}>
           <MDBBtn className='login' style={{
           backgroundColor: "transparent",
           borderColor: "transparent",
@@ -115,11 +116,18 @@ const GuestNavbar = ({updateCourses}) => {
         }} color="link" onClick={() => navigate('/signup')}> Sign Up </MDBBtn>
         </div>
 
-          <NavDropdown title={<BiWorld size={25}/>} id="navbarScrollingDropdown" onSelect = {toggleCurrency} className='navlink-world' align="end">
-            {countries.map((country) => (
-                <NavDropdown.Item eventKey={country.country}>{country.country}</NavDropdown.Item>
+        <Dropdown
+                    id={'Dropdown'}
+                >
+                 <Dropdown.Toggle style={{ textAlign: "right", paddingBottom: 5, backgroundColor:"#C00418", borderColor:"#C00418", boxShadow: "none", color:"#D0D0D0"}} className="navlink-world">
+                 {<BiWorld size={25}/>}
+                 </Dropdown.Toggle>
+                <Dropdown.Menu style={{overflowY: 'scroll', maxHeight: 300}} align="end">
+                {countries.map((country) => (
+                <Dropdown.Item eventKey={country.country}>{country.country}</Dropdown.Item>
               ))}
-            </NavDropdown>
+                </Dropdown.Menu>
+            </Dropdown>
 
             {/*
             <Nav.Link href="#" disabled>

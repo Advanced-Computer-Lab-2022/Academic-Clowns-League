@@ -92,7 +92,7 @@ const MyProblem = ({ id, course, content, status, followUp }) => {
     return(
       <div>
 <body ref={ref} >
-<Card className="text-center" style={{width:800 ,height:200, position:"relative", left:300}}  >
+<Card className="text-center" style={{width:800 ,height:200, position:"relative", left:193}}  >
       <Card.Header><Badge pill bg="danger" style={{display:unseen}}>
         {status}
       </Badge> <Badge pill bg="warning" text="dark" style={{display:pending}}>
