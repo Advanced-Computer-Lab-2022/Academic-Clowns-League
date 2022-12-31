@@ -1223,6 +1223,7 @@ const moneyOwed = async (req, res) => {
 const sendCertificateMail = async (req, res) => {
   // const id = req.query.id;
   traineeEmail = req.user.email;
+  const Title = req.query.courseTitle;
   let mailTransporter = nodemailer.createTransport({
     service: "gmail",
     auth: {
@@ -1233,7 +1234,7 @@ const sendCertificateMail = async (req, res) => {
   let details = {
     from: "nourhan.khedr24@gmail.com",
     to: traineeEmail,
-    subject: "CanCham Course Certificate",
+    subject: Title+" Course Certificate",
 
     html: "<h2>Congratulations! You have successfully completed a course on CanCham's Online Learning Platform.</h2>",
     text: "Kindly find your certificate attached.",

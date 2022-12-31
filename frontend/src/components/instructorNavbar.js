@@ -162,7 +162,7 @@ const InstructorNavbar = ({ updateCourses }) => {
                 navigate(`/viewAndEditInfo?id`);
               }}
             >
-              View And Edit Information
+              My Profile
             </NavDropdown.Item>
 
             <NavDropdown.Item

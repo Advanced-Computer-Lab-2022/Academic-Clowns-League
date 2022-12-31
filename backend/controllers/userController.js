@@ -71,7 +71,7 @@ console.log("success")
       await User.findOne({username:userLoggingIn.username}).then(dbUser => {
         if(!dbUser){
             console.log("Incorrect Username")
-            return res.json({
+            return res.status(400).json({
                 message:"Invalid Username or Password"
             })
         }
@@ -103,7 +103,7 @@ console.log("success")
                          const token = jwt.sign({payload}, 'supersecret', {expiresIn: 604800})
                          res.cookie('jwtoken', token, { httpOnly: false, maxAge: 24*60*60*1000 })
                          res.cookie('role', role, { httpOnly: false, maxAge: 24*60*60*1000 })
-                         return res.json({
+                         return res.status(200).json({
                            message:"successful",
                            payload : payload,
                            role: role,
@@ -113,7 +113,7 @@ console.log("success")
                          
                          
             } else{
-                return res.json({
+              return res.status(400).json({
                     message:"Invalid Username or Password"
                 })
             }
@@ -138,7 +138,7 @@ const requireAuth = (req, res, next) => {
           message: "Failed to Authenticate",
         });
       req.user = decodedToken.payload;
-      console.log("User ", decodedToken);
+      
       next();
     });
   } else {
@@ -152,9 +152,9 @@ const resetPassword = async (req, res) => {
     /*if (!mongoose.Types.ObjectId.isValid(id)) {
     return res.status(404).json({ error: "No such instructor" });
   }*/
-    console.log(email);
+    
     const user = await User.findOne({ email: email });
-    console.log(user);
+    
     //const instructor = await Instructor.find({ _id: "63715373d953904400b6a4d5" });
 
     if (!user) {
@@ -193,6 +193,61 @@ const resetPassword = async (req, res) => {
     res.status(400).json({ error: "Access Restriced" });
   }
 };
+
+
+
+const updatePassword2 = async (req, res) => {
+  const id = req.user._id;
+
+  const encryptedPassword = await bcrypt.hash(req.body.newPassword, 10);
+  if (req.body.newPassword == req.body.confirmPassword) {
+    console.log("im here");
+
+    const user = await User.findOneAndUpdate(
+      { username:req.user.username },
+      {
+        password: encryptedPassword,
+      }
+    );
+    if (user.role == "Instructor") {
+      await Instructor.findOneAndUpdate(
+        { username: user.username },
+        {
+          password: encryptedPassword,
+        }
+      );
+    } else if (user.role == "cTrainee") {
+      await cTrainee.findOneAndUpdate(
+        { username: user.username },
+        {
+          password: encryptedPassword,
+        }
+      );
+    } else if (user.role == "iTrainee") {
+      await iTrainee.findOneAndUpdate(
+        { username: user.username },
+        {
+          password: encryptedPassword,
+        }
+      );
+    } else if (user.role == "Admin") {
+      await Admin.findOneAndUpdate(
+        { username: user.username },
+        {
+          password: encryptedPassword,
+        }
+      );
+    }
+
+    res.status(200).json(user);
+  } else {
+    res.status(400).json({ error: "cant do it" });}
+
+
+}
+
+
+
 
 const updatePassword = async (req, res) => {
   // console.log(id);
@@ -278,5 +333,5 @@ module.exports = {
   resetPassword,
   updatePassword,
   updateContract,
-  
+  updatePassword2
 };

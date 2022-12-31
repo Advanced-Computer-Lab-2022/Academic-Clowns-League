@@ -268,8 +268,7 @@ const CTraineeCourse = () => {
 
         const newProgress = json.data;
         if (newProgress >= 100) {
-
-          const sendEmail = await fetch("api/courses/sendCertificateMail");
+          const sendEmail = await fetch("api/courses/sendCertificateMail/?courseTitle=" + course.title);
         }
       }
     }
@@ -281,7 +280,7 @@ const CTraineeCourse = () => {
   };
 
   const handleShowAddCourseReview = () => setShowAddCourseReview(true);
-  
+
   const handleSaveAddCourseReview = async () => {
     if (tempCourseReview == '') {
       setAddCourseReviewMessage('   Your review cannot be blank!');
@@ -518,6 +517,8 @@ const CTraineeCourse = () => {
                     <br />
                     <em> <strong> Summary: </strong></em> {course.summary}
                     <br />
+                    <em> <strong> Total hours: </strong></em> {course.hours}
+                    <br />
                     <br />
                     <MDBRow className='g-0'>
                       <MDBCol md='2' style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', }}>
@@ -661,10 +662,17 @@ const CTraineeCourse = () => {
                   course.subtitles.map((subtitle) => (
                     <ListGroup.Item action as="li" className="d-flex justify-content-between align-items-start"
                       onClick={() => { markAsCompleted(subtitle._id); setVideoURL(subtitle.videoLink); }}>
+
+
                       <div className="ms-2 me-auto">
-                        <div className="fw-bold"> <BsFillPlayCircleFill /> {subtitle.title}</div>
+                        <div style={{ display: 'flex', flexDirection: 'row' }}>
+                          <div className="fw-bold"> <BsFillPlayCircleFill /> {subtitle.title}</div>
+                          <MDBCardText className="text-muted" style={{ fontSize: '12px', padding: '3px' }}><em>{subtitle.totalHours} hrs</em></MDBCardText>
+                        </div>
                         {subtitle.shortDescription}
                       </div>
+
+
                     </ListGroup.Item>
                   ))}
               </ListGroup>
