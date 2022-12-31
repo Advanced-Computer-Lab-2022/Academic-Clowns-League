@@ -279,7 +279,7 @@ const MyCourseDetailsInstructor = ({ course }) => {
       </FloatingLabel><br></br>
 
       <FloatingLabel controlId="floatingDiscountVU" label="Discount Valid Until">
-        <Form.Control type="text" placeholder="Discount Valid Until" value={discountValidUntil} onChange = {(e) => setDiscountValidUntil(e.target.value)}/>
+        <Form.Control type="date" placeholder="Discount Valid Until" value={discountValidUntil} onChange = {(e) => setDiscountValidUntil(e.target.value)}/>
       </FloatingLabel><br></br>
 
       <FloatingLabel controlId="floatingSummary" label="Summary *">
