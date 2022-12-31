@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import InstructorNavbar from "../components/instructorNavbar";
+import HomeInstNav from "../components/homeInstNav";
 import MyProblem from "../components/myProblem";
 
 const InstructorProblems = () => {  
@@ -19,7 +19,7 @@ const InstructorProblems = () => {
       {
         return (
           <div className="">
-            <InstructorNavbar />
+            <HomeInstNav />
             {myProblems &&
               myProblems.map((problem) => (
                 <MyProblem course={problem.course.title} status={problem.status} content={problem.content} followUp={problem.followUp}

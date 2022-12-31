@@ -74,6 +74,7 @@ const AdminForm = () => {
           top: "70px",
           width: "500px",
           height: "-200px",
+          right: 160
           // transform: "translate(90%, 20%)",
         }}
       >
@@ -93,13 +94,14 @@ const AdminForm = () => {
             onChange={(e) => setPassword(e.target.value)}
             value={password}
           />{" "}
-          <button
+          <MDBBtn
             style={{ allign: "center", top: "-15px" }}
             className="button4"
             onClick={handleSubmit}
+            color="danger"
           >
             Add Admin
-          </button>
+          </MDBBtn>
         </MDBCardBody>
         <p style={{ color: "red", transform: "translate(33%, 160%)" }}>
           {" "}

@@ -100,11 +100,11 @@ const CreateCourse = () => {
       </FloatingLabel><br></br>
 
       <FloatingLabel controlId="floatingDiscount" label="Discount">
-        <Form.Control type="text" placeholder="Discount" value="" onChange = {(e) => setDiscount(e.target.value)}/>
+        <Form.Control type="text" placeholder="Discount" value={discount} onChange = {(e) => setDiscount(e.target.value)}/>
       </FloatingLabel><br></br>
 
       <FloatingLabel controlId="floatingDiscountVU" label="Discount Valid Until">
-        <Form.Control type="text" placeholder="Discount Valid Until" value={discountValidUntil} onChange = {(e) => setDiscountValidUntil(e.target.value)}/>
+        <Form.Control type="date" placeholder="Discount Valid Until" value={discountValidUntil} onChange = {(e) => setDiscountValidUntil(e.target.value)}/>
       </FloatingLabel><br></br>
 
       <FloatingLabel controlId="floatingSummary" label="Summary *">

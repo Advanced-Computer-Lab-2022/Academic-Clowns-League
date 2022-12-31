@@ -143,11 +143,6 @@ const InstructorNavbar = ({ updateCourses }) => {
           </div>
 
           <NavDropdown title={<CgProfile size={25} />} id="navbarScrollingDropdown" className='navlink-profile-instructor' align="end">
-            <NavDropdown.Item
-              onClick={() => navigate("/instructorRatingsAndReviews")}
-            >
-              View my Ratings and Reviews
-            </NavDropdown.Item>
 
             <NavDropdown.Item
               onClick={() => {

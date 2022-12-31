@@ -3,7 +3,7 @@ import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import { useState } from 'react';
 import { Navigate, useNavigate } from 'react-router-dom';
-import GuestNavbar from '../components/guestNavbar';
+import GuestNavNoSearch from '../components/guestNavNoSearch';
 import Modal from 'react-bootstrap/Modal';
 import Stack from '@mui/material/Stack';
 import Card from 'react-bootstrap/Card';
@@ -109,7 +109,7 @@ const Signup = () => {
     }
     return (
         <div>
-            <GuestNavbar />
+            <GuestNavNoSearch />
             <Card style={{  position:'relative',width:'600px', margin:'auto',marginTop:'20px' }} >
                 <Card.Body>
                     <Stack direction="column" spacing={1} >

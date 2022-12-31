@@ -1,4 +1,4 @@
-import InstructorNavbar from "../components/instructorNavbar";
+import HomeInstNav from "../components/homeInstNav";
 import { useState, useEffect } from "react";
 import { Routes, Route, useNavigate } from "react-router-dom";
 import { MdOutlineModeEdit } from "react-icons/md";
@@ -144,7 +144,7 @@ const ViewAndEditInfo = () => {
   return (
     <div>
 
-      <InstructorNavbar />
+      <HomeInstNav />
       <section  > {/*className="vh-100" */} {/* style={{ backgroundColor: '#f4f5f7' }} */}
         <MDBContainer className="py-5 h-100">
           <MDBRow className="justify-content-center align-items-center h-100">

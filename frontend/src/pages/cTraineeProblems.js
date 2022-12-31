@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import CTraineeNavbar from "../components/cTraineeNavbar";
+import MyCoursesCTraineeNav from "../components/myCoursesCTraineeNav";
 import MyProblem from "../components/myProblem";
 
 const CTraineeProblems = () => {  
@@ -19,7 +19,7 @@ const CTraineeProblems = () => {
       {
         return (
           <div className="">
-            <CTraineeNavbar />
+            <MyCoursesCTraineeNav />
             {myProblems &&
               myProblems.map((problem) => (
                 <MyProblem course={problem.course.title} status={problem.status} content={problem.content} followUp={problem.followUp}

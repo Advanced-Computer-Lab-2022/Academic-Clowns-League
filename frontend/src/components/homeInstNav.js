@@ -97,11 +97,6 @@ const HomeInstNav = () => {
           </Nav>
 
           <NavDropdown title={<CgProfile size={25} />} id="navbarScrollingDropdown" className='navlink-profile-instructor' align="end">
-            <NavDropdown.Item
-              onClick={() => navigate("/instructorRatingsAndReviews")}
-            >
-              View my Ratings and Reviews
-            </NavDropdown.Item>
 
             <NavDropdown.Item
               onClick={() => {
@@ -116,7 +111,7 @@ const HomeInstNav = () => {
                 navigate(`/viewAndEditInfo?id`);
               }}
             >
-              View And Edit Information
+              My Profile
             </NavDropdown.Item>
 
             <NavDropdown.Item

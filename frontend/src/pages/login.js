@@ -3,7 +3,7 @@ import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import { useState } from "react";
 import { Link, Navigate, useNavigate } from "react-router-dom";
-import GuestNavbar from "../components/guestNavbar";
+import GuestNavNoSearch from "../components/guestNavNoSearch";
 import NavLink from "react-bootstrap/esm/NavLink";
 import Modal from 'react-bootstrap/Modal'
 import { ModalBody } from "react-bootstrap";
@@ -156,7 +156,7 @@ const Login = () => {
 
   return (
     <div>
-      <GuestNavbar />
+      <GuestNavNoSearch />
       <Card style={{ position: 'relative', width: '600px', margin: 'auto',marginTop:'20px' }} >
         <Card.Body>
           <Stack direction="column" spacing={1} >
@@ -219,7 +219,7 @@ const Login = () => {
         <ModalBody>
           <FloatingLabel controlId="floatingPassword" label="Password">
             <Form.Control type="password" placeholder="Password" value={password1} onChange={(e) => setPassword1(e.target.value)} />
-          </FloatingLabel>
+          </FloatingLabel><br></br>
           <FloatingLabel controlId="floatingPassword" label="Confirm Password">
             <Form.Control type="password" placeholder="Confirm Password" value={password2} onChange={(e) => setPassword2(e.target.value)} />
           </FloatingLabel>

@@ -100,6 +100,7 @@ const CTraineeForm = () => {
           top: "40px",
           width: "500px",
           height: "-200px",
+          right: 160
           //  transform: "translate(90%, 20%)",
         }}
       >
@@ -147,13 +148,14 @@ const CTraineeForm = () => {
             onChange={(e) => setCorporate(e.target.value)}
             value={corporate}
           />{" "}
-          <button
+          <MDBBtn
             style={{ allign: "center", top: "-15px" }}
             className="button4"
             onClick={handleSubmit}
+            color="danger"
           >
             Add corporate Trainee
-          </button>
+          </MDBBtn>
         </MDBCardBody>
       </MDBCard>
       <p style={{ color: "red", transform: "translate(33%, 160%)" }}>

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import CTraineeNavbar from "../components/cTraineeNavbar";
+import MyCoursesCTraineeNav from "../components/myCoursesCTraineeNav";
 import YouTube from 'react-youtube';
 
 import RateCourse from "../components/rateCourse";
@@ -462,7 +462,7 @@ const CTraineeCourse = () => {
 
   return (
     <div className="">
-      <CTraineeNavbar />
+      <MyCoursesCTraineeNav />
       {course && (
         <div>
           <MDBRow className='g-0'>
