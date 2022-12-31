@@ -226,14 +226,13 @@ const Login = () => {
         </ModalBody>
         <Modal.Footer>
 
-          <Button variant="danger" onClick={handleClose2}>
-            Save Password
-          </Button>
-          <p>{passwordError}</p>
+
+        <Stack direction="column" justifyContent="center" alignItems="center" spacing={0}>
+        <p style={{ color: 'red' }}>{passwordError}</p>
+          <Button variant="danger" onClick={handleClose2}> Save Password </Button>
+            </Stack>
         </Modal.Footer>
       </Modal>
-
-
 
 
     </div >

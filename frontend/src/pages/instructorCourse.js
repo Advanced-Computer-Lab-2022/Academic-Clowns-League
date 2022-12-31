@@ -177,6 +177,8 @@ const InstructorCourse = () => {
                     <br />
                     <em> <strong> Summary: </strong></em> {course.summary}
                     <br />
+                    <em> <strong> Total hours: </strong></em> {course.hours}
+                    <br />
                     <br />
 
                   </MDBCardText>
@@ -263,14 +265,14 @@ const InstructorCourse = () => {
 
 
                                 <Card style={{ fontSize: '20px', width: '99%', margin: '1px' }}>
-                                    <Card.Body>
-                                      <Stack direction="row" justifyContent="center" alignItems="center" >
+                                  <Card.Body>
+                                    <Stack direction="row" justifyContent="center" alignItems="center" >
 
                                       <MDBTypography tag="h6" style={{ margin: '2px', fontSize: 30 }}> "{review.content}"</MDBTypography>
-                                  <MDBCardText className="text-muted" style={{ marginLeft: '5px', fontSize: 30 }} > <em>  - {review.traineeName} </em></MDBCardText>
-                                      </Stack>
-                                    </Card.Body>
-                                  </Card>
+                                      <MDBCardText className="text-muted" style={{ marginLeft: '5px', fontSize: 30 }} > <em>  - {review.traineeName} </em></MDBCardText>
+                                    </Stack>
+                                  </Card.Body>
+                                </Card>
 
 
 
@@ -308,10 +310,17 @@ const InstructorCourse = () => {
                   course.subtitles.map((subtitle) => (
                     <ListGroup.Item action as="li" className="d-flex justify-content-between align-items-start"
                       onClick={() => { setVideoURL(subtitle.videoLink); }}>
+
+
                       <div className="ms-2 me-auto">
-                        <div className="fw-bold"> <BsFillPlayCircleFill /> {subtitle.title}</div>
+                        <div style={{ display: 'flex', flexDirection: 'row' }}>
+                          <div className="fw-bold"> <BsFillPlayCircleFill /> {subtitle.title}</div>
+                          <MDBCardText className="text-muted" style={{ fontSize: '12px', padding: '3px' }}><em>{subtitle.totalHours} hrs</em></MDBCardText>
+                        </div>
                         {subtitle.shortDescription}
                       </div>
+
+
                     </ListGroup.Item>
                   ))}
               </ListGroup>
