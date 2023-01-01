@@ -74,7 +74,7 @@ const CTraineeForm = () => {
         console.log("new corporate trainee is added", json);
       }
     } else {
-      if (username == "") setTraineemessage("Please enter a valid username");
+      if (username == "") setTraineemessage("Please enter a username");
       if (password == "") setTraineemessage("Please type in a password");
       if (email == "") setTraineemessage("Please type in an email");
       if (firstname == "") setTraineemessage("Please type in a firstname");
@@ -100,7 +100,7 @@ const CTraineeForm = () => {
           top: "40px",
           width: "500px",
           height: "-200px",
-          right: 160
+          right: 160,
           //  transform: "translate(90%, 20%)",
         }}
       >

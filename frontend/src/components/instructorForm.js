@@ -66,6 +66,7 @@ const InstructorForm = () => {
         setMiniBio("");
         setName("");
         setError(null);
+        setInstructormessage("New instructor added successfully");
         console.log("new Instructor added", json);
       }
     } else {

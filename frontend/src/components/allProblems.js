@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
-import Button from 'react-bootstrap/Button';
-import Card from 'react-bootstrap/Card';
-import Nav from 'react-bootstrap/Nav';
-import Modal from 'react-bootstrap/Modal';
+import React, { useState } from "react";
+import Button from "react-bootstrap/Button";
+import Card from "react-bootstrap/Card";
+import Nav from "react-bootstrap/Nav";
+import Modal from "react-bootstrap/Modal";
 
 const AllProblems = ({id, content, followUp, status, course, email, type}) => {
     const [b1, setB1] = useState("");
@@ -16,39 +16,42 @@ const AllProblems = ({id, content, followUp, status, course, email, type}) => {
     let unres="none";
     let unresButton = "Resolved";
 
-    if(status=="Resolved"){
-        buttonState="none";
-    }
-    else if(status=="Unseen"){
-        buttonState="";
-        //buttonName = "Pending"
-        unres="";
-    }
-    else{
-      //buttonName="Resolved"
-        buttonState="";
-    }
-    if(followUp!=""){
-        showTab="";
-    }
-    
-    const handleClose = () => setShow(false);
-    const handleShow = () => setShow(true);
-   
-    const bb1 = () => {setB1("");
-                       setB2("none")
-                       setB3("none")
+  if (status == "Resolved") {
+    buttonState = "none";
+  } else if (status == "Unseen") {
+    buttonState = "";
+    unres = "";
+    //buttonName = "Pending";
+  } else {
+    buttonState = "";
+    //buttonName = "Resolved";
+  }
+  if (followUp != "") {
+    showTab = "";
+  }
 
-                                    }
-    const bb2 = () => {setB2("");
-                       setB1("none")
-                       setB3("none")
-                 }
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
 
-    const bb3 = () => {setB2("none");
-                       setB1("none")
-                       setB3("")
-                 }
+  const bb1 = () => {
+    setB1("");
+    setB2("none");
+    setB3("none");
+  };
+  const bb2 = () => {
+    setB2("");
+    setB1("none");
+    setB3("none");
+  };
+
+  const bb3 = () => {
+    setB2("none");
+    setB1("none");
+    setB3("");
+  };
+
+
+
 
                  const changeStatus = async () => {
                     const response = await fetch(
@@ -156,9 +159,7 @@ const AllProblems = ({id, content, followUp, status, course, email, type}) => {
         </Modal.Footer>
       </Modal>
     </div>
+  );
+};
 
-
-    ) 
-}
-
-export default AllProblems ;
+export default AllProblems;
