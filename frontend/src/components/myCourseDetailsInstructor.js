@@ -169,10 +169,13 @@ const MyCourseDetailsInstructor = ({ course }) => {
       <div className="course-info">
       <h4>{course.title}</h4>
 
-      <p>
-        <strong>Total hours: </strong>
-        {course.hours}
-      </p>
+      
+      
+      <p style={{display: (course.hours)>=60?"true":"none"}}> <strong>Total hours: </strong> {Math.floor(course.hours/60)}hrs{course.hours%60}min </p>
+      <p style={{display: (course.hours)>=60?"none":"true"}}> <strong>Total hours: </strong> {course.hours%60}min </p>
+
+
+
       <p>
         <strong>Rating: </strong>
         {course.overallRating}
@@ -268,6 +271,7 @@ const MyCourseDetailsInstructor = ({ course }) => {
                 label="Subject *"
               >
         <Form.Select onChange={onChangeValue}>
+          <option>Please select a subject</option>
           <option value="Computer Science">Computer Science</option>
           <option value="Digital Media">Digital Media</option>
           <option value="Lab Programming">Lab Programming</option>

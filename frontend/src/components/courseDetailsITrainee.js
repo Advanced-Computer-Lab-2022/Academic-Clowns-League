@@ -91,10 +91,9 @@ const CourseDetailsITrainee = ({ course }) => {
       <div className="course-info">
       <h4>{myCourse.title}</h4>
 
-      <p>
-        <strong>Total hours: </strong>
-        {myCourse.hours}
-      </p>
+      <p style={{display: (myCourse.hours)>=60?"true":"none"}}> <strong>Total hours: </strong> {Math.floor(myCourse.hours/60)}hrs{myCourse.hours%60}min </p>
+      <p style={{display: (myCourse.hours)>=60?"none":"true"}}> <strong>Total hours: </strong> {myCourse.hours%60}min </p>
+
       <p>
         <strong>Rating: </strong>
         {myCourse.overallRating}

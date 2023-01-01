@@ -92,6 +92,7 @@ const CreateCourse = () => {
                 label="Subject *"
               >
         <Form.Select onChange={onChangeValue}>
+        <option>Please select a subject</option>
           <option value="Computer Science">Computer Science</option>
           <option value="Digital Media">Digital Media</option>
           <option value="Lab Programming">Lab Programming</option>

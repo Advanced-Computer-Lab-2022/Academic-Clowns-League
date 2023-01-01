@@ -21,7 +21,6 @@ const AddSubtitle = () => {
     const [title,setTitle] = useState('')
     const [videoLink,setVideoLink] = useState('')
     const [shortDescription,setShortDescription] = useState('')
-    const [totalHours,setTotalHours] = useState('')
     const [error, setError] = useState(null);
     const [message, setMessage] = useState(null);
     const [counter, setCounter] = useState(1);
@@ -45,7 +44,7 @@ const AddSubtitle = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault()
-        if(title == '' || videoLink == '' || shortDescription == '' || totalHours == ''){
+        if(title == '' || videoLink == '' || shortDescription == ''){
           setError('Please fill in all the fields')
         }
         else{
@@ -53,7 +52,6 @@ const AddSubtitle = () => {
             title,
             videoLink,
             shortDescription,
-            totalHours
         }
         const response = await fetch("/api/courses/addCourseSub/?id=" + id,{
             method: 'PATCH',
@@ -74,7 +72,6 @@ const AddSubtitle = () => {
             setTitle('')
             setVideoLink('')
             setShortDescription('')
-            setTotalHours('')
             setCounter(counter + 1);
             setMessage(counter + ' subtitle(s) added successfully')
             setError(null);
@@ -105,9 +102,6 @@ const AddSubtitle = () => {
         <Form.Control type="text" placeholder="Short Description *" value={shortDescription} onChange = {(e) => setShortDescription(e.target.value)}/>
       </FloatingLabel><br></br>
 
-      <FloatingLabel controlId="floatingPrice" label="Total Hours *">
-        <Form.Control type="text" placeholder="Total Hours *" value={totalHours} onChange = {(e) => setTotalHours(e.target.value)}/>
-      </FloatingLabel><br></br>
 
       {error && <div className="error" style={{color: "red", fontSize: "small"}}>{error}</div>}
       <Button variant="danger" onClick={handleSubmit}>Add</Button>{' '}
