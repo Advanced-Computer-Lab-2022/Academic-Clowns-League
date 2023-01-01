@@ -59,11 +59,11 @@ const AdminForm = () => {
     }
 
     if (username == "") {
-      setAdminmessage("please enter a username");
+      setAdminmessage("Please enter a username");
     }
 
     if (username == "" && password == "") {
-      setAdminmessage("please enter username and password");
+      setAdminmessage("Please enter username and password");
     }
   };
 
@@ -94,8 +94,12 @@ const AdminForm = () => {
             onChange={(e) => setPassword(e.target.value)}
             value={password}
           />{" "}
+          <p style={{ color: "red", transform: "translate(32%, 40%)" }}>
+          {" "}
+          {adminmessage}
+        </p>
           <MDBBtn
-            style={{ allign: "center", top: "-15px" }}
+            style={{ allign: "center", top: "-33px" }}
             className="button4"
             onClick={handleSubmit}
             color="danger"
@@ -103,13 +107,7 @@ const AdminForm = () => {
             Add Admin
           </MDBBtn>
         </MDBCardBody>
-        <p style={{ color: "red", transform: "translate(33%, 160%)" }}>
-          {" "}
-          {adminmessage}
-        </p>
       </MDBCard>
-
-      {error && <div className="error">{error}</div>}
     </form>
   );
 };

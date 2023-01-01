@@ -106,23 +106,23 @@ const CTraineeForm = () => {
       >
         <MDBCardHeader>Add Corporate Trainee</MDBCardHeader>
         <MDBCardBody>
-          <MDBCardTitle>Firstname:</MDBCardTitle>
+          <MDBCardTitle>First Name:</MDBCardTitle>
           <MDBInput
-            label="firstname"
+            label="First Name"
             type="text"
             onChange={(e) => setFirstname(e.target.value)}
             value={firstname}
           />{" "}
-          <MDBCardTitle>Lastname:</MDBCardTitle>
+          <MDBCardTitle>Last Name:</MDBCardTitle>
           <MDBInput
-            label="lastname"
+            label="Last Name"
             type="text"
             onChange={(e) => setLastname(e.target.value)}
             value={lastname}
           />{" "}
           <MDBCardTitle>Email:</MDBCardTitle>
           <MDBInput
-            label="email"
+            label="Email"
             type="text"
             onChange={(e) => setEmail(e.target.value)}
             value={email}
@@ -148,8 +148,12 @@ const CTraineeForm = () => {
             onChange={(e) => setCorporate(e.target.value)}
             value={corporate}
           />{" "}
+          <p style={{ color: "red", transform: "translate(25%, 85%)" }}>
+        {" "}
+        {traineemessage}
+      </p>
           <MDBBtn
-            style={{ allign: "center", top: "-15px" }}
+            style={{ allign: "center", top: "-25px" }}
             className="button4"
             onClick={handleSubmit}
             color="danger"
@@ -158,12 +162,6 @@ const CTraineeForm = () => {
           </MDBBtn>
         </MDBCardBody>
       </MDBCard>
-      <p style={{ color: "red", transform: "translate(33%, 160%)" }}>
-        {" "}
-        {traineemessage}
-      </p>
-
-      {error && <div className="error">{error}</div>}
     </form>
   );
 };

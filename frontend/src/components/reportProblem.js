@@ -96,7 +96,7 @@ const ReportProblem = ({cid}) => {
   <Form >
     <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
     <p style={{color:"firebrick", display:checkT}} >
-        please specify type
+        Please specify type
       </p>
     <Form.Select aria-label="Default select example" onChange={onChangeValue}>
     <option>Please select type of inconvenience</option>
@@ -120,7 +120,7 @@ const ReportProblem = ({cid}) => {
       <Form.Label>Sorry for the inconvencience. Please enter the details:</Form.Label>
       <Form.Control as="textarea" rows={6} value={content} onChange={(e) => setContent(e.target.value)} />
       <p style={{color:"firebrick", display:checkC}} >
-        please specify your inconvencience in the given field
+        Please specify your inconvencience in the given field
       </p>
     </Form.Group>
 
@@ -140,7 +140,7 @@ const ReportProblem = ({cid}) => {
         keyboard={false}
       >
         <Modal.Body>
-        problem registered successfully. your inconvenience will be resolved shortly.
+        Problem registered successfully. Your inconvenience will be resolved shortly.
         </Modal.Body>
         <Modal.Footer>
           <Button variant="danger" onClick={close}>

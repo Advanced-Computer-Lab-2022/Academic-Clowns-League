@@ -13,6 +13,7 @@ import {
 import Button from "react-bootstrap/Button";
 
 import React from "react";
+import GuestNavNoSearch from "../components/guestNavNoSearch";
 
 const ForgotPassword = () => {
   const params = new URLSearchParams(window.location.search);
@@ -78,6 +79,7 @@ const ForgotPassword = () => {
 
   return (
     <div>
+      <GuestNavNoSearch />
       <img
         width="50%"
         height="60%"
@@ -90,8 +92,7 @@ const ForgotPassword = () => {
           width: "400px",
           height: "430px",
           transform: "translate(40%, -90%)",
-        }}
-      >
+        }}>
         <MDBCardHeader>Reset Password</MDBCardHeader>
         <MDBCardBody>
           <MDBCardText>New Password</MDBCardText>

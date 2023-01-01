@@ -6,6 +6,7 @@ const bcrypt = require("bcrypt");
 const { json } = require("body-parser");
 const User = require("../models/userModel");
 const Admin = require("../models/adminModel");
+const Request = require("../models/requestModel");
 const nodemailer = require("nodemailer");
 
 //POST a corporate trainee
@@ -235,6 +236,7 @@ const getCourse = async (req, res) => {
     const ctraineeCourses = await cTrainee
       .findOne({ _id: ctraineeID })
       .select("courses");
+    const request = await Request.findOne({cTraineeId: req.user._id, courseId: req.query.id, status: "pending"})
     const courseID = mongoose.Types.ObjectId(req.query.id);
     const course = await Course.aggregate([
       {
@@ -265,6 +267,13 @@ const getCourse = async (req, res) => {
       course[0].register = true;
     } else {
       course[0].register = false;
+    }
+
+    if(request == null){
+      course[0].request = false
+    }
+    else{
+      course[0].request = true
     }
 
     res.status(200).json(course[0]);

@@ -61,7 +61,7 @@ const ITraineeChangePassword = () => {
       const json = await response.json();
       if (response.status == 400) {
         setError(json.error);
-        setMessage("current password is incorrect");
+        setMessage("Current password is incorrect");
       }
       if (response.status == 200) {
         setPassword("");
@@ -72,9 +72,9 @@ const ITraineeChangePassword = () => {
         console.log("Password Updated", json);
       }
     } else if (password == "" || newPassword == "" || confirmPassword == "") {
-      setMessage("please type in all required fields");
+      setMessage("Please type in all required fields");
     } else if (newPassword != confirmPassword) {
-      setMessage("confirmation password doesn't match the new password");
+      setMessage("Confirmation password doesn't match the new password");
     }
   };
   return (
@@ -101,7 +101,7 @@ const ITraineeChangePassword = () => {
           <MDBCardBody>
             <MDBCardText>Current Password</MDBCardText>
             <MDBInput
-              label="current Password"
+              label="Current Password"
               type="password"
               onChange={(e) => setPassword(e.target.value)}
               value={password}
@@ -117,32 +117,33 @@ const ITraineeChangePassword = () => {
             <br></br>
             <MDBCardText>Confirm New Password</MDBCardText>
             <MDBInput
-              label="confirm Password"
+              label="Confirm Password"
               type="password"
               onChange={(e) => setConfirmPassword(e.target.value)}
               value={confirmPassword}
             />{" "}
-            <Button
-              type="button"
-              class="btn btn-outline-success"
-              href="#"
-              variant="danger"
-              onClick={handleSubmit}
-              style={{ transform: "translate(55%,90%)" }}
-            >
-              Change Password
-            </Button>
-          </MDBCardBody>
-          <p
+            <p
             style={{
               color: "red",
-              transform: "translate(20%, 200%)",
+              transform: "translate(15%, 80%)",
               width: "500px",
             }}
           >
             {" "}
             {message}
           </p>
+            <Button
+              type="button"
+              class="btn btn-outline-success"
+              href="#"
+              variant="danger"
+              onClick={handleSubmit}
+              style={{ transform: "translate(55%,30%)" }}
+            >
+              Change Password
+            </Button>
+          </MDBCardBody>
+          
         </MDBCard>
       </form>
     </div>
