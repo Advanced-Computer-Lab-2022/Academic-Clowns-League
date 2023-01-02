@@ -71,6 +71,7 @@ const CTraineeForm = () => {
         setLastname("");
         setCorporate("");
         setError(null);
+        setTraineemessage("Corporate trainee added successfully");
         console.log("new corporate trainee is added", json);
       }
     } else {
@@ -88,9 +89,9 @@ const CTraineeForm = () => {
         lastname == "" &&
         corporate == ""
       )
-        setTraineemessage("Please fill in all the required fields");
+        setTraineemessage("Please fill in all the fields");
       if (firstname == "" || lastname == "" || email == "" || corporate == "")
-        setTraineemessage("Please fill in all the required fields");
+        setTraineemessage("Please fill in all the fields");
     }
   };
   return (

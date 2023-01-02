@@ -113,7 +113,7 @@ const MyProblem = ({ id, course, content, status, followUp }) => {
     <Offcanvas show={show} placement="top" onHide={handleClose} >
         <Offcanvas.Header closeButton >
           <Offcanvas.Title > </Offcanvas.Title>
-          <Form.Control as="textarea" rows={6} placeholder="Please enter followUp" style={{width:500 ,height:85}} 
+          <Form.Control as="textarea" rows={6} placeholder="Please enter your follow up" style={{width:500 ,height:85}} 
           value={fText} onChange={(e) => setFText(e.target.value)} />
           <Button variant="danger"  style={{position:"absolute", right:550, top:110}} onClick={confirm} >Confirm</Button>
           <Overlay
@@ -124,7 +124,7 @@ const MyProblem = ({ id, course, content, status, followUp }) => {
         containerPadding={20}
       >
         <Popover id="popover-contained">
-          <Popover.Header as="h3" style={{display:one}}>Please enter your followup in the given field</Popover.Header>
+          <Popover.Header as="h3" style={{display:one}}>Please enter your follow up in the given field</Popover.Header>
         </Popover>
       </Overlay>
         </Offcanvas.Header>
@@ -144,7 +144,7 @@ const MyProblem = ({ id, course, content, status, followUp }) => {
         keyboard={false}
       >
         <Modal.Body>
-      Followup registered successfully
+      Follow Up registered successfully
         </Modal.Body>
         <Modal.Footer>
           <Button variant="danger" onClick={close2}>

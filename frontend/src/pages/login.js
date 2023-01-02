@@ -41,42 +41,49 @@ const Login = () => {
 
     const json = await response2.json()
 
-    if (password1 == password2) {
+    if (password1 =="" || password2==""){
+      setPasswordError("Password cannot be empty");
+    }
+    else{
+      if (password1 == password2) {
 
-      const response3 = await fetch("/api/users/updatePassword2", {
-        method: "PATCH",
-        body: JSON.stringify({
-
-          "newPassword": password1,
-          "confirmPassword": password2,
-
-        }),
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-      const json2 = await response3.json()
-      console.log(json2)
-
-
-
-      if (json.role == "iTrainee") {
-        window.location.href = `/individualTraineeHome`;
+        const response3 = await fetch("/api/users/updatePassword2", {
+          method: "PATCH",
+          body: JSON.stringify({
+  
+            "newPassword": password1,
+            "confirmPassword": password2,
+  
+          }),
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+        const json2 = await response3.json()
+        console.log(json2)
+  
+  
+  
+        if (json.role == "iTrainee") {
+          window.location.href = `/individualTraineeHome`;
+        }
+        else if (json.role == "cTrainee") {
+          window.location.href = `/corporateTraineeHome`;
+        }
+        else if (json.role == "Instructor") {
+          window.location.href = `/instructorHome`;
+        }
+        else if (json.role == "Admin") {
+          window.location.href = `/adminProblems`;
+        }
       }
-      else if (json.role == "cTrainee") {
-        window.location.href = `/corporateTraineeHome`;
+  
+      else {
+        setPasswordError("Passwords do not match.");
       }
-      else if (json.role == "Instructor") {
-        window.location.href = `/instructorHome`;
-      }
-      else if (json.role == "Admin") {
-        window.location.href = `/adminProblems`;
-      }
+
     }
 
-    else {
-      setPasswordError("Passwords do not match.");
-    }
 
 
 

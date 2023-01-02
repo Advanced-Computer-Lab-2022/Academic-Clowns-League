@@ -153,7 +153,7 @@ const InstructorHome = () => {
         </MDBTabsItem>
         <MDBTabsItem>
           <MDBTabsLink onClick={() => handleJustifyClick('tab3')} active={justifyActive === 'tab3'}>
-            All Courses
+            All My Courses
           </MDBTabsLink>
         </MDBTabsItem>
       </MDBTabs>

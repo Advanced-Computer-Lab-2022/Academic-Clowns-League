@@ -102,7 +102,7 @@ const CTraineeChangePassword = () => {
           <MDBCardText>Current Password</MDBCardText>
           <MDBInput
             label="Current Password"
-            type="text"
+            type="password"
             onChange={(e) => setPassword(e.target.value)}
             value={password}
           />{" "}
@@ -110,7 +110,7 @@ const CTraineeChangePassword = () => {
           <MDBCardText>New Password</MDBCardText>
           <MDBInput
             label="New Password"
-            type="text"
+            type="password"
             onChange={(e) => setNewPassword(e.target.value)}
             value={newPassword}
           />{" "}
@@ -118,7 +118,7 @@ const CTraineeChangePassword = () => {
           <MDBCardText>Confirm new password</MDBCardText>
           <MDBInput
             label="Confirm Password"
-            type="text"
+            type="password"
             onChange={(e) => setConfirmPassword(e.target.value)}
             value={confirmPassword}
           />{" "}
