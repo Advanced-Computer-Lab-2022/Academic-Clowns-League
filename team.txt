@@ -1,0 +1,12 @@
+Team members:
+Ganna Mohamed Abdelhafiz 49-17219
+Mariam Hossam ElNaggar  49-1181
+Nourhan Ahmed Khedr 49-2023
+Mariam Faggal 49-12207
+Adam Nizar 49-2819
+
+In every sprint tasks were split equally among the team members.
+
+Sprint 1 had 14 requirements so each of us worked on 2-3 requirements.
+Sprint 2 had 19 requirements so each of us worked on 3-4 requirements.
+Sprint 3 had 27 requirements and 6 bonus requirements so each of us worked on 6-7 requirements.
