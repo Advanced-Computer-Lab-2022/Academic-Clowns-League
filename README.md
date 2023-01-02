@@ -146,31 +146,8 @@ https://youtu.be/1r-F3FIONl8
 ![App Screenshot](https://i.paste.pics/3cc3a144a0d8d7612c8e3255041702b9.png)
 
 ## Code Examples
-[
-const getAllCourses = async (req, res) => {
-  const courses = await Course.aggregate([
-    {
-      $lookup: {
-        from: "instructors",
-        localField: "instructor",
-        foreignField: "_id",
-        as: "instructorData",
-      },
-    },
-    {
-      $unwind: "$instructorData",
-    },
-    {
-      $match: { $and: [ {published: true}, {open: true} ]}
-    }
-  ]);
-  res.status(200).json(courses);
-};
-]
 
-
-
-[
+```
 const updateCourse = async (req, res) => {
   if (await Instructor.findById(req.user._id)) {
     const id = req.query.id;
@@ -187,8 +164,41 @@ const updateCourse = async (req, res) => {
     res.status(400).json({ error: "Access Restriced" });
   }
 };
+```
 
-]
+```
+const printCertificatePDF = async (req, res) => {
+  if (
+    (await iTrainee.findById(req.user._id)) ||
+    (await cTrainee.findById(req.user._id))
+  ) {
+    const stream = res.writeHead(200, {
+      "Content-Type": "application/pdf",
+      "Content-Disposition": "attachement;filename=Cetificate.pdf",
+    });
+
+    buildCertificatePDF(
+      (chunk) => stream.write(chunk),
+      () => stream.end()
+    );
+  } else {
+    res.status(400).json({ error: "Access Restriced" });
+  }
+};
+
+function buildCertificatePDF(dataCallback, endCallback) {
+  const doc = new PDFDocument();
+  doc.on("data", dataCallback);
+  doc.on("end", endCallback);
+  doc
+    .image("public/certificate.png", 55, 250, { fit: [500, 500] })
+    //.rect(200, 30, 250, 250)
+    .stroke();
+  // .text("Fit", 320, 0);
+  doc.end();
+}
+
+```
 
 
 
