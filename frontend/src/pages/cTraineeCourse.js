@@ -517,7 +517,8 @@ const CTraineeCourse = () => {
                     <br />
                     <em> <strong> Summary: </strong></em> {course.summary}
                     <br />
-                    <em> <strong> Total hours: </strong></em> {course.hours}
+                    <em style={{display: (course.hours)>=60?"true":"none"}}> <strong> Total hours: </strong>  {Math.floor(course.hours/60)}hrs{course.hours%60}min </em>
+                    <em style={{display: (course.hours)>=60?"none":"true"}}> <strong> Total hours: </strong>  {course.hours%60}min </em>
                     <br />
                     <br />
                     <MDBRow className='g-0'>
@@ -667,7 +668,12 @@ const CTraineeCourse = () => {
                       <div className="ms-2 me-auto">
                         <div style={{ display: 'flex', flexDirection: 'row' }}>
                           <div className="fw-bold"> <BsFillPlayCircleFill /> {subtitle.title}</div>
-                          <MDBCardText className="text-muted" style={{ fontSize: '12px', padding: '3px' }}><em>{subtitle.totalHours} hrs</em></MDBCardText>
+
+                          <MDBCardText className="text-muted" style={{ fontSize: '12px', padding: '3px', display: (subtitle.totalHours) >= 60 ? "true" : "none" }}><em>{Math.floor(subtitle.totalHours / 60)}hrs{subtitle.totalHours % 60}min</em></MDBCardText>
+
+                          <MDBCardText className="text-muted" style={{ fontSize: '12px', padding: '3px', display: (subtitle.totalHours) >= 60 ? "none" : "true" }}><em>{subtitle.totalHours % 60}min</em></MDBCardText>
+
+
                         </div>
                         {subtitle.shortDescription}
                       </div>

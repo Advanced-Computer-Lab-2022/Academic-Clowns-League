@@ -7,6 +7,7 @@ const mongoose = require("mongoose");
 const nodemailer = require("nodemailer");
 const Admin = require("../models/adminModel");
 //const user = require("../models/userModel");
+const moment = require('moment');
 
 const PDFDocument = require("pdfkit");
 const { listeners } = require("process");
@@ -944,15 +945,26 @@ const viewCorrectAnswer = async (req, res) => {
 };
 
 const addCourseSub = async (req, res) => {
+
   if(await Instructor.findById(req.user._id)){  const id = req.query.id;
   const {
     //courseID, //637a197cbc66688b3924a864
     title,
     videoLink,
-    shortDescription,
-    totalHours,
+    shortDescription
   } = req.body;
   const videoId = getId(videoLink);
+
+  let totalHours =0;
+  let url = 'https://www.googleapis.com/youtube/v3/videos?'+`id=${videoId}`+`&part=contentDetails&key=${process.env.YOUTUBE_API_KEY}`;
+  const result = await fetch(url).then((data)=> data.json());
+  //console.log(result);
+  result.items.map((item) => {
+      totalHours = Number(Math.ceil(moment.duration(item.contentDetails.duration).asMinutes()));
+      console.log("MINUTES: "+totalHours);
+  });
+
+  console.log("TOT HRS: "+totalHours);
   const embeddedLink = "//www.youtube.com/embed/" + videoId;
   const courseSubs = (await Course.findById({ _id: id }).select("subtitles")).subtitles;
   const oldCourse = await Course.findOne({ _id: id })
@@ -975,6 +987,7 @@ else{
 }
 
 };
+
 const addCoursePreview = async (req, res) => {
   if (await Instructor.findById(req.user._id)) {
     const id = req.query.id;
@@ -1636,6 +1649,11 @@ const getCourseInfo = async (req, res) => {
   }
 };
 
+
+
+
+
+
 module.exports = {
   getAllCourses,
   getCourse,
@@ -1672,5 +1690,5 @@ module.exports = {
   getInstUnpub,
   publishCourse,
   closeCourse,
-  getCourseInfo,
+  getCourseInfo
 };

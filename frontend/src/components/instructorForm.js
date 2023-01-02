@@ -84,9 +84,9 @@ const InstructorForm = () => {
         miniBio == "" &&
         name == ""
       )
-        setInstructormessage("Please fill in all required fields");
+        setInstructormessage("Please fill in all fields");
       if (country == "" || email == "" || miniBio == "" || name == "")
-        setInstructormessage("Please fill in all required fields");
+        setInstructormessage("Please fill in all fields");
     }
   };
   return (

@@ -38,7 +38,7 @@ const WalletHistory = () => {
       <MDBTableBody>
         <tr>
           <td>December</td>
-          <td>{1800*rate} {currency}</td>
+          <td>{0*rate} {currency}</td>
         </tr>
       </MDBTableBody>
     </MDBTable>
