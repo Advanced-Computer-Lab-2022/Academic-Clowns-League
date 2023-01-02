@@ -146,6 +146,7 @@ https://youtu.be/1r-F3FIONl8
 ![App Screenshot](https://i.paste.pics/3cc3a144a0d8d7612c8e3255041702b9.png)
 
 ## Code Examples
+[
 const getAllCourses = async (req, res) => {
   const courses = await Course.aggregate([
     {
@@ -165,10 +166,11 @@ const getAllCourses = async (req, res) => {
   ]);
   res.status(200).json(courses);
 };
+]
 
 
 
-
+[
 const updateCourse = async (req, res) => {
   if (await Instructor.findById(req.user._id)) {
     const id = req.query.id;
@@ -185,6 +187,8 @@ const updateCourse = async (req, res) => {
     res.status(400).json({ error: "Access Restriced" });
   }
 };
+
+]
 
 
 
