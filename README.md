@@ -234,6 +234,7 @@ To run the frontend:
 > npm start
 ```
 Then head to http://localhost:3000/ and start navigating.
+
 NOTE: you need to add the following environment variables to a .env file: 
 ```PORT```
 ```MONGO_URI```
@@ -247,7 +248,9 @@ NOTE: you need to add the following environment variables to a .env file:
 Contributions are always welcome! Your contributions in implementing any of these features would be appreciated:
 - Having a Q&A section where trainees can leave questions for their instructors and instructors can view and answer those questions.
 - Displaying more insights for the trainees by keeping a history of their grades and displaying their average score and keep track of the change in their average score over time.
+
 Here's how to contribute:
+
 1- Fork and clone the repo
 2- Install all dependencies and run the project by following the instructions in the [Installations](https://github.com/Advanced-Computer-Lab-2022/Academic-Clowns-League#installations) and [How To Use](https://github.com/Advanced-Computer-Lab-2022/Academic-Clowns-League#how-to-use) sections.
 3- Create a new branch and start working on the feature.
