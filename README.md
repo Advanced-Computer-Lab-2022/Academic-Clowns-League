@@ -1,25 +1,78 @@
-
-# Online Learning System
-This Project is essentially a fully functioning learning system with a database to store various types of users and a polished front end experience. It's a full Online learning platform, handling the whole learning process, which includes the uploading of learning materials, the authorization, the payment procedures, reporting issues, rating and reviewing and much more.
-
+# Canadian Chamber of Commerce Online Learning System
+This Project is essentially a full stack web app that represents an online learning platform using the MERN stack. It caters for various types of users and provides a polished front end experience. It's covering the whole learning process, for both instructors and learners as well as system administrators, which includes the uploading of learning materials, the authorization, the payment procedures, reporting issues, rating and reviewing and much more.
 
 ## Motivation
-The reason this project was implemented was for a university project. The objective was to learn how to properly use the Agile Methodology, to plan out a project and develop the software, learn the process of following a given set of System Requirements to develop a software, learn to research and master the use of the MERN Stack and learn how to work together as a team on GitHub.
-
-
+The reason this project was implemented was for a university project for the course `CSEN704 - Advanced Computer Lab`. The objective was for us to learn how to properly use the Agile Methodology, to plan out a project and develop the software, learn the process of following a given set of System Requirements to develop a software, learn to research and master the use of the MERN Stack and learn how to work together as a team on GitHub.
 
 ## Build Status
-Currently, there are no known bugs on our application, but please report to us if you experience anything unusual.
+The project is currently in development. We are working on the following points to have a better UI:
+- The rating on a course should be rounded to the nearest tenth (for example if a rating is 3.6666666, it should simply be displayed as 3.7).
+- The "Submit" button on an exercise has a bug, and sometimes displays an error message when it shouldn't.
+- Font should be smaller
+- Thumbnail for course preview should be bigger.
+
+Please report to us if you experience any additional bugs.
+
 
 ## Code Style
-The standard style is followed in this project. Files names start with small letters and any followig word gets capitalized (camelCase), names of components in React start with capital letters. On the backend, the code was neatly split into routers, models and controllers for every model. The frontend was organized into pages and reusable components. 
+We used the standard coding style in this project.  Files names start with small letters and any followig word gets capitalized (camelCase), names of components in React start with capital letters. On the backend, the code was neatly split into routers, models and controllers for every model. The frontend was organized into pages and reusable components. 
+
+## Screenshots
+![App Screenshot](https://i.paste.pics/9afab6a1276e89de41aac94caeb6364f.png)
+![App Screenshot](https://i.paste.pics/e575c9847e9ed92fc8c40506c975a895.png)
+![App Screenshot](https://i.paste.pics/3cc3a144a0d8d7612c8e3255041702b9.png)
+![Screenshot (228)](https://user-images.githubusercontent.com/77853945/210191508-0691583b-fd3f-4780-bcfc-a551785ac81e.png)
+
+
 
 ## Tech/Framework used
-The MERN Stack which consists of MongoDB (the database), Express, React and NodeJs.
+![MongoDB](https://img.shields.io/badge/MongoDB-%234ea94b.svg?style=for-the-badge&logo=mongodb&logoColor=white) ![Express.js](https://img.shields.io/badge/express.js-%23404d59.svg?style=for-the-badge&logo=express&logoColor=%2361DAFB) ![React](https://img.shields.io/badge/react-%2320232a.svg?style=for-the-badge&logo=react&logoColor=%2361DAFB) ![NodeJS](https://img.shields.io/badge/node.js-6DA55F?style=for-the-badge&logo=node.js&logoColor=white)  ![YouTube](https://img.shields.io/badge/YouTube-%23FF0000.svg?style=for-the-badge&logo=YouTube&logoColor=white) ![NPM](https://img.shields.io/badge/NPM-%23000000.svg?style=for-the-badge&logo=npm&logoColor=white) ![Bootstrap](https://img.shields.io/badge/bootstrap-%23563D7C.svg?style=for-the-badge&logo=bootstrap&logoColor=white) ![Postman](https://img.shields.io/badge/Postman-FF6C37?style=for-the-badge&logo=postman&logoColor=white)  ![Git](https://img.shields.io/badge/git-%23F05033.svg?style=for-the-badge&logo=git&logoColor=white) ![GitHub](https://img.shields.io/badge/github-%23121011.svg?style=for-the-badge&logo=github&logoColor=white) ![Visual Studio Code](https://img.shields.io/badge/Visual%20Studio%20Code-0078d7.svg?style=for-the-badge&logo=visual-studio-code&logoColor=white)
+- MongoDB 
+- Express 
+- React 
+- NodeJs
+- Youtube Data API v3
+- NPM  
+- React Bootstrap
+- Postman  
+- Git 
+- GitHub
+- VSCode   
+- Stripe
+- NodeMailer
+- Mongoose
+- PDFkit
+- Material UI
+- MDB
+- React Player
+
 
 
 ## Features
-Smooth front end experience, fully functional database, fully implemented country API and currency tranfers, VISA Payments, integration with the Youtube player API,  watching videos without leaving the website, being able to take notes and download them, automation and receiving certificates by email, practicing and solving exercises, rating and reviewing instructors and courses as well as reporting any possible issues.
+- Authentication and authorization as an individual trinee, corporate trainee, instructor or admin, as well as some limited access to the system as a guest.
+- Security and route protection.
+- Currency Conversion based on the country you choose.
+- Automation such as automatically receiving certificates by email, and automatically updating your progress if you watch a lesson or pass the course exam.
+- Account recovery, as you can reset your password if you forget it by providing your email.
+- Watching embedded youtube videos without having to leave the website.
+- The whole payment procedure using your credit card or your wallet.
+- Rating instructors/courses.
+- Reviewing instructors/courses.
+- Reporting issues, and following up on them.
+- Profiles for trainees and instructors.
+- Setting discounts with expiry dates.
+- Searching and filtering through data.
+- Auto-calculated durations of subtitles and courses.
+- Seeing popular courses first.
+- History of all your previously reported problems and their statuses.
+- A neat view from the admin's POV to keep track of everything and solve issues efficiently.
+- As a trainee, you can pay for a course (if you're an individual trainee) or request access to it (if you're a corporate trainee), watch the lessons, solve exercises, take notes and save them as PDF, download your certificate, keep track of your progress and rate/review a course or an instructor, report issues and request a refund if you're an individual trainee who's less than halfway through the course.
+- As an instructor , you can create a course and sets its price and discount, upload the content and exercises, view your earnings for the past 3 months, see your ratings and reviews. You can also edit your information such as email and Bio, you can have unpublished courses that you are still in the process of creating, and you can close a published course to prevent further trainees from enrolling in it.
+- As an admin, you can view and resolve problems, add instructors/corporate trainees/admins, set promotions on courses, approve access requests and refund requests.
+
+
+
+
 
 ## Installations
 Libraries/packages used are in the package.json file.
@@ -136,15 +189,6 @@ https://dev.to/salarc123/mern-stack-authentication-tutorial-part-1-the-backend-1
 Using Stripe API:
 
 https://youtu.be/1r-F3FIONl8
-
-
-
-## Screenshots
-
-![App Screenshot](https://i.paste.pics/9afab6a1276e89de41aac94caeb6364f.png)
-![App Screenshot](https://i.paste.pics/e575c9847e9ed92fc8c40506c975a895.png)
-![App Screenshot](https://i.paste.pics/3cc3a144a0d8d7612c8e3255041702b9.png)
-![Screenshot (228)](https://user-images.githubusercontent.com/77853945/210191508-0691583b-fd3f-4780-bcfc-a551785ac81e.png)
 
 
 
