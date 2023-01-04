@@ -26,11 +26,12 @@ We used the standard coding style in this project.  Files names start with small
 
 
 ## Tech/Framework used
-![MongoDB](https://img.shields.io/badge/MongoDB-%234ea94b.svg?style=for-the-badge&logo=mongodb&logoColor=white) ![Express.js](https://img.shields.io/badge/express.js-%23404d59.svg?style=for-the-badge&logo=express&logoColor=%2361DAFB) ![React](https://img.shields.io/badge/react-%2320232a.svg?style=for-the-badge&logo=react&logoColor=%2361DAFB) ![NodeJS](https://img.shields.io/badge/node.js-6DA55F?style=for-the-badge&logo=node.js&logoColor=white)  ![YouTube](https://img.shields.io/badge/YouTube-%23FF0000.svg?style=for-the-badge&logo=YouTube&logoColor=white) ![NPM](https://img.shields.io/badge/NPM-%23000000.svg?style=for-the-badge&logo=npm&logoColor=white) ![Bootstrap](https://img.shields.io/badge/bootstrap-%23563D7C.svg?style=for-the-badge&logo=bootstrap&logoColor=white) ![Postman](https://img.shields.io/badge/Postman-FF6C37?style=for-the-badge&logo=postman&logoColor=white)  ![Git](https://img.shields.io/badge/git-%23F05033.svg?style=for-the-badge&logo=git&logoColor=white) ![GitHub](https://img.shields.io/badge/github-%23121011.svg?style=for-the-badge&logo=github&logoColor=white) ![Visual Studio Code](https://img.shields.io/badge/Visual%20Studio%20Code-0078d7.svg?style=for-the-badge&logo=visual-studio-code&logoColor=white)
+![MongoDB](https://img.shields.io/badge/MongoDB-%234ea94b.svg?style=for-the-badge&logo=mongodb&logoColor=white) ![Express.js](https://img.shields.io/badge/express.js-%23404d59.svg?style=for-the-badge&logo=express&logoColor=%2361DAFB) ![React](https://img.shields.io/badge/react-%2320232a.svg?style=for-the-badge&logo=react&logoColor=%2361DAFB) ![NodeJS](https://img.shields.io/badge/node.js-6DA55F?style=for-the-badge&logo=node.js&logoColor=white)  ![YouTube](https://img.shields.io/badge/YouTube-%23FF0000.svg?style=for-the-badge&logo=YouTube&logoColor=white) ![NPM](https://img.shields.io/badge/NPM-%23000000.svg?style=for-the-badge&logo=npm&logoColor=white) ![Bootstrap](https://img.shields.io/badge/bootstrap-%23563D7C.svg?style=for-the-badge&logo=bootstrap&logoColor=white) ![Postman](https://img.shields.io/badge/Postman-FF6C37?style=for-the-badge&logo=postman&logoColor=white)  ![Git](https://img.shields.io/badge/git-%23F05033.svg?style=for-the-badge&logo=git&logoColor=white) ![GitHub](https://img.shields.io/badge/github-%23121011.svg?style=for-the-badge&logo=github&logoColor=white) ![Visual Studio Code](https://img.shields.io/badge/Visual%20Studio%20Code-0078d7.svg?style=for-the-badge&logo=visual-studio-code&logoColor=white) ![JWT](https://img.shields.io/badge/JWT-black?style=for-the-badge&logo=JSON%20web%20tokens) ![MUI](https://img.shields.io/badge/MUI-%230081CB.svg?style=for-the-badge&logo=mui&logoColor=white)
 - MongoDB 
 - Express 
 - React 
 - NodeJs
+- JWT/JSON Web Token
 - Youtube Data API v3
 - NPM  
 - React Bootstrap
@@ -71,21 +72,83 @@ We used the standard coding style in this project.  Files names start with small
 - As an admin, you can view and resolve problems, add instructors/corporate trainees/admins, set promotions on courses, approve access requests and refund requests.
 
 
+## Code Examples
+
+```js
+const updateCourse = async (req, res) => {
+  if (await Instructor.findById(req.user._id)) {
+    const id = req.query.id;
+
+    const course = await Course.findOneAndUpdate(
+      { _id: id },
+      {
+        ...req.body,
+      }
+    );
+
+    res.status(200).json(course);
+  } else {
+    res.status(400).json({ error: "Access Restriced" });
+  }
+};
+```
+
+```js
+const printCertificatePDF = async (req, res) => {
+  if (
+    (await iTrainee.findById(req.user._id)) ||
+    (await cTrainee.findById(req.user._id))
+  ) {
+    const stream = res.writeHead(200, {
+      "Content-Type": "application/pdf",
+      "Content-Disposition": "attachement;filename=Cetificate.pdf",
+    });
+
+    buildCertificatePDF(
+      (chunk) => stream.write(chunk),
+      () => stream.end()
+    );
+  } else {
+    res.status(400).json({ error: "Access Restriced" });
+  }
+};
+
+function buildCertificatePDF(dataCallback, endCallback) {
+  const doc = new PDFDocument();
+  doc.on("data", dataCallback);
+  doc.on("end", endCallback);
+  doc
+    .image("public/certificate.png", 55, 250, { fit: [500, 500] })
+    //.rect(200, 30, 250, 250)
+    .stroke();
+  // .text("Fit", 320, 0);
+  doc.end();
+}
+
+```
 
 
 
 ## Installations
-Libraries/packages used are in the package.json file.
-To test out our project, download the file, open a terminal, cd into the backend folder and run npm install followed by nodemon server.js.
-Then in the frontend directory run npm install followed by npm start.
 
-backend:
-npm install
-nodemon server.js
+1. Clone the repository or download the code zip folder from the repository on your local machine.
+2. Open a terminal and navigate to the project location.
+3. Run the following commands to install all needed dependencies to run the server:
+```js
+> cd backend
+> npm install
+```
+4. Go back to the root destination of your project.
+5. Run the following commands to install all needed dependencies to run the frontend:
+```js
+> cd frontend
+> npm install
+```
+Now you have all needed installations/dependencies to run the project. To know how to fully use the website and run the server and the frontend, check out [How To Use.](https://github.com/Advanced-Computer-Lab-2022/Academic-Clowns-League#how-to-use)
 
-frontend: 
-npm install
-npm start
+
+
+
 
 ## API Reference
 
@@ -153,113 +216,64 @@ npm start
 | `no input parameter`      | `string` | Gets All Courses |
 
 
-
-## How to use
-Open entire folder in VS code, open two terminals and navigate one to front end and the other to backend
-then run the installs that were mentioned above in their respective files, then run "nodemon server.js" in backend and "npm start" in front end, 
-which should run the project on your local server and the website should be fully functional. 
-
-## Credits
-YouTube have playlists for : Node, Express, React, Mongo and MERN stack in beginner level.
-
-https://www.youtube.com/channel/UC29ju8bIPH5as8OGnQzwJyA
-
-https://www.youtube.com/channel/UCW5YeuERMmlnqo4oq8vwUpg    
-         
-
-
-React introduction:
-
-https://www.youtube.com/playlist?list=PLZlA0Gpn_vH_NT5zPVp18nGe_W9LqBDQK
-
-React Hooks -- functional components
-
-https://www.youtube.com/playlist?list=PLZlA0Gpn_vH8EtggFGERCwMY5u5hOjf-h
-
-https://youtu.be/hQAHSlTtcmY
-
-JWT authentication:
-
-https://www.youtube.com/watch?v=mbsmsi7l3r4
-
-https://www.youtube.com/watch?v=-RCnNyD0L-s
-
-https://dev.to/salarc123/mern-stack-authentication-tutorial-part-1-the-backend-1c57
-
-Using Stripe API:
-
-https://youtu.be/1r-F3FIONl8
-
-
-
-
-## Code Examples
-
-```
-const updateCourse = async (req, res) => {
-  if (await Instructor.findById(req.user._id)) {
-    const id = req.query.id;
-
-    const course = await Course.findOneAndUpdate(
-      { _id: id },
-      {
-        ...req.body,
-      }
-    );
-
-    res.status(200).json(course);
-  } else {
-    res.status(400).json({ error: "Access Restriced" });
-  }
-};
-```
-
-```
-const printCertificatePDF = async (req, res) => {
-  if (
-    (await iTrainee.findById(req.user._id)) ||
-    (await cTrainee.findById(req.user._id))
-  ) {
-    const stream = res.writeHead(200, {
-      "Content-Type": "application/pdf",
-      "Content-Disposition": "attachement;filename=Cetificate.pdf",
-    });
-
-    buildCertificatePDF(
-      (chunk) => stream.write(chunk),
-      () => stream.end()
-    );
-  } else {
-    res.status(400).json({ error: "Access Restriced" });
-  }
-};
-
-function buildCertificatePDF(dataCallback, endCallback) {
-  const doc = new PDFDocument();
-  doc.on("data", dataCallback);
-  doc.on("end", endCallback);
-  doc
-    .image("public/certificate.png", 55, 250, { fit: [500, 500] })
-    //.rect(200, 30, 250, 250)
-    .stroke();
-  // .text("Fit", 320, 0);
-  doc.end();
-}
-
-```
-
-
-
-
-
 ## Tests
 To test out the project, try signing up as an Individual trainee, taking a look at all the courses and buying a course so you can have access to all the content inside the course and have the full experience.
 
+
+
+## How to use
+After following the instructions in the [Installations](https://github.com/Advanced-Computer-Lab-2022/Academic-Clowns-League#installations) section, you can run the backend and the frontend.
+To run the backend:
+```js
+> cd backend
+> nodemon server.js
+```
+To run the frontend:
+```js
+> cd frontend
+> npm start
+```
+Then head to http://localhost:3000/ and start navigating.
+NOTE: you need to add the following environment variables to a .env file: 
+```PORT```
+```MONGO_URI```
+```YOUTUBE_API_KEY```
+
+
+
+
+
 ## Contributing
+Contributions are always welcome! Your contributions in implementing any of these features would be appreciated:
+- Having a Q&A section where trainees can leave questions for their instructors and instructors can view and answer those questions.
+- Displaying more insights for the trainees by keeping a history of their grades and displaying their average score and keep track of the change in their average score over time.
+Here's how to contribute:
+1- Fork and clone the repo
+2- Install all dependencies and run the project by following the instructions in the [Installations](https://github.com/Advanced-Computer-Lab-2022/Academic-Clowns-League#installations) and [How To Use](https://github.com/Advanced-Computer-Lab-2022/Academic-Clowns-League#how-to-use) sections.
+3- Create a new branch and start working on the feature.
+4- When you're done, commit and push your changes on your branch.
+5- Create a pull request and kindly wait until it's reviewed.
 
-Contributions are always welcome!
 
-See `contributing.md` for ways to get started.
+## Credits
+https://www.w3schools.com/REACT/DEFAULT.ASP
+https://www.tutorialspoint.com/javascript/index.htm
+YouTube have playlists for : Node, Express, React, Mongo and MERN stack in beginner level.
+https://www.youtube.com/channel/UC29ju8bIPH5as8OGnQzwJyA
+https://www.youtube.com/channel/UCW5YeuERMmlnqo4oq8vwUpg     
+React introduction:
+https://www.youtube.com/playlist?list=PLZlA0Gpn_vH_NT5zPVp18nGe_W9LqBDQK
+React Hooks -- functional components
+https://www.youtube.com/playlist?list=PLZlA0Gpn_vH8EtggFGERCwMY5u5hOjf-h
+https://youtu.be/hQAHSlTtcmY
+JWT authentication:
+https://www.youtube.com/watch?v=mbsmsi7l3r4
+https://www.youtube.com/watch?v=-RCnNyD0L-s
+https://dev.to/salarc123/mern-stack-authentication-tutorial-part-1-the-backend-1c57
+Using Stripe API:
+https://youtu.be/1r-F3FIONl8
 
-Please adhere to this project's `code of conduct`.
 
+##Licenses
+- Apache License 2.0 for the Stripe CLI.
+- MIT License for React, react-player, mongoose, express, etc.
