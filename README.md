@@ -389,67 +389,6 @@ const createAdmin = async (req, res) => {
 ```
 
 
-```js
-const createCTrainee = async (req, res) => {
-  if (await Admin.findById(req.user._id)) {
-    const {
-      firstname,
-      lastname,
-      username,
-      password,
-      email,
-      country,
-      grades,
-      corporate,
-    } = req.body;
-    const shoeDesign = mongoose.Types.ObjectId('63b022e9a2669ff313f140f4');
-    const jewelryDesign = mongoose.Types.ObjectId('63b024dba2669ff313f14280');
-    const courses = [shoeDesign, jewelryDesign];
-    const takenUsername = await User.findOne({ username: username });
-    if (takenUsername) {
-      res.status(400).json({ message: "Username is taken" });
-    } else {
-      try {
-        const encryptedPassword = await bcrypt.hash(password, 10);
-        const ctrainee = await cTrainee.create({
-          firstname,
-          lastname,
-          username,
-          password: encryptedPassword,
-          email,
-          country,
-          courses,
-          grades,
-          corporate,
-        });
-        const dbUser = new User({
-          username: username,
-          password: encryptedPassword,
-          email: email,
-          role: "cTrainee",
-        });
-        const course1 = await Course.findOne({ _id: '63b022e9a2669ff313f140f4' });
-        const newNum = ((course1.numOfEnrolledTrainees)+1);
-        const course1new = await Course.findOneAndUpdate({ _id: '63b022e9a2669ff313f140f4' },{numOfEnrolledTrainees: newNum},{ new: true });
-        const course2 = await Course.findOne({ _id: '63b024dba2669ff313f14280' });
-        const newNum2 = ((course2.numOfEnrolledTrainees)+1);
-        const course2new = await Course.findOneAndUpdate({ _id: '63b024dba2669ff313f14280' },{numOfEnrolledTrainees: newNum2},{ new: true });
-        dbUser.save();
-        res.status(200).json(ctrainee);
-      } catch (error) {
-        res
-          .status(400)
-          .json({error: error.message });
-      }
-    }
-  } else {
-    res.status(400).json({ error: "Access Restriced" });
-  }
-};
-```
-
-
-
 
 ```js
 const getRegisteredCourses = async (req, res) => {
@@ -484,67 +423,6 @@ const getRegisteredCourses = async (req, res) => {
   }
 };
 ```
-
-
-
-
-
-
-```js
-const rateInstructor = async (req, res) => {
-  if (
-    (await iTrainee.findById(req.user._id)) ||
-    (await cTrainee.findById(req.user._id))
-  ) {
-    const id = req.query.id;
-    const Rating = req.query.rating;
-    const user = req.user._id;
-    const instructor = await Instructor.findById({ _id: id });
-    let ratingsTemp = [Object];
-    ratingsTemp = instructor.ratings;
-    let found = false;
-    ratingsTemp.forEach(Function);
-
-    function Function(value) {
-      if (value.userId == user) {
-        found = true;
-      }
-    }
-    if (!found) {
-      console.log(ratingsTemp);
-      ratingsTemp.push({ rating: Rating, userId: user });
-      console.log(ratingsTemp);
-      let len = ratingsTemp.length;
-      console.log(len);
-      let ratingsSum = 0;
-      ratingsTemp.forEach(myFunction);
-
-      function myFunction(value) {
-        ratingsSum += value.rating;
-      }
-      console.log(ratingsSum);
-
-      const overallR = ratingsSum / len;
-      console.log(overallR);
-
-      const updatedinstructor = await Instructor.findOneAndUpdate(
-        { _id: id },
-        { ratings: ratingsTemp, rating: overallR },
-        { new: true }
-      );
-      res.status(200).json(updatedinstructor);
-    } else {
-      return res
-        .status(404)
-        .json({ error: "you have already rated this instructor" });
-    }
-  } else {
-    res.status(400).json({ error: "Access Restriced" });
-  }
-};
-```
-
-
 
 
 
@@ -630,9 +508,6 @@ const payForCourse = async (req, res) => {
   }
 };
 ```
-
-
-
 
 
 ```js
