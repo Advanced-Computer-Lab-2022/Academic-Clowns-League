@@ -252,31 +252,50 @@ Contributions are always welcome! Your contributions in implementing any of thes
 Here's how to contribute:
 
 1- Fork and clone the repo
+
 2- Install all dependencies and run the project by following the instructions in the [Installations](https://github.com/Advanced-Computer-Lab-2022/Academic-Clowns-League#installations) and [How To Use](https://github.com/Advanced-Computer-Lab-2022/Academic-Clowns-League#how-to-use) sections.
+
 3- Create a new branch and start working on the feature.
+
 4- When you're done, commit and push your changes on your branch.
+
 5- Create a pull request and kindly wait until it's reviewed.
 
 
 ## Credits
 https://www.w3schools.com/REACT/DEFAULT.ASP
+
 https://www.tutorialspoint.com/javascript/index.htm
-YouTube have playlists for : Node, Express, React, Mongo and MERN stack in beginner level.
+
+YouTube  playlists for: Node, Express, React, Mongo and MERN stack.
+
 https://www.youtube.com/channel/UC29ju8bIPH5as8OGnQzwJyA
-https://www.youtube.com/channel/UCW5YeuERMmlnqo4oq8vwUpg     
+
+https://www.youtube.com/channel/UCW5YeuERMmlnqo4oq8vwUpg  
+
 React introduction:
+
 https://www.youtube.com/playlist?list=PLZlA0Gpn_vH_NT5zPVp18nGe_W9LqBDQK
+
 React Hooks -- functional components
+
 https://www.youtube.com/playlist?list=PLZlA0Gpn_vH8EtggFGERCwMY5u5hOjf-h
+
 https://youtu.be/hQAHSlTtcmY
+
 JWT authentication:
+
 https://www.youtube.com/watch?v=mbsmsi7l3r4
+
 https://www.youtube.com/watch?v=-RCnNyD0L-s
+
 https://dev.to/salarc123/mern-stack-authentication-tutorial-part-1-the-backend-1c57
+
 Using Stripe API:
+
 https://youtu.be/1r-F3FIONl8
 
 
-##Licenses
+## Licenses
 - Apache License 2.0 for the Stripe CLI.
 - MIT License for React, react-player, mongoose, express, etc.
