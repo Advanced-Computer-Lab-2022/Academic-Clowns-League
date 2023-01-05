@@ -759,5 +759,5 @@ https://youtu.be/1r-F3FIONl8
 
 
 ## Licenses
-- Apache License 2.0 for the Stripe CLI.
-- MIT License for React, react-player, mongoose, express, etc.
+- ![Hex.pm](https://img.shields.io/hexpm/l/plug)  Apache License 2.0 for the Stripe CLI.
+- ![NPM](https://img.shields.io/npm/l/express)  MIT License for React, react-player, mongoose, express, etc.
