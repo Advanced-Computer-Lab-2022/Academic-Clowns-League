@@ -128,6 +128,268 @@ function buildCertificatePDF(dataCallback, endCallback) {
 ```
 
 
+```js
+const getAllCourses = async (req, res) => {
+  const courses = await Course.aggregate([
+    {
+      $lookup: {
+        from: "instructors",
+        localField: "instructor",
+        foreignField: "_id",
+        as: "instructorData",
+      },
+    },
+    {
+      $unwind: "$instructorData",
+    },
+    {
+      $match: { $and: [ {published: true}, {open: true} ]}
+    }
+  ]);
+  res.status(200).json(courses);
+};
+
+```
+
+```js
+const getCourse = async (req, res) => {
+  if (await Instructor.findById(req.user._id)) {
+    const course = await Course.findOne({ _id: req.query.id });
+    res.status(200).json(course);
+  } else {
+    res.status(400).json({ error: "Access Restriced" });
+  }
+};
+
+```
+
+
+```js
+const addCourseExercise = async (req, res) => {
+  if (await Instructor.findById(req.user._id)) {
+    const id = req.query.id; //637a197cbc66688b3924a864
+    const { question, option1, option2, option3, option4, answer } = req.body;
+    const courseEx = (await Course.findById({ _id: id }).select("exercises"))
+      .exercises;
+    const index = courseEx.length;
+    exercise = {
+      question: question,
+      options: [option1, option2, option3, option4],
+      answer: answer,
+      index: index,
+    };
+    courseEx.push(exercise);
+    const course = await Course.findByIdAndUpdate(
+      { _id: id },
+      { exercises: courseEx }
+    );
+    res.status(200).json(course);
+  } else {
+    res.status(400).json({ error: "Access Restriced" });
+  }
+};
+
+```
+
+
+```js
+const searchAllCourses = async (req, res) => {
+  const THEsearchterm = req.query.searchTerm;
+  var re = new RegExp(THEsearchterm, "i");
+  const courses = await Course.aggregate([
+    {
+      $lookup: {
+        from: "instructors",
+        localField: "instructor",
+        foreignField: "_id",
+        as: "instructorData",
+      },
+    },
+    {
+      $unwind: "$instructorData",
+    },
+    {
+      $match: {
+        $or: [
+          { "instructorData.name": { $regex: re } },
+          { title: { $regex: re } },
+          { subject: { $regex: re } },
+        ],
+        $and: [{published: true}, {open: true}]
+      },
+    },
+  ]);
+  res.status(200).json(courses);
+};
+```
+
+
+```js
+const addCoursePreview = async (req, res) => {
+  if (await Instructor.findById(req.user._id)) {
+    const id = req.query.id;
+    const { videoPreviewURL } = req.body;
+    const videoId = getId(videoPreviewURL);
+    const embeddedLink = "//www.youtube.com/embed/" + videoId;
+    const course = await Course.findByIdAndUpdate(
+      { _id: id },
+      { previewURL: embeddedLink },
+      { new: true }
+    );
+    res.status(200).json(course);
+  } else {
+    res.status(400).json({ error: "Access Restriced" });
+  }
+};
+
+```
+
+
+```js
+const moneyOwed = async (req, res) => {
+  if(await Instructor.findById(req.user._id)){
+  const courses = await Course.find({instructor: req.user._id});
+  let money = 0;
+
+    for (let i = 0; i < courses.length; i++) {
+      if (courses[i].discountApplied == true) {
+        money +=
+          Math.round(
+            ((courses[i].price * (100 - courses[i].discount)) / 100) * 0.8
+          ) * courses[i].numOfEnrolledTrainees; //assuming website takes 20%
+      } else {
+        money +=
+          Math.round(courses[i].price * 0.8) * courses[i].numOfEnrolledTrainees;
+      }
+    }
+
+    const instructor = await Instructor.findOneAndUpdate(
+      { _id: req.user._id },
+      { wallet: money }
+    );
+
+    res.status(200).json(instructor);
+  } else {
+    res.status(400).json({ error: "Access Restriced" });
+  }
+};
+
+```
+
+
+```js
+const editMyCourseReview = async (req, res) => {
+  if (
+    (await iTrainee.findById(req.user._id)) ||
+    (await cTrainee.findById(req.user._id))
+  ) {
+    try {
+      const traineeId = req.user._id; //replace by id of the loggedin person
+
+      const id = req.query.id;
+      const reviewContent = req.body.content;
+
+      const courseReviews = (
+        await Course.findById({ _id: id }).select("reviews")
+      ).reviews;
+
+      for (var i = 0; i < courseReviews.length; i++) {
+        if (courseReviews[i].traineeId == traineeId) {
+          courseReviews[i].content = reviewContent;
+        }
+      }
+      const course = await Course.findByIdAndUpdate(
+        { _id: id },
+        { reviews: courseReviews },
+        { new: true }
+      );
+      res.status(200).json(course);
+    } catch (error) {
+      res.status(400).json({ error: error.message });
+    }
+  } else {
+    res.status(400).json({ error: "Access Restriced" });
+  }
+};
+
+```
+
+
+
+
+```js
+const publishCourse = async (req, res) => {
+  if (await Instructor.findById(req.user._id)) {
+    const course = await Course.findOneAndUpdate(
+      { _id: req.query.id },
+      { published: true, open: true }
+    );
+    res.status(200).json(course);
+  } else {
+    res.status(400).json({ error: "Access Restriced" });
+  }
+};
+
+```
+
+
+
+```js
+const getRefundRequests = async(req, res) => {
+  if(await Admin.findById(req.user._id)){
+    try{
+      const requests = await Request.find({requestType: "refund"})
+      res.status(200).json(requests)
+    }
+    catch (error) {
+      res.status(400).json({ error: error.message });
+    }
+  }
+  else{
+    res.status(400).json({ error: "Access Restriced" })
+  }
+}
+
+```
+
+
+
+```js
+const createAdmin = async (req, res) => {
+  if (await Admin.findById(req.user._id)) {
+    //const { username, password } = req.body;
+    const username = req.body.username;
+    const password = req.body.password;
+    const takenUsername = await User.findOne({ username: username });
+    if (takenUsername) {
+      res.status(400).json({ message: "Username is taken" });
+    } else {
+      try {
+        const encryptedPassword = await bcrypt.hash(password, 10);
+        const admin = await Admin.create({
+          username: username,
+          password: encryptedPassword,
+        });
+        const dbUser = new User({
+          username: username,
+          password: encryptedPassword,
+          role: "Admin",
+        });
+        dbUser.save();
+        res.status(200).json(admin);
+      } catch (error) {
+        res.status(400).json({ error: error.message });
+      }
+    }
+  } else {
+    res.status(400).json({ error: "Access Restriced" });
+  }
+};
+
+```
+
+
+
 
 ## Installations
 
