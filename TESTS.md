@@ -1,5 +1,5 @@
 <details>
-<summary>Course routes</summary>
+<summary>View Tests</summary>
   
 ```http
 POST /api/courses/
@@ -4344,12 +4344,7 @@ Status Code: 200 OK
 
 ```
 </details>  
-</details>
-  
-  
-<details>
-<summary>Problem routes</summary>
-  
+
 
   ```http
   GET /api/problem/myProblems
@@ -8352,7 +8347,7 @@ Status Code: 200 OK
 
 
 
-    <details>
+<details>
 <summary>
 Response - Test #2
 </summary>
@@ -8376,7 +8371,7 @@ NOTE: that's because I'm logged in as a Trainee not an admin
   
   
   
-   <details>
+<details>
 <summary>
 Response - Test #1
 </summary>
@@ -10837,6 +10832,7 @@ Status Code: 200 OK
 ]
 
 ```
+     
   ![Screenshot (265)](https://user-images.githubusercontent.com/77853945/211094208-f24a5ab6-6545-41d6-9113-1f4fddb48016.png)
    
      
@@ -10847,7 +10843,7 @@ Status Code: 200 OK
 
 
 
-    <details>
+<details>
 <summary>
 Response - Test #2
 </summary>
