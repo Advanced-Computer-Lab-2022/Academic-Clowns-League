@@ -1419,9 +1419,11 @@ Status Code: 200 OK
     "contract": true
 }
   
-![Screenshot (266)](https://user-images.githubusercontent.com/77853945/211096235-9367528a-d8c1-4115-bf61-827266d0219d.png)
+
 
 ```
+
+![Screenshot (266)](https://user-images.githubusercontent.com/77853945/211096235-9367528a-d8c1-4115-bf61-827266d0219d.png)
 
 </details>
   
