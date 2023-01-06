@@ -1,6 +1,110 @@
 <details>
 <summary>View Tests</summary>
   
+  
+  ```http
+  POST /api/users/login
+```
+
+  <details>
+<summary>
+Body - Test #1
+</summary>
+
+```json
+    
+    {
+    "username":"gitrainee",
+    "password":"inst"
+}
+
+```
+</details>
+  
+
+<details>
+<summary>
+Response - Test #1
+</summary>
+Status Code: 200 OK
+   
+```json
+  
+  {
+    "message": "successful",
+    "payload": {
+        "_id": "63b21764da1ecf541a899341",
+        "firstname": "Ganna",
+        "lastname": "ITrainee",
+        "username": "gitrainee",
+        "password": "$2b$10$mjbFaSwGcJ5u8f4CUVirK.YbfiYkj.DwcmZ0a7h2NuiKjAE8SAW.a",
+        "email": "gannamelsayed@gmail.com",
+        "gender": "female",
+        "courses": [
+            "6384a69690658873b8e1681b",
+            "63b2139bda1ecf541a89907b"
+        ],
+        "wallet": -83,
+        "grades": [],
+        "createdAt": "2023-01-01T23:29:40.052Z",
+        "updatedAt": "2023-01-02T02:22:17.077Z",
+        "__v": 0
+    },
+    "role": "iTrainee",
+    "contract": true
+}
+  
+![Screenshot (266)](https://user-images.githubusercontent.com/77853945/211096235-9367528a-d8c1-4115-bf61-827266d0219d.png)
+
+```
+
+</details>
+  
+  
+  
+  
+  
+<details>
+<summary>
+Body - Test #2
+</summary>
+
+```json
+  
+{
+    "username":"gitraineeeeee",
+    "password":"inst"
+}
+
+```
+</details>
+  
+
+  
+<details>
+<summary>
+Response - Test #2
+</summary>
+Status Code: 200 OK
+   
+```json
+  
+  {
+    "message": "Invalid Username or Password"
+}
+
+```
+  
+![Screenshot (268)](https://user-images.githubusercontent.com/77853945/211096353-405d2858-f86b-4766-be18-0da3ec41ec9f.png)
+
+</details>
+  
+  
+  
+  
+  
+  
+  
 ```http
 POST /api/courses/
 ```
@@ -10859,6 +10963,443 @@ NOTE: that's because I'm logged in as a Trainee not an admin
 </details>
   
   
+  
+  
+  
+```http
+  PATCH /api/instructor/reviewInstructor/?id=6384a69690658873b8e1681b
+```
+  
+  
+  <details>
+<summary>
+Body - Test #1
+</summary>
+
+```json
+    
+{
+    "content":"excellent instructor"
+}
+
+
+```
+</details>
+  
+
+
+
+
+
+  
+<details>
+<summary>
+Response - Test #1
+</summary>
+Status Code: 200 OK
+   
+```json
+  
+  {
+    "_id": "63a34389398e97a471db5921",
+    "username": "r.gosling",
+    "password": "$2b$10$OUMyY7FuMHzgGwM8ckrRROS6zHaAthAWuY4BIvYnKLqmKgbLfpjAC",
+    "country": "USA",
+    "email": "nourhan.khedr24@gmail.com",
+    "miniBio": "I was really bad in La La Land",
+    "name": "Ryan Gosling",
+    "rating": 3,
+    "wallet": 2017,
+    "ratings": [
+        {
+            "rating": 0,
+            "userId": "637a356c54c79d632507dc8a",
+            "_id": "63a76d12d0318f90018cfcd7"
+        },
+        {
+            "rating": 3,
+            "userId": "63a3196b78d093cbccc82bb7",
+            "_id": "63a77dad1174185adbe05a91"
+        },
+        {
+            "rating": 5,
+            "userId": "63a9d4d85defffcabbcbc0a7",
+            "_id": "63a9eb589e20366c450b7526"
+        },
+        {
+            "rating": 4,
+            "userId": "63a3435e9958691a5e19bef1",
+            "_id": "63ae0cf09b94d536a0f8faf7"
+        }
+    ],
+    "reviews": [
+        {
+            "content": "tesssstttt",
+            "traineeId": "63a3435e9958691a5e19bef1",
+            "traineeName": "Ganna ElSayed",
+            "_id": "63ae0ce29b94d536a0f8faea"
+        },
+        {
+            "content": "wallahi ya3ni mozza",
+            "traineeId": "63b5790d6ea3fa39cb92f29c",
+            "traineeName": "Nada Ibrahim",
+            "_id": "63b57a0a6ea3fa39cb92f497"
+        },
+        {
+            "content": "excellent instructor",
+            "traineeId": "63b21764da1ecf541a899341",
+            "traineeName": "Ganna ITrainee",
+            "_id": "63b88c67d32caeabf7388bd8"
+        }
+    ],
+    "createdAt": "2022-12-21T17:34:01.355Z",
+    "updatedAt": "2023-01-06T21:02:31.494Z",
+    "__v": 0
+}
+  
+
+```
+  
+  ![Screenshot (271)](https://user-images.githubusercontent.com/77853945/211099619-7c7a9ad9-6e76-4405-9013-014f1b7f5099.png)
+
+
+</details>
+  
+  
+  
+<details>
+<summary>
+Body - Test #2
+</summary>
+
+```json
+
+{
+    "content":""
+}
+
+
+```
+</details>
+  
+
+
+
+
+  
+<details>
+<summary>
+Response - Test #2
+</summary>
+Status Code: 400 Bad Request
+  
+  
+```json
+  
+  {"error":"Your review cannot be empty!"}
+
+```
+
+</details>
+  
+  
+  
+  
+  
+```http
+  PATCH /api/instructor/editMyInstructorReview/?id=6384a69690658873b8e1681b
+```
+
+  <details>
+<summary>
+Body - Test #1
+</summary>
+
+```json
+{
+    "content":"part 2"
+}
+
+```
+</details>
+  
+
+
+
+  
+<details>
+<summary>
+Response - Test #1
+</summary>
+Status Code: 200 OK
+   
+```json
+  
+  {
+    "_id": "63a34389398e97a471db5921",
+    "username": "r.gosling",
+    "password": "$2b$10$OUMyY7FuMHzgGwM8ckrRROS6zHaAthAWuY4BIvYnKLqmKgbLfpjAC",
+    "country": "USA",
+    "email": "nourhan.khedr24@gmail.com",
+    "miniBio": "I was really bad in La La Land",
+    "name": "Ryan Gosling",
+    "rating": 3,
+    "wallet": 2017,
+    "ratings": [
+        {
+            "rating": 0,
+            "userId": "637a356c54c79d632507dc8a",
+            "_id": "63a76d12d0318f90018cfcd7"
+        },
+        {
+            "rating": 3,
+            "userId": "63a3196b78d093cbccc82bb7",
+            "_id": "63a77dad1174185adbe05a91"
+        },
+        {
+            "rating": 5,
+            "userId": "63a9d4d85defffcabbcbc0a7",
+            "_id": "63a9eb589e20366c450b7526"
+        },
+        {
+            "rating": 4,
+            "userId": "63a3435e9958691a5e19bef1",
+            "_id": "63ae0cf09b94d536a0f8faf7"
+        }
+    ],
+    "reviews": [
+        {
+            "content": "tesssstttt",
+            "traineeId": "63a3435e9958691a5e19bef1",
+            "traineeName": "Ganna ElSayed",
+            "_id": "63ae0ce29b94d536a0f8faea"
+        },
+        {
+            "content": "wallahi ya3ni mozza",
+            "traineeId": "63b5790d6ea3fa39cb92f29c",
+            "traineeName": "Nada Ibrahim",
+            "_id": "63b57a0a6ea3fa39cb92f497"
+        },
+        {
+            "content": "part 2",
+            "traineeId": "63b21764da1ecf541a899341",
+            "traineeName": "Ganna ITrainee",
+            "_id": "63b88c67d32caeabf7388bd8"
+        }
+    ],
+    "createdAt": "2022-12-21T17:34:01.355Z",
+    "updatedAt": "2023-01-06T21:06:03.644Z",
+    "__v": 0
+}
+
+```
+
+</details>
+  
+  
+  
+  
+
+<details>
+<summary>
+Body - Test #1
+</summary>
+
+```json
+
+{
+    "content":""
+}
+
+
+```
+</details>
+  
+  
+  
+  
+
+<details>
+<summary>
+Response - Test #2
+</summary>
+Status Code: 400 Bad Request
+  
+  
+```json
+  
+  {"error":"Your review cannot be empty!"}
+
+```
+
+</details>
+  
+  
+  
+  ```http
+  PATCH /api/instructor/deleteMyInstructorReview/?id=6384a69690658873b8e1681b
+```
+
+ 
+<details>
+<summary>
+Response - Test #1
+</summary>
+Status Code: 200 OK
+   
+```json
+  {
+    "_id": "63a34389398e97a471db5921",
+    "username": "r.gosling",
+    "password": "$2b$10$OUMyY7FuMHzgGwM8ckrRROS6zHaAthAWuY4BIvYnKLqmKgbLfpjAC",
+    "country": "USA",
+    "email": "nourhan.khedr24@gmail.com",
+    "miniBio": "I was really bad in La La Land",
+    "name": "Ryan Gosling",
+    "rating": 3,
+    "wallet": 2017,
+    "ratings": [
+        {
+            "rating": 0,
+            "userId": "637a356c54c79d632507dc8a",
+            "_id": "63a76d12d0318f90018cfcd7"
+        },
+        {
+            "rating": 3,
+            "userId": "63a3196b78d093cbccc82bb7",
+            "_id": "63a77dad1174185adbe05a91"
+        },
+        {
+            "rating": 5,
+            "userId": "63a9d4d85defffcabbcbc0a7",
+            "_id": "63a9eb589e20366c450b7526"
+        },
+        {
+            "rating": 4,
+            "userId": "63a3435e9958691a5e19bef1",
+            "_id": "63ae0cf09b94d536a0f8faf7"
+        }
+    ],
+    "reviews": [
+        {
+            "content": "tesssstttt",
+            "traineeId": "63a3435e9958691a5e19bef1",
+            "traineeName": "Ganna ElSayed",
+            "_id": "63ae0ce29b94d536a0f8faea"
+        },
+        {
+            "content": "wallahi ya3ni mozza",
+            "traineeId": "63b5790d6ea3fa39cb92f29c",
+            "traineeName": "Nada Ibrahim",
+            "_id": "63b57a0a6ea3fa39cb92f497"
+        }
+    ],
+    "createdAt": "2022-12-21T17:34:01.355Z",
+    "updatedAt": "2023-01-06T21:08:38.735Z",
+    "__v": 0
+}
+
+```
+  ![Screenshot (272)](https://user-images.githubusercontent.com/77853945/211100440-21cb9f03-f708-43da-99f1-69c7e92556d4.png)
+
+</details>
+
+
+
+
+<details>
+<summary>
+Response - Test #2
+</summary>
+Status Code: 400 Bad Request
+  
+  
+```json
+  
+  {"error":"Couldn't find a review made by you"}
+
+```
+
+</details>  
+  
+  
+  
+```http
+  GET /api/instructor/getMyInstReview/?id=6384a69690658873b8e1681b
+```
+
+  <details>
+<summary>
+Response - Test #1
+</summary>
+Status Code: 200 OK
+   
+```json
+
+    {
+    "text": "YASSSS"
+}
+    
+```
+
+</details>
+
+
+
+  
+  
+  
+  
+  
+  
+  
+  
+```http
+  GET /api/users/logout
+```
+<details>
+<summary>
+Response - Test #1
+</summary>
+Status Code: 200 OK
+   
+```json
+  {
+    "message": "Token Deleted"
+}
+
+```
+  
+![Screenshot (270)](https://user-images.githubusercontent.com/77853945/211096896-2ee2be67-d900-492e-b8b9-e78ac9ca744f.png)
+
+</details>
+  
+  
+  <details>
+<summary>
+Response - Test #2
+</summary>
+Status Code: 200 OK
+    
+NOTE: i'm getting this reponse because I'm trying to log out when I'm already logged out
+   
+```json
+    
+    {
+    "message": "incorrect token",
+    "isLoggedIn": false
+}
+
+```
+    
+![Screenshot (269)](https://user-images.githubusercontent.com/77853945/211096771-598101fe-20f6-4bb8-a408-8b29ce6a84d0.png)
+
+</details>
+  
+  
+  
+
+
   
   
   
