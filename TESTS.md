@@ -11341,17 +11341,31 @@ Status Code: 200 OK
 }
     
 ```
+![Screenshot (273)](https://user-images.githubusercontent.com/77853945/211101014-31c082d3-59c3-4835-ad34-d87c3d535b11.png)
 
 </details>
 
 
+    <details>
+<summary>
+Response - Test #2
+</summary>
+Status Code: 200 OK
+      
+NOTE: test is an empty string cause I deleted my review
+   
+```json
 
-  
-  
-  
-  
-  
-  
+    {
+    "text": ""
+}
+    
+```
+![Screenshot (274)](https://user-images.githubusercontent.com/77853945/211101189-c80cbd3d-04e6-48df-ab57-0ef22ffd0884.png)
+
+      
+</details>
+
   
   
 ```http
