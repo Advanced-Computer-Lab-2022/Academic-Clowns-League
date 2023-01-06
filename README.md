@@ -1360,8 +1360,11 @@ Now you have all needed installations/dependencies to run the project. To know h
 
 
 ## Tests
-To test out the project, try signing up as an Individual trainee, taking a look at all the courses and buying a course so you can have access to all the content inside the course and have the full experience.
 
+<details><summary>TEST </summary>
+  
+To test out the project, try signing up as an Individual trainee, taking a look at all the courses and buying a course so you can have access to all the content inside the course and have the full experience.
+</details>
 
 
 ## How to use
