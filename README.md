@@ -630,6 +630,9 @@ Now you have all needed installations/dependencies to run the project. To know h
 
 ## API Reference
 
+Here are the routes, to see how they're tested and their reponses, check out [Tests.](https://github.com/Advanced-Computer-Lab-2022/Academic-Clowns-League#tests)
+
+
 ```http
   POST /api/users/
 ```
